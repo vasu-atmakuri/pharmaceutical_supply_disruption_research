@@ -13,12 +13,12 @@ def basec(m,t):
     return None if any(v is None or v<=0 for v in p) else float(np.mean(p))
 def band(s): return "minority" if s<.35 else ("mid" if s<.95 else "sole")
 LOr=YMIN-B0+2
-COH=[(m,v[0],v[1]) for m,v in first.items() if v[0]>=LOr and v[0]+11<=TMAX and basec(m,v[0]) is not None]
+COH=[(m,v[0],v[1]) for m,v in first.items() if v[0]>=LOr and v[0]+11<=TMAX and basec(m,v[0]) is not None and any(MQ[m].get(v[0]+k) is not None for k in range(1,13))]
 def wil(k,n,z=1.96):
     if n==0: return (0.0,0.0)
     p=k/n; d=1+z*z/n; c=(p+z*z/(2*n))/d; h=z*np.sqrt(p*(1-p)/n+z*z/(4*n*n))/d
     return max(0,c-h),min(1,c+h)
-K=list(range(1,12))
+K=list(range(1,13))
 fig,axes=plt.subplots(1,2,figsize=(10.4,4.2))
 # (a) cumulative share regained, conditional on having fallen below 50%
 ax=axes[0]
