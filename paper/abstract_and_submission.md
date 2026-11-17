@@ -84,8 +84,8 @@ funding.
 
 Thank you for your consideration.
 
-Vasu Atmakuri, Independent Researcher, Dallas, Texas
-Souseelya Kidambi
+Vasu Atmakuri, Independent Researcher, Dallas, TX, USA (athmakurivasu@gmail.com, ORCID 0009-0007-5955-2466)
+Souseelya Kidambi, Independent Researcher, Dallas, TX, USA (ORCID 0009-0003-9788-8949)
 
 ## Author contributions
 

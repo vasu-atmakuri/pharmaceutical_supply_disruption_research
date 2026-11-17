@@ -17,10 +17,10 @@ pdflatex manuscript && bibtex manuscript && pdflatex manuscript && pdflatex manu
 Or on Overleaf: upload all files, set `manuscript.tex` as the main document.
 
 ## Before submitting
-1. Replace `INSERT-CORRESPONDING-EMAIL` on line 19 with the corresponding author email.
+1. Author block is complete: both authors, emails and ORCIDs are in place.
 2. Add Souseelya's affiliation details on the `\affil[2]` line if she wants more than
    "Independent Researcher".
-3. Add ORCIDs with `\orcid{...}` inside each `\author` block once the ORCID record is public.
+3. ORCIDs render via the orcidlink package, which draws the logo in vector form. The class's own \orcid command needs an Orcidlogo.eps file that is not shipped here, so do not switch to it.
 4. Switch reference style if the target journal requires it: change the class option
    `sn-vancouver-num` and the `\bibliographystyle` line together.
 
