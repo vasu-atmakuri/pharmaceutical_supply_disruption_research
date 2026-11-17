@@ -485,6 +485,22 @@ an Established Pharmacologic Class also does not establish clinical interchangea
 given patient or indication. Identifying substitution would require a matched counterfactual for
 class trend and, preferably, patient-level data.
 
+\subsection{Two external validations were attempted and are not available}\label{subsec:extval}
+
+We attempted to corroborate the detected collapses against two independent FDA sources, and
+report both as unavailable rather than as null findings.
+
+The FDA Drug Shortages Database would be the natural benchmark, but it is a live register rather
+than an archive: resolved shortages remain listed for six months and discontinuations for one
+year. For events spanning 2017 to 2024 almost every corresponding record has been removed, so
+absence from the current list carries no information and a matched comparison is not possible.
+
+The FDA product listing records a marketing end date, which would independently date a product's
+withdrawal. In practice the field is populated for only 3{,}835 of 255{,}165 products in our
+combined crosswalk, and for none of the 28 departing labelers in the sole-source stratum. FDA's
+own listing does not reliably record when these products ceased to be marketed, which is part of
+why dispensing data is informative here.
+
 \subsection{Robustness}\label{subsec:robust}
 
 \textbf{Choice of panel.} Repeating the analysis on the sum of state rows rather than national
@@ -524,6 +540,37 @@ departing labeler marketing ANDA or authorized generic products and 4 do not. Be
 rates are 37.5 and 75.0 percent respectively, with a median replacement ratio of 0.00 in both. The
 four non-generic cases are too few to interpret, and we report them only to show that the finding
 is not confined to one marketing category.
+
+\textbf{Approval-level concentration.} The concern that two labeler codes may represent one
+underlying supplier can be tested directly. Each NDC in the FDA listing carries the approval
+number under which the product is marketed, available for 73.2 percent of products in our
+crosswalk; products without one are never merged with any other. Two labelers marketing under the
+same approval are the same approved product, which is the mechanism by which relabeling and
+private-label distribution inflate apparent competition.
+
+Labeler counts and approval counts track each other almost exactly. Across 98{,}674
+market-quarters the mean labeler count is 2.50 and the mean approval count 2.58, and markets with
+one, two, three, four and five labelers average 1.09, 2.12, 3.11, 4.15 and 5.13 approvals
+respectively. Approvals are fewer than labelers in 12.6 percent of market-quarters, and only 2.2
+percent appear competitive on labeler count while resting on a single approval.
+
+Repeating the entire analysis with the approval rather than the labeler as the unit gives 258
+events and a cohort of 103. In the sole-source stratum ($n=18$) dispensing falls below two
+percent of baseline in 38.9 percent of markets (95 percent CI 20.3 to 61.4) and the median
+replacement ratio is 0.00, with 12 of 18 markets at exactly zero; in the minority stratum
+($n=75$) no market falls below the threshold and the median ratio is 1.47. The difference in
+medians is 1.47 (95 percent CI 0.51 to 2.61). Of 28 markets classified sole-source by labeler, 25
+are also sole-source by approval. The labeler-based results are therefore not an artefact of
+relabeling. An approval number identifies an approved application rather than a physical plant,
+so this does not exclude two distinct approvals being manufactured at a shared contract site.
+
+\textbf{Required length of follow-up.} Requiring six post-event quarters inside the panel
+excludes events late in the series. Relaxing the requirement to $H$ quarters gives, in the
+sole-source stratum, $n=20$ and 45.0 percent below threshold at $H=6$; $n=25$ and 60.0 percent at
+$H=4$; $n=26$ and 50.0 percent at $H=3$; and $n=26$ and 46.2 percent at $H=2$. The median
+replacement ratio is 0.00 at every value of $H$, and the minority stratum stays at or below 1.0
+percent throughout. Of the 27 sole-source events outside the main window, 21 are excluded because
+they occur after 2024Q3 and will become analysable as further quarters are released.
 
 \textbf{Internal placebo.} The minority-exposure stratum is a placebo inside the design: these
 markets experience a labeler departure but do not lose supply, and no such market falls below the
@@ -576,11 +623,16 @@ revenues are low \cite{berndt2017}, so the opportunity is small.
 Five limitations bound the interpretation.
 
 \textbf{Labelers are not verified manufacturers.} As set out in Section~\ref{subsec:labeler}, an
-NDC labeler may be a repackager, relabeler or distributor. We measure labeler concentration. Two
-labelers in our data may share a manufacturing site, in which case our supplier counts overstate
-productive capacity and our sole-supplier markets are a conservative subset. Conversely, a
-labeler's disappearance need not mean a plant closed. Linking labeler codes to establishment
-registrations would resolve this and is the most valuable single extension of this work.
+NDC labeler may be a repackager, relabeler or distributor. The approval-level analysis in
+Section~\ref{subsec:robust} bounds how much this matters: labeler and approval counts coincide
+almost exactly, only 2.2 percent of market-quarters appear competitive on labeler count while
+resting on a single approval, 25 of 28 sole-source markets are classified identically under both
+definitions, and the main result replicates at the approval level. What remains unexcluded is
+shared contract manufacturing, since two distinct approvals can be produced at one site, and the
+fact that a labeler's disappearance need not mean a plant closed. Linking labeler codes to
+establishment registrations would settle the remainder, but FDA's establishment register is a
+current-registration snapshot, so the firms of most interest, those that departed, are the ones
+least likely to appear in it.
 
 \textbf{Generalisation beyond Medicaid.} Medicaid is a large but not representative payer. Its
 dispensing mix is weighted toward generic oral products, the segment where sole-source supply is
