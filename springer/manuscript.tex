@@ -53,11 +53,13 @@ matched on share, the same quantity drifted by 0.09 (95 percent CI $-0.01$ to 0.
 percent of the 20 evaluable sole-labeler markets; across all 28, assigning the eight events with
 no observed post-event quarter to each extreme gives full-cohort identification bounds of 32.1 to
 60.7 percent. No market fell below the threshold among 500 matched control observations drawn
-from 357 single-labeler markets that did not lose their labeler. At a common twelve-quarter
-horizon, and restricted to markets that actually fell below the threshold, 37 percent of
-sole-labeler markets regained half their baseline dispensing against 75 percent of minority-loss
-markets, and sole-labeler markets accumulated a median deficit of 11.8 quarters of baseline
-volume, two thirds of it after the four-quarter detection window closed.
+from 357 single-labeler markets that did not lose their labeler. On a single twelve-quarter cohort, every
+sole-labeler market fell below half its baseline dispensing against 9 of 53 minority-loss
+markets. Conditional on having fallen, recovery favoured minority-loss markets at every horizon
+and threshold but no comparison reached significance on these sample sizes (smallest Fisher
+$p=0.068$). The median sole-labeler market accumulated 11.8 quarters of baseline volume in
+unreplaced dispensing, 7.9 of them in quarters $t+4$ to $t+11$ alone, against none for the median
+minority-loss market.
 
 \textbf{Conclusions.} When a market's only labeler departs, remaining labelers take up none of
 the lost volume at the median and replacement entry is rare, whereas the loss of a minority
@@ -544,79 +546,97 @@ contrast is undiminished.
 
 \subsection{Recovery dynamics}\label{subsec:recovery}
 
-A six-quarter window summarises the level of replacement but not its timing, and timing is what
-distinguishes a disruption from a market failure. Three design choices govern this analysis, each
-adopted because the naive version is misleading.
+A six-quarter window summarises the level of replacement but not its timing. Three design choices
+govern this analysis, each adopted because the naive version is misleading.
 
-\textbf{Fixed horizons, not variable follow-up.} Events observed for three quarters cannot
-accumulate the deficit or the recovery opportunity of events observed for twelve. We therefore
-report each horizon using only events with that much follow-up inside the panel, and state the
-number at risk at each.
+\textbf{One cohort, not several.} Comparing horizons across different event sets confounds
+recovery time with cohort composition. Every figure in this subsection uses the single set of 84
+events whose full twelve quarters $t$ through $t+11$ lie inside the panel: 53 minority-loss, 10
+intermediate and 21 sole-labeler markets.
 
 \textbf{Recovery is conditional on having fallen.} A market that loses a labeler holding under
-35 percent of its volume can remain above half its baseline without any other labeler expanding
-at all. Counting such a market as recovered measures the absence of disruption, not restoration.
-We therefore restrict recovery rates to markets that first fell below the threshold in question.
-This matters enormously: only 8 of 97 minority-loss markets ever fall below half of baseline,
-against 35 of 35 sole-labeler markets.
+35 percent of its volume can stay above half its baseline without any other labeler expanding.
+Counting it as recovered measures the absence of disruption. We therefore restrict recovery to
+markets that first fell below the threshold in question.
 
 \textbf{The detection window is separated from what follows.} An event qualifies on the
-departing labeler's dispensing over the event quarter and the three following quarters, so
-shortfall inside that window is partly mechanical. We report the deficit accruing during $t+0$ to
-$t+3$ separately from $t+4$ onward.
+departing labeler's dispensing over $t$ through $t+3$, so shortfall inside that window is partly
+mechanical. We report $t+4$ to $t+11$ separately.
 
 \begin{table}[htbp]
-\caption{Recovery at fixed horizons. Unconditional columns use all events with that much
-follow-up. Conditional columns restrict to markets that first fell below the threshold, which is
-the quantity of interest; $n$ for those columns is the number at risk.}\label{tab:recovery}
-\begin{tabular}{llrrrrr}
+\caption{Recovery on the single twelve-quarter cohort, conditional on first falling below the
+threshold. Wilson 95 percent intervals; two-sided Fisher exact tests compare the minority and
+sole-labeler strata at each cell.}\label{tab:recovery}
+\begin{tabular}{llrrlr}
 \toprule
- & & \multicolumn{3}{c}{Unconditional} & \multicolumn{2}{c}{Conditional on falling} \\
-\cmidrule(lr){3-5}\cmidrule(lr){6-7}
-Horizon & Departing share & $n$ & Any entry & Regain 50\% & $n$ at risk & Regained 50\% \\
+Threshold & Horizon & At risk & Regained & Rate [95\% CI] & Fisher $p$ \\
 \midrule
-4 q  & Under 35\%    & 97 & 64\% & 96\% & 8  & 38\% \\
-     & 35 to 95\%    & 21 & 33\% & 81\% & 7  & 14\% \\
-     & Sole, 95\%+   & 35 & 11\% & 6\%  & 35 & 6\%  \\
+\multirow{6}{*}{50\%}
+ & 4 q, minority  & 7  & 3  & 42.9\% [15.8, 75.0] & \multirow{2}{*}{0.083} \\
+ & 4 q, sole      & 21 & 2  & 9.5\% [2.7, 28.9]   & \\
+ & 8 q, minority  & 7  & 5  & 71.4\% [35.9, 91.8] & \multirow{2}{*}{0.076} \\
+ & 8 q, sole      & 21 & 6  & 28.6\% [13.8, 50.0] & \\
+ & 12 q, minority & 9  & 6  & 66.7\% [35.4, 87.9] & \multirow{2}{*}{0.236} \\
+ & 12 q, sole     & 21 & 8  & 38.1\% [20.8, 59.1] & \\
 \midrule
-8 q  & Under 35\%    & 67 & 78\% & 97\% & 8  & 62\% \\
-     & 35 to 95\%    & 12 & 25\% & 92\% & 5  & 60\% \\
-     & Sole, 95\%+   & 26 & 19\% & 27\% & 26 & 27\% \\
-\midrule
-12 q & Under 35\%    & 52 & 81\% & 98\% & 8  & \textbf{75\%} \\
-     & 35 to 95\%    & 8  & 50\% & 100\% & 4 & 75\% \\
-     & Sole, 95\%+   & 19 & 21\% & 37\% & 19 & \textbf{37\%} \\
+\multirow{6}{*}{90\%}
+ & 4 q, minority  & 21 & 3  & 14.3\% [5.0, 34.6]  & \multirow{2}{*}{0.232} \\
+ & 4 q, sole      & 21 & 0  & 0.0\% [0.0, 15.5]   & \\
+ & 8 q, minority  & 22 & 8  & 36.4\% [19.7, 57.0] & \multirow{2}{*}{0.162} \\
+ & 8 q, sole      & 21 & 3  & 14.3\% [5.0, 34.6]  & \\
+ & 12 q, minority & 26 & 12 & 46.2\% [28.8, 64.5] & \multirow{2}{*}{0.068} \\
+ & 12 q, sole     & 21 & 4  & 19.0\% [7.7, 40.0]  & \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The conditional columns are the defensible comparison and they are less dramatic than the
-unconditional ones. Among markets that actually lost half their dispensing, 75 percent of
-minority-loss markets regain it within twelve quarters against 37 percent of sole-labeler
-markets. At the 90 percent threshold the corresponding figures are 48 and 21 percent, on 25 and
-19 markets at risk. The direction is consistent across all three horizons and both thresholds,
-and the gap narrows as the horizon lengthens, which is what slow recovery rather than permanent
-failure looks like.
+\textbf{We state plainly what this does and does not establish.} All six comparisons favour
+minority-loss markets, and the point estimates differ by factors of two to four. None of the six
+is statistically significant at the conventional threshold: the smallest $p$ is 0.068. The
+conditional samples are 7 to 26 markets, and the Wilson intervals overlap in every cell. The
+consistent direction across horizons and thresholds is suggestive, but these six tests are not
+independent of one another, so we do not combine them into a single $p$ value and we do not
+describe the conditional recovery advantage as an established effect. It is a directionally
+consistent pattern that this sample cannot resolve.
+
+The unconditional contrast is much sharper but answers a different question: 21 of 21
+sole-labeler markets fall below half of baseline against 9 of 53 minority-loss markets. That is
+a statement about whether disruption occurs, not about recovery from it, and the two should not
+be conflated.
 
 \begin{table}[htbp]
-\caption{Median cumulative dispensing deficit over twelve quarters, in quarters of baseline
-volume, split at the end of the four-quarter event-detection window.}\label{tab:deficit}
+\caption{Median cumulative dispensing deficit on the same cohort, in quarters of baseline volume,
+split at the end of the four-quarter detection window.}\label{tab:deficit}
 \begin{tabular}{lrrrr}
 \toprule
-Departing share & $n$ & $t+0$ to $t+3$ & $t+4$ to $t+11$ & Share after detection \\
+Departing share & $n$ & $t$ to $t+3$ & $t+4$ to $t+11$ & Total \\
 \midrule
-Under 35\%    & 53 & 0.0 q & 0.0 q & 39\% \\
-35 to 95\%    & 10 & 1.4 q & 1.6 q & 54\% \\
-Sole, 95\%+   & 21 & 3.9 q & 7.9 q & \textbf{67\%} \\
+Under 35\%    & 53 & 0.0 q & 0.0 q & 0.0 q \\
+35 to 95\%    & 10 & 1.4 q & 1.6 q & 3.0 q \\
+Sole, 95\%+   & 21 & 3.9 q & \textbf{7.9 q} & \textbf{11.8 q} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:deficit} answers the mechanical objection directly. If the deficit were an
-artefact of the event definition it would concentrate in the detection window. It does not: two
-thirds of the sole-labeler deficit accrues after that window closes, and the total of 11.8
-quarters of baseline volume compares with 0.0 for minority losses. This is the paper's practical
-magnitude, and it is the part of the result that the event definition does not determine.
+The informative comparison here is across strata within the post-detection window, not the share
+of each stratum's deficit falling after detection. That share is approximately two thirds in
+every stratum, including the minority stratum, which is what a roughly constant shortfall over a
+period that is two thirds post-detection would produce mechanically; it distinguishes nothing. We
+therefore report it only to note that it is uninformative, and rest the argument on the levels:
+over quarters $t+4$ to $t+11$, entirely outside the detection window, the median sole-labeler
+market accumulates 7.9 quarters of baseline volume in unreplaced dispensing while the median
+minority-loss market accumulates none. Figure~\ref{fig:recovery} shows both the recovery curves
+with their intervals and the accumulation path.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig2.pdf}
+\caption{(a) Share of markets regaining 50 percent of baseline dispensing, among those that first
+fell below it, with Wilson 95 percent bands and the number at risk. (b) Median cumulative
+unreplaced dispensing, in quarters of baseline volume. The dashed line marks the end of the
+four-quarter event-detection window. Both panels use the single 84-event twelve-quarter
+cohort.}\label{fig:recovery}
+\end{figure}
 
 \subsection{Replacement entry is limited}\label{subsec:entry}
 
@@ -902,9 +922,10 @@ only 8 of 97 such markets ever fall below half their baseline.
 Replacement is heterogeneous across these markets and the interval does not establish complete
 take-up, but it is unambiguously greater than in sole-labeler markets. When a market loses
 its only labeler, remaining labelers take up nothing at the median, entry occurs in 20 percent of
-cases, and dispensing falls below two percent of baseline in 45 to 61 percent of markets against
-none of 500 matched single-labeler markets that kept their labeler. The gradient between these
-cases is sharp. Where replacement does occur after a sole-supplier departure, it is partial: among
+cases, and dispensing falls below two percent of baseline in 45.0 percent of evaluable markets,
+with full-cohort bounds of 32.1 to 60.7 percent, against none of 500 matched control observations
+drawn from markets that kept their labeler. The gradient between these
+cases is sharp. Where replacement does occur after a sole-labeler departure, it is partial: among
 the five such markets the median ratio is 0.24.
 
 The policy content lies in that gradient, but it should be stated carefully. A prospective
@@ -941,9 +962,10 @@ or distributor, as set out in Section~\ref{subsec:labeler}. Three independent ch
 At the approval level (Section~\ref{subsec:robust}) labeler and approval counts coincide almost
 exactly, only 2.2 percent of market-quarters appear competitive on labeler count while resting on
 a single approval, and 25 of 28 sole-source markets are classified identically. At the
-establishment level (Section~\ref{subsec:estab}) no multi-labeler market maps to a single
-manufacturing site. And at the product level, which is the strictest test, 91.4 percent of
-replacement products were made at plants disjoint from the departing labeler's. The concern is
+establishment level (Section~\ref{subsec:estab}), among markets with usable site data none maps
+all of its labelers to one establishment. And at the product level, which is the strictest test,
+32 of 35 testable markets had their newly appearing replacement products listed at establishments
+disjoint from the departing labeler's. The concern is
 therefore measured rather than assumed, and it is small. Two residual issues remain:
 establishment listings cover a subset of products, so the percentages describe testable markets;
 and the listings are current rather than historical, so plant relationships are assumed stable
@@ -969,6 +991,14 @@ these comparisons as strong descriptive associations rather than as identified c
 \textbf{Cessation is bounded by suppression.} The threshold outcome identifies dispensing falling
 below two percent of baseline. Whether trace supply persists cannot be determined where records
 below eleven prescriptions are withheld. The panel comparison bounds this but does not remove it.
+
+\textbf{The conditional recovery comparison is underpowered.} Restricting recovery to markets
+that first fell below a threshold is the right estimand, but it leaves 7 to 26 markets per cell.
+All six comparisons in Table~\ref{tab:recovery} favour minority-loss markets and none is
+significant at 0.05. The unconditional contrast, 21 of 21 against 9 of 53 falling below half of
+baseline, is decisive about whether disruption occurs; the conditional contrast about recovery
+from it is not resolved by this sample and would need either a longer panel or a pooled
+multi-payer cohort.
 
 \textbf{Concentration is measured conditionally, not prospectively.} Every result here is
 conditional on a supplier loss having occurred. We do not estimate how often sole-labeler markets
@@ -998,14 +1028,17 @@ In US Medicaid drug markets defined by ingredient and dosage form, the loss of a
 is substantially absorbed by remaining labelers and the loss of the only labeler is not.
 Replacement entry is rare in the latter case, five of twenty sole-labeler markets receive some
 replacement and none receives full replacement, and dispensing frequently falls below the level
-these data resolve. The practical magnitude is the cumulative deficit: over twelve quarters a median of 11.8
-quarters of baseline volume, two thirds of it accruing after the detection window closes, against
-essentially none when a minority labeler departs. Conditional on actually losing half their
-dispensing, 37 percent of sole-labeler markets regain it within twelve quarters against 75
-percent of minority-loss markets. Product-level
-establishment records show why the two differ: absorbing markets draw replacement volume from
-plants other than the departing labeler's in 91 percent of testable cases, whereas sole-labeler
-markets are typically served by a single plant and have no internal redundancy to draw on. FDA establishment records show that the markets which absorb a loss do so from genuinely
+these data resolve. The practical magnitude is the cumulative deficit: over twelve quarters a median of 11.8 quarters
+of baseline volume, 7.9 of them accruing after the detection window closes, against essentially
+none when a minority labeler departs. Conditional recovery rates also favour minority-loss
+markets at every horizon, but on 7 to 26 markets at risk none of those comparisons is
+statistically significant, and we present them as directional rather than established. Product-level
+establishment records are consistent with a mechanism: in 32 of 35 testable minority-loss markets
+the newly appearing replacement products were listed at establishments disjoint from the
+departing labeler's, while sole-labeler markets are typically listed at a single establishment.
+This describes listed manufacturing pathways for newly appearing products in a selected subset of
+markets. It does not identify the facility that produced any historical dispensed batch, and it
+is not a volume-weighted statement about replacement dispensing. FDA establishment records show that the markets which absorb a loss do so from genuinely
 distinct manufacturing sites, and the same gradient appears in Medicare Part D, so the finding is
 neither an artefact of labeling conventions nor specific to one payer. Because the determinant is
 labeler concentration, a standing property of each market rather than a consequence of any
