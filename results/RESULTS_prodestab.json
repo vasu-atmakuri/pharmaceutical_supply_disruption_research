@@ -1,0 +1,30 @@
+{
+  "bands": {
+    "under 35%": {
+      "n": 83,
+      "tested": 4,
+      "disjoint": 3,
+      "shared": 1,
+      "coverage": 0.10416666666666666
+    },
+    "35 to 95%": {
+      "n": 15,
+      "tested": 0,
+      "disjoint": 0,
+      "shared": 0,
+      "coverage": 0.2
+    },
+    "sole >=95%": {
+      "n": 28,
+      "tested": 0,
+      "disjoint": 0,
+      "shared": 0,
+      "coverage": 0.21428571428571427
+    }
+  },
+  "new_disjoint": 2,
+  "new_shared": 0,
+  "sole_sites_mean": 1.1666666666666667,
+  "sole_single_site": 5,
+  "sole_n": 6
+}
