@@ -57,7 +57,9 @@ percent of minor-supplier markets.
 
 \textbf{Conclusions.} When a market's only labeler departs, remaining labelers take up none of
 the lost volume at the median and replacement entry is rare, whereas the loss of a minority
-labeler is fully absorbed. Labeler concentration is computable from public data for every market
+labeler is substantially absorbed. FDA establishment records show that absorbing markets draw on
+genuinely distinct manufacturing sites in 83 percent of cases, and the concentration-collapse
+gradient replicates in Medicare Part D. Labeler concentration is computable from public data for every market
 without waiting for any disruption to be reported, and so offers a standing structural measure of
 vulnerability.}
 
@@ -197,8 +199,11 @@ A supplier-loss event occurs when a labeler supplying a market at a sustained ra
 200 prescriptions per quarter, averaged over the four preceding quarters, falls below five
 percent of that rate averaged over the current and three following quarters. For each market we
 use the first such event. Exposure is the departing labeler's share of market volume over the
-four preceding quarters. This yields 285 events: 192 under 35 percent, 22 between 35 and 65
-percent, 16 between 65 and 95 percent, and 55 sole-supplier events at 95 percent or above.
+four preceding quarters. The detector returns 285 labeler-market events. Because several markets experience more than one
+such event, and we use only the first per market, these correspond to 218 distinct markets: 128
+under 35 percent, 20 between 35 and 65 percent, 15 between 65 and 95 percent, and 55 sole-labeler
+markets at 95 percent or above. Every market with a sole-labeler event has exactly one, so that
+stratum is 55 under either count. All subsequent numbers refer to markets, not raw events.
 
 \textbf{Eligibility is a single rule, applied identically to every analysis.} For each market we
 take the \emph{first} detected event anywhere in the series, which avoids conditioning the choice
@@ -296,16 +301,33 @@ difference in medians. Binomial proportions carry Wilson 95 percent intervals.
 \subsection{Remaining suppliers take up nothing when the sole supplier departs}
 
 Table~\ref{tab:rep} reports the replacement ratio. Where the departing labeler held a minority of
-the market, remaining labelers more than covered the departing volume within six quarters. Where
-it was the sole supplier, the median ratio is exactly zero. The difference in medians between the
+the market, the median market more than covered the departing volume within six quarters, though
+the bootstrap interval runs from 0.36 to 2.11 and the interquartile range from $-1.01$ to 4.29:
+median take-up exceeds the departing volume, but replacement varies considerably across markets
+and complete replacement is not established at the 95 percent level. Where the departing labeler
+was the sole supplier, the median ratio is exactly zero. The difference in medians between the
 extreme strata is 1.45 (95 percent bootstrap CI 0.36 to 2.15); in 20{,}000 resamples the
 difference was at or below zero in 0.04 percent of draws.
 
-The comparison that matters is against what remaining labelers would have done anyway. In
-never-exposed markets matched on pre-event labeler count, dosage form, calendar quarter and
-baseline volume, the same quantity drifts upward by a median of 0.16 (95 percent CI $-0.04$ to
-0.40) over an equivalent window. The minority stratum therefore exceeds counterfactual drift
-substantially, while the sole-supplier stratum falls below it.
+\textbf{The counterfactual, and what it does and does not show.} The ratio divides by the
+departing labeler's baseline volume, so a control market needs a \emph{pseudo-departing labeler}.
+We select, within each matched control market at the same calendar quarter, the labeler whose
+baseline share is closest to the treated market's departing share, and compute the identical
+expression entirely within that control market. On this construction the counterfactual drift is
+a median of $+0.09$ (95 percent CI $-0.01$ to $+0.44$; 275 observations across 219 unique
+markets) for minority-matched controls. The treated minority median of 1.45 therefore reflects
+active expansion by remaining labelers, well beyond ordinary drift.
+
+For sole-labeler markets the counterfactual is uninformative by construction, and we say so
+plainly. Matched single-labeler control markets also return a median ratio of exactly $+0.00$
+(95 percent CI 0.00 to 0.00), because a market with one labeler has no other labeler whose volume
+could move. In that stratum the zero ratio is therefore largely structural rather than an
+estimated treatment effect: it is equivalent information to the entry result in
+Section~\ref{subsec:entry}, not independent confirmation of it. The evidence that sole-labeler
+loss is harmful rests on the dispensing outcome in Section~\ref{subsec:bounds} and its matched
+comparison in Section~\ref{subsec:matched}, not on the replacement ratio. What the ratio
+establishes is the \emph{contrast between strata}: markets that retain other labelers recruit
+them, and markets that do not, cannot.
 
 \textbf{The sole-supplier stratum is not uniformly zero.} Of its 20 markets, 15 have a
 replacement ratio of exactly zero and 5 are positive, at 0.08, 0.24, 0.25 and 0.67 (one value
@@ -358,42 +380,53 @@ than the departing one, as a fraction of the departing labeler's baseline volume
 marks complete take-up.}\label{fig:main}
 \end{figure}
 
-\subsection{Market dispensing, reported as bounds}\label{subsec:bounds}
+\subsection{Market dispensing: complete-case rate and identification bounds}\label{subsec:bounds}
 
-Table~\ref{tab:main} reports the share of markets whose dispensing falls below two percent of
-baseline. Eight sole-supplier events have no observed post-event quarter at all. Dropping them,
-as the primary estimate does, risks excluding the most complete disappearances: their baselines
-range from 748 to 23{,}923 prescriptions per quarter, and all eight are sole-supplier events. We
-therefore report bounds. The lower bound drops them. The upper bound counts them as
-below-threshold, on the ground that a market with no observable dispensing in any of six
-following quarters has, at minimum, fallen below what these data resolve.
+Eight sole-labeler events have no observed post-event quarter. Their baselines run from 748 to
+23{,}923 prescriptions per quarter, so excluding them risks dropping the most complete
+disappearances. Table~\ref{tab:main} therefore separates two quantities that must not be
+conflated: the \emph{complete-case rate} among evaluable events, and \emph{identification
+bounds} over the full stratum obtained by assigning the eight unobserved events first to
+non-collapse and then to collapse.
 
 \begin{table}[htbp]
 \caption{Markets whose mean dispensing over the six post-event quarters falls below two percent
-of baseline, with Wilson 95 percent intervals. The lower bound excludes events with no observed
-post-event quarter; the upper bound counts them as below threshold. The two coincide outside the
-sole-supplier stratum, where no such events occur.}\label{tab:main}
-\begin{tabular}{lrrlrrl}
+of baseline. The complete-case rate is computed among events with at least one observed
+post-event quarter. The identification bounds are computed over all eligible events in the
+stratum, assigning the unobserved events to non-collapse (lower) and to collapse (upper). Wilson
+95 percent intervals in brackets.}\label{tab:main}
+\begin{tabular}{lrrlrl}
 \toprule
- & \multicolumn{3}{c}{Lower bound} & \multicolumn{3}{c}{Upper bound} \\
-\cmidrule(lr){2-4}\cmidrule(lr){5-7}
-Departing share & $n$ & Rate & 95\% CI & $n$ & Rate & 95\% CI \\
+ & \multicolumn{2}{c}{Complete case} & \multicolumn{3}{c}{Identification bounds, all eligible} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-6}
+Departing share & $n$ & Rate & $n$ & Lower & Upper \\
 \midrule
-Under 35\%    & 83 & 0.0\%  & 0.0 to 4.4\%   & 83 & 0.0\%  & 0.0 to 4.4\%   \\
-35 to 65\%    & 8  & 12.5\% & 2.2 to 47.1\%  & 8  & 12.5\% & 2.2 to 47.1\%  \\
-65 to 95\%    & 7  & 0.0\%  & 0.0 to 35.4\%  & 7  & 0.0\%  & 0.0 to 35.4\%  \\
-95\% or above & 20 & 45.0\% & 25.8 to 65.8\% & 28 & 60.7\% & 42.4 to 76.4\% \\
+Under 35\%    & 83 & 0.0\%  [0.0, 4.4]   & 83 & 0.0\%  & 0.0\%  \\
+35 to 65\%    & 8  & 12.5\% [2.2, 47.1]  & 8  & 12.5\% & 12.5\% \\
+65 to 95\%    & 7  & 0.0\%  [0.0, 35.4]  & 7  & 0.0\%  & 0.0\%  \\
+95\% or above & 20 & 45.0\% [25.8, 65.8] & 28 & \textbf{32.1\%} & \textbf{60.7\%} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Both bounds lie far above the matched control rate reported in
-Section~\ref{subsec:matched}, so the conclusion does not depend on how the unobserved events are
-treated. The intermediate strata contain 8 and 7 events and their intervals span most of the unit
-interval; they are reported for completeness and support no inference.
+The 45.0 percent figure is the rate among the 20 evaluable sole-labeler events. It is not a lower
+bound on the 28-event stratum; that bound is 32.1 percent. Outside the sole-labeler stratum no
+events are unobserved, so the two coincide. Even the lower bound exceeds the matched control rate
+in Section~\ref{subsec:matched} by two orders of magnitude.
 
-A leave-one-out recomputation of the sole-supplier lower bound gives a range of 42.1 to 47.4
-percent, so no single event drives the estimate.
+A leave-one-out recomputation of the complete-case rate gives 42.1 to 47.4 percent, so no single
+event drives it.
+
+\textbf{Event-level suppression sensitivity.} Section~\ref{subsec:data} bounds hidden volume on
+average; classification requires an event-level check. For each sole-labeler event we recomputed
+the outcome after inflating every suppressed post-event record to its maximum of ten
+prescriptions. One of the 20 classifications changes (alcaftadine oral liquid, where post-event
+dispensing of 12 plus a maximum hidden 8 would exceed the threshold of 16), moving the
+complete-case rate from 45.0 to 40.0 percent. The other 19 are unaffected because their observed
+post-event volume is far from the threshold in either direction. We note that CMS also applies
+secondary suppression, so the ten-prescription ceiling per suppressed record is the documented
+primary rule rather than a proven bound on every cell; the single-event sensitivity above is the
+reason this does not alter the conclusion.
 
 \subsection{Comparison with matched controls}\label{subsec:matched}
 
@@ -418,8 +451,11 @@ Under 35\%    & 65 & 340 & 0.0\%  & 0.0\% & $-13.8$\% \\
 
 The sharpest comparison restricts both arms to single-labeler markets. Of 20 such markets that
 lost their only labeler, 45.0 percent fell below two percent of baseline (95 percent CI 25.8 to
-65.8). Of 500 matched single-labeler markets that did not lose their labeler, 0.0 percent did (95
-percent CI 0.0 to 0.8). Mean dispensing changed by $-96.6$ percent in the treated arm and $+2.7$
+65.8). Of 500 matched single-labeler control observations, drawn from 357 unique markets with a mean
+reuse of 1.40, none fell below the threshold (95 percent CI 0.0 to 0.8). Because controls recur
+across matched sets these are not 500 independent markets, and the permutation procedure
+resamples control observations rather than matched sets, so the resulting $p$ value should be
+read as a descriptive extremeness measure rather than a calibrated test. Mean dispensing changed by $-96.6$ percent in the treated arm and $+2.7$
 percent in the control arm. The permutation $p$ value is 0.00005, the floor attainable with
 20{,}000 draws.
 
@@ -455,7 +491,7 @@ supplier. It is therefore an upper bound on true entry, which strengthens rather
 finding that entry is rare in the sole-supplier stratum. As noted in Section~\ref{sec:results},
 this result and the zero median replacement ratio measure the same underlying phenomenon.
 
-\subsection{Spending}
+\subsection{Spending}\label{subsec:spending}
 
 Against matched controls, sole-supplier loss is associated with a 96.7 percent decline in volume
 and a 96.6 percent decline in reimbursement; for minority losses the figures are $-14.4$ and
@@ -485,21 +521,118 @@ an Established Pharmacologic Class also does not establish clinical interchangea
 given patient or indication. Identifying substitution would require a matched counterfactual for
 class trend and, preferably, patient-level data.
 
-\subsection{Two external validations were attempted and are not available}\label{subsec:extval}
+\subsection{Manufacturing establishments behind each labeler}\label{subsec:estab}
 
-We attempted to corroborate the detected collapses against two independent FDA sources, and
-report both as unavailable rather than as null findings.
+The concern that an NDC labeler may not be an independent manufacturer can be tested against
+FDA's own registration data rather than only bounded by approval numbers. Each structured product
+label records the establishments performing each business operation on the product, identified by
+DUNS number, together with the operation performed \cite{dailymed}. We retrieved 1{,}420 such
+labels covering the 241 labelers that dispensed in any cohort market, and extracted every
+establishment carrying a MANUFACTURE operation, excluding API-only manufacture. This yields site
+data for 167 labelers (77 to 82 percent of labelers per stratum) and 318 distinct manufacturing
+establishments.
 
-The FDA Drug Shortages Database would be the natural benchmark, but it is a live register rather
-than an archive: resolved shortages remain listed for six months and discontinuations for one
-year. For events spanning 2017 to 2024 almost every corresponding record has been removed, so
-absence from the current list carries no information and a matched comparison is not possible.
+Three results follow. First, manufacturing sites are consistently more numerous than labelers,
+not fewer: cohort markets average 7.90 labelers and 19.88 distinct sites in the minority stratum,
+and 1.04 labelers and 3.64 sites in the sole-supplier stratum. Second, of 93 markets with two or
+more labelers carrying site data, \emph{none} has all of its labelers mapping to a single
+establishment. The mechanism by which relabeling would inflate apparent competition is not
+present in this sample. Third, and most directly, among minority-loss markets where both the
+departing labeler and a remaining labeler have site data ($n=72$), the remaining labelers used
+entirely different manufacturing sites in 83.3 percent of cases. Replacement in those markets is
+therefore supply from other sites, not an accounting artefact of one manufacturer trading under
+several labels.
 
-The FDA product listing records a marketing end date, which would independently date a product's
-withdrawal. In practice the field is populated for only 3{,}835 of 255{,}165 products in our
-combined crosswalk, and for none of the 28 departing labelers in the sole-source stratum. FDA's
-own listing does not reliably record when these products ceased to be marketed, which is part of
-why dispensing data is informative here.
+One linkage caveat governs all three results. Establishments were extracted per structured
+product label and then pooled to the labeler, rather than restricted to the specific NDCs
+dispensing in each market at the event date. Different sites therefore establish that the
+labelers are associated with distinct listed manufacturing establishments, not that the specific
+replacement product was made at a different plant. Product-level linkage is possible in principle,
+since each label ties operations to product codes, and is the natural refinement of this analysis.
+
+Among sole-labeler markets, the departing labeler itself averages 4.00 manufacturing sites
+(median 4, maximum 6). A sole-labeler market is therefore not generally a single-plant market:
+the concentration that matters here is at the level of the firm holding the listing, not of
+physical capacity. The below-threshold rate among the 16 sole-supplier markets with site data is
+43.8 percent, indistinguishable from the 45.0 percent in the full stratum.
+
+\subsection{Replication in Medicare Part D}\label{subsec:partd}
+
+Medicare Part D Spending by Drug reports, for each drug and each named manufacturer, annual
+claims and spending for 2019 through 2023 \cite{cms_partd}. This is a different payer, a
+different reporting unit (the manufacturer as named by CMS rather than the NDC labeler), and a
+different time resolution. We applied the same event logic: a manufacturer dispensing at least
+1{,}000 claims for a drug in one year falling below five percent of that in the next, with the
+following year used to measure the outcome. This yields 80 events.
+
+\begin{table}[htbp]
+\caption{Replication in Medicare Part D. Collapse is drug-level claims in the year after the
+exit falling below two percent of the year before it.}\label{tab:partd}
+\begin{tabular}{lrrr}
+\toprule
+Departing manufacturer's share & $n$ & Drug-level collapse & Median change \\
+\midrule
+Under 35\%    & 58 & 0.0\%  & $-1.1$\%  \\
+35 to 95\%    & 6  & 0.0\%  & $-25.0$\% \\
+95\% or above & 16 & 68.8\% & $-99.2$\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The gradient reproduces: no drug collapses when a minority manufacturer exits, and 68.8 percent
+do when a sole manufacturer exits, against 32 to 61 percent in Medicaid. Several events appear in
+both datasets independently, including the 2021 varenicline withdrawal, which supports the event
+detector rather than the payer-specific panel.
+
+Two limits on what this shows. Part D reports annual drug-level claims and names manufacturers
+rather than NDC labelers, so it cannot reproduce the replacement ratio, which requires
+within-market volume by supplier. This is therefore an external replication of the
+\emph{concentration-to-collapse association}, not of the paper's primary estimand. And as in
+Medicaid, the collapse of total claims after a dominant manufacturer's exit is partly mechanical;
+what Part D adds is that the gradient across exposure strata, including the flat minority
+stratum, appears in an independent payer.
+
+\subsection{Acquisition cost}\label{subsec:nadac}
+
+Section~\ref{subsec:spending} reports reimbursement, which is gross of manufacturer rebates. The
+National Average Drug Acquisition Cost survey reports what pharmacies actually pay per unit,
+weekly by NDC \cite{cms_nadac}. We obtained annual files for 2016, 2018 and 2021 through 2026 and
+formed market-level quarterly median acquisition cost.
+
+Coverage is the limiting factor: only nine sole-supplier markets have acquisition cost observed
+both before and after the event, in part because 2017, 2019 and 2020 files were not retrievable.
+Within those nine the median change is $-9.8$ percent and the range runs from $-96$ to $+232$
+percent. One market, trimethoprim tablets, shows a 232 percent increase of the kind associated
+with shortage episodes; one shows a 96 percent decrease that reflects a change in product mix
+rather than a price cut. Against matched controls the mean difference is $-23.1$ percent in the
+sole stratum and $-18.0$ percent in the minority stratum.
+
+We draw no conclusion from nine observations with this dispersion, in either direction. The
+available acquisition-cost observations are too sparse and too heterogeneous, and too affected by
+product-mix change as volume disappears, to determine whether sole-labeler loss produces a
+systematic price response. We report the analysis because acquisition cost is the right
+measurement to make and because the gaps in it are informative for anyone attempting it: the
+binding constraint is NADAC year coverage, not the method.
+
+\subsection{The FDA shortage register does not record these events}\label{subsec:shortreg}
+
+We matched each event to the FDA Drug Shortages Database on active ingredient, allowing a
+shortage first posted within eight quarters of the event \cite{fda_shortages}. No sole-supplier
+market matched a listed shortage (0 of 28), against 3.6 percent in the minority stratum, 6.7
+percent in the intermediate stratum, and a placebo rate of 6.8 percent computed by drawing
+never-exposed markets at random dates.
+
+This result requires care. The register is a live list: resolved shortages are removed after six
+months and discontinuations after one year, so for events in 2018 to 2023 a shortage that was
+declared and resolved would no longer appear. Absence therefore cannot establish that no shortage
+was ever declared, and we do not claim it does. What it does establish is that these supply
+losses are not recoverable from the live register as it stood in November 2026, at a rate no
+higher than chance. We did not reconstruct historical shortage records from archived copies of
+FDA's downloadable files, which federal analyses of the 2018 to 2023 period have done; that
+reconstruction is the correct way to settle the question and we do not claim to have settled it
+here. That is consistent with the paper's policy argument: a concentration measure computed
+from dispensing data identifies exposure that the shortage register, as a historical record, does
+not carry.
 
 \subsection{Robustness}\label{subsec:robust}
 
@@ -576,6 +709,13 @@ they occur after 2024Q3 and will become analysable as further quarters are relea
 markets experience a labeler departure but do not lose supply, and no such market falls below the
 threshold.
 
+\textbf{Sole-labeler versus 95 percent share.} The 95-percent-or-above stratum averages 1.05
+labelers at $t-1$, so it is not by construction composed only of single-labeler markets. In fact
+19 of the 20 evaluable events have exactly one labeler at $t-1$; the below-threshold rate in that
+exact subset is 47.4 percent against 45.0 percent overall. The single market with a second
+labeler did not fall below the threshold. We use sole-labeler for the stratum on that basis, and
+report the exact subset here so the distinction is visible.
+
 \textbf{Labeler counts after the event.} The below-threshold rate is 100 percent where no labeler
 remains, about half where one remains and zero where two or more remain. This is descriptive
 only. Cross-tabulation shows it is nearly collinear with exposure share by construction, since 18
@@ -584,9 +724,11 @@ units.
 
 \section{Discussion}\label{sec:discussion}
 
-When a market loses a labeler that held a minority of its volume, remaining labelers take up more
-than the lost volume within six quarters, well above the counterfactual drift of 0.16 observed in
-matched never-exposed markets, and total dispensing is essentially unchanged. When a market loses
+When a market loses a labeler that held a minority of its volume, the median market sees
+remaining labelers take up more than the lost volume within six quarters, against a counterfactual
+drift of 0.09 in matched never-exposed markets, and total dispensing is essentially unchanged.
+Replacement is heterogeneous across these markets and the interval does not establish complete
+take-up, but it is unambiguously greater than in sole-labeler markets. When a market loses
 its only labeler, remaining labelers take up nothing at the median, entry occurs in 20 percent of
 cases, and dispensing falls below two percent of baseline in 45 to 61 percent of markets against
 none of 500 matched single-labeler markets that kept their labeler. The gradient between these
@@ -622,17 +764,17 @@ revenues are low \cite{berndt2017}, so the opportunity is small.
 
 Five limitations bound the interpretation.
 
-\textbf{Labelers are not verified manufacturers.} As set out in Section~\ref{subsec:labeler}, an
-NDC labeler may be a repackager, relabeler or distributor. The approval-level analysis in
-Section~\ref{subsec:robust} bounds how much this matters: labeler and approval counts coincide
-almost exactly, only 2.2 percent of market-quarters appear competitive on labeler count while
-resting on a single approval, 25 of 28 sole-source markets are classified identically under both
-definitions, and the main result replicates at the approval level. What remains unexcluded is
-shared contract manufacturing, since two distinct approvals can be produced at one site, and the
-fact that a labeler's disappearance need not mean a plant closed. Linking labeler codes to
-establishment registrations would settle the remainder, but FDA's establishment register is a
-current-registration snapshot, so the firms of most interest, those that departed, are the ones
-least likely to appear in it.
+\textbf{Labelers are not verified manufacturers.} An NDC labeler may be a repackager, relabeler
+or distributor, as set out in Section~\ref{subsec:labeler}. Two independent checks now bound this.
+At the approval level (Section~\ref{subsec:robust}) labeler and approval counts coincide almost
+exactly, only 2.2 percent of market-quarters appear competitive on labeler count while resting on
+a single approval, and 25 of 28 sole-source markets are classified identically. At the
+establishment level (Section~\ref{subsec:estab}) no multi-labeler market maps to a single
+manufacturing site, and in 83.3 percent of absorbing markets the remaining labelers use entirely
+different sites from the departing one. The concern is therefore measured rather than assumed,
+and it is small. Two residual issues remain: establishment data is available for 77 to 82 percent
+of labelers, not all; and a labeler's disappearance still need not mean a plant closed, since the
+departing labelers themselves average four manufacturing sites.
 
 \textbf{Generalisation beyond Medicaid.} Medicaid is a large but not representative payer. Its
 dispensing mix is weighted toward generic oral products, the segment where sole-source supply is
@@ -664,11 +806,15 @@ demand is not a supply failure, and such cases cannot be fully excluded from the
 \section{Conclusion}\label{sec:conclusion}
 
 In US Medicaid drug markets defined by ingredient and dosage form, the loss of a minority labeler
-is fully absorbed by remaining suppliers and the loss of the only labeler is not absorbed at all.
+is substantially absorbed by remaining labelers and the loss of the only labeler is not.
 Replacement entry is rare in the latter case, and dispensing frequently falls below the level
-these data resolve. Because the determinant is labeler concentration, a standing property of each
-market rather than a consequence of any particular disruption, the markets at risk can be
-enumerated from public data and used to complement the existing notification regime. Whether displaced prescriptions move to therapeutic alternatives is not identifiable
+these data resolve. FDA establishment records show that the markets which absorb a loss do so from genuinely
+distinct manufacturing sites, and the same gradient appears in Medicare Part D, so the finding is
+neither an artefact of labeling conventions nor specific to one payer. Because the determinant is
+labeler concentration, a standing property of each market rather than a consequence of any
+particular disruption, the markets at risk can be enumerated from public data and used to
+complement the existing notification regime. None of these events is recoverable from the FDA
+shortage register, which is a live list rather than a historical record. Whether displaced prescriptions move to therapeutic alternatives is not identifiable
 in these data and remains open.
 
 \section*{Declarations}
