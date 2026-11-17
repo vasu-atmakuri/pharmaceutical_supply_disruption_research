@@ -34,27 +34,32 @@ FDA National Drug Code Directory and the openFDA bulk National Drug Code dataset
 quarterly panel of 3342 markets and 246{,}251 labeler-market-quarter observations, of which 97.4
 percent of dispensing is from abbreviated new drug application or authorized generic products. A
 supplier-loss event was defined as a labeler dispensing at least 200 prescriptions per quarter
-over four quarters falling below five percent of that rate. Because a dominant supplier's
-departure mechanically reduces market volume, our primary outcome is the \emph{replacement
-ratio}: the change in volume dispensed by all \emph{other} suppliers, divided by the departing
-supplier's baseline volume. A ratio of one denotes complete take-up. We also report an indicator
-for market dispensing falling below two percent of baseline. Treated markets were compared with
-never-exposed markets matched on pre-event supplier count, dosage form, calendar quarter and
-baseline volume, with no requirement that controls survive the panel.
+over four quarters falling below five percent of that rate; the first such event per market was
+used. Because a dominant supplier's departure mechanically reduces market volume, our primary
+outcome is the \emph{replacement ratio}: the change in volume dispensed by all \emph{other}
+labelers, divided by the departing labeler's baseline volume. A ratio of one denotes complete
+take-up. We also report an indicator for market dispensing falling below two percent of baseline,
+as bounds reflecting events whose post-event quarters are entirely unobserved. Treated markets
+were compared with never-exposed markets matched on pre-event labeler count, dosage form,
+calendar quarter and baseline volume, with no requirement that controls survive the panel.
 
-\textbf{Results.} Of 285 supplier-loss events, 122 met the window and baseline criteria,
-including 20 sole-supplier events. The median replacement ratio six quarters after the event was
-1.47 where the departing labeler held under 35 percent of the market, 1.14 between 35 and 95
-percent, and 0.00 where it was the sole supplier. Market dispensing fell below two percent of
-baseline in 45.0 percent of sole-supplier markets (95 percent CI 25.8 to 65.8) against 0.0
-percent of 500 matched single-supplier markets that did not lose their supplier (95 percent CI
-0.0 to 0.8; permutation $p = 0.00005$). New labeler entry occurred in 14 percent of sole-supplier
-markets against 76 percent of minor-supplier markets.
+\textbf{Results.} Supplier loss was detected in 218 markets, of which 118 met the window,
+baseline and follow-up criteria, including 20 sole-supplier events. The median replacement ratio
+was 1.45 (95 percent CI 0.36 to 2.11) where the departing labeler held under 35 percent of the
+market, 1.13 between 35 and 65 percent, 0.97 between 65 and 95 percent, and 0.00 (95 percent CI
+0.00 to 0.00) where it was the sole supplier; the difference between the extreme strata was 1.45
+(95 percent CI 0.36 to 2.15). In matched never-exposed markets the same quantity drifted by 0.16
+(95 percent CI $-0.04$ to 0.40). Market dispensing fell below two percent of baseline in 45.0 to
+60.7 percent of sole-supplier markets, the range reflecting eight events with no observed
+post-event quarter, against 0.0 percent of 500 matched single-labeler markets that did not lose
+their labeler. New labeler entry occurred in 20 percent of sole-supplier markets against 75
+percent of minor-supplier markets.
 
-\textbf{Conclusions.} When a market's only supplier departs, remaining suppliers take up
-essentially none of the lost volume and replacement entry is rare, whereas the loss of a minority
-supplier is fully absorbed. Because the determinant is supplier concentration, which is
-observable in public data before any failure, the at-risk set can be enumerated in advance.}
+\textbf{Conclusions.} When a market's only labeler departs, remaining labelers take up none of
+the lost volume at the median and replacement entry is rare, whereas the loss of a minority
+labeler is fully absorbed. Labeler concentration is computable from public data for every market
+without waiting for any disruption to be reported, and so offers a standing structural measure of
+vulnerability.}
 
 \keywords{pharmaceutical supply chain, drug shortages, sole-source supply, generic drug markets,
 market entry, Medicaid, supply chain resilience}
@@ -127,9 +132,20 @@ suppressed, and \emph{absent} if no record exists. Suppressed and absent quarter
 identically as missing and are never imputed as zero. In forming a post-event mean, missing
 quarters are excluded from the baseline, which must be complete, and are set to zero in the
 post-event window only when at least one post-event quarter is observed. This asymmetry is
-deliberate: a market with no observed post-event quarter is dropped rather than recorded as
-having collapsed. Because a suppressed quarter in the national rows implies fewer than eleven
-prescriptions nationally, the zero substitution errs by at most ten prescriptions per quarter.
+deliberate: a market with no observed post-event quarter is dropped from the primary estimate
+rather than recorded as having collapsed, and Section~\ref{subsec:bounds} reports what happens
+when such events are instead counted as collapsed.
+
+The error introduced by substituting zero is bounded but not by ten prescriptions. Suppression
+applies to each reported NDC record, and a labeler-market-quarter aggregates several: the mean
+is 2.72 records, so a fully suppressed cell hides at most ten prescriptions per suppressed
+record. Across fully suppressed labeler-product-quarters the median count of suppressed records
+is one, the ninetieth percentile is two and the maximum is fourteen, giving hidden volume of at
+most 10, 20 and 140 prescriptions respectively. Aggregated to the market level over the
+post-event window, the implied upper bound on hidden volume averages 12.5 prescriptions per
+quarter in the sole-supplier stratum (0.26 percent of baseline) and 116.3 in the
+minority stratum (0.32 percent of baseline). These bounds are far below the two percent
+threshold, so suppression cannot by itself produce a below-threshold classification.
 
 \subsection{Labelers are not necessarily independent manufacturers}\label{subsec:labeler}
 
@@ -184,13 +200,38 @@ use the first such event. Exposure is the departing labeler's share of market vo
 four preceding quarters. This yields 285 events: 192 under 35 percent, 22 between 35 and 65
 percent, 16 between 65 and 95 percent, and 55 sole-supplier events at 95 percent or above.
 
-\textbf{Eligibility is a single rule.} An event enters the analysis if and only if (i) quarters
-$t-6$ through $t+6$ lie inside the panel, (ii) all four baseline quarters $t-6$ through $t-3$ are
+\textbf{Eligibility is a single rule, applied identically to every analysis.} For each market we
+take the \emph{first} detected event anywhere in the series, which avoids conditioning the choice
+of event on the analysis window. That event enters the analysis if and only if (i) quarters $t-6$
+through $t+6$ lie inside the panel, (ii) all four baseline quarters $t-6$ through $t-3$ are
 observed and positive, and (iii) at least one of the six post-event quarters is observed.
-Condition (i) ensures every event has the same calendar follow-up available; condition (iii)
-distinguishes a market that fell silent from one for which we have no post-event information at
-all. Of 285 events, 132 satisfy (i) and 122 satisfy all three. Every reported stratum uses this
-one rule, so the strata sum to the total.
+Condition (i) gives every event the same calendar follow-up; condition (iii) separates a market
+that fell silent from one for which no post-event information exists at all.
+Table~\ref{tab:flow} reports the resulting event flow. Every stratum in every table uses this one
+rule, so strata sum to totals throughout.
+
+One further exclusion applies to the replacement ratio only, and is mechanical rather than
+selective: the ratio divides by the departing labeler's own baseline volume, which is
+unobservable when all four of that labeler's baseline quarters are suppressed even though the
+market total is observed. This occurs once, in the minority stratum, reducing that stratum from
+83 to 82.
+
+\begin{table}[htbp]
+\caption{Event flow from detection to analysis cohort. Markets are counted once, at their first
+detected supplier-loss event.}\label{tab:flow}
+\begin{tabular}{lrrrrr}
+\toprule
+Departing share & Detected & In window & Baseline complete & Post observed & No post observed \\
+\midrule
+Under 35\%    & 128 & 84  & 83  & 83  & 0 \\
+35 to 65\%    & 20  & 8   & 8   & 8   & 0 \\
+65 to 95\%    & 15  & 8   & 7   & 7   & 0 \\
+95\% or above & 55  & 28  & 28  & 20  & 8 \\
+\midrule
+Total          & 218 & 128 & 126 & 118 & 8 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Controls}\label{subsec:controls}
 
@@ -204,7 +245,13 @@ stability. The matched design conditions only on information available before th
 
 For the sole-supplier stratum we additionally report the sharpest available comparison: markets
 that had exactly one labeler at $t-1$ and lost it, against markets that had exactly one labeler
-at $t-1$ and did not, matched on baseline volume within a factor of three.
+at $t-1$ and did not, matched on baseline volume within a factor of three and capped at 25
+controls per treated market, which yields 500 control observations for 20 treated markets. The
+wider volume window and higher cap are deliberate for this comparison, which conditions on an
+exact labeler count rather than on dosage form. Controls are drawn independently for each treated
+market and may therefore appear in more than one matched set; control observations are
+consequently not independent, and we treat them as a comparison distribution rather than as a
+sample of distinct units.
 
 \subsection{Outcomes and inference}\label{subsec:spec}
 
@@ -232,41 +279,73 @@ markets reaching zero; a plain logarithm drops exactly the most severe cases. Pe
 are reported as $100(e^{\Delta}-1)$, where $\Delta$ is the difference in mean $\log(1+x)$ between
 treated and matched controls. Log points are never reported directly as percentages.
 
-\textbf{Inference.} Binomial proportions carry Wilson 95 percent intervals. Treated-control
-differences are tested by permutation with 20{,}000 draws, giving a minimum attainable $p$ of
-$1/20001 \approx 0.00005$. Our pre-specified primary hypothesis concerns the sole-supplier
-stratum; the intermediate strata and the threshold, baseline and panel variations in
-Section~\ref{subsec:robust} are exploratory.
+\textbf{Inference.} Treated-control differences in the below-threshold indicator are tested by
+permutation with 20{,}000 draws, giving a minimum attainable $p$ of $1/20001 \approx 0.00005$;
+where that floor is reached we report it as such rather than as an exact $p$ value. The designated primary outcome is the replacement
+ratio in the sole-supplier stratum. We did not register an analysis plan in advance, and this
+manuscript reflects revisions made after inspecting the data, so we describe this outcome as
+designated rather than pre-specified. The intermediate strata and the threshold, baseline and
+panel variations in Section~\ref{subsec:robust} are exploratory.
+
+Uncertainty for the replacement ratio is reported as bootstrap 95 percent intervals on the
+median, from 20{,}000 resamples, and the contrast between strata as a bootstrap interval on the
+difference in medians. Binomial proportions carry Wilson 95 percent intervals.
 
 \section{Results}\label{sec:results}
 
 \subsection{Remaining suppliers take up nothing when the sole supplier departs}
 
 Table~\ref{tab:rep} reports the replacement ratio. Where the departing labeler held a minority of
-the market, remaining suppliers more than covered the departing volume within six quarters. Where
-it was the sole supplier, the median ratio is exactly zero, and the mean of 0.06 reflects a small
-number of markets with partial take-up.
+the market, remaining labelers more than covered the departing volume within six quarters. Where
+it was the sole supplier, the median ratio is exactly zero. The difference in medians between the
+extreme strata is 1.45 (95 percent bootstrap CI 0.36 to 2.15); in 20{,}000 resamples the
+difference was at or below zero in 0.04 percent of draws.
+
+The comparison that matters is against what remaining labelers would have done anyway. In
+never-exposed markets matched on pre-event labeler count, dosage form, calendar quarter and
+baseline volume, the same quantity drifts upward by a median of 0.16 (95 percent CI $-0.04$ to
+0.40) over an equivalent window. The minority stratum therefore exceeds counterfactual drift
+substantially, while the sole-supplier stratum falls below it.
+
+\textbf{The sole-supplier stratum is not uniformly zero.} Of its 20 markets, 15 have a
+replacement ratio of exactly zero and 5 are positive, at 0.08, 0.24, 0.25 and 0.67 (one value
+appears twice). Among the five receiving any replacement, the median ratio is 0.24: even where
+some labeler steps in, roughly three quarters of the departing volume is not covered. No market
+in this stratum has a negative ratio.
+
+We note the structural relationship between this result and the entry result in
+Section~\ref{subsec:entry}. In a market with one labeler, other-labeler volume begins at zero, so
+a positive replacement ratio requires a new labeler to appear. The zero median and the low entry
+rate are therefore two measurements of one phenomenon rather than independent corroboration, and
+we present them as such. What the ratio adds beyond the entry count is magnitude: it shows that
+the few entrants who do appear replace only a fraction of the lost volume.
 
 \begin{table}[htbp]
 \caption{Replacement ratio by departing labeler's prior market share: volume taken up by all
-other suppliers over the six post-event quarters, divided by the departing labeler's mean
-baseline volume. A value of 1.00 denotes complete take-up. Medians are the preferred summary
-because the ratio is unbounded above. Volumes are prescriptions per quarter.}\label{tab:rep}
-\begin{tabular}{lrrrrr}
+other labelers over the six post-event quarters, divided by the departing labeler's mean baseline
+volume. A value of 1.00 denotes complete take-up. Intervals are bootstrap 95 percent intervals on
+the median from 20{,}000 resamples. Means are shown for completeness and are unstable in the
+minority stratum, where the denominator can be small relative to a large and growing
+market.}\label{tab:rep}
+\begin{tabular}{lrrlrr}
 \toprule
-Departing share & $n$ & Departing base & Other base & Median $R$ & Mean $R$ \\
+Departing share & $n$ & Median $R$ & 95\% CI & IQR & Mean $R$ \\
 \midrule
-Under 35\%    & 86 & 29{,}672 & 325{,}509 & 1.45 & 16.00 \\
-35 to 65\%    & 8  & 42{,}550 & 16{,}399  & 1.13 & 0.82 \\
-65 to 95\%    & 7  & 8{,}187  & 340       & 0.97 & 0.80 \\
-95\% or above & 20 & 23{,}087 & 0         & \textbf{0.00} & 0.06 \\
+Under 35\%    & 82 & 1.45 & 0.36 to 2.11 & $-1.01$ to 4.29 & 15.43 \\
+35 to 65\%    & 8  & 1.13 & 0.02 to 1.48 & 0.44 to 1.26    & 0.82 \\
+65 to 95\%    & 7  & 0.97 & 0.41 to 1.12 & 0.51 to 1.08    & 0.80 \\
+95\% or above & 20 & \textbf{0.00} & 0.00 to 0.00 & 0.00 to 0.00 & 0.06 \\
+\midrule
+\multicolumn{6}{l}{\footnotesize Matched never-exposed comparison, same denominator: median 0.16 (95\% CI $-0.04$ to 0.40)} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Figure~\ref{fig:main}(b) shows the ratio over event time. Minority-supplier losses are covered
-before the event is complete, consistent with other suppliers scaling as the departing one winds
-down. Sole-supplier losses show a flat line at zero across all thirteen quarters.
+Figure~\ref{fig:main}(b) shows the ratio over event time. Minority losses are covered before the
+event is complete, consistent with other labelers scaling as the departing one winds down.
+Sole-supplier losses show a flat line at zero across all thirteen quarters, including quarters
+$t+4$ through $t+6$, which lie entirely outside the four-quarter window used to detect the event
+and so cannot be an artefact of the detection rule.
 
 \begin{figure}[htbp]
 \centering
@@ -279,34 +358,44 @@ than the departing one, as a fraction of the departing labeler's baseline volume
 marks complete take-up.}\label{fig:main}
 \end{figure}
 
-\subsection{Market dispensing}
+\subsection{Market dispensing, reported as bounds}\label{subsec:bounds}
 
 Table~\ref{tab:main} reports the share of markets whose dispensing falls below two percent of
-baseline. The strata sum to the total by construction of the eligibility rule in
-Section~\ref{subsec:treat}.
+baseline. Eight sole-supplier events have no observed post-event quarter at all. Dropping them,
+as the primary estimate does, risks excluding the most complete disappearances: their baselines
+range from 748 to 23{,}923 prescriptions per quarter, and all eight are sole-supplier events. We
+therefore report bounds. The lower bound drops them. The upper bound counts them as
+below-threshold, on the ground that a market with no observable dispensing in any of six
+following quarters has, at minimum, fallen below what these data resolve.
 
 \begin{table}[htbp]
 \caption{Markets whose mean dispensing over the six post-event quarters falls below two percent
-of baseline, by departing labeler's prior share, with Wilson 95 percent intervals. All rows use
-the single eligibility rule and the single baseline window.}\label{tab:main}
-\begin{tabular}{lrrrl}
+of baseline, with Wilson 95 percent intervals. The lower bound excludes events with no observed
+post-event quarter; the upper bound counts them as below threshold. The two coincide outside the
+sole-supplier stratum, where no such events occur.}\label{tab:main}
+\begin{tabular}{lrrlrrl}
 \toprule
-Departing share & $n$ & Below 2\% & Rate & 95\% CI \\
+ & \multicolumn{3}{c}{Lower bound} & \multicolumn{3}{c}{Upper bound} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Departing share & $n$ & Rate & 95\% CI & $n$ & Rate & 95\% CI \\
 \midrule
-Under 35\%    & 87  & 0  & 0.0\%  & 0.0 to 4.2\%   \\
-35 to 65\%    & 8   & 1  & 12.5\% & 2.2 to 47.1\%  \\
-65 to 95\%    & 7   & 0  & 0.0\%  & 0.0 to 35.4\%  \\
-95\% or above & 20  & 9  & 45.0\% & 25.8 to 65.8\% \\
-\midrule
-All events    & 122 & 10 & 8.2\%  & 4.5 to 14.4\%  \\
+Under 35\%    & 83 & 0.0\%  & 0.0 to 4.4\%   & 83 & 0.0\%  & 0.0 to 4.4\%   \\
+35 to 65\%    & 8  & 12.5\% & 2.2 to 47.1\%  & 8  & 12.5\% & 2.2 to 47.1\%  \\
+65 to 95\%    & 7  & 0.0\%  & 0.0 to 35.4\%  & 7  & 0.0\%  & 0.0 to 35.4\%  \\
+95\% or above & 20 & 45.0\% & 25.8 to 65.8\% & 28 & 60.7\% & 42.4 to 76.4\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The intermediate strata contain 8 and 7 events and their intervals span most of the unit
-interval. They are reported for completeness and support no inference.
+Both bounds lie far above the matched control rate reported in
+Section~\ref{subsec:matched}, so the conclusion does not depend on how the unobserved events are
+treated. The intermediate strata contain 8 and 7 events and their intervals span most of the unit
+interval; they are reported for completeness and support no inference.
 
-\subsection{Comparison with matched controls}
+A leave-one-out recomputation of the sole-supplier lower bound gives a range of 42.1 to 47.4
+percent, so no single event drives the estimate.
+
+\subsection{Comparison with matched controls}\label{subsec:matched}
 
 Table~\ref{tab:matched} reports treated markets against never-exposed markets matched on
 pre-event labeler count, dosage form, calendar quarter and baseline volume.
@@ -338,22 +427,24 @@ This addresses the concern that a control group selected for persistent dispensi
 exaggerate the contrast. These controls are selected only on pre-event characteristics, and the
 contrast is undiminished.
 
-\subsection{Replacement entry is limited}
+\subsection{Replacement entry is limited}\label{subsec:entry}
 
-Table~\ref{tab:entry} reports labeler counts and entry, where entry is any labeler dispensing in
-quarters $t$ through $t+6$ that was not dispensing at $t-1$. Markets losing one of several
-labelers see entry in 76 percent of cases and their count is unchanged. Markets losing their only
-labeler see entry in 14 percent of cases, and the mean count falls from 1.04 to 0.64.
+Table~\ref{tab:entry} reports labeler counts and entry on the same 118-market cohort used
+elsewhere, where entry is any labeler dispensing in quarters $t$ through $t+6$ that was not
+dispensing at $t-1$. Markets losing one of several labelers see entry in 75 percent of cases and
+their count is unchanged. Markets losing their only labeler see entry in 20 percent of cases, and
+the mean count falls from 1.05 to 0.90.
 
 \begin{table}[htbp]
-\caption{Labeler counts and entry after supplier loss.}\label{tab:entry}
+\caption{Labeler counts and entry after supplier loss, on the analysis cohort of
+Table~\ref{tab:flow}.}\label{tab:entry}
 \begin{tabular}{lrrrr}
 \toprule
 Departing share & $n$ & Labelers at $t-1$ & Labelers at $t+6$ & Any entry \\
 \midrule
-Under 35\%    & 88 & 7.91 & 8.40 & 76\% \\
-35 to 95\%    & 16 & 3.56 & 3.69 & 38\% \\
-95\% or above & 28 & 1.04 & 0.64 & 14\% \\
+Under 35\%    & 83 & 7.90 & 8.35 & 75\% \\
+35 to 95\%    & 15 & 3.67 & 3.87 & 40\% \\
+95\% or above & 20 & 1.05 & 0.90 & 20\% \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -361,7 +452,8 @@ Under 35\%    & 88 & 7.91 & 8.40 & 76\% \\
 This measure counts any labeler code appearing that was absent at $t-1$, which includes a
 previously active labeler returning and an administrative relabeling as well as a genuinely new
 supplier. It is therefore an upper bound on true entry, which strengthens rather than weakens the
-finding that entry is rare in the sole-supplier stratum.
+finding that entry is rare in the sole-supplier stratum. As noted in Section~\ref{sec:results},
+this result and the zero median replacement ratio measure the same underlying phenomenon.
 
 \subsection{Spending}
 
@@ -419,10 +511,19 @@ involves no threshold.
 reasons is not a supply chain failure, and demand may fall because clinicians stop prescribing.
 The clearest instances in our window are ranitidine (2020) and varenicline (2021), both
 nitrosamine related. Using openFDA drug enforcement records \cite{openfda} we flagged
-sole-supplier markets with a recall of the same ingredient within four quarters. On the state-row
-panel, where the stratum is large enough to split, flagged and unflagged subgroups are
-indistinguishable: 53.8 and 54.5 percent below threshold respectively. On the national panel the
-stratum is too small to split meaningfully, which is a limitation.
+sole-supplier markets with a recall of the same ingredient within four quarters of the event, and
+split the primary stratum directly rather than relying on the larger state-row panel. Of the 20
+markets, 14 are flagged and 6 are not. Their below-threshold rates are 42.9 and 50.0 percent
+respectively, and the median replacement ratio is 0.00 in both subgroups. Safety-related
+departures are present but do not account for the finding. The flagging rule matches on ingredient
+name and so is deliberately over-inclusive; the unflagged subgroup is therefore the conservative
+one, and it shows the same result.
+
+\textbf{Generic and non-generic departures.} Of the 20 sole-supplier events, 16 involve a
+departing labeler marketing ANDA or authorized generic products and 4 do not. Below-threshold
+rates are 37.5 and 75.0 percent respectively, with a median replacement ratio of 0.00 in both. The
+four non-generic cases are too few to interpret, and we report them only to show that the finding
+is not confined to one marketing category.
 
 \textbf{Internal placebo.} The minority-exposure stratum is a placebo inside the design: these
 markets experience a labeler departure but do not lose supply, and no such market falls below the
@@ -436,17 +537,34 @@ units.
 
 \section{Discussion}\label{sec:discussion}
 
-When a market loses a labeler that held a minority of its volume, remaining suppliers take up more
-than the lost volume within six quarters and total dispensing is essentially unchanged. When a
-market loses its only labeler, remaining suppliers take up nothing at the median, entry occurs in
-14 percent of cases, and dispensing falls below two percent of baseline in 45 percent of markets
-against none of 500 matched single-labeler markets that kept their supplier. The gradient between
-these cases is sharp.
+When a market loses a labeler that held a minority of its volume, remaining labelers take up more
+than the lost volume within six quarters, well above the counterfactual drift of 0.16 observed in
+matched never-exposed markets, and total dispensing is essentially unchanged. When a market loses
+its only labeler, remaining labelers take up nothing at the median, entry occurs in 20 percent of
+cases, and dispensing falls below two percent of baseline in 45 to 61 percent of markets against
+none of 500 matched single-labeler markets that kept their labeler. The gradient between these
+cases is sharp. Where replacement does occur after a sole-supplier departure, it is partial: among
+the five such markets the median ratio is 0.24.
 
-The policy content lies in that gradient. Supplier concentration is observable in public data
-before any failure occurs, so the at-risk set is enumerable in advance: it is the set of
-ingredient and dosage-form markets with one meaningful labeler. Instruments keyed to shortage
-status necessarily activate after supply has already stopped.
+The policy content lies in that gradient, but it should be stated carefully. A prospective
+notification regime already exists: section 506C of the Federal Food, Drug, and Cosmetic Act, as
+amended, requires applicants and manufacturers of covered drugs to notify FDA of a permanent
+discontinuance or an interruption in manufacturing six months in advance, or as soon as
+practicable, and the requirement applies regardless of market share \cite{fda506c}. It is
+therefore wrong to characterise the regulatory apparatus as purely reactive.
+
+The contribution is different and narrower. Notification is triggered by a particular firm's
+decision about a particular product, and tells the recipient nothing about how exposed the market
+would be if that product went away. Labeler concentration is a standing property of every market,
+computable from public data at any time without waiting for any disruption to be reported, and
+our results indicate it is the variable that determines whether a departure is absorbed. It is
+complementary to notification rather than a substitute for it: a concentration measure identifies
+which notifications, and which markets with no notification at all, warrant attention.
+
+One caveat constrains operational use. Medicaid State Drug Utilization Data are released
+quarterly and with a lag, so a concentration measure built from them is not a real-time monitor.
+Establishing the latency at which such a measure could be maintained, and whether more timely
+sources support it, is necessary before it could be used prospectively.
 
 The finding is consistent with the FDA Task Force's identification of impaired market recovery as
 a root cause of shortages \cite{fda2019taskforce}, and supplies a magnitude the report did not. It
@@ -468,10 +586,18 @@ registrations would resolve this and is the most valuable single extension of th
 dispensing mix is weighted toward generic oral products, the segment where sole-source supply is
 most common, so the setting is appropriate, but it is one payer.
 
-\textbf{Sample size.} The sole-supplier stratum contains 20 eligible events. Losing one's only
-labeler is rare, which is the binding constraint on this design. The Wilson interval on the
-below-threshold rate runs from 25.8 to 65.8 percent: the direction is secure, the magnitude is
-not precise. The intermediate strata are too small to interpret at all.
+\textbf{Sample size.} The sole-supplier stratum contains 20 eligible events, or 28 including those
+with no observed follow-up. Losing one's only labeler is rare, which is the binding constraint on
+this design. The Wilson interval on the below-threshold rate runs from 25.8 to 65.8 percent at the
+lower bound: the direction is secure, the magnitude is not precise. The intermediate strata are
+too small to interpret at all.
+
+\textbf{Association rather than established causation.} Controls are defined by the absence of a
+detected supplier-loss event, which is a property of their subsequent history, and matching covers
+labeler count, dosage form, calendar quarter and baseline volume but not product age, therapeutic
+class, brand status or pre-event trend. The pre-event paths in Figure~\ref{fig:main}(a) are flat
+and the counterfactual drift in Table~\ref{tab:rep} is small, which is reassuring, but we describe
+these comparisons as strong descriptive associations rather than as identified causal effects.
 
 \textbf{Cessation is bounded by suppression.} The threshold outcome identifies dispensing falling
 below two percent of baseline. Whether trace supply persists cannot be determined where records
@@ -488,9 +614,9 @@ demand is not a supply failure, and such cases cannot be fully excluded from the
 In US Medicaid drug markets defined by ingredient and dosage form, the loss of a minority labeler
 is fully absorbed by remaining suppliers and the loss of the only labeler is not absorbed at all.
 Replacement entry is rare in the latter case, and dispensing frequently falls below the level
-these data resolve. Because the determinant is labeler concentration, the markets at risk can be
-enumerated from public data before a failure occurs rather than identified from shortage lists
-afterwards. Whether displaced prescriptions move to therapeutic alternatives is not identifiable
+these data resolve. Because the determinant is labeler concentration, a standing property of each
+market rather than a consequence of any particular disruption, the markets at risk can be
+enumerated from public data and used to complement the existing notification regime. Whether displaced prescriptions move to therapeutic alternatives is not identifiable
 in these data and remains open.
 
 \section*{Declarations}
