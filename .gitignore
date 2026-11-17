@@ -1,0 +1,12 @@
+# raw data: large, public, reproducible from source
+*.csv
+*.parquet
+*.zip
+*.txt
+drug-ndc-*.json
+sdud/
+crosswalk/
+wget.log
+__pycache__/
+.venv/
+.DS_Store
