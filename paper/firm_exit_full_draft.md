@@ -1,45 +1,31 @@
-# When the Only Supplier Fails: Abrupt Manufacturer Exit and the Absence of Market Repair in US Generic Drug Markets
+# When the Last Supplier Leaves: Supplier Loss, Absent Market Repair, and Access in US Generic Drug Markets
 
 Vasu Atmakuri (first author), Independent Researcher, Dallas, TX. ORCID 0009-0007-5955-2466.
 Souseelya Kidambi (second author).
-Full draft, 17 November 2026. All estimates computed from public data; every figure in this
-draft traces to a logged run.
+Draft of 17 November 2026. Every figure traces to a logged run on public data.
 
 ---
 
 ## 1. Introduction
 
-Policy attention to pharmaceutical supply reliability has concentrated almost entirely on
-shortages: their causes, their prediction, and the effectiveness of regulatory response. The
-underlying market event that produces many of them has received far less scrutiny. Generic
-drug markets in the United States are highly concentrated, and a substantial number of
-molecules are supplied by a single manufacturer. When such a manufacturer fails, the question
-is not whether supply is interrupted, which is immediate and arithmetic, but whether the
-market repairs itself. Competitive markets are expected to attract replacement entry, and
-clinical practice is expected to substitute within therapeutic class. Neither assumption has
-been tested at national scale.
+Policy attention to pharmaceutical supply reliability concentrates on shortages: their
+prediction, their causes, and the effectiveness of regulatory response. The market event that
+produces many of them is less examined. US generic drug markets are concentrated, and many
+drug-form markets are served by a single manufacturer. When that manufacturer stops supplying,
+the interesting question is not whether supply is interrupted, which is immediate, but whether
+the market repairs itself. Economic theory expects replacement entry. Clinical practice expects
+therapeutic substitution. Neither has been tested at national scale.
 
 The existing literature asks a different question. Work on generic market structure documents
-entry and exit and relates supplier counts to prices, and work on firm behaviour explains
-*why* firms leave markets. What happens to patients after a firm leaves, and whether anyone
-replaces it, is not established.
+entry and exit and relates supplier counts to prices. Work on firm behaviour explains why firms
+leave. What happens to patients after a supplier leaves, and whether anyone replaces it, is not
+established.
 
-This paper addresses that gap. Using twelve years of national Medicaid dispensing records, it
-identifies 105 abrupt manufacturer exits, measures what happens to the affected molecules, and
-tests the two repair mechanisms directly: replacement entry by other manufacturers, and
-therapeutic substitution within pharmacologic class.
-
-The central result is that repair largely does not occur. Where the failing firm was one of
-many suppliers, dispensing is unaffected and new entry is common. Where it was the sole
-supplier, roughly a third of affected prescription molecules cease to be dispensed
-altogether, replacement entry occurs for a small minority, and the rest of the therapeutic
-class absorbs essentially none of the lost volume.
-
-This matters for three reasons. First, it identifies supplier count, rather than shortage
-status, as the operative resilience variable. Second, it shows that the loss is not a
-transition cost: it persists for at least two years. Third, it contrasts directly with planned
-exits. Prior work on Medicaid Drug Rebate Program terminations found that the market absorbs
-most of the lost volume. Planned withdrawal transfers supply. Abrupt failure destroys it.
+This paper tests both repair mechanisms directly using eleven years of national Medicaid
+dispensing records. The finding is that repair largely does not happen, and that the operative
+variable is the departing supplier's market share rather than the size or visibility of the
+firm. Where the departing supplier held under 35% of a market, 0.8% of markets lose supply
+entirely. Where it was the sole supplier, 54% do.
 
 ---
 
@@ -47,9 +33,9 @@ most of the lost volume. Planned withdrawal transfers supply. Abrupt failure des
 
 ### 2.1 Data
 
-Medicaid State Drug Utilization Data, published quarterly by the Centers for Medicare and
-Medicaid Services, 2014Q1 to 2026Q1: 13 annual files, 5.7 GB, approximately 57 million
-records covering 6.78 billion prescriptions between 2017 and 2025.
+Medicaid State Drug Utilization Data, published quarterly by CMS. The full series runs from
+1991, and all 36 years were obtained (37 files, 12 GB), but the analysis window is 2016Q1 to
+2026Q1 for a reason stated in 2.2.
 
 Two handling decisions materially affect results.
 
@@ -58,269 +44,222 @@ coded 'XX'. Summing both double counts by approximately 1.99x. The aggregate row
 rising from 274,082 records in 2017 to 320,609 in 2025. All analyses use state rows only.
 
 **Suppressed cells treated as missing.** Suppression flags 48.9% to 52.3% of rows in every
-year. Because suppression applies to very low counts, the suppressed share of volume is
-small while the suppressed share of cells is about half. Suppressed cells are excluded from
-aggregation, not imputed.
+year. Suppression applies to very low counts, so the suppressed share of volume is small while
+the suppressed share of cells is about half. Suppressed cells are excluded, not imputed.
 
-### 2.2 Molecule, class and product type
+### 2.2 Why the window starts in 2016
 
-National Drug Codes were mapped to active ingredient, Established Pharmacologic Class and
-product type using the FDA National Drug Code Directory product file combined with the
-openFDA bulk NDC dataset. The latter is required because it retains discontinued products
-the current directory omits. The combined crosswalk holds 136,099 unique labeler-product
-keys and matches **76.7% of prescriptions to ingredient and 69.3% to pharmacologic class**.
+National Drug Codes were mapped to ingredient, dosage form, Established Pharmacologic Class and
+prescription-versus-OTC status using the FDA National Drug Code Directory product file combined
+with the openFDA bulk NDC dataset, which retains discontinued products the current directory
+omits. The combined crosswalk holds 136,099 labeler-product keys.
 
-**The main analysis is restricted to products typed HUMAN PRESCRIPTION DRUG.** An unrestricted
-first pass produced larger effects, but inspection showed the affected set mixed clinically
-significant drugs with over-the-counter products such as senna, psyllium and zinc oxide cream.
-Restricting to prescription drugs roughly halves the estimated effect and is the specification
-reported throughout.
+Coverage is strongly time-dependent, because the FDA directory does not retain historical NDCs:
 
-### 2.3 Identifying abrupt exit
+| year | 1993 | 1999 | 2005 | 2011 | 2014 | 2017 | 2020 | 2023 | 2026 |
+|---|---|---|---|---|---|---|---|---|---|
+| prescriptions matched | 6% | 15% | 20% | 42% | 49% | 63% | 82% | 93% | 100% |
 
-No public register of abrupt pharmaceutical manufacturer failure exists, so exits are
-identified from dispensing. A labeler is classified as exiting in quarter t when its total
-dispensing averaged at least 2,000 prescriptions per quarter over the preceding four quarters
-and fell below 10% of that level across the four quarters from t. Detection uses the full
-panel, including records unmatched to the crosswalk, so firm size is not understated.
+Coverage first exceeds 60% in 2017. Extending the panel back therefore adds years but not
+usable observations, and the pre-2016 data is not used. This is stated because it is a real
+constraint on any study of this kind using SDUD with a current-vintage crosswalk.
 
-This yields **105 exiting labelers** between 2016 and 2024.
+**The analysis is restricted to products typed HUMAN PRESCRIPTION DRUG.** An unrestricted first
+pass produced larger effects, but the affected set mixed clinically significant drugs with
+over-the-counter products such as senna, psyllium and zinc oxide cream.
 
-**Validation.** The procedure recovers the 2023 collapse of Akorn Pharmaceuticals with no
-external input. Labeler 17478 exits in 2023Q2 with 111 products; labeler 50383, Hi-Tech
-Pharmacal, which Akorn owned, exits in 2023Q3 with 80 products. Akorn closed four
-manufacturing facilities abruptly in February 2023 and recalled all in-date product in April
-2023.
+### 2.3 Market definition
 
-### 2.4 Treatment, exposure and controls
+The unit of analysis is the **ingredient by dosage-form market**, following the molecule-form
+convention in the generic drug literature. Amoxicillin suspension and amoxicillin tablets are
+distinct markets with distinct suppliers, and aggregating them conceals sole-supplier status.
+Dosage forms are grouped into nine buckets (tablet, capsule, oral liquid, injectable, topical,
+inhaled or spray, drops, rectal, other) so that label variants do not fragment markets.
 
-For each exit, the exiting firm's share of each affected ingredient is computed over the four
-preceding quarters. Ingredients are assigned to their first exposure, giving **65 treated
-prescription ingredients**, of which **29 are sole-supplier** cases at 95% share or above.
-Bands are minor (under 35%), intermediate (35 to 95%) and sole supplier (95% and above).
+This yields **3,258 markets** and 230,541 labeler-market-quarter observations.
 
-Controls are **998 prescription ingredients** never exposed to a detected exit, with positive
-dispensing in at least 40 quarters and mean dispensing of at least 400 prescriptions per
+### 2.4 Treatment: supplier loss and exposure intensity
+
+A supplier-loss event occurs when a labeler supplying a market at a sustained rate of at least
+200 prescriptions per quarter over four quarters falls below 5% of that rate. Exposure is the
+departing supplier's share of the market over the four preceding quarters.
+
+This yields **398 supplier-loss events**, of which 60 are sole-supplier (95% share or above).
+After restricting to events with a complete pre and post window inside the data, 189 events
+remain, including 39 sole-supplier markets and 24 with complete baselines.
+
+**Edge exclusion matters.** An earlier version of this analysis allowed event windows to extend
+past the end of the panel and filled the missing quarters with zeros, which manufactures
+collapses. Events are now restricted to those with the full window inside the data.
+
+Controls are **1,272 markets** never exposed to a supplier-loss event, with positive dispensing
+in at least 34 of the window's quarters and mean dispensing of at least 400 prescriptions per
 quarter.
 
 ### 2.5 Specification
 
-Two outcomes are reported, because a single log specification is inadequate here.
+**Baseline is quarters t-8 to t-5, not t-1.** Event-time paths show dispensing declining by
+roughly one log point from t-4 to t-1: departing suppliers wind down before stopping. A
+baseline immediately before the event is therefore already depressed, and using it overstates
+the effect. The baseline is moved back four quarters to sit before the wind-down.
 
-**Extensive margin.** An indicator for whether mean dispensing in the six quarters after exit
-falls below 2% of the six-quarter pre-exit mean. This captures complete cessation, which a log
-specification cannot represent and which an earlier draft of this analysis silently dropped.
+Two outcomes:
 
-**Intensive margin.** Change in mean log(1+prescriptions) over the six quarters after exit
-against the six before. The log(1+x) form retains zeros. A plain log specification excludes
-any molecule that reached zero, which are precisely the most severe cases, and understates
-the effect by roughly a factor of three.
+**Extensive margin (primary).** An indicator for whether mean dispensing over the six quarters
+after the event falls below 2% of the baseline. This captures complete cessation of supply, is
+immune to pre-trend contamination, and is the result the paper leads with.
 
-Both are differenced against controls assigned placebo exit dates drawn from the empirical
-distribution of true exit dates. **Inference is by permutation**, 500 to 600 resamples, not
-asymptotic standard errors, because the sole-supplier band is small. Exact n is reported
-everywhere.
+**Intensive margin (secondary).** Change in mean log(1+prescriptions). The log(1+x) form retains
+zeros; a plain log specification silently drops every market that reached zero, which are the
+most severe cases, and understates the effect roughly threefold.
+
+Both are differenced against controls assigned placebo event dates drawn from the empirical
+distribution of true event dates. **Inference is by permutation** (600 resamples), not asymptotic
+standard errors, because the sole-supplier band is small. Exact n is reported throughout.
 
 ---
 
 ## 3. Results
 
-### 3.1 Main estimates
+### 3.1 Supply loss rises sharply with the departing supplier's share
 
-Prescription drugs only. Collapse is cessation of dispensing as defined above.
-
-| exposure band | n | collapse, treated | collapse, control | p | intensive margin | change | p |
-|---|---|---|---|---|---|---|---|
-| minor, under 35% | 31 | 0% | 0% | 1.000 | +0.116 | +12.3% | 0.349 |
-| intermediate, 35 to 95% | 5 | 0% | 0% | 1.000 | -0.842 | -56.9% | 0.0017 |
-| **sole supplier, 95%+** | **26** | **38%** | **0%** | **0.002** | **-3.018** | **-95.1%** | **0.0017** |
-| all treated | 62 | 16% | 0% | 0.002 | -1.275 | -72.1% | 0.0017 |
-
-Minor-supplier exits produce no detectable loss and no cessation. Sole-supplier exits cause
-complete cessation of dispensing for 38% of affected molecules, against zero of 998 controls.
-
-### 3.2 Pre-trends and the restricted sample
-
-Sole-supplier molecules display a positive pre-exit trend, mean slope +0.092 log points per
-quarter against +0.013 for controls, though medians are closer at +0.019 and +0.008. The mean
-is driven by a minority. 77% of sole-supplier molecules have pre-trend slopes within plus or
-minus 0.10 log points per quarter.
-
-Restricting to that flat-pre-trend subsample:
-
-| band | n | collapse, treated vs control | p | intensive margin | change | p |
-|---|---|---|---|---|---|---|
-| minor | 25 | 0% vs 0% | 1.000 | +0.185 | +20.3% | 0.012 |
-| **sole supplier** | **20** | **30% vs 0%** | **0.002** | **-2.360** | **-90.6%** | **0.002** |
-| all treated | 50 | 12% vs 0% | 0.002 | -0.928 | -60.5% | 0.002 |
-
-The result survives. The extensive margin is by construction immune to trend artefacts: a
-molecule reaching literal zero is not an extrapolated trend.
-
-### 3.3 Event-time path
-
-Log(1+prescriptions) relative to the quarter before exit, sole-supplier band, n=29, zeros
-retained. Figure 1: `fig1_event_time_firm_exit.png`.
-
-| t-6 | t-4 | t-2 | t-1 | **t+0** | t+2 | t+4 | t+6 | t+8 |
-|---|---|---|---|---|---|---|---|---|
-| -1.273 | -0.708 | -0.041 | 0.000 | **-2.507** | -3.660 | -3.558 | -4.058 | -3.963 |
-
-A discontinuity at the exit quarter, deepening over the following year, and no recovery
-through eight quarters. The path worsens rather than reverts.
-
-### 3.4 Replacement entry does not occur
-
-| band | n | suppliers at t-1 | t+4 | t+8 | new firms by t+8 | share with any entry |
-|---|---|---|---|---|---|---|
-| minor | 54 | 8.69 | 9.17 | 8.63 | 2.65 | **85%** |
-| intermediate | 12 | 3.25 | 2.92 | 2.08 | 1.33 | 67% |
-| **sole supplier** | 43 | 1.05 | 0.63 | 0.60 | 0.37 | **16%** |
-
-Where the failing firm was one of many, 85% of molecules see new entry within two years.
-Where it was the only supplier, 16% do, and mean supplier count falls to 0.60 and stays there.
-
-### 3.5 Therapeutic substitution does not occur
-
-Log dispensing of all other ingredients in the same Established Pharmacologic Class:
-
-| band | n | t+0 | t+2 | t+4 | t+6 | t+8 |
-|---|---|---|---|---|---|---|
-| minor | 47 | -0.075 | -0.038 | -0.033 | +0.010 | +0.055 |
-| intermediate | 7 | +0.032 | +0.115 | +0.002 | -0.028 | -0.016 |
-| sole supplier | 24 | -0.009 | +0.125 | -0.011 | +0.018 | +0.082 |
-
-When a sole-supplier molecule loses most of its volume, the remainder of its class moves
-between -0.01 and +0.08 log points. There is no offsetting increase.
-
-### 3.6 Remaining supplier count determines recovery
-
-All treated molecules, grouped by supplier count four quarters after exit:
-
-| suppliers remaining | n | intensive margin | change |
-|---|---|---|---|
-| 1 | 15 | -0.722 | -51.4% |
-| 2 to 3 | 8 | -0.097 | -9.2% |
-| 4 or more | 44 | +0.199 | +22.0% |
-
-Monotone. This is the paper's policy content: resilience is a function of how many suppliers
-remain, not of the size or visibility of the failing firm.
-
-### 3.7 Spending tracks volume
-
-In the sole-supplier band, prescriptions fall 52.2% and Medicaid spending falls 50.8% on the
-surviving-molecule subsample. There is no compensating price increase. The loss is borne as
-reduced access, not higher expenditure.
-
-### 3.8 Clinical composition
-
-Sole-supplier prescription molecules affected include beclomethasone dipropionate inhalation
-aerosol, the largest at 90,722 prescriptions per quarter before exit, lidocaine 5% patch,
-collagenase for wound debridement, teriflunomide for multiple sclerosis, propylthiouracil,
-goserelin, voxelotor for sickle cell disease and agalsidase beta for Fabry disease. Aggregate
-pre-exit volume at risk across the unrestricted sole-supplier set is approximately 320,000
-prescriptions per quarter. Median change was -100% and 68% lost more than half their volume.
-
-### 3.10 Exit cause: the damaging exits are the ones with no recall
-
-FDA enforcement records (18,166 drug recalls) were matched to exiting labelers by normalised
-firm name, giving 15,746 recall-to-labeler matches across 581 labelers. An exit is classified
-as recall-associated when the firm issued any recall within four quarters either side of exit.
-
-| | count | share of exits |
-|---|---|---|
-| total exits | 105 | |
-| recall-associated | 11 | 10% |
-| **quiet, no recall** | **94** | **90%** |
-| at least one Class I recall | 1 | 1% |
-| quality-driven text (CGMP, sterility, contamination, impurity) | 6 | 6% |
-
-Effect by cause:
-
-| scope | cause | n | collapse rate | intensive margin | p |
+| exposure band | n | cessation rate | control | intensive margin | p |
 |---|---|---|---|---|---|
-| all treated | recall-associated | 9 | 0% | +1.6% | 0.958 |
-| all treated | **quiet** | 53 | **19%** | **-77.8%** | **0.0025** |
-| sole supplier | **quiet** | 25 | **40%** | **-95.4%** | **0.0025** |
+| minor, under 35% | 128 | 0.8% | 0.2% | -8.2% | 0.158 |
+| 35 to 65% | 12 | 0.0% | 0.2% | +14.4% | 0.243 |
+| 65 to 95% | 9 | 0.0% | 0.2% | -11.3% | 0.305 |
+| **sole supplier, 95%+** | **24** | **54.2%** | **0.2%** | **-98.9%** | **0.0017** |
+| all events | 173 | 8.1% | 0.2% | -49.8% | 0.0017 |
 
-**The entire effect sits in the quiet exits.** Firms that collapse while issuing recalls
-produce no measurable dispensing loss. Firms that simply stop shipping, with no recall and no
-regulatory event, account for 90% of exits and all of the harm.
+Losing a minor supplier produces no detectable effect. Losing the sole supplier causes complete
+cessation of dispensing in **54% of markets**, against 0.2% of 1,272 controls.
 
-This is the paper's sharpest policy point. Shortage and recall monitoring are both triggered
-by firm-initiated notification. The exits that destroy supply generate no notification at all,
-so the surveillance system is oriented toward the visible minority.
+### 3.2 Robustness to safety withdrawals
 
-Two caveats. The recall-associated cell is small (n=9 pooled, n=1 for sole supplier), so the
-claim is that quiet exits are harmful and numerous, not that recall-associated exits are
-reliably harmless. And recall-associated exits may involve systematically larger firms in
-better-supplied molecules, which is a composition difference rather than a causal one. Both
-are stated rather than resolved.
+A supplier that stops because its product was withdrawn for safety is not a supply-chain
+failure. Ranitidine (NDMA, 2020) and varenicline (nitrosamine, 2021) are the clearest cases and
+are among the largest events detected. FDA enforcement records (18,166 recalls) were used to
+flag any sole-supplier market with a contemporaneous recall mentioning the ingredient.
 
-### 3.9 Robustness
-
-**Threshold invariance.** The 2,000 prescription detection threshold is arbitrary. Varying it
-changes the sample substantially and the estimate negligibly.
-
-| threshold | exits | sole-supplier molecules | effect t+4 | t+8 |
+| group | n | cessation rate | intensive margin | p |
 |---|---|---|---|---|
-| 20,000 | 44 | 26 | -1.249 | -0.917 |
-| 10,000 | 60 | 32 | -1.370 | -0.917 |
-| 5,000 | 85 | 37 | -1.107 | -0.680 |
-| 2,000 | 105 | 44 | -1.446 | -0.919 |
+| all sole-supplier | 24 | 54.2% | -99.0% | 0.0017 |
+| recall-contemporaneous excluded | 11 | 54.5% | -98.4% | 0.0017 |
+| recall-contemporaneous only | 13 | 53.8% | -99.3% | 0.0017 |
+| minor exposure (placebo) | 128 | 0.8% | -12.3% | 0.023 |
 
-**Placebo in time.** A pseudo-exit eight quarters before the true exit yields +0.061 against a
-true-event estimate of -0.203 in the pooled log specification: small and opposite in sign.
+**The two subgroups are indistinguishable.** Safety withdrawals do not drive the result, and the
+screen's aggressiveness is therefore immaterial.
 
-**Internal placebo.** The minor-exposure band is a within-design placebo. These molecules
-experience a firm failure but lose no supply, and show zero cessation and no decline.
+### 3.3 Replacement entry does not occur
 
-**Power.** The placebo distribution implies a minimum detectable effect of approximately 12%
-at 80% power and 5% significance. Observed sole-supplier effects far exceed it.
+| band | n | suppliers at t-1 | t+4 | t+6 | new firms by t+6 | share with any entry |
+|---|---|---|---|---|---|---|
+| minor, under 35% | 128 | 7.23 | 7.42 | 7.52 | 1.41 | **68%** |
+| intermediate | 22 | 3.09 | 3.14 | 3.00 | 0.77 | 41% |
+| **sole supplier** | 39 | 1.00 | 0.64 | 0.62 | 0.18 | **18%** |
+
+Markets that lose one of several suppliers see entry in 68% of cases and their supplier count is
+unchanged. Markets that lose their only supplier see entry in 18%, and the mean supplier count
+falls to 0.62 and stays there.
+
+### 3.4 Therapeutic substitution is partial at best
+
+Log dispensing of all other markets in the same Established Pharmacologic Class:
+
+| band | n | t+0 | t+2 | t+4 | t+6 |
+|---|---|---|---|---|---|
+| minor, under 35% | 113 | -0.023 | +0.012 | +0.012 | +0.030 |
+| sole supplier | 29 | +0.053 | +0.108 | +0.103 | **+0.146** |
+
+Class volume rises about 15% over six quarters after a sole-supplier loss. That is a real
+substitution response, and it is far smaller than the roughly 99% decline in the affected
+market. Most of the lost volume does not reappear within the class.
+
+### 3.5 Markets affected, recall-contemporaneous cases excluded
+
+| ingredient | form | event | before | after | suppliers after |
+|---|---|---|---|---|---|
+| 1.1% sodium fluoride dental cream | topical | 2023Q4 | 25,016 | 0 | 0 |
+| terbinafine 250 mg | tablet | 2023Q3 | 21,215 | 300 | 1 |
+| griseofulvin | oral liquid | 2023Q2 | 14,182 | 444 | 1 |
+| vitamin-mineral omega-3 | capsule | 2021Q1 | 6,634 | 0 | 0 |
+| elbasvir and grazoprevir | tablet | 2018Q2 | 5,661 | 329 | 1 |
+| dorzolamide and timolol | oral liquid | 2023Q4 | 3,085 | 176 | 2 |
+| pegfilgrastim-bmez | injectable | 2023Q4 | 2,877 | 39 | 1 |
+| goserelin | other | 2021Q4 | 2,368 | 8 | 0 |
+| lumacaftor and ivacaftor | tablet | 2021Q4 | 1,111 | 3 | 0 |
+| estradiol and norethindrone | tablet | 2019Q2 | 678 | 4 | 0 |
+| colesevelam | tablet | 2023Q1 | 578 | 0 | 0 |
+| alcaftadine | oral liquid | 2022Q2 | 531 | 7 | 0 |
+
+Approximately 98,000 prescriptions per quarter across 14 markets. The clinical range includes
+hepatitis C therapy, cystic fibrosis therapy, an oncology implant, a neutropenia biosimilar,
+glaucoma therapy and two systemic antifungals.
+
+Two entries are anomalies worth naming: benztropine tablets (12,951 to 13,647) and alirocumab
+(1,500 to 3,340) rose after the detected event. These are labeler reassignments rather than
+supply loss, and they attenuate rather than inflate the estimates.
+
+### 3.6 Robustness
+
+**Pre-trend restriction.** Restricting sole-supplier markets to those with pre-event slopes
+within plus or minus 0.15 log points per quarter leaves 10 markets with a 60% cessation rate and
+an intensive margin of -98.7%.
+
+**Threshold invariance.** At the firm level, varying the exit-detection threshold from 20,000 to
+2,000 prescriptions per quarter changes the number of events from 44 to 105 and the estimate
+negligibly (t+4 effect between -1.11 and -1.45 log points).
+
+**Internal placebo.** The minor-exposure band is a within-design placebo: these markets lose a
+supplier but not their supply, and show a 0.8% cessation rate against 0.2% in controls.
+
+**Firm-level specification.** Defining treatment as whole-labeler collapse rather than
+market-level supplier loss gives 105 firm exits and a consistent pattern, with 18% replacement
+entry for sole-supplier molecules. The market-level definition is preferred because it is the
+economically relevant unit and yields more events.
 
 ---
 
 ## 4. Discussion
 
-Three mechanisms were tested and all three point the same way. Dispensing collapses, nobody
-enters, and nothing substitutes. The volume is destroyed rather than redirected.
+Three mechanisms were tested. Supply ceases in a majority of sole-supplier markets, replacement
+entry occurs in 18% of them, and the therapeutic class absorbs around 15% of lost volume. The
+loss is largely not redirected and largely not repaired within six quarters.
 
-The contrast with planned exit is the substantive contribution. Work on Medicaid Drug Rebate
-Program terminations found the market absorbs the large majority of lost volume. Planned
-withdrawal gives notice, leaves the firm operating, and transfers supply to competitors.
-Abrupt failure does none of these. Treating the two as equivalent supply events, as shortage
-monitoring implicitly does, understates the harm from the second.
+The policy content is in the gradient. Losing a supplier is harmless when others remain and
+close to total when none do. Supplier count is observable in public data before any failure
+occurs, so the at-risk set is identifiable in advance. Resilience policy keyed to shortage
+status is, by construction, late.
 
-The policy implication follows from section 3.6. Supplier count four quarters out predicts
-recovery almost deterministically: four or more remaining suppliers and dispensing rises,
-one remaining and it halves. Resilience policy that targets drugs already in shortage is
-therefore late. The at-risk population is identifiable in advance from supplier counts in
-public data, before any failure occurs.
+The contrast with planned exit is instructive. Prior work on Medicaid Drug Rebate Program
+terminations found the market absorbs most lost volume. A planned withdrawal gives notice and
+leaves the firm operating. A supplier that simply stops does neither.
 
-Three limitations bound the interpretation.
+Four limitations bound the interpretation.
 
 **Generalisation.** Medicaid is not the national market. Whether commercial and Medicare
-populations show the same pattern is an assumption, not a result here.
+populations show the same pattern is an assumption here, not a result.
 
-**Sample size.** The sole-supplier analytical sample is 20 to 29 molecules. Abrupt
-sole-supplier failures are rare by nature. This is why inference is by permutation and why
-exact n is reported throughout rather than relying on asymptotics.
+**Sample size.** The sole-supplier band is 24 to 39 markets depending on window requirements.
+Losing one's only supplier is rare. This is why inference is by permutation and exact n is
+reported everywhere rather than relying on asymptotics.
 
-**Exit cause is only partly identified.** Section 3.10 separates recall-associated from quiet
-exits using FDA enforcement records. Bankruptcy filings and FDA warning letters remain
-unidentified, because neither is available as structured public data at the firm-quarter level.
-Separating financial failure from voluntary withdrawal within the quiet-exit group is the
-remaining extension.
+**Cause of departure is only partly identified.** Recall-contemporaneous events can be flagged,
+and doing so does not change the result. Bankruptcy and voluntary withdrawal cannot be
+separated, because neither is available as structured public data at the firm-quarter level.
+
+**Crosswalk vintage.** Coverage falls from 100% in 2026 to 6% in 1993, which confines any
+SDUD study of this design to roughly the last decade unless historical NDC vintages are obtained.
 
 ---
 
 ## Files
 
-- `firm_exit_results_twopart.json` main estimates
-- `firm_exit_results_flat_pretrend.json` pre-trend restricted
-- `firm_exit_results_rx_only.json` log specification, prescription only
-- `firm_exit_main_results.json` unrestricted first pass, superseded
-- `firm_exit_cause_split.json` exit cause split
+- `firm_exit_FINAL_clean.json` safety-withdrawal screen, primary
+- `firm_exit_FINAL_all.json` main, entry, substitution
+- `firm_exit_results_FINAL_marketform.json` market-form specification
+- `firm_exit_results_FINAL.json` ingredient-level specification
+- `firm_exit_cause_split.json` firm-level cause split
 - `fig1_event_time_firm_exit.png` Figure 1
-- `Candidate_D_Firm_Exit_Validated.md` validation record
-- `Feasibility_Power_Analysis_Verdict.md` why candidates A and B were rejected
+- `decisions/` candidates A and B, and why they were rejected
