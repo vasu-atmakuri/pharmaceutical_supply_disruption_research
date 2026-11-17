@@ -1,6 +1,7 @@
 # When the Only Supplier Fails: Abrupt Manufacturer Exit and the Absence of Market Repair in US Generic Drug Markets
 
-Vasu Atmakuri, Independent Researcher, Dallas, TX. ORCID 0009-0007-5955-2466.
+Vasu Atmakuri (first author), Independent Researcher, Dallas, TX. ORCID 0009-0007-5955-2466.
+Souseelya Kidambi (second author).
 Full draft, 17 November 2026. All estimates computed from public data; every figure in this
 draft traces to a logged run.
 
@@ -220,6 +221,42 @@ goserelin, voxelotor for sickle cell disease and agalsidase beta for Fabry disea
 pre-exit volume at risk across the unrestricted sole-supplier set is approximately 320,000
 prescriptions per quarter. Median change was -100% and 68% lost more than half their volume.
 
+### 3.10 Exit cause: the damaging exits are the ones with no recall
+
+FDA enforcement records (18,166 drug recalls) were matched to exiting labelers by normalised
+firm name, giving 15,746 recall-to-labeler matches across 581 labelers. An exit is classified
+as recall-associated when the firm issued any recall within four quarters either side of exit.
+
+| | count | share of exits |
+|---|---|---|
+| total exits | 105 | |
+| recall-associated | 11 | 10% |
+| **quiet, no recall** | **94** | **90%** |
+| at least one Class I recall | 1 | 1% |
+| quality-driven text (CGMP, sterility, contamination, impurity) | 6 | 6% |
+
+Effect by cause:
+
+| scope | cause | n | collapse rate | intensive margin | p |
+|---|---|---|---|---|---|
+| all treated | recall-associated | 9 | 0% | +1.6% | 0.958 |
+| all treated | **quiet** | 53 | **19%** | **-77.8%** | **0.0025** |
+| sole supplier | **quiet** | 25 | **40%** | **-95.4%** | **0.0025** |
+
+**The entire effect sits in the quiet exits.** Firms that collapse while issuing recalls
+produce no measurable dispensing loss. Firms that simply stop shipping, with no recall and no
+regulatory event, account for 90% of exits and all of the harm.
+
+This is the paper's sharpest policy point. Shortage and recall monitoring are both triggered
+by firm-initiated notification. The exits that destroy supply generate no notification at all,
+so the surveillance system is oriented toward the visible minority.
+
+Two caveats. The recall-associated cell is small (n=9 pooled, n=1 for sole supplier), so the
+claim is that quiet exits are harmful and numerous, not that recall-associated exits are
+reliably harmless. And recall-associated exits may involve systematically larger firms in
+better-supplied molecules, which is a composition difference rather than a causal one. Both
+are stated rather than resolved.
+
 ### 3.9 Robustness
 
 **Threshold invariance.** The 2,000 prescription detection threshold is arbitrary. Varying it
@@ -269,10 +306,11 @@ populations show the same pattern is an assumption, not a result here.
 sole-supplier failures are rare by nature. This is why inference is by permutation and why
 exact n is reported throughout rather than relying on asymptotics.
 
-**Exit cause is unidentified.** Exits are detected from dispensing, not from a register of
-corporate failure, so bankruptcy, regulatory enforcement and voluntary withdrawal are not
-separated. This is the most valuable extension and would sharpen policy attribution
-considerably.
+**Exit cause is only partly identified.** Section 3.10 separates recall-associated from quiet
+exits using FDA enforcement records. Bankruptcy filings and FDA warning letters remain
+unidentified, because neither is available as structured public data at the firm-quarter level.
+Separating financial failure from voluntary withdrawal within the quiet-exit group is the
+remaining extension.
 
 ---
 
@@ -282,6 +320,7 @@ considerably.
 - `firm_exit_results_flat_pretrend.json` pre-trend restricted
 - `firm_exit_results_rx_only.json` log specification, prescription only
 - `firm_exit_main_results.json` unrestricted first pass, superseded
+- `firm_exit_cause_split.json` exit cause split
 - `fig1_event_time_firm_exit.png` Figure 1
 - `Candidate_D_Firm_Exit_Validated.md` validation record
 - `Feasibility_Power_Analysis_Verdict.md` why candidates A and B were rejected

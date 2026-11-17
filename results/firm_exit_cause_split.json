@@ -1,0 +1,37 @@
+{
+  "exits": 105,
+  "recall_assoc": 11,
+  "quiet": 94,
+  "class1": 1,
+  "quality": 6,
+  "by_cause": {
+    "sole 95-100%|quiet (no recall)": {
+      "n": 25,
+      "collapse": 0.4,
+      "log1p_did": -3.0820022455531646,
+      "pct": -95.41326730046259,
+      "p": 0.0024937655860349127
+    },
+    "all treated|recall-associated": {
+      "n": 9,
+      "collapse": 0.0,
+      "log1p_did": 0.015421532713321862,
+      "pct": 1.5541058180481793,
+      "p": 0.9576059850374065
+    },
+    "all treated|quiet (no recall)": {
+      "n": 53,
+      "collapse": 0.18867924528301888,
+      "log1p_did": -1.5054502807968064,
+      "pct": -77.80826537880863,
+      "p": 0.0024937655860349127
+    },
+    "all treated|quality-driven": {
+      "n": 4,
+      "collapse": 0.0,
+      "log1p_did": 0.16119870387892332,
+      "pct": 17.491840646540325,
+      "p": 0.46384039900249374
+    }
+  }
+}
