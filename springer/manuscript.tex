@@ -49,21 +49,26 @@ was 1.45 (95 percent CI 0.36 to 2.11) where the departing labeler held under 35 
 market, 1.13 between 35 and 65 percent, 0.97 between 65 and 95 percent, and 0.00 (95 percent CI
 0.00 to 0.00) where it was the sole supplier; the difference between the extreme strata was 1.45
 (95 percent CI 0.36 to 2.15). In matched never-exposed markets, using a pseudo-departing labeler
-matched on share, the same quantity drifted by 0.09 (95 percent CI $-0.01$ to 0.44). Market dispensing fell below two percent of baseline in 45.0 to
-60.7 percent of sole-supplier markets, the range reflecting eight events with no observed
-post-event quarter, against 0.0 percent of 500 matched single-labeler markets that did not lose
-their labeler. New labeler entry occurred in 20 percent of sole-supplier markets against 75
-percent of minor-supplier markets.
+matched on share, the same quantity drifted by 0.09 (95 percent CI $-0.01$ to 0.44). Market dispensing fell below two percent of baseline in 45.0
+percent of the 20 evaluable sole-labeler markets; across all 28, assigning the eight events with
+no observed post-event quarter to each extreme gives full-cohort identification bounds of 32.1 to
+60.7 percent. No market fell below the threshold among 500 matched control observations drawn
+from 357 single-labeler markets that did not lose their labeler. At a common twelve-quarter
+horizon, and restricted to markets that actually fell below the threshold, 37 percent of
+sole-labeler markets regained half their baseline dispensing against 75 percent of minority-loss
+markets, and sole-labeler markets accumulated a median deficit of 11.8 quarters of baseline
+volume, two thirds of it after the four-quarter detection window closed.
 
 \textbf{Conclusions.} When a market's only labeler departs, remaining labelers take up none of
 the lost volume at the median and replacement entry is rare, whereas the loss of a minority
 labeler is substantially absorbed. Linking FDA establishment registrations to the specific
-products dispensing in each market, the replacement volume in absorbing markets was manufactured
-at establishments disjoint from the departing labeler's in 91 percent of testable cases, while
-sole-labeler markets are usually served by a single plant (16 of 18). Extending the horizon
-beyond six quarters, sole-labeler markets accumulate a median unreplaced deficit of 8.6 quarters
-of baseline volume against 0.2 for minority losses, and only 16 percent regain 90 percent of
-baseline. The concentration-to-collapse gradient replicates in Medicare Part D. Labeler concentration is computable from public data for every market
+products dispensing in each market, newly appearing replacement products were listed at
+establishments disjoint from the departing labeler's in 91 percent of 35 testable markets, while
+sole-labeler markets are usually served by a single plant (16 of 18). At a common twelve-quarter horizon, and restricting
+attention to markets that actually fell below the relevant threshold, 37 percent of sole-labeler
+markets regain half their baseline dispensing against 75 percent of minority-loss markets, and
+sole-labeler markets accumulate a median deficit of 11.8 quarters of baseline volume, two thirds
+of which accrues after the four-quarter event-detection window closes. The concentration-to-collapse gradient replicates in Medicare Part D. Labeler concentration is computable from public data for every market
 without waiting for any disruption to be reported, and so offers a standing structural measure of
 vulnerability.}
 
@@ -96,6 +101,24 @@ disruption \cite{fda2019taskforce}. Structural work on generic entry supports th
 finding that manufacturing and regulatory barriers materially limit competitive entry
 \cite{wang2023}. The magnitude of the recovery failure, however, has not been quantified across a
 national market.
+
+Two recent studies bound what this paper can claim. Colazo \cite{colazo2026} argues that approved
+supplier counts record administrative visibility rather than operational redundancy, and that
+neither approved nor linked-firm counts measure redundancy without normalisation by market type
+and volume. We take that caution seriously, and our own establishment analysis corroborates it
+from a different direction: pooling manufacturing sites across a labeler's product portfolio
+inflates apparent redundancy roughly fourfold relative to the sites listed for the products
+actually dispensing (Section~\ref{subsec:estab}). Our measure is accordingly not an approved
+supplier count but realised dispensing concentration, and our outcome is not shortage listing but
+observed dispensing and its recovery. Lee and colleagues \cite{lee2026} study recovery from
+shortage at the manufacturing plant, finding that plants learn from their own past recoveries;
+our unit is the market rather than the plant, and the two are complementary, since a market can
+fail to recover even where every remaining plant performs well.
+
+What this paper adds is therefore narrow and specific: not that concentration measures are
+reliable in general, which Colazo gives reason to doubt, but that realised dispensing
+concentration at the moment a labeler departs predicts whether and how quickly the market's
+volume returns.
 
 A measurement problem stands in the way. If a supplier holding most of a market stops dispensing,
 total market volume must fall unless someone else expands, so a large decline is partly
@@ -352,11 +375,11 @@ markets equally; the volume-weighted ratio is the sum of volume taken up divided
 departing volume, and so reflects aggregate supply.}\label{tab:estimands}
 \begin{tabular}{lrrrrrr}
 \toprule
-Departing share & $n$ & Median $R$ & Volume-weighted $R$ & $P(R>0)$ & $P(R\ge 0.5)$ & $P(R\ge 1)$ \\
+Departing share & $n$ & Median $R$ & Volume-weighted $R$ [95\% CI] & $P(R>0)$ & $P(R\ge 0.5)$ & $P(R\ge 1)$ \\
 \midrule
-Under 35\%    & 82 & 1.45 & 1.25 & 68\% & 60\% & 55\% \\
-35 to 95\%    & 15 & 1.04 & 1.15 & 93\% & 73\% & 53\% \\
-Sole, 95\%+   & 20 & 0.00 & 0.17 & 25\% & 5\%  & 0\%  \\
+Under 35\%    & 82 & 1.45 & 1.25 [0.51, 2.34] & 68\% & 60\% & 55\% \\
+35 to 95\%    & 15 & 1.04 & 1.15 [0.46, 1.40] & 93\% & 73\% & 53\% \\
+Sole, 95\%+   & 20 & 0.00 & 0.17 [0.00, 0.38] & 25\% & 5\%  & 0\%  \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -462,7 +485,12 @@ reason this does not alter the conclusion.
 \subsection{Comparison with matched controls}\label{subsec:matched}
 
 Table~\ref{tab:matched} reports treated markets against never-exposed markets matched on
-pre-event labeler count, dosage form, calendar quarter and baseline volume.
+pre-event labeler count, dosage form, calendar quarter and baseline volume. Matching requires at
+least one control meeting all four criteria, which not every treated market has: of 83 eligible
+minority-loss markets 65 are matched, and of 15 intermediate markets 14 are. The unmatched
+markets are those with unusual combinations of labeler count and volume, typically the largest
+and the smallest, so the matched comparison describes the central part of the distribution rather
+than all treated markets. All 20 sole-labeler markets are matched.
 
 \begin{table}[htbp]
 \caption{Treated markets against matched never-exposed controls. Controls are matched on
@@ -495,7 +523,15 @@ therefore resample whole matched sets rather than observations.
 
 Under both corrections the result is unchanged: 45.0 percent of 20 treated markets fall below the
 threshold against 1 of 500 risk-set control observations (0.20 percent, drawn from 369 unique
-markets), with a matched-set cluster bootstrap $p$ of 0.00005, again the floor of 20{,}000 draws.
+markets), with a matched-set cluster bootstrap $p$ of 0.00005, the floor of 20{,}000 draws.
+
+To be precise about that procedure, because a bootstrap interval and a permutation test are not
+interchangeable: the statistic is the difference in below-threshold rates between treated markets
+and their matched controls; the resampling unit is the whole matched set, drawn with replacement;
+the reference distribution is formed by resampling matched sets under the control rate; and the
+test is two-sided. Reused control markets stay inside the set that drew them, so repetition does
+not inflate the effective sample. The reported value is at the resolution floor of the procedure
+and should be read as "below 0.0001" rather than as a point estimate.
 We continue to describe this as a strong descriptive association rather than an identified causal
 effect, because concentration is not randomly assigned and matching does not cover product age,
 therapeutic class or pre-event demand trajectory. Mean dispensing changed by $-96.6$ percent in the treated arm and $+2.7$
@@ -509,42 +545,78 @@ contrast is undiminished.
 \subsection{Recovery dynamics}\label{subsec:recovery}
 
 A six-quarter window summarises the level of replacement but not its timing, and timing is what
-distinguishes a disruption from a market failure. Relaxing the follow-up requirement to at least
-two post-event quarters and censoring at the end of the panel gives 172 events, including 37 in
-the sole-labeler stratum, and allows four further outcomes: time to the first new labeler, time
-to regain 50 and 90 percent of baseline dispensing, and the cumulative unreplaced volume,
-expressed as quarters of baseline volume lost over the observed horizon.
+distinguishes a disruption from a market failure. Three design choices govern this analysis, each
+adopted because the naive version is misleading.
+
+\textbf{Fixed horizons, not variable follow-up.} Events observed for three quarters cannot
+accumulate the deficit or the recovery opportunity of events observed for twelve. We therefore
+report each horizon using only events with that much follow-up inside the panel, and state the
+number at risk at each.
+
+\textbf{Recovery is conditional on having fallen.} A market that loses a labeler holding under
+35 percent of its volume can remain above half its baseline without any other labeler expanding
+at all. Counting such a market as recovered measures the absence of disruption, not restoration.
+We therefore restrict recovery rates to markets that first fell below the threshold in question.
+This matters enormously: only 8 of 97 minority-loss markets ever fall below half of baseline,
+against 35 of 35 sole-labeler markets.
+
+\textbf{The detection window is separated from what follows.} An event qualifies on the
+departing labeler's dispensing over the event quarter and the three following quarters, so
+shortfall inside that window is partly mechanical. We report the deficit accruing during $t+0$ to
+$t+3$ separately from $t+4$ onward.
 
 \begin{table}[htbp]
-\caption{Recovery dynamics, censored at the end of the panel. Entry and recovery quarters are
-medians among markets where the event occurs. The cumulative deficit is the median across
-markets of total unreplaced volume divided by baseline, expressed in quarters of baseline
-volume.}\label{tab:recovery}
-\begin{tabular}{lrrrrrr}
+\caption{Recovery at fixed horizons. Unconditional columns use all events with that much
+follow-up. Conditional columns restrict to markets that first fell below the threshold, which is
+the quantity of interest; $n$ for those columns is the number at risk.}\label{tab:recovery}
+\begin{tabular}{llrrrrr}
 \toprule
-Departing share & $n$ & Median entry & Any entry & Regain 50\% & Regain 90\% & Cumulative deficit \\
+ & & \multicolumn{3}{c}{Unconditional} & \multicolumn{2}{c}{Conditional on falling} \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-7}
+Horizon & Departing share & $n$ & Any entry & Regain 50\% & $n$ at risk & Regained 50\% \\
 \midrule
-Under 35\%    & 109 & 1.0 q & 74\% & 100\% & 82\% & 0.2 q \\
-35 to 95\%    & 26  & 1.5 q & 38\% & 77\%  & 58\% & 0.9 q \\
-Sole, 95\%+   & 37  & 3.5 q & 22\% & \textbf{24\%}  & \textbf{16\%} & \textbf{8.6 q} \\
+4 q  & Under 35\%    & 97 & 64\% & 96\% & 8  & 38\% \\
+     & 35 to 95\%    & 21 & 33\% & 81\% & 7  & 14\% \\
+     & Sole, 95\%+   & 35 & 11\% & 6\%  & 35 & 6\%  \\
+\midrule
+8 q  & Under 35\%    & 67 & 78\% & 97\% & 8  & 62\% \\
+     & 35 to 95\%    & 12 & 25\% & 92\% & 5  & 60\% \\
+     & Sole, 95\%+   & 26 & 19\% & 27\% & 26 & 27\% \\
+\midrule
+12 q & Under 35\%    & 52 & 81\% & 98\% & 8  & \textbf{75\%} \\
+     & 35 to 95\%    & 8  & 50\% & 100\% & 4 & 75\% \\
+     & Sole, 95\%+   & 19 & 21\% & 37\% & 19 & \textbf{37\%} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-This is where the practical content of the paper lies. That a market with no remaining labeler
-shows no incumbent expansion is close to a tautology. That such markets accumulate a median
-deficit of 8.6 quarters of baseline volume, against 0.2 quarters when a minority labeler departs,
-is not: it is a measured magnitude, and the ratio between the two is more than fortyfold. Nor is
-it a tautology that only 24 percent of sole-labeler markets ever regain half their baseline
-dispensing within the observed horizon, or that only 16 percent regain 90 percent, while every
-minority-loss market regains half and 82 percent regain 90 percent.
+The conditional columns are the defensible comparison and they are less dramatic than the
+unconditional ones. Among markets that actually lost half their dispensing, 75 percent of
+minority-loss markets regain it within twelve quarters against 37 percent of sole-labeler
+markets. At the 90 percent threshold the corresponding figures are 48 and 21 percent, on 25 and
+19 markets at risk. The direction is consistent across all three horizons and both thresholds,
+and the gap narrows as the horizon lengthens, which is what slow recovery rather than permanent
+failure looks like.
 
-The event-level detail in the sole stratum shows how uneven this is. Some markets recover through
-late entry: diclofenac potassium tablets saw a new labeler at six quarters and regained 90 percent
-by twelve. Others do not recover at all within the panel: ranitidine capsules and collagenase
-accumulate the maximum observable deficit of twelve quarters with no entry at any point. The
-median time to first entry of 3.5 quarters, conditional on entry occurring at all, means that even
-successful recovery is slow relative to a patient's treatment horizon.
+\begin{table}[htbp]
+\caption{Median cumulative dispensing deficit over twelve quarters, in quarters of baseline
+volume, split at the end of the four-quarter event-detection window.}\label{tab:deficit}
+\begin{tabular}{lrrrr}
+\toprule
+Departing share & $n$ & $t+0$ to $t+3$ & $t+4$ to $t+11$ & Share after detection \\
+\midrule
+Under 35\%    & 53 & 0.0 q & 0.0 q & 39\% \\
+35 to 95\%    & 10 & 1.4 q & 1.6 q & 54\% \\
+Sole, 95\%+   & 21 & 3.9 q & 7.9 q & \textbf{67\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:deficit} answers the mechanical objection directly. If the deficit were an
+artefact of the event definition it would concentrate in the detection window. It does not: two
+thirds of the sole-labeler deficit accrues after that window closes, and the total of 11.8
+quarters of baseline volume compares with 0.0 for minority losses. This is the paper's practical
+magnitude, and it is the part of the result that the event definition does not determine.
 
 \subsection{Replacement entry is limited}\label{subsec:entry}
 
@@ -625,9 +697,16 @@ seven testable markets.
 \textbf{The volume that replaced the loss came from different plants.} The sharper test
 restricts attention to products dispensing at $t+6$ that were \emph{not} dispensing at $t-1$,
 that is, to genuine replacements rather than incumbents. Across the 35 minority-loss markets
-where such products exist and carry site data, 91.4 percent were manufactured at establishments
-disjoint from the departing labeler's. Replacement in these markets is therefore production from
-other facilities, not relabeled output from the same plant.
+where such products exist and carry site data, 91.4 percent had those products listed at
+establishments disjoint from the departing labeler's.
+
+Three limits on that number, all of which narrow it. It counts markets, not prescriptions, so it
+is not a volume-weighted statement about replacement dispensing. It covers only newly appearing
+products, so replacement delivered by incumbents expanding output is outside it. And FDA listings
+record where a product may be made, not where a given batch was made at a historical date. The
+defensible claim is that in 32 of 35 testable markets the replacement products were listed at
+different establishments, which is evidence against relabeled output from a single plant and is
+not a measurement of production.
 
 \textbf{Sole-labeler markets are usually single-plant markets.} Restricting to the products
 actually dispensing, the departing labeler in a sole-labeler market lists a mean of 1.11
@@ -818,7 +897,8 @@ units.
 
 When a market loses a labeler that held a minority of its volume, the median market sees
 remaining labelers take up more than the lost volume within six quarters, against a counterfactual
-drift of 0.09 in matched never-exposed markets, and total dispensing is essentially unchanged.
+drift of 0.09 in matched never-exposed markets, and total dispensing is essentially unchanged:
+only 8 of 97 such markets ever fall below half their baseline.
 Replacement is heterogeneous across these markets and the interval does not establish complete
 take-up, but it is unambiguously greater than in sole-labeler markets. When a market loses
 its only labeler, remaining labelers take up nothing at the median, entry occurs in 20 percent of
@@ -890,6 +970,14 @@ these comparisons as strong descriptive associations rather than as identified c
 below two percent of baseline. Whether trace supply persists cannot be determined where records
 below eleven prescriptions are withheld. The panel comparison bounds this but does not remove it.
 
+\textbf{Concentration is measured conditionally, not prospectively.} Every result here is
+conditional on a supplier loss having occurred. We do not estimate how often sole-labeler markets
+experience such a loss, and we therefore cannot say that concentration identifies the markets
+where disruption is most likely, only that it predicts what follows when disruption happens. A
+prospective evaluation would need to compare labeler count against largest-labeler share, the
+Herfindahl index, approval counts and site dependence on a chronological holdout. With 20
+evaluable sole-labeler events that exercise would be underpowered, and we do not attempt it.
+
 \textbf{Dispensing loss is not verified supply failure.} The detector identifies a sustained
 collapse in a labeler's Medicaid dispensing. That is an observed utilisation change, and it is
 consistent with a manufacturing interruption, a safety withdrawal, a commercial discontinuation,
@@ -910,8 +998,11 @@ In US Medicaid drug markets defined by ingredient and dosage form, the loss of a
 is substantially absorbed by remaining labelers and the loss of the only labeler is not.
 Replacement entry is rare in the latter case, five of twenty sole-labeler markets receive some
 replacement and none receives full replacement, and dispensing frequently falls below the level
-these data resolve. The practical magnitude is the cumulative deficit: a median of 8.6 quarters
-of baseline volume unreplaced, against 0.2 quarters when a minority labeler departs. Product-level
+these data resolve. The practical magnitude is the cumulative deficit: over twelve quarters a median of 11.8
+quarters of baseline volume, two thirds of it accruing after the detection window closes, against
+essentially none when a minority labeler departs. Conditional on actually losing half their
+dispensing, 37 percent of sole-labeler markets regain it within twelve quarters against 75
+percent of minority-loss markets. Product-level
 establishment records show why the two differ: absorbing markets draw replacement volume from
 plants other than the departing labeler's in 91 percent of testable cases, whereas sole-labeler
 markets are typically served by a single plant and have no internal redundancy to draw on. FDA establishment records show that the markets which absorb a loss do so from genuinely
