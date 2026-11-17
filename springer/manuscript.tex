@@ -1,0 +1,479 @@
+%% Springer Nature journal article
+%% Class: sn-jnl with Vancouver numbered reference style
+\documentclass[pdflatex,sn-vancouver-num,Numbered]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage[numbers,sort&compress]{natbib}
+
+\raggedbottom
+
+\begin{document}
+
+\title[Supplier Loss and Absent Market Repair in US Generic Drug Markets]{When the last supplier leaves: supplier loss, absent market repair, and access in US generic drug markets}
+
+\author[1]{\fnm{Vasu} \sur{Atmakuri}}\email{INSERT-CORRESPONDING-EMAIL}
+
+\author[2]{\fnm{Souseelya} \sur{Kidambi}}
+
+\affil[1]{\orgname{Independent Researcher}, \city{Dallas}, \state{Texas}, \country{United States}}
+
+\affil[2]{\orgname{Independent Researcher}, \country{United States}}
+
+\abstract{\textbf{Background.} Many US generic drug markets, defined at the level of an active
+ingredient and a dosage form, are served by a single manufacturer. When that manufacturer stops
+supplying, two repair mechanisms are commonly assumed: replacement entry by other
+manufacturers, and therapeutic substitution within the drug class. The US Food and Drug
+Administration has identified difficulty of market recovery after a disruption as a root cause of
+drug shortages, but the magnitude of that difficulty has not been measured at national scale.
+
+\textbf{Methods.} We linked Medicaid State Drug Utilization Data for 2016Q1 to 2026Q1 to the
+FDA National Drug Code Directory and the openFDA bulk National Drug Code dataset, forming a
+quarterly panel of 3342 prescription drug markets and 246{,}251 manufacturer-market-quarter
+observations. A supplier-loss event was defined as a manufacturer dispensing at least 200
+prescriptions per quarter over four quarters falling below five percent of that rate. Events were
+stratified by the departing manufacturer's prior share of the market. Outcomes were an indicator
+for dispensing falling below two percent of baseline, and the change in log dispensing, each
+measured over the six quarters after the event against a baseline that precedes the observed
+pre-event wind-down. Estimates were differenced against never-exposed markets assigned placebo
+event dates, and inference was by permutation.
+
+\textbf{Results.} We identified 285 supplier-loss events, including 55 in which the departing
+manufacturer was the sole supplier. Where the departing manufacturer held under 35 percent of
+the market, no market fell below the two percent threshold and dispensing changed by $-12.5$
+percent. Where it was the sole supplier, 45.0 percent of markets fell below the threshold and
+dispensing fell 98.8 percent (n = 20; p = 0.0012 against 0.0 percent of 1433 control markets).
+Replacement entry occurred in 14 percent of sole-supplier markets against 76 percent of
+minor-supplier markets. Dispensing of other drugs in the same pharmacologic class rose 16.9
+percent, against the 98.8 percent decline in the affected market. Spending fell with volume and
+reimbursement per prescription did not rise.
+
+\textbf{Conclusions.} Sole-source supplier loss is not repaired by entry or absorbed by
+substitution within six quarters, and it generates no price signal to payers. Market
+concentration is observable in public data before any failure occurs, so policy keyed to shortage
+status necessarily acts after supply has already stopped.}
+
+\keywords{pharmaceutical supply chain, drug shortages, sole-source supply, generic drug markets,
+market entry, Medicaid, supply chain resilience, therapeutic substitution}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+
+Policy and research attention to pharmaceutical supply reliability concentrates on shortages:
+their prediction, their causes, and the effectiveness of regulatory response. Shortages are
+associated with increased out-of-pocket costs, medication errors, adverse events and, in some
+settings, mortality, although outcomes are sometimes equivalent or improved where substitutes
+exist \cite{phuong2019,aronson2023}. The economic drivers have been studied directly: reductions
+in Medicare Part B reimbursement were followed by greater increases in shortages for the drugs
+most exposed to the change, consistent with low prices discouraging investment in capacity and
+reliability \cite{yurukoglu2017}.
+
+Less examined is the market event that produces many shortages. US generic markets are
+concentrated. Defining a market as a molecule and its formulation, the median number of
+manufacturers is about two and the mean about four, and supplier counts declined over the
+2004--2016 period through both increased exit and reduced entry \cite{berndt2017,conti2020}.
+A substantial number of markets therefore have one supplier, and the relevant question when
+that supplier stops is not whether supply is interrupted, which is immediate, but whether the
+market repairs itself.
+
+Two repair mechanisms are ordinarily assumed. Economic theory expects replacement entry, since a
+vacated market with positive demand is an opportunity. Clinical practice expects therapeutic
+substitution, since prescribers can often move patients to another agent in the same class. The
+FDA Drug Shortages Task Force identified, as one of three root causes of shortages, that
+logistical and regulatory challenges make it difficult for the market to recover from a
+disruption \cite{fda2019taskforce}. Structural work on generic entry supports the mechanism,
+finding that manufacturing and regulatory barriers materially limit competitive entry
+\cite{wang2023}. Neither the entry response nor the substitution response to an actual supplier
+departure has been quantified across a national market.
+
+This paper tests both mechanisms directly. Our contribution is threefold. First, we measure what
+happens to dispensing after a manufacturer stops supplying a market, separating the effect by the
+departing manufacturer's market share, which turns out to be the variable that governs the
+outcome. Second, we measure the two repair mechanisms on the same events, so that the failure of
+repair is established rather than inferred from the persistence of shortages. Third, we show the
+event generates no price response, which means the usual financial signal that would draw a
+payer's attention does not fire.
+
+We find that losing a manufacturer that held a minority share of a market has no detectable
+effect, and that losing the sole supplier causes dispensing to fall by 98.8 percent, with 45
+percent of such markets falling below two percent of their prior volume. Entry occurs in 14
+percent of these markets. The therapeutic class absorbs roughly a sixth of the lost volume. The
+policy-relevant implication is that the at-risk set is identifiable in advance from public data,
+because it is defined by supplier counts rather than by any event that has yet to occur.
+
+\section{Methods}\label{sec:methods}
+
+\subsection{Data}\label{subsec:data}
+
+The primary source is Medicaid State Drug Utilization Data (SDUD), released quarterly by the
+Centers for Medicare and Medicaid Services \cite{cms_sdud}. For each eleven-digit National Drug
+Code (NDC), state, year, quarter and utilization type, SDUD report the number of prescriptions,
+units reimbursed and total amount reimbursed for outpatient drugs reimbursed by Medicaid. We
+obtained the complete series and used 2016Q1 through 2026Q1 for the reason given in
+Section~\ref{subsec:crosswalk}. The 2026 file contains first-quarter data only.
+
+Two features of SDUD materially affect any analysis of supply interruption, and we treat both
+explicitly.
+
+\textbf{Aggregation level.} SDUD contain both state rows and a national aggregate row coded
+\texttt{XX}. Summing across both double counts utilization by approximately a factor of two. Most
+published analyses that require state detail therefore use state rows and discard the aggregate.
+We do the opposite, and use the national aggregate rows alone. The reason is suppression.
+
+\textbf{Suppression.} CMS withholds the counts and amounts of any record representing fewer than
+eleven prescriptions, citing the Federal Privacy Act and the HIPAA Privacy Rule. Because the
+national row pools all states, fewer records fall below the threshold than when each state is
+counted separately, so the national rows lose less information at the low end of the distribution
+than the sum of state rows does. In our window the state rows recover 99.0 percent of the volume
+in the national rows, which is immaterial for most purposes but not for ours: our outcome is
+measured precisely at the low end, where a market that has fallen to a trace volume may be fully
+suppressed state by state while remaining visible nationally. Suppressed records are treated as
+missing, never as zero. Section~\ref{subsec:panelchoice} reports what this choice changes.
+
+The national rows retain manufacturer and product detail, since they are reported per NDC, so
+using them costs no resolution on the dimension the analysis requires.
+
+\subsection{Product crosswalk and the start of the window}\label{subsec:crosswalk}
+
+NDCs were mapped to active ingredient, dosage form, Established Pharmacologic Class and
+prescription-versus-over-the-counter status by combining the FDA National Drug Code Directory
+product file \cite{fda_ndc} with the openFDA bulk drug NDC dataset \cite{openfda}, which retains
+discontinued products that the current directory omits. The combined crosswalk contains 136{,}099
+manufacturer-product keys.
+
+Coverage is strongly time dependent, because the directory does not retain the full history of
+withdrawn NDCs. The share of SDUD prescriptions matching the crosswalk rises from 6 percent in
+1993 to 42 percent in 2011, 63 percent in 2017 and 100 percent in 2026. Coverage first exceeds 60
+percent in 2017. Extending the panel earlier therefore adds calendar years but few usable
+observations, and biases the sample toward products that survived to be listed. We report this
+because it constrains any study of this design that uses SDUD with a current-vintage crosswalk,
+and because we initially assembled the full series from 1991 before establishing that it could
+not be used.
+
+Analysis is restricted to products typed \texttt{HUMAN PRESCRIPTION DRUG}. An unrestricted first
+pass produced larger estimates, but the affected set then mixed clinically consequential drugs
+with over-the-counter products such as senna, psyllium and zinc oxide cream.
+
+\subsection{Market definition}\label{subsec:market}
+
+The unit of analysis is the market formed by an active ingredient and a dosage form. This follows
+the convention in the generic drug literature, where a product market is defined as a molecule
+combined with its formulation or route of administration, aggregated over dosages and strengths
+\cite{berndt2017,conti2020}. Amoxicillin oral suspension and amoxicillin tablets are distinct
+markets with distinct manufacturers, and aggregating them to the ingredient conceals sole-supplier
+status. Dosage forms were grouped into nine buckets (tablet, capsule, oral liquid, injectable,
+topical, inhaled or spray, drops, rectal, other) so that label variants of the same form do not
+fragment a market.
+
+This yields 3342 markets and 246{,}251 manufacturer-market-quarter observations.
+
+\subsection{Treatment definition and exposure intensity}\label{subsec:treat}
+
+A supplier-loss event occurs when a manufacturer supplying a market at a sustained rate of at
+least 200 prescriptions per quarter, averaged over the four preceding quarters, falls below five
+percent of that rate averaged over the current and three following quarters. For each market we
+use the first such event. Exposure intensity is the departing manufacturer's share of market
+volume over the four preceding quarters.
+
+This yields 285 supplier-loss events: 192 where the departing manufacturer held under 35 percent
+of the market, 22 between 35 and 65 percent, 16 between 65 and 95 percent, and 55 where it was
+the sole supplier at 95 percent or above.
+
+Events are restricted to those whose complete pre-event baseline and six-quarter post-event
+window lie inside the panel. This restriction is consequential. An earlier specification allowed
+windows to extend beyond the end of the panel and filled the missing quarters with zeros, which
+manufactures apparent collapses; quarters outside the data are now dropped rather than zero
+filled, and an event is retained only if at least one post-event quarter is observed.
+
+Control markets are those never exposed to a supplier-loss event, with positive dispensing in at
+least 34 of the window's 41 quarters and mean dispensing of at least 400 prescriptions per
+quarter, giving 1433 control markets. An earlier, looser control definition admitted markets that
+were themselves disappearing for unrelated reasons and produced a control mean change of $-87$
+percent, which is not a usable counterfactual.
+
+\subsection{Specification}\label{subsec:spec}
+
+\textbf{Baseline window.} Event-time paths show that dispensing in sole-supplier markets is flat
+from eight through three quarters before the event and then declines over the final two quarters:
+manufacturers wind down before they stop. A baseline taken immediately before the event is
+therefore already depressed and overstates the effect. We set the baseline at quarters $t-6$
+through $t-3$, which lies inside the observed flat region. Section~\ref{subsec:robust} reports
+alternatives.
+
+Two outcomes are estimated.
+
+The \emph{extensive margin} is an indicator for mean dispensing over quarters $t+1$ through $t+6$
+falling below two percent of baseline. We describe this as dispensing falling below the level
+these data can resolve rather than as literal cessation, for the suppression reason given in
+Section~\ref{subsec:data}.
+
+The \emph{intensive margin} is the change in mean $\log(1+\text{prescriptions})$ between the
+baseline and post-event windows. The $\log(1+x)$ form retains markets that reach zero. A plain
+logarithmic specification silently drops exactly the most severe cases and understates the effect
+roughly threefold.
+
+Both outcomes are differenced against control markets assigned placebo event dates drawn from the
+empirical distribution of true event dates, so that any common calendar-time variation is removed.
+Inference is by permutation with 800 resamples of control markets at the treated sample size,
+rather than by asymptotic standard errors, because the sole-supplier stratum is small. Exact
+sample sizes are reported for every estimate.
+
+\section{Results}\label{sec:results}
+
+\subsection{Supply loss rises sharply with the departing manufacturer's share}
+
+Table~\ref{tab:main} reports the main estimates. Losing a manufacturer that held a minority share
+of a market produces no market falling below the two percent threshold and a dispensing change of
+$-12.5$ percent that is not distinguishable from control variation. Losing the sole supplier
+causes dispensing to fall 98.8 percent, with 45.0 percent of markets falling below two percent of
+baseline, against 0.0 percent of 1433 control markets.
+
+\begin{table}[htbp]
+\caption{Effect of supplier loss on market dispensing, by the departing manufacturer's prior
+market share. The extensive margin is the share of markets whose mean dispensing over the six
+following quarters falls below two percent of baseline. The intensive margin is the change in mean
+$\log(1+\text{prescriptions})$, expressed as a percentage, differenced against control markets.
+$p$ values are from 800 permutations of control markets at the treated sample size.}\label{tab:main}
+\begin{tabular}{lrrrrr}
+\toprule
+Departing share & $n$ & Below 2\% & Control & Intensive margin & $p$ \\
+\midrule
+Under 35\%        & 87  & 0.0\%  & 0.0\% & $-12.5$\% & 0.064 \\
+35 to 65\%        & 8   & 12.5\% & 0.0\% & $-66.5$\% & 0.001 \\
+65 to 95\%        & 7   & 0.0\%  & 0.0\% & $-26.0$\% & 0.013 \\
+95\% or above     & 20  & 45.0\% & 0.0\% & $-98.8$\% & 0.001 \\
+\midrule
+All events        & 118 & 6.8\%  & 0.0\% & $-53.9$\% & 0.001 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The intermediate strata contain too few events to support inference and should be read as
+uninformative rather than as evidence of no effect; Section~\ref{subsec:robust} quantifies this.
+
+\subsection{Event-time path}
+
+Figure~\ref{fig:eventstudy} shows the event-time path by exposure stratum. Three features matter.
+Dispensing in sole-supplier markets is flat through the baseline window and through $t-3$,
+confirming the absence of a long pre-trend. It then falls over the two quarters before the event,
+which is the wind-down the baseline choice is designed to exclude. After the event it drops by
+roughly four log points and does not recover within six quarters. Minor-supplier markets and
+control markets are flat throughout.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{fig1.pdf}
+\caption{Dispensing around supplier loss, by the departing manufacturer's prior market share.
+Points are means of the change in $\log(1+\text{prescriptions})$ from the shaded baseline window
+($t-6$ to $t-3$); bars are 95 percent intervals. The dashed line marks the event quarter. Control
+markets are assigned placebo event dates drawn from the empirical distribution of true event
+dates.}\label{fig:eventstudy}
+\end{figure}
+
+\subsection{Replacement entry does not occur}
+
+Table~\ref{tab:entry} reports manufacturer counts and entry. Markets that lose one of several
+manufacturers see entry in 76 percent of cases and their supplier count is unchanged or slightly
+higher six quarters later. Markets that lose their only manufacturer see entry in 14 percent of
+cases, and the mean supplier count falls from 1.04 to 0.64 and stays there.
+
+\begin{table}[htbp]
+\caption{Manufacturer counts and replacement entry after supplier loss. Entry is counted as any
+manufacturer dispensing in the market in quarters $t$ through $t+6$ that was not dispensing at
+$t-1$.}\label{tab:entry}
+\begin{tabular}{lrrrr}
+\toprule
+Departing share & $n$ & Suppliers at $t-1$ & Suppliers at $t+6$ & Any entry \\
+\midrule
+Under 35\%    & 88 & 7.91 & 8.40 & 76\% \\
+35 to 95\%    & 16 & 3.56 & 3.69 & 38\% \\
+95\% or above & 28 & 1.04 & 0.64 & 14\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Therapeutic substitution is partial}
+
+Table~\ref{tab:sub} reports log dispensing of all other markets sharing the affected market's
+Established Pharmacologic Class. Class volume rises about 17 percent over six quarters following a
+sole-supplier loss. This is a real substitution response, and it is roughly a sixth of the
+98.8 percent decline in the affected market. Most of the lost volume does not reappear within the
+class. Minor-supplier losses produce no class response, as expected, since those markets do not
+lose supply.
+
+\begin{table}[htbp]
+\caption{Change in log dispensing of other markets in the same Established Pharmacologic Class,
+relative to quarter $t-1$.}\label{tab:sub}
+\begin{tabular}{lrrrrr}
+\toprule
+Departing share & $n$ & $t+0$ & $t+2$ & $t+4$ & $t+6$ \\
+\midrule
+Under 35\%    & 87 & $-0.039$ & $-0.020$ & $-0.033$ & $+0.010$ \\
+95\% or above & 20 & $+0.028$ & $+0.086$ & $+0.087$ & $+0.169$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Spending follows volume and no price signal appears}
+
+Against control markets, sole-supplier loss is associated with a 98.6 percent decline in volume
+and a 99.4 percent decline in reimbursement. For minor-supplier loss the figures are $-10.3$
+percent and $-20.5$ percent. Reimbursement per prescription does not rise in either stratum.
+
+This matters for how the event is detected in practice. A payer monitoring drug spending observes
+a volume disappearance, not a cost increase. The event therefore produces none of the financial
+signal that attends the shortage episodes in which supply contracts but does not stop and prices
+rise \cite{yurukoglu2017,li2022}.
+
+\subsection{Robustness}\label{subsec:robust}
+
+\textbf{Choice of panel.}\label{subsec:panelchoice} Repeating the analysis on the sum of state
+rows rather than the national rows gives 398 events, 39 sole-supplier markets in window, and an
+extensive margin of 54.2 percent against 43.8 percent on the national rows under a common
+baseline. Comparing the two panels market by market for the sole-supplier stratum, the two agree
+on the classification of 26 markets and disagree on 5. Every disagreement runs the same way: a
+trace residual volume of 18 to 93 prescriptions per quarter is visible in the national rows and
+fully suppressed in the state rows. The intensive margin is almost unaffected ($-98.9$ percent
+state, $-97.9$ percent national). We therefore report the national rows, which over-detect
+neither events nor cessation, and we describe the extensive margin as dispensing falling below
+what these data resolve.
+
+\textbf{Baseline window.} The estimate is insensitive to the baseline on the national panel. The
+extensive margin is 43.8 percent with a $t-8$ to $t-5$ baseline ($n=16$), 45.0 percent with the
+reported $t-6$ to $t-3$ baseline ($n=20$), and 47.6 percent with a deliberately contaminated
+$t-4$ to $t-1$ baseline ($n=21$); the intensive margin is between $-98.4$ and $-98.8$ percent and
+$p=0.001$ in all three.
+
+\textbf{Threshold for the extensive margin.} The two percent threshold is a choice and the
+headline rate depends on it, though the contrast does not. For the sole-supplier stratum the rate
+is 25.0 percent at a one percent threshold, 43.8 percent at two percent, 50.0 percent at five
+percent, 62.5 percent at ten percent and 68.8 percent at twenty percent. The corresponding
+control rates are 0.0, 0.1, 0.1, 0.3 and 0.9 percent. At every threshold the treated rate exceeds
+the control rate by roughly two orders of magnitude.
+
+\textbf{Statistical power.} The permutation distribution of the intensive margin at the treated
+sample size has a standard deviation of 0.125 log points, implying a minimum detectable effect of
+approximately 42 percent. The observed sole-supplier effect is far outside this. The design is
+therefore well powered for the large effect it reports and poorly powered for moderate effects,
+which is why the intermediate strata in Table~\ref{tab:main} are not interpreted.
+
+\textbf{Safety withdrawals.} A manufacturer that stops because its product was withdrawn for
+safety reasons is not a supply chain failure. The clearest instances in our window are ranitidine
+(2020, nitrosamine contamination) and varenicline (2021, nitrosamine contamination), which are
+among the largest events detected. Using openFDA drug enforcement records \cite{openfda}, we
+flagged every sole-supplier market with a recall of the same ingredient within four quarters of
+the event. On the state-row panel, where the stratum is large enough to split, the flagged and
+unflagged subgroups are indistinguishable: the extensive margin is 53.8 percent for flagged
+markets and 54.5 percent for unflagged markets, and the intensive margin is $-99.3$ and $-98.4$
+percent respectively. Safety withdrawals are present in the sample but do not drive the result.
+
+\textbf{Internal placebo.} The minor-exposure stratum functions as a placebo inside the design.
+These markets experience the same kind of event, the departure of a manufacturer, but do not lose
+their supply, and no such market falls below the two percent threshold.
+
+\textbf{Manufacturer counts after the event.} The extensive margin is 100 percent where no
+manufacturer remains, about half where one remains, and zero where two or more remain. We report
+this for description only. Cross-tabulation shows it is nearly collinear with exposure share by
+construction, since 18 of 24 sole-supplier events leave exactly one manufacturer and 111 of 128
+minor-supplier events leave four or more. It restates the main result in different units and is
+not an independent test.
+
+\textbf{Alternative treatment definition.} Defining treatment as the collapse of an entire
+manufacturer rather than its exit from one market yields 105 firm-level exits and a consistent
+pattern, including 18 percent replacement entry for sole-supplier ingredients. The detector
+independently recovers known events, including the 2023 withdrawals associated with two large
+generic manufacturers. The market-level definition is preferred because the market, not the firm,
+is the unit in which supply is or is not replaced.
+
+\section{Discussion}\label{sec:discussion}
+
+Three mechanisms were tested on the same set of events. Supply falls below the resolvable level in
+45 percent of markets that lose their only manufacturer. Replacement entry occurs in 14 percent of
+them. The therapeutic class absorbs roughly a sixth of the lost volume. Within six quarters, the
+loss is largely neither replaced nor redirected.
+
+The policy content lies in the gradient rather than in any single number. Losing a manufacturer is
+harmless when others remain and close to total when none do. That is a statement about market
+structure, and market structure is observable in public data before any failure occurs: the
+at-risk set is the set of ingredient and dosage-form markets with one meaningful supplier. Policy
+instruments keyed to shortage status, including the shortage lists that trigger regulatory
+flexibility, necessarily activate after supply has already stopped. The absence of a price
+response sharpens the point, because it removes the signal that would otherwise prompt a payer to
+act: a market can lose its only manufacturer, fail to attract entry, and leave no trace in
+spending.
+
+The finding is consistent with the FDA Task Force's identification of impaired market recovery as
+a root cause of shortages \cite{fda2019taskforce}, and it supplies the magnitude that the Task
+Force report did not. It is also consistent with structural evidence that manufacturing and
+regulatory barriers limit generic entry \cite{wang2023}: an entrant into a vacated sole-source
+market faces the approval and facility requirements that made the market sole-source to begin
+with, and the volumes involved are small. Median generic market revenues are low
+\cite{berndt2017}, so the opportunity a vacated market represents is correspondingly small.
+
+Four limitations bound the interpretation.
+
+\textbf{Generalisation beyond Medicaid.} Medicaid is a large but not representative share of the
+US market. Whether commercial and Medicare populations show the same pattern is an assumption
+here, not a result. Medicaid's dispensing mix is weighted toward generic oral products, which is
+the segment where sole-source supply is most common, so the setting is appropriate, but it is one
+payer.
+
+\textbf{Sample size.} The sole-supplier stratum contains 20 to 55 markets depending on the window
+requirements imposed. Losing one's only manufacturer is rare, which is the binding constraint on
+this design and the reason inference is by permutation with exact sample sizes reported. The
+consequence is asymmetric: the design detects the large effect it finds decisively and cannot
+speak to moderate effects.
+
+\textbf{Cessation is bounded by suppression, not observed directly.} Our extensive margin
+identifies dispensing falling below two percent of baseline. Whether residual supply at a trace
+level persists cannot be determined from data in which records below eleven prescriptions are
+withheld. The comparison of national and state panels in Section~\ref{subsec:robust} bounds how
+much this matters and motivates our panel choice, but it does not eliminate the limitation.
+
+\textbf{Cause of departure is only partly identified.} Recall-contemporaneous events can be
+flagged, and doing so does not change the result. Bankruptcy, voluntary discontinuation and
+quality-driven suspension cannot be separated from one another, because none is published as
+structured data at the manufacturer-quarter level. Distinguishing them would identify which
+departures are preventable, and is the natural extension of this work.
+
+\section{Conclusion}\label{sec:conclusion}
+
+In US generic drug markets defined by ingredient and dosage form, the loss of a minority
+manufacturer is absorbed without trace, and the loss of the only manufacturer is not. Neither
+replacement entry nor therapeutic substitution repairs a sole-source departure within six
+quarters, and the event generates no price signal. Because the determinant is the number of
+remaining manufacturers, the markets at risk can be enumerated from public data before a failure
+occurs rather than identified from shortage lists afterwards.
+
+\section*{Declarations}
+
+\bmhead{Funding} This research received no funding from any agency in the public, commercial or
+not-for-profit sectors.
+
+\bmhead{Competing interests} The authors declare no competing interests.
+
+\bmhead{Ethics approval} This study uses only publicly released, aggregated administrative data
+containing no individual identifiers. It is not human subjects research and required no ethics
+review.
+
+\bmhead{Data availability} All data are public. Medicaid State Drug Utilization Data are available
+from \url{https://data.medicaid.gov}. The FDA National Drug Code Directory and the openFDA drug
+NDC and drug enforcement datasets are available from \url{https://open.fda.gov}.
+
+\bmhead{Code availability} Analysis code and intermediate result files are available in the
+project repository, to be made public on acceptance.
+
+\bmhead{Author contributions} VA conceived the study, assembled the data, designed and conducted
+the analysis, and wrote the manuscript. SK contributed supply chain domain framing, reviewed the
+clinical plausibility of the affected market list, and revised the manuscript. Both authors
+approved the final version.
+
+\bibliographystyle{sn-vancouver-num}
+\bibliography{refs}
+
+\end{document}
