@@ -80,6 +80,13 @@ Colazo J.
 \newblock Silver Spring, MD: US Food and Drug Administration; 2026.
 \newblock Available at https://open.fda.gov/apis/drug/. Accessed November 2026.
 
+\bibitem[\protect\citeauthoryear{{US Food and Drug
+  Administration}}{2026}]{fda_shortages}
+{US Food and Drug Administration}.
+\newblock Drug Shortages Database.
+\newblock Silver Spring, MD: US Food and Drug Administration; 2026.
+\newblock Accessed via the openFDA drug shortages endpoint, November 2026.
+
 \bibitem[\protect\citeauthoryear{{National Library of
   Medicine}}{2026}]{dailymed}
 {National Library of Medicine}.
@@ -87,12 +94,5 @@ Colazo J.
 \newblock Bethesda, MD: National Library of Medicine; 2026.
 \newblock Establishment registration and business operation data. Available at
   https://dailymed.nlm.nih.gov. Accessed November 2026.
-
-\bibitem[\protect\citeauthoryear{{US Food and Drug
-  Administration}}{2026}]{fda_shortages}
-{US Food and Drug Administration}.
-\newblock Drug Shortages Database.
-\newblock Silver Spring, MD: US Food and Drug Administration; 2026.
-\newblock Accessed via the openFDA drug shortages endpoint, November 2026.
 
 \end{thebibliography}

@@ -8,7 +8,7 @@
     ],
     "total_median": 0.21121819615022575,
     "total_ci": [
-      0.024341887873113775,
+      0.030701625530403127,
       0.5517072032805804
     ],
     "loo_min": 0.0,
@@ -20,19 +20,14 @@
         0.0
       ],
       [
-        "CLONAZEPAM | ORAL TABLET",
-        0.0,
-        0.0
-      ],
-      [
         "GUANFACINE | ORAL TABLET",
         0.0,
         0.0
       ],
       [
-        "MORPHINE,SULFATE | ORAL TABLET",
-        2.321,
-        3.059
+        "CLONAZEPAM | ORAL TABLET",
+        0.0,
+        0.0
       ],
       [
         "MEMANTINE | ORAL TABLET",
@@ -55,9 +50,9 @@
         5.08
       ],
       [
-        "NITROFURANTOIN | ORAL LIQUID",
-        7.905,
-        11.665
+        "MORPHINE,SULFATE | ORAL TABLET",
+        2.321,
+        3.059
       ],
       [
         "ZONISAMIDE | ORAL CAPSULE",
@@ -70,9 +65,14 @@
         0.469
       ],
       [
-        "SULFAMETHOXAZOLE,TRIMETHOPRIM | ORAL TABLET",
-        1.202,
-        1.618
+        "NITROFURANTOIN | ORAL LIQUID",
+        7.905,
+        11.665
+      ],
+      [
+        "ZOLMITRIPTAN | ORAL TABLET",
+        0.0,
+        0.0
       ],
       [
         "HYDROCHLOROTHIAZIDE,LOSARTAN,POTASSIUM | ORAL TABLET",
@@ -80,9 +80,9 @@
         1.384
       ],
       [
-        "ZOLMITRIPTAN | ORAL TABLET",
-        0.0,
-        0.0
+        "SULFAMETHOXAZOLE,TRIMETHOPRIM | ORAL TABLET",
+        1.202,
+        1.618
       ],
       [
         "BENZTROPINE | ORAL TABLET",
@@ -105,16 +105,6 @@
         0.552
       ],
       [
-        "CLARITHROMYCIN | ORAL TABLET",
-        1.643,
-        2.386
-      ],
-      [
-        "DULOXETINE | ORAL CAPSULE",
-        0.0,
-        0.0
-      ],
-      [
         "ACETAMINOPHEN,BITARTRATE,HYDROCODONE | ORAL TABLET",
         0.923,
         1.481
@@ -125,9 +115,14 @@
         0.211
       ],
       [
-        "DUTASTERIDE | ORAL CAPSULE",
+        "DULOXETINE | ORAL CAPSULE",
         0.0,
         0.0
+      ],
+      [
+        "CLARITHROMYCIN | ORAL TABLET",
+        1.643,
+        2.386
       ],
       [
         "PARICALCITOL | INJECTABLE",
@@ -135,7 +130,7 @@
         0.218
       ],
       [
-        "CYCLOBENZAPRINE | ORAL TABLET",
+        "DUTASTERIDE | ORAL CAPSULE",
         0.0,
         0.0
       ],
@@ -145,19 +140,14 @@
         1.653
       ],
       [
+        "CYCLOBENZAPRINE | ORAL TABLET",
+        0.0,
+        0.0
+      ],
+      [
         "OSELTAMIVIR | ORAL CAPSULE",
         4.403,
         8.136
-      ],
-      [
-        "METFORMIN | ORAL TABLET",
-        0.0,
-        0.0
-      ],
-      [
-        "CLOBETASOL,PROPIONATE | TOPICAL",
-        0.0,
-        0.0
       ],
       [
         "OSELTAMIVIR,PHOSPHATE | ORAL LIQUID",
@@ -170,14 +160,24 @@
         0.113
       ],
       [
-        "HYDROCHLORIDE,NORTRIPTYLINE | ORAL CAPSULE",
-        0.089,
-        0.089
+        "CLOBETASOL,PROPIONATE | TOPICAL",
+        0.0,
+        0.0
+      ],
+      [
+        "METFORMIN | ORAL TABLET",
+        0.0,
+        0.0
       ],
       [
         "ONDANSETRON | ORAL TABLET",
         0.0,
         0.212
+      ],
+      [
+        "HYDROCHLORIDE,NORTRIPTYLINE | ORAL CAPSULE",
+        0.089,
+        0.089
       ],
       [
         "RAMIPRIL | ORAL CAPSULE",
@@ -200,19 +200,14 @@
         0.0
       ],
       [
-        "BENZONATATE | ORAL CAPSULE",
-        0.0,
-        0.38
-      ],
-      [
         "ALENDRONATE,SODIUM | ORAL TABLET",
         1.02,
         1.423
       ],
       [
-        "LIDOCAINE | TOPICAL",
+        "BENZONATATE | ORAL CAPSULE",
         0.0,
-        0.0
+        0.38
       ],
       [
         "CAPECITABINE | ORAL TABLET",
@@ -225,9 +220,9 @@
         0.476
       ],
       [
-        "DIGOXIN | ORAL TABLET",
-        2.394,
-        3.295
+        "LIDOCAINE | TOPICAL",
+        0.0,
+        0.0
       ],
       [
         "GABAPENTIN | ORAL TABLET",
@@ -240,6 +235,11 @@
         0.014
       ],
       [
+        "DIGOXIN | ORAL TABLET",
+        2.394,
+        3.295
+      ],
+      [
         "HYDROXYCHLOROQUINE,SULFATE | ORAL TABLET",
         0.0,
         0.0
@@ -250,19 +250,19 @@
         0.0
       ],
       [
-        "TINIDAZOLE | ORAL TABLET",
-        0.049,
-        0.049
-      ],
-      [
         "METHADONE | ORAL TABLET",
         0.365,
         0.365
       ],
       [
+        "TINIDAZOLE | ORAL TABLET",
+        0.049,
+        0.049
+      ],
+      [
         "ACETATE,ESTRADIOL,ETHINYL,FERROUS,FUMARATE,NORETHINDRONE | OTHER",
-        1.963,
-        2.208
+        1.973,
+        2.218
       ],
       [
         "FEBUXOSTAT | ORAL TABLET",
@@ -270,9 +270,9 @@
         0.0
       ],
       [
-        "AMPHETAMINE,ASPARTATE,DEXTROAMPHETAMINE,SACCHARATE,SULFATE | ORAL CAPSULE",
-        0.0,
-        0.049
+        "ACETAMINOPHEN,OXYCODONE | ORAL TABLET",
+        1.708,
+        2.031
       ],
       [
         "ESTRADIOL,ETHINYL,NORGESTIMATE | OTHER",
@@ -280,9 +280,9 @@
         4.045
       ],
       [
-        "ACETAMINOPHEN,OXYCODONE | ORAL TABLET",
-        1.708,
-        2.031
+        "AMPHETAMINE,ASPARTATE,DEXTROAMPHETAMINE,SACCHARATE,SULFATE | ORAL CAPSULE",
+        0.0,
+        0.049
       ],
       [
         "HYDROCHLORIDE,METHADONE | ORAL LIQUID",
@@ -327,14 +327,14 @@
         4.02
       ],
       [
-        "HYDROCHLORIDE,OXYMORPHONE | ORAL TABLET",
-        4.777,
-        6.393
-      ],
-      [
         "CARISOPRODOL | ORAL TABLET",
         0.0,
         0.063
+      ],
+      [
+        "HYDROCHLORIDE,OXYMORPHONE | ORAL TABLET",
+        4.777,
+        6.393
       ],
       [
         "RANITIDINE | ORAL CAPSULE",
@@ -379,14 +379,14 @@
         11.83
       ],
       [
-        "ACETIC,ACID,HYDROCORTISONE | OTIC",
-        3.676,
-        7.549
-      ],
-      [
         "DICLOFENAC,POTASSIUM | ORAL TABLET",
         5.061,
         8.949
+      ],
+      [
+        "ACETIC,ACID,HYDROCORTISONE | OTIC",
+        3.676,
+        7.549
       ],
       [
         "RANITIDINE | ORAL TABLET",
@@ -399,24 +399,24 @@
         4.998
       ],
       [
-        "HYDROCHLORIDE,OLOPATADINE | OPHTHALMIC",
-        8.0,
-        11.875
-      ],
-      [
         "TARTRATE,VARENICLINE | OTHER",
         3.805,
         7.567
       ],
       [
-        "VARENICLINE | ORAL TABLET",
-        1.804,
-        3.723
+        "HYDROCHLORIDE,OLOPATADINE | OPHTHALMIC",
+        8.0,
+        11.875
       ],
       [
         "GOSERELIN | INJECTABLE",
         7.992,
         11.946
+      ],
+      [
+        "VARENICLINE | ORAL TABLET",
+        1.804,
+        3.723
       ],
       [
         "TRIMETHOPRIM | ORAL TABLET",

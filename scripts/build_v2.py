@@ -6,13 +6,20 @@ DROP={'TABLET','TABLETS','CAPSULE','CAPSULES','INJECTION','INJECTABLE','SOLUTION
       'OPHTHALMIC','OTIC','TOPICAL','NASAL','RECTAL','VAGINAL','ORAL'}
 SALT={'HYDROCHLORIDE','HYDROBROMIDE','SULFATE','TARTRATE','MALEATE','MESYLATE','CITRATE',
       'PHOSPHATE','SUCCINATE','FUMARATE','BESYLATE','DIHYDRATE','MONOHYDRATE','ANHYDROUS',
-      'BITARTRATE','NITRATE','OXALATE','PAMOATE','TOSYLATE','HEMIHYDRATE','HYDRATE','HCL'}
+      'BITARTRATE','NITRATE','OXALATE','TOSYLATE','HEMIHYDRATE','HYDRATE','HCL'}
 SYN={'HCL':'HYDROCHLORIDE','HBR':'HYDROBROMIDE','NA':'SODIUM','K':'POTASSIUM',
      'BICARB':'BICARBONATE','MONOHYD':'MONOHYDRATE','ANHYD':'ANHYDROUS'}
 def tok(m):
     ing=(m.split(" | ")+[""])[0]
     w=[SYN.get(x,x) for x in re.split(r'[^A-Z0-9]+',ing.upper()) if x]
-    return frozenset(x for x in w if x not in DROP and not re.fullmatch(r'[0-9.]+',x) and len(x)>1)
+    # a standalone small integer can be the only thing separating two formulations
+    keep=[]
+    for x in w:
+        if x in DROP: continue
+        if re.fullmatch(r'[0-9]{1,2}',x): keep.append(x); continue   # formulation index: 4 vs 5
+        if re.fullmatch(r'[0-9.]+',x): continue                       # strength: 800, 0.25
+        if len(x)>1: keep.append(x)
+    return frozenset(keep)
 raw=[r[0] for r in con.execute("SELECT DISTINCT mkt FROM read_parquet('/tmp/lmq_rt.parquet')").fetchall()]
 T={m:(tok(m),(m.split(" | ")+[""])[1]) for m in raw}
 byform=collections.defaultdict(set)

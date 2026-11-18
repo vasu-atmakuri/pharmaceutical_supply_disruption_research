@@ -41,20 +41,32 @@ for m,t,s,lab in soleA:
         j=len(A&B)/max(1,len(A|B))
         if best is None or j>best[0]: best=(j,k)
     nk=best[1] if best and best[0]>0.3 else None
-    nlab=len(LMc.get((nk,t-1),{})) if nk else None
-    d=LMc.get((nk,t-1),{}) if nk else {}
-    nshr=((d.get(lab) or 0)/max(1e-9,sum(v or 0 for v in d.values()))) if d else None
+    # PRIMARY share: four-quarter baseline t-4..t-1, matching the event detector.
+    def shr4(LM,key):
+        if key is None: return None,None
+        num=den=0.0; labs=set()
+        for q in range(t-4,t):
+            d=LM.get((key,q),{})
+            for l,v in d.items():
+                if v: den+=v; labs.add(l)
+                if l==lab and v: num+=v
+        return (num/den if den>0 else None), len(labs)
+    nshr,nlab=shr4(LMc,nk)
+    q1=LMc.get((nk,t-1),{}) if nk else {}
+    nshr_t1=((q1.get(lab) or 0)/max(1e-9,sum(v or 0 for v in q1.values()))) if q1 else None
     still = (nk in FC and FC[nk][0]==t and FC[nk][1]>=.95) if nk else False
     rows.append(dict(event_quarter=cal(t),departing_labeler=lab,
-        raw_market=m, raw_share=round(s,4), raw_labelers=len(LMa.get((m,t-1),{})),
+        raw_market=m, raw_share=round(s,4), raw_labelers=len(set(l for q in range(t-4,t) for l in LMa.get((m,q),{}))),
         corrected_market=nk or "(unmatched)",
         corrected_share=None if nshr is None else round(nshr,4),
+        corrected_share_t_minus_1=None if nshr_t1 is None else round(nshr_t1,4),
         corrected_labelers=nlab,
         still_sole_after_correction=int(bool(still))))
 out=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/sole_event_transition.csv")
 with open(out,"w",newline="") as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
 print(f"{len(rows)} sole-labeler exits under the raw specification\n")
+print("shares are four-quarter baselines over t-4..t-1, matching the event detector\n")
 print(f"{'quarter':<8}{'lab':<7}{'raw share':>10}{'raw n':>6}{'corr share':>12}{'corr n':>8}  {'sole?':<6} market")
 for r in rows:
     cs = "  n/a " if r['corrected_share'] is None else f"{r['corrected_share']:>11.1%}"

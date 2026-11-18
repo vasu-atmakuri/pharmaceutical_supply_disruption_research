@@ -48,16 +48,18 @@ must("deficit LOO high", f"{DE['at least 95%']['loo_max']:.1f}")
 for k in ["under 35%","35-95%","at least 95%"]:
     a,b=DE["entry"][k]; must(f"entry {k}", f"{a/b*100:.1f} percent")
 # --- structural claims ---
-for n in ["3{,}342","2{,}870","424","3{,}294","6.4 percent","1.5 percent","2.3 percent","96.5 percent",
-          "1{,}727","305","83.4 percent"]:
+for n in ["3{,}342","2{,}911","383","3{,}294","16.1 percent","8.9 percent","2.1 percent",
+          "99.7 percent","1{,}727","293","83.4 percent","14.71","10.53","20.5 percent",
+          "32.2 percent","26.3 to 57.9","85.6 percent","1.25"]:
     must("structural", n)
 # --- numbers that must NOT survive from the previous framing ---
-for n in ["1.45","0.00005","118-market","21 sole","2{,}913","1.73","35.7","0.053","fourteen sole-labeler exits",
-          "four documented supply"]:
+for n in ["1.45","0.00005","118-market","21 sole","2{,}913","2{,}870","1.73","1.77","35.7","0.053",
+          "fourteen sole-labeler exits","four documented supply","96.5 percent","424 of",
+          "Six of twenty apparent","is an upper bound on manufacturing","Twenty less six"]:
     must_not("prior-version number", n)
 # --- figures must agree with the tables ---
-for fig,need in [("fig1",["6% of 19 labelers","100% of 1 labeler"]),
-                 ("fig2",["n=13","n=77"]),
+for fig,need in [("fig1",["16% of 19 labelers","100% of 1 labeler"]),
+                 ("fig2",["n=13","n=76","n=78"]),
                  ("fig3",[f"p = {RC['90%']['logrank_p']:.3f}",f"p = {RC['50%']['logrank_p']:.3f}"])]:
     txt=subprocess.run(["pdftotext",f"{ROOT}/springer/{fig}.pdf","-"],capture_output=True,text=True).stdout
     t=re.sub(r"\s+"," ",txt)

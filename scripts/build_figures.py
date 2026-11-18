@@ -22,16 +22,16 @@ import csv
 TR=list(csv.DictReader(open(f"{RES}/sole_event_transition.csv")))
 PICK=["PREGABALIN CAPSULES, CV | CAPSULE",
       "DORZOLAMIDE HYDROCHLORIDE AND TIMOLOL MALEATE OPHTHALMIC SOLUTION | ORAL LIQUID",
-      "BENZTROPINE | TABLET"]
+      "DEXTROAMPHETAMINE SACCHARATE, AMPHETAMINE ASPARTATE MONOHYDRATE"]
 LABEL={"PREGABALIN CAPSULES, CV | CAPSULE":"Pregabalin, capsule",
-  "DORZOLAMIDE HYDROCHLORIDE AND TIMOLOL MALEATE OPHTHALMIC SOLUTION | ORAL LIQUID":"Dorzolamide and timolol, ophthalmic",
-  "BENZTROPINE | TABLET":"Benztropine, tablet"}
+  "DORZOLAMIDE HYDROCHLORIDE AND TIMOLOL MALEATE OPHTHALMIC SOLUTION | ORAL LIQUID":"Dorzolamide and timolol, ophthalmic"}
 rows=[]
 for want in PICK:
     r=next((x for x in TR if x["raw_market"]==want),None)
     if r is None:
         r=next(x for x in TR if x["raw_market"].startswith(want.split(" | ")[0][:24]))
-    rows.append((LABEL.get(r["raw_market"],r["raw_market"][:34]),
+    nm=LABEL.get(r["raw_market"]) or "Mixed amphetamine salts, tablet"
+    rows.append((nm,
                  float(r["raw_share"]), float(r["corrected_share"]),
                  int(r["raw_labelers"]), int(r["corrected_labelers"])))
     print(f"  {rows[-1][0]}: {rows[-1][1]:.0%} of {rows[-1][3]} -> {rows[-1][2]:.1%} of {rows[-1][4]}")
@@ -47,7 +47,7 @@ for i,(nm,sr,sn,lr,ln) in enumerate(rows):
     a.text(max(sn,0)+.015,i-h/2,f"{sn:.0%} of {ln} labelers",va='center',fontsize=7.3,color='#333')
 a.set_yticks(y); a.set_yticklabels([r[0] for r in rows],fontsize=7.9); a.set_xlim(0,1.45)
 a.set_xticks([0,.25,.5,.75,1.0]); a.set_xticklabels(["0","25%","50%","75%","100%"])
-a.set_xlabel("departing labeler's share in the quarter before exit")
+a.set_xlabel("departing labeler's share of the market, four-quarter baseline")
 a.set_title("(a) Three apparent sole-supplier exits, re-measured",loc='left')
 a.legend(frameon=False,loc='lower right'); a.grid(axis='x',alpha=.18); a.set_axisbelow(True)
 for s in ('top','right','left'): a.spines[s].set_visible(False)

@@ -44,7 +44,11 @@ def sset(s):
     if not s: return frozenset()
     out=set()
     for p in re.split(r';',s.upper()):
-        p=SALTRE.sub('',p); p=re.sub(r'[^A-Z0-9 ]',' ',p); p=" ".join(p.split())
+        p=SALTRE.sub('',p)
+        # FDA writes the same substance several ways; these suffixes carry no product content
+        p=re.sub(r'\bUNSPECIFIED FORM\b','',p)
+        p=re.sub(r'\b(HEMIHYDRATE|HYDRATE|HEPTAHYDRATE|DL|D L|ANHYDROUS|TRISODIUM)\b','',p)
+        p=re.sub(r'[^A-Z0-9 ]',' ',p); p=" ".join(p.split())
         if len(p)>2: out.add(p)
     return frozenset(out)
 raw_sub=collections.defaultdict(collections.Counter)
