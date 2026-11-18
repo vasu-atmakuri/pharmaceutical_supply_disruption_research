@@ -99,6 +99,13 @@ Colazo J.
 \newblock Silver Spring, MD: US Food and Drug Administration; 2026.
 \newblock Accessed via the openFDA drug shortages endpoint, November 2026.
 
+\bibitem[\protect\citeauthoryear{Lee et~al.}{2026}]{lee2026}
+Lee HS, Lee J, Noh IJ, Staats BR.
+\newblock Learning in Recovery from Disruption: Empirical Evidence from the
+  {US} Drug Shortages.
+\newblock Management Science. 2026;Published online 28 May 2026.
+  \doi{10.1287/mnsc.2024.08337}.
+
 \bibitem[\protect\citeauthoryear{{National Library of
   Medicine}}{2026}]{dailymed}
 {National Library of Medicine}.
@@ -106,5 +113,31 @@ Colazo J.
 \newblock Bethesda, MD: National Library of Medicine; 2026.
 \newblock Establishment registration and business operation data. Available at
   https://dailymed.nlm.nih.gov. Accessed November 2026.
+
+\bibitem[\protect\citeauthoryear{{Centers for Medicare and Medicaid
+  Services}}{2025}]{cms_partd}
+{Centers for Medicare and Medicaid Services}.
+\newblock Medicare Part D Spending by Drug.
+\newblock Baltimore, MD: Centers for Medicare and Medicaid Services; 2025.
+\newblock Data years 2019--2023. Available at https://data.cms.gov. Accessed
+  November 2026.
+
+\bibitem[\protect\citeauthoryear{{Centers for Medicare and Medicaid
+  Services}}{2026}]{cms_nadac}
+{Centers for Medicare and Medicaid Services}.
+\newblock National Average Drug Acquisition Cost (NADAC).
+\newblock Baltimore, MD: Centers for Medicare and Medicaid Services; 2026.
+\newblock Weekly reference files. Available at https://download.medicaid.gov.
+  Accessed November 2026.
+
+\bibitem[\protect\citeauthoryear{{US Food and Drug
+  Administration}}{2015}]{fda506c}
+{US Food and Drug Administration}.
+\newblock Permanent Discontinuance or Interruption in Manufacturing of Certain
+  Drug or Biological Products: Final Rule.
+\newblock Silver Spring, MD: US Food and Drug Administration; 2015.
+\newblock 80 Federal Register 38915. Implements section 506C of the Federal
+  Food, Drug, and Cosmetic Act (21 U.S.C. 356c) as amended by the Food and Drug
+  Administration Safety and Innovation Act.
 
 \end{thebibliography}

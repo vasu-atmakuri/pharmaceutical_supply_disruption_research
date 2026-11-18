@@ -8,7 +8,13 @@ and is not on an explicit whitelist of legitimate non-result values. It is how
 """
 import json, os, re, sys, glob
 ROOT=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+QUARTER_RE=None
 TEX=open(f"{ROOT}/springer/manuscript.tex").read()
+import re as _re
+TEX=_re.sub(r"[0-9]{4}Q[1-4]","",TEX)
+TEX=_re.sub(r"\\cite[tp]?\{[^}]*\}","",TEX)
+TEX=_re.sub(r"\\(?:label|ref|input|includegraphics)\{[^}]*\}","",TEX)
+TEX=_re.sub(r"\\n[A-Za-z]+","",TEX)
 TEX=re.sub(r"(?m)^\s*%.*$","",TEX)
 # citation keys, ORCIDs and emails carry digits that are not results
 TEX=re.sub(r"\\cite\{[^}]*\}"," ",TEX)

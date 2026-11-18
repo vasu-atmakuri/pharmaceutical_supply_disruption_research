@@ -42,7 +42,32 @@ N["single_vol_rel_reduction"]=round((AB["A"]["one_vol"]-AB["C"]["one_vol"])/AB["
 V=json.load(open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/normalization_validation.json")))
 N["testable_merges"]=V["confirmed"]+V["contradicted"]
 # bounds and misc
-N["bound_low"]=round(5/19*100,1); N["bound_high"]=round(11/19*100,1)
+# Worst-case bounds on the sole-labeler collapse rate over the calendar-eligible
+# population. Computed, not asserted: the denominator is every sole-labeler exit
+# inside the calendar window with a complete baseline, and the uncertainty is the
+# exits dropped because every post-event quarter is suppressed.
+_spec={x["tag"][0]:x for x in json.load(open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/three_specifications.json")))}["C"]
+_elig=_spec["sole_cal_eligible"]; _obs=_spec["sole_observed"]
+_dropped=_elig-_obs
+_coll=round(_spec["sole"]["collapse"]*_obs)
+if abs(_spec["sole"]["collapse"]*_obs-_coll)>1e-6:
+    raise SystemExit(f"collapse count is not integral: {_spec['sole']['collapse']}*{_obs}")
+# Bucket counts, counted from the panels themselves rather than asserted.
+# Specification A buckets on dosage form only; specification C buckets on route
+# and form, and its labels carry a "#hash" suffix where the composition tie-break
+# had to split a key, which is not a separate bucket.
+import duckdb as _dd
+_con=_dd.connect()
+def _buckets(path):
+    return sorted({r[0] for r in _con.execute(
+        f"SELECT DISTINCT trim(split_part(mol,' | ',2)) FROM read_parquet('{path}')").fetchall()})
+_fa=_buckets("/tmp/molq_nat.parquet")
+_fc=sorted({b.split(" #")[0] for b in _buckets("/tmp/molq_v2.parquet")})
+N["form_buckets"]=len(_fa); N["form_bucket_names"]=_fa
+N["route_buckets"]=len(_fc); N["route_bucket_names"]=_fc
+N["bound_eligible"]=_elig; N["bound_observed"]=_obs; N["bound_dropped"]=_dropped
+N["bound_collapsed"]=_coll
+N["bound_low"]=round(_coll/_elig*100,1); N["bound_high"]=round((_coll+_dropped)/_elig*100,1)
 N["bootstrap_draws"]=20000
 N["generic_share"]=85.6; N["anda_share"]=82.9; N["authgen_share"]=2.7
 N["brand_share"]=11.4; N["biologic_share"]=2.6

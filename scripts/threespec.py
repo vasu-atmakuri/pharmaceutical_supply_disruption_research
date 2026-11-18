@@ -31,7 +31,12 @@ def spec(tag,mq,lq,sl):
         if all(v is None for v in post): return None
         return 1 if np.mean([0.0 if v is None else v for v in post])<0.02*bl else 0
     out=dict(tag=tag,markets=len(MQ),lmq=nlmq,events=len(SL),ev_markets=len(set(x[0] for x in SL)),
-             inwin=len(inwin),baseline=len(COH),obs=len(OBS),bands=dict(bands))
+             inwin=len(inwin),baseline=len(COH),obs=len(OBS),bands=dict(bands),
+             # sole-labeler exits inside the calendar window WITH a complete baseline,
+             # before dropping those whose every post-event quarter is suppressed.
+             # This is the denominator of the worst-case bound on the collapse rate.
+             sole_cal_eligible=sum(1 for m in COH if band(inwin[m][1])=="sole"),
+             sole_observed=sum(1 for m in OBS if band(inwin[m][1])=="sole"))
     for b in ["<35%","sole"]:
         sel=[m for m in OBS if band(inwin[m][1])==b]
         v=[R(m) for m in sel]; v=np.array([x for x in v if x is not None])

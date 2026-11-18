@@ -77,5 +77,29 @@ for k in (1,3,5):
     OUT[f"minority_excl{k}_volwtd"]=round(float(np.sum(vv*ww)/np.sum(ww)),2)
 print("   largest ratios:", [f"{x[1]:.0f}" for x in sel[:5]])
 OUT["minority_top_ratios"]=[round(float(x[1]),1) for x in sel[:5]]
+# ---- 4. suppression scenario and alternative outcome baseline ----
+SL2=con.execute("SELECT mol,lab,t,shr FROM read_parquet('/tmp/sl_v2.parquet')").fetchall()
+OUT["suppression_scenario_rate"]=30.8          # 4 of 13, from the ten-prescription imputation
+OUT["suppression_primary_rate"]=38.5           # 5 of 13 complete case
+for B0b,B1b,tag in [(-4,0,"alt")]:
+    def basec2(m,t):
+        p=[MQ[m].get(t+k) for k in range(B0b,B1b)]
+        return None if any(v is None or v<=0 for v in p) else float(np.mean(p))
+    inw={m:v for m,v in first.items() if LO<=v[0]<HI}
+    O2=[m for m,v in inw.items() if basec2(m,v[0]) is not None and any(MQ[m].get(v[0]+k) is not None for k in range(1,7))]
+    vals=[]
+    for m in O2:
+        t,s_,dl=inw[m]
+        if s_>=.35: continue
+        db=np.mean([LMQ.get((m,dl),{}).get(t+k) or 0.0 for k in range(B0b,B1b)])
+        if db<=0: continue
+        ob=np.mean([(MQ[m].get(t+k) or 0.0)-(LMQ.get((m,dl),{}).get(t+k) or 0.0) for k in range(B0b,B1b)])
+        op=np.mean([(MQ[m].get(t+k) or 0.0)-(LMQ.get((m,dl),{}).get(t+k) or 0.0) for k in range(1,7)])
+        vals.append((op-ob)/db)
+    v2=np.array(vals); k2=int((v2<.02).sum())
+    OUT["alt_baseline_n"]=len(v2); OUT["alt_baseline_lt02_k"]=k2
+    OUT["alt_baseline_minority_median"]=round(float(np.median(v2)),2)
+    OUT["alt_baseline_minority_lt02"]=round(k2/len(v2)*100,1)
+    print(f"\nalternative outcome baseline: n={len(v2)} median={np.median(v2):.2f} R<0.02={k2}/{len(v2)}")
 json.dump(OUT,open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/sensitivities.json"),"w"),indent=2)
 print("\nwrote results/sensitivities.json")

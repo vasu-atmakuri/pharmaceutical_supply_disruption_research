@@ -1,14 +1,68 @@
 # Response to reviewer
 
-Thank you for the eighth round of comments. Every point in this round was acted on.
-Below we list what changed, and then set out our standing position on a small number
-of items that have recurred across rounds, so that the remaining disagreements are
-explicit rather than repeated.
+Thank you for your comments on this revision. Each point has been addressed through
+additional analyses, reporting corrections, or an explicitly stated limitation. Below
+we list what changed, and then set out our standing position on a small number of items
+that have recurred, so that the remaining disagreements are explicit rather than
+repeated.
 
-The manuscript is accompanied by two scripts that enforce internal consistency:
-`verify_manuscript.py`, which pins named figures in the text to the analysis output
-files by value, and `audit_numbers.py`, which extracts every number in the source and
-fails if any of them appears in no analysis output. Both pass on the attached version.
+We also report, in Section 0 below, four errors that we found ourselves in the course
+of rebuilding the manuscript's reporting pipeline. None of them was raised in review.
+We report them because two changed published quantities and one withdrew a claim.
+
+The manuscript is now generated rather than transcribed. Every reported quantity in the
+text, including the spelled-out counts, is a LaTeX macro emitted from the analysis
+output files, and seven of the tables and the abstract are emitted whole, so a stale
+number is not representable. Four scripts are run after every build and all pass on the
+attached version:
+
+- `audit_numbers.py` fails if any number in the source appears in no analysis output.
+- `verify_manuscript.py` checks structure: that the abstract contains no hand-typed
+  statistic, that every cross-reference and citation resolves, that every float is
+  referenced, and that the PDF is newer than every source it was built from.
+- `check_relationships.py` runs 53 assertions on relationships rather than presence:
+  that band counts sum to their cohort, that figure sample sizes equal their table's,
+  that the key-collapse distribution reconstructs both market counts, that the bound
+  arithmetic closes, and that each generated table reproduces its source file.
+- `check_determinism.py` re-runs every stochastic stage and requires byte-identical
+  output.
+
+---
+
+## 0. Errors we found ourselves
+
+**The bound on the sole-labeler collapse rate was wrong.** It was reported as 26.3 to
+57.9 percent over 19 calendar-eligible exits. Computed from the panel, the
+calendar-eligible population is 20 and seven of those are dropped because every
+post-event quarter is suppressed, not six. The bound is 25.0 to 60.0 percent. The cause
+was a hard-coded `5/19` in the script that collected reported numbers; that denominator
+is now derived from the event flow and asserted against the cohort.
+
+**We have withdrawn the claim that ingredient-level recall matching flagged fourteen of
+twenty exits against one at firm level.** That pair of figures is not reproducible from
+the FDA enforcement data. Recomputed with the window held fixed at the exit quarter, the
+counts are six on a shared ingredient and three on the departing firm. At four quarters
+either side both saturate at fifteen of twenty. The revised text reports these and makes
+the stronger point they support: the window dominates the matching level, so a recall
+flag defined on a generous window carries almost no information about cause. The
+classification in Table 5 never rested on recall co-occurrence and is unchanged.
+
+**The form-based bucketing yields eight buckets, not nine.** Counted from the
+specification A panel.
+
+**Two reporting defects.** The raw-to-corrected transition table printed a bootstrap
+confidence bound in place of one market's corrected share, and listed the two ranitidine
+exits as two markets when the normalisation makes them one. That table is now generated
+from its source file, with the identity 20 minus 7 equals 13 asserted at emit time. A
+paragraph was also duplicated verbatim in two sections; three floats were never
+cross-referenced; four references were uncited. All are fixed.
+
+**Two stages were not reproducible.** The matched-set confidence interval and the merge
+validation count both moved between runs despite a fixed seed: array order determined
+which elements the draws indexed, and `Counter.most_common` broke a tie by insertion
+order, letting an empty substance set win. Both are fixed and the determinism check is
+now part of the build. The matched-set interval is 15.1 to 61.7 points and the merge
+agreement is 292 of 292 testable groups.
 
 ---
 
@@ -18,15 +72,15 @@ fails if any of them appears in no analysis output. Both pass on the attached ve
 
 You were right that assigning a split raw market to its largest corrected component is
 a modelling choice rather than a mapping, and that the headline should not rest on it.
-14,649 of the 58,905 raw near-sole market-quarters split into more than one corrected
+Of the 58,905 raw near-sole market-quarters, those that split into more than one corrected
 market. The manuscript now reports all three rules you proposed, plus a volume
 allocation that requires no rule at all:
 
 | Rule | Reclassified | Rate |
 |---|---|---|
-| Largest corrected component | 15,744 | 26.7% |
-| Any component still near-sole | 9,549 | 16.2% |
-| Every component still near-sole | 17,004 | 28.9% |
+| Largest corrected component no longer near-sole | 15,744 | 26.7% |
+| No component still near-sole | 9,549 | 16.2% |
+| At least one component no longer near-sole | 17,004 | 28.9% |
 | Volume allocated across all components | — | **34.1% of flagged dispensing** |
 
 The count is bracketed between 16.2% and 28.9%. We now describe 26.7% as the rate
@@ -38,10 +92,14 @@ choice. This is a better result than the one it replaces and we are grateful for
 
 Fixed rather than documented. We added a composition tie-break: where the merge rule
 would join keys for which FDA records different active-substance sets, the keys are
-kept apart. This splits four groups, including Trace Elements 4, and raises agreement
-with the substance data from 293 of 294 to **all 291 testable groups**. We have
-removed any claim that all absorbed keys are proven duplicates; 16 groups remain
-untestable because substance names are missing for every member, and that is stated.
+kept apart. This splits four groups, including Trace Elements 4, and brings agreement
+with the substance data to **all 292 testable groups, with none contradicted**. We
+state in the manuscript that this is not an independent test: the same composition
+field was used to adjudicate the merges it contradicted, so the agreement reported is
+agreement after adjudication. We have removed any claim that all absorbed keys are
+proven duplicates; 15 groups remain untestable because substance names are missing for
+every member, and that is stated. An RxNorm-adjudicated replication remains the right
+external check and is named as the single most valuable extension.
 
 ### The outdated conclusion and the route-correction nuance (your Section 4)
 
@@ -73,8 +131,8 @@ therefore governs about five percent of volume rather than a sixth of it. Added,
 
 Added, and it changed what we report. The minority band's median is stable under
 trimming (1.77 → 1.73 → 1.58 → 1.47 removing the largest one, three and five), but the
-mean falls from 19.21 to −0.92 and the volume-weighted ratio from 14.55 to −12.18,
-changing sign. The five largest ratios are 625, 370, 273, 170 and 107. **We have
+mean falls from 19.39 to 11.42, 3.04 and -0.72, and the
+volume-weighted ratio from 14.68 to 6.92, -5.39 and -12.04, changing sign. The five largest ratios are 625, 370, 273, 170 and 107. **We have
 withdrawn the volume-weighted figure for that band**, since no stable value exists.
 
 ### Suppression scenario (your C9)

@@ -1,90 +1,62 @@
-"""Assert that every headline number in manuscript.tex matches the computed
-results, and that the embedded figures agree with the tables.
+"""Structural verification of the manuscript.
 
-Runs against the LaTeX SOURCE, not extracted PDF text: line wrapping in
-pdftotext broke exact-string matching and let stale numbers survive a check
-three times.
+Numeric agreement is no longer checked here: every reported quantity is a macro
+emitted from the results files by emit_tex.py, so a stale number is not
+representable. What remains checkable is structure: that the abstract carries no
+hand-typed figure, that every cross-reference and citation resolves, that each
+figure and table is referenced in the text, and that the compiled PDF is current.
 """
-import json, os, re, subprocess, sys
-ROOT=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
-TEX=open(f"{ROOT}/springer/manuscript.tex").read()
-flat=re.sub(r"\s+"," ",TEX)
-# treat "12.3\%" and "12.3 percent" as the same token
-flat=flat.replace("\\%"," percent")
-INF=json.load(open(f"{ROOT}/results/inference_normalized.json"))
-RC=json.load(open(f"{ROOT}/results/recovery_censored.json"))
-DE=json.load(open(f"{ROOT}/results/deficit_entry_normalized.json"))
-fails=[]; checks=0
-def must(label, needle):
-    global checks; checks+=1
-    if needle.lower() not in flat.lower(): fails.append(f"MISSING  {label}: {needle!r}")
-def must_not(label, needle):
-    global checks; checks+=1
-    if needle.lower() in flat.lower(): fails.append(f"STALE    {label}: {needle!r}")
+import os, re, subprocess, sys, json, time
+R=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+S=f"{R}/springer"; TEX=open(f"{S}/manuscript.tex").read()
+fails=[]; n=0
+def ck(l,c,d=""):
+    global n; n+=1
+    if not c: fails.append(f"{l}: {d}")
 
-# --- replacement ratios, from inference_normalized.json ---
-for b,lab in [("<35%","under 35"),("65-95%","65 to 95"),("sole","at least 95")]:
-    d=INF[f"R_{b}"]
-    must(f"R median {b}", f"{d['median']:.2f}")
-    must(f"R n {b}", str(d['n']))
-    must(f"R collapse {b}", f"{d['p_lt_2pct']*100:.1f} percent")
-# --- matched comparison ---
-m=INF["matched"]
-must("matched control obs", f"{m['control_obs']}")
-must("unique controls", f"{m['unique_controls']}")
-must("risk difference", f"{m['risk_diff']*100:.1f}")
-must("matched CI low", f"{m['ci_sets'][0]*100:.1f}")
-must("matched CI high", f"{m['ci_sets'][1]*100:.1f}")
-# --- recovery ---
-must("logrank 50", f"{RC['50%']['logrank_p']:.3f}")
-must("logrank 90", f"{RC['90%']['logrank_p']:.3f}")
-# --- deficits ---
-for k,lab in [("under 35%","0.2"),("35-95%","5.6"),("at least 95%","10.4")]:
-    must(f"deficit total {k}", DE[k]["total_median"] and f"{DE[k]['total_median']:.1f}")
-must("deficit post sole", f"{DE['at least 95%']['post_median']:.1f}")
-must("deficit LOO low", f"{DE['at least 95%']['loo_min']:.1f}")
-must("deficit LOO high", f"{DE['at least 95%']['loo_max']:.1f}")
-# --- entry ---
-for k in ["under 35%","35-95%","at least 95%"]:
-    a,b=DE["entry"][k]; must(f"entry {k}", f"{a/b*100:.1f} percent")
-# --- structural claims ---
-for n in ["3{,}342","2{,}915","379","3{,}294","16.1 percent","8.9 percent","2.1 percent",
-          "1{,}727","291","16.2 percent","28.9 percent","94.4","30.8","83.4 percent","14.71","10.54","26.7 percent",
-          "34.1 percent","26.3 to 57.9","85.6 percent","1.25"]:
-    must("structural", n)
-# --- numbers that must NOT survive from the previous framing ---
-for n in ["1.45","0.00005","118-market","21 sole","2{,}913","2{,}870","35.7","0.053",
-          "fourteen sole-labeler exits","four documented supply","96.5 percent","424 of",
-          "Six of twenty apparent","is an upper bound on manufacturing","Twenty less six","20.5 percent","32.2 percent","860","should be treated as an upper bound","27.0 percent","34.3 percent","2{,}911","moved off the Medicaid"]:
-    must_not("prior-version number", n)
-# --- figures must agree with the tables ---
-for fig,need in [("fig1",["16% of 19 labelers","100% of 1 labeler"]),
-                 ("fig2",["n=13","n=76","n=78"]),
-                 ("fig3",[f"p = {RC['90%']['logrank_p']:.3f}",f"p = {RC['50%']['logrank_p']:.3f}"])]:
-    txt=subprocess.run(["pdftotext",f"{ROOT}/springer/{fig}.pdf","-"],capture_output=True,text=True).stdout
-    t=re.sub(r"\s+"," ",txt)
-    for s in need:
-        checks+=1
-        if s.lower() not in t.lower(): fails.append(f"FIGURE   {fig}.pdf does not contain {s!r}")
+# 1. the abstract must contain no literal statistic
+ab=TEX[TEX.index("\\abstract{"):]; ab=ab[:ab.index("\\keywords")]
+body=re.sub(r"\\n[A-Za-z]+","",ab)
+lits=[x for x in re.findall(r"(?<![\w.])\d+(?:\.\d+)?(?![\w.])",body)
+      if x not in ("1","2","2016","2026","4","5","02","0","35","65","90","95")]  # band and threshold definitions, not results
+ck("abstract carries no hand-typed statistic", not lits, f"literals: {lits}")
 
-# --- the abstract must carry the SAME values as the results files, not merely
-# --- contain them somewhere. A silent no-match patch left 38.5/15.4/61.5 in the
-# --- abstract for two rounds while the results said 38.2/15.1/68.0.
-ab=flat[flat.lower().index("\\abstract"):flat.lower().index("\\keywords")] if "\\keywords" in flat else flat[:4000]
-m=INF["matched"]
-for label,needle in [("abstract risk difference", f"{m['risk_diff']*100:.1f} points"),
-                     ("abstract control rate",    f"{m['control_rate']*100:.2f} percent"),
-                     ("abstract CI low",          f"{m['ci_sets'][0]*100:.1f}"),
-                     ("abstract CI high",         f"{m['ci_sets'][1]*100:.1f}")]:
-    checks+=1
-    if needle.lower() not in ab.lower(): fails.append(f"ABSTRACT {label}: expected {needle!r}")
-for stale in ["38.5 points","15.4 to 61.5","0.0 percent among"]:
-    checks+=1
-    if stale.lower() in ab.lower(): fails.append(f"ABSTRACT stale value {stale!r}")
+ck("no double-escaped macros", not re.search(r"\\\\\\\\n[A-Z]",TEX),
+   f"found: {re.findall(chr(92)*4+'n[A-Za-z]+',TEX)[:5]}")
 
-print(f"{checks} checks run")
+# 2. every \ref resolves to a \label, every \cite to a bib entry
+labels=set(re.findall(r"\\label\{([^}]+)\}",TEX))
+refs=set(re.findall(r"\\ref\{([^}]+)\}",TEX))
+ck("all refs resolve", refs<=labels, f"dangling: {sorted(refs-labels)}")
+bib=open(f"{S}/refs.bib").read()
+keys=set(re.findall(r"@\w+\{([^,]+),",bib))
+cited=set(k.strip() for g in re.findall(r"\\cite[tp]?\{([^}]+)\}",TEX) for k in g.split(","))
+ck("all citations resolve", cited<=keys, f"missing: {sorted(cited-keys)}")
+ck("no uncited references", not (keys-cited), f"uncited: {sorted(keys-cited)}")
+
+# 3. every float is referenced in the text, and no \ref is broken in the PDF
+for lab in sorted(l for l in labels if l.startswith(("fig:","tab:"))):
+    ck(f"{lab} referenced in text", f"\\ref{{{lab}}}" in TEX)
+pdf=subprocess.run(["pdftotext",f"{S}/manuscript.pdf","-"],capture_output=True,text=True).stdout
+ck("no broken references in the PDF", "??" not in pdf and "efsubsec" not in pdf and "efsec" not in pdf)
+ck("no undefined macro text in the PDF", not re.search(r"\\n[A-Z]",pdf))
+
+# 4. the PDF must be newer than the sources it was built from
+pt=os.path.getmtime(f"{S}/manuscript.pdf")
+for f in ["manuscript.tex","generated/numbers.tex","generated/tab_flow.tex","generated/tab_concentration.tex",
+          "generated/tab_rules.tex","generated/tab_replacement.tex","fig1.pdf","fig2.pdf","fig3.pdf"]:
+    ck(f"PDF newer than {f}", pt>=os.path.getmtime(f"{S}/{f}")-1,
+       f"{f} is {(os.path.getmtime(f'{S}/{f}')-pt)/60:.1f} min newer than the PDF")
+
+# 5. the figures must be newer than the panel they are drawn from
+for f in ["fig1.pdf","fig2.pdf","fig3.pdf"]:
+    ck(f"{f} newer than the results files",
+       os.path.getmtime(f"{S}/{f}")>=os.path.getmtime(f"{R}/results/inference_normalized.json")-1,
+       f"{f} predates inference_normalized.json")
+
+print(f"{n} structural checks run")
 if fails:
     print(f"\n{len(fails)} FAILED:")
-    for f in fails: print("  "+f)
+    for f in fails: print("   "+f)
     sys.exit(1)
-print("ALL CHECKS PASS: manuscript, results files and figures agree.")
+print("ALL STRUCTURAL CHECKS PASS")

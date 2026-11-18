@@ -2,6 +2,9 @@
 matched-control comparison, all on the normalized panel."""
 import duckdb, numpy as np, json, os, collections
 rng=np.random.default_rng(20261117)
+# Every array fed to a bootstrap below is built from a sorted iteration. A fixed
+# seed is not sufficient on its own: the same draws index different elements if
+# the array order changes, which made the matched-set CI move between runs.
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 MQ={}; LMQ={}
 for m,t,r in con.execute("SELECT mol,tq,rx FROM read_parquet('/tmp/molq_v2.parquet')").fetchall(): MQ.setdefault(m,{})[t]=r
@@ -34,7 +37,7 @@ OUT={}
 print("REPLACEMENT RATIO by pre-exit concentration band (normalized panel)")
 print(f"{'band':<9}{'n':>4}{'median':>8}{'95% CI':>18}{'mean':>8}{'vol-wtd':>9}{'P(R>=.5)':>10}{'P(R<.02)':>10}")
 for b in ["<35%","35-65%","65-95%","sole"]:
-    sel=[m for m in OBS if band(inwin[m][1])==b]
+    sel=sorted(m for m in OBS if band(inwin[m][1])==b)   # sorted: array order fixes the bootstrap
     v=np.array([R(m) for m in sel if R(m) is not None])
     w=np.array([basec(m,inwin[m][0]) for m in sel if R(m) is not None])
     if not len(v): continue
@@ -45,7 +48,7 @@ for b in ["<35%","35-65%","65-95%","sole"]:
                        volwtd=float(np.sum(v*w)/np.sum(w)),p_ge_half=float(np.mean(v>=.5)),
                        p_lt_2pct=float(np.mean(v<.02)))
 # ---- matched risk-set controls, audited ----
-sole=[m for m in OBS if inwin[m][1]>=.95]
+sole=sorted(m for m in OBS if inwin[m][1]>=.95)   # sorted: matched-set order fixes the bootstrap
 def collapse(m,t):
     bl=basec(m,t)
     post=[MQ[m].get(t+k) for k in range(1,7)]
@@ -55,11 +58,11 @@ sets=[]; reuse=collections.Counter()
 for m in sole:
     t,s,dl=inwin[m]
     cands=[]
-    for c in MQ:
+    for c in sorted(MQ):
         if c==m: continue
         if c in EVT and EVT[c]<=t+6: continue          # risk set: not yet exposed
         if basec(c,t) is None: continue
-        labs={l for (cc,l) in LMQ if cc==c}
+        labs=sorted({l for (cc,l) in LMQ if cc==c})   # sorted: set order is not stable across runs
         best=None
         for l in labs:
             lb=np.mean([LMQ[(c,l)].get(t+k) or 0.0 for k in range(B0,B1)])

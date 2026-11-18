@@ -55,13 +55,20 @@ raw_sub=collections.defaultdict(collections.Counter)
 for lab,pc,gen,sub,rt,fm in prod:
     key=gen.strip().upper()+" | "+bucket(rt,fm)
     if key in NK: raw_sub[key][sset(sub)]+=1
-SUB={k:c.most_common(1)[0][0] for k,c in raw_sub.items() if c}
+# Counter.most_common breaks ties by insertion order, so an EMPTY substance set
+# could win a tie in one run and lose it in the next, moving a merge group between
+# "confirmed" and "not testable". Prefer a populated set and break ties on content.
+SUB={}
+for k,c in raw_sub.items():
+    cand=[(n,s) for s,n in c.items() if s]
+    if not cand: continue
+    SUB[k]=max(cand,key=lambda x:(x[0],sorted(x[1])))[1]
 print(f"raw keys with a substance set: {len([k for k,v in SUB.items() if v])} of {len(NK)}")
 groups=collections.defaultdict(list)
 for raw,norm in NK.items(): groups[norm].append(raw)
 merged={k:v for k,v in groups.items() if len(v)>1}
 ok=bad=unk=0; badlist=[]
-for norm,members in merged.items():
+for norm,members in sorted(merged.items()):
     ss=[SUB.get(m) for m in members]; ss=[s for s in ss if s]
     if len(ss)<2: unk+=1; continue
     if all(s==ss[0] for s in ss): ok+=1
@@ -81,7 +88,7 @@ for raw,norm in NK.items():
     s=SUB.get(raw)
     if s: norm_sub[norm].add(s)
 cand=collections.defaultdict(list)
-for norm,ss in norm_sub.items():
+for norm,ss in sorted(norm_sub.items()):
     if len(ss)==1: cand[(next(iter(ss)),(norm.split(" | ")+[""])[1])].append(norm)
 missed={k:v for k,v in cand.items() if len(v)>1}
 print(f"\nMISSED DUPLICATES: {len(missed)} substance-and-route groups still split across "

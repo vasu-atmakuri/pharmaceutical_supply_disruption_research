@@ -54,14 +54,21 @@ for m,t,s,lab in soleA:
     nshr,nlab=shr4(LMc,nk)
     q1=LMc.get((nk,t-1),{}) if nk else {}
     nshr_t1=((q1.get(lab) or 0)/max(1e-9,sum(v or 0 for v in q1.values()))) if q1 else None
-    still = (nk in FC and FC[nk][0]==t and FC[nk][1]>=.95) if nk else False
+    # Two distinct conditions, previously conflated in one flag:
+    #  (a) is the market still sole-supplied once correctly defined?  This is what
+    #      the reclassification claim is about, and it is a property of the share.
+    #  (b) does the corrected detector still place a sole-labeler exit at this same
+    #      quarter?  A market can stay sole while the corrected event quarter shifts.
+    still_by_share = (nshr is not None and nshr>=.95) or (nlab==1)
+    detected_same_q = (nk in FC and FC[nk][0]==t and FC[nk][1]>=.95) if nk else False
     rows.append(dict(event_quarter=cal(t),departing_labeler=lab,
         raw_market=m, raw_share=round(s,4), raw_labelers=len(set(l for q in range(t-4,t) for l in LMa.get((m,q),{}))),
         corrected_market=nk or "(unmatched)",
         corrected_share=None if nshr is None else round(nshr,4),
         corrected_share_t_minus_1=None if nshr_t1 is None else round(nshr_t1,4),
         corrected_labelers=nlab,
-        still_sole_after_correction=int(bool(still))))
+        still_sole_after_correction=int(bool(still_by_share)),
+        detected_same_quarter=int(bool(detected_same_q))))
 out=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/sole_event_transition.csv")
 with open(out,"w",newline="") as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
@@ -73,4 +80,8 @@ for r in rows:
     print(f"{r['event_quarter']:<8}{r['departing_labeler']:<7}{r['raw_share']:>9.0%}{r['raw_labelers']:>6}"
           f"{cs}{str(r['corrected_labelers']):>8}  {'yes' if r['still_sole_after_correction'] else 'NO':<6} "
           f"{r['raw_market'][:44]}")
-print(f"\nstill sole after correction: {sum(r['still_sole_after_correction'] for r in rows)} of {len(rows)}")
+ns=sum(r['still_sole_after_correction'] for r in rows)
+print(f"\nstill sole after correction: {ns} of {len(rows)}")
+print(f"reclassified as not sole: {len(rows)-ns}")
+print(f"still sole but corrected event quarter differs: "
+      f"{sum(1 for r in rows if r['still_sole_after_correction'] and not r['detected_same_quarter'])}")
