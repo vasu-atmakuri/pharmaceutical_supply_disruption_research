@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.10.21)  18 NOV 2026 15:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.10.21)  18 NOV 2026 20:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -919,19 +919,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [5]
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 247.
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 251.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 247.
+(Font)              size <5> substituted on input line 251.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.015> not available
-(Font)              size <5> substituted on input line 247.
+(Font)              size <5> substituted on input line 251.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 247.
+(Font)              size <5> substituted on input line 251.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -943,14 +943,14 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [8]
-Overfull \hbox (28.82582pt too wide) in paragraph at lines 392--409
+Overfull \hbox (28.82582pt too wide) in paragraph at lines 396--413
  [] 
  []
 
-<fig1.pdf, id=212, 737.15402pt x 245.718pt>
+<fig1.pdf, id=216, 737.15402pt x 245.718pt>
 File: fig1.pdf Graphic file (type pdf)
 <use fig1.pdf>
-Package pdftex.def Info: fig1.pdf  used on input line 424.
+Package pdftex.def Info: fig1.pdf  used on input line 428.
 (pdftex.def)             Requested size: 372.0pt x 124.00224pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -962,7 +962,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [11]
-Overfull \hbox (35.73024pt too wide) in paragraph at lines 540--565
+Overfull \hbox (35.73024pt too wide) in paragraph at lines 546--571
  [] 
  []
 
@@ -970,22 +970,22 @@ Overfull \hbox (35.73024pt too wide) in paragraph at lines 540--565
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [12]
-<fig2.pdf, id=288, 737.15402pt x 274.626pt>
+<fig2.pdf, id=291, 737.15402pt x 274.626pt>
 File: fig2.pdf Graphic file (type pdf)
 <use fig2.pdf>
-Package pdftex.def Info: fig2.pdf  used on input line 612.
+Package pdftex.def Info: fig2.pdf  used on input line 618.
 (pdftex.def)             Requested size: 372.0pt x 138.59074pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [13 <./fig2.pdf>]
+ [13]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [14]
-<fig3.pdf, id=359, 737.15402pt x 354.12299pt>
+ [14 <./fig2.pdf>]
+<fig3.pdf, id=362, 737.15402pt x 354.12299pt>
 File: fig3.pdf Graphic file (type pdf)
 <use fig3.pdf>
-Package pdftex.def Info: fig3.pdf  used on input line 713.
+Package pdftex.def Info: fig3.pdf  used on input line 719.
 (pdftex.def)             Requested size: 372.0pt x 178.7091pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1006,7 +1006,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [20]
-Overfull \hbox (46.16357pt too wide) in paragraph at lines 947--969
+Overfull \hbox (46.16357pt too wide) in paragraph at lines 957--979
  [] 
  []
 
@@ -1015,15 +1015,15 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [21]
 (./manuscript.bbl
-Underfull \hbox (badness 10000) in paragraph at lines 69--75
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [22]
+Underfull \hbox (badness 10000) in paragraph at lines 81--87
 \OT1/cmr/m/n/10 https://www.fda.gov/drugs/drug-approvals-and-databases/national
 -drug-code-
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [22])
+)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [23]
@@ -1036,13 +1036,13 @@ Package rerunfilecheck Info: File `manuscript.out' has not changed.
 (rerunfilecheck)             Checksum: 8458FC5CF3D49F6698070E2E1A848E05;5508.
  ) 
 Here is how much of TeX's memory you used:
- 21918 strings out of 480247
- 409846 string characters out of 5896150
- 681724 words of memory out of 5000000
- 39380 multiletter control sequences out of 15000+600000
+ 21926 strings out of 480247
+ 409976 string characters out of 5896150
+ 683130 words of memory out of 5000000
+ 39386 multiletter control sequences out of 15000+600000
  482225 words of font info for 74 fonts, out of 8000000 for 9000
  24 hyphenation exceptions out of 8191
- 99i,14n,103p,637b,720s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 99i,14n,103p,973b,720s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
@@ -1061,10 +1061,10 @@ e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/public/amsfonts/cm/cmtt10.pfb>
-Output written on manuscript.pdf (23 pages, 375899 bytes).
+Output written on manuscript.pdf (23 pages, 378256 bytes).
 PDF statistics:
- 572 PDF objects out of 1000 (max. 8388607)
- 365 compressed objects within 4 object streams
- 78 named destinations out of 1000 (max. 500000)
+ 581 PDF objects out of 1000 (max. 8388607)
+ 374 compressed objects within 4 object streams
+ 80 named destinations out of 1000 (max. 500000)
  244 words of extra memory for PDF output out of 10000 (max. 10000000)
 

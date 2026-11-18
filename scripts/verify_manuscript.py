@@ -49,13 +49,13 @@ for k in ["under 35%","35-95%","at least 95%"]:
     a,b=DE["entry"][k]; must(f"entry {k}", f"{a/b*100:.1f} percent")
 # --- structural claims ---
 for n in ["3{,}342","2{,}911","383","3{,}294","16.1 percent","8.9 percent","2.1 percent",
-          "99.7 percent","1{,}727","293","83.4 percent","14.71","10.53","20.5 percent",
-          "32.2 percent","26.3 to 57.9","85.6 percent","1.25"]:
+          "99.7 percent","1{,}727","293","83.4 percent","14.71","10.53","27.0 percent",
+          "34.3 percent","26.3 to 57.9","85.6 percent","1.25"]:
     must("structural", n)
 # --- numbers that must NOT survive from the previous framing ---
 for n in ["1.45","0.00005","118-market","21 sole","2{,}913","2{,}870","1.73","1.77","35.7","0.053",
           "fourteen sole-labeler exits","four documented supply","96.5 percent","424 of",
-          "Six of twenty apparent","is an upper bound on manufacturing","Twenty less six"]:
+          "Six of twenty apparent","is an upper bound on manufacturing","Twenty less six","20.5 percent","32.2 percent","860","should be treated as an upper bound"]:
     must_not("prior-version number", n)
 # --- figures must agree with the tables ---
 for fig,need in [("fig1",["16% of 19 labelers","100% of 1 labeler"]),
@@ -66,6 +66,22 @@ for fig,need in [("fig1",["16% of 19 labelers","100% of 1 labeler"]),
     for s in need:
         checks+=1
         if s.lower() not in t.lower(): fails.append(f"FIGURE   {fig}.pdf does not contain {s!r}")
+
+# --- the abstract must carry the SAME values as the results files, not merely
+# --- contain them somewhere. A silent no-match patch left 38.5/15.4/61.5 in the
+# --- abstract for two rounds while the results said 38.2/15.1/68.0.
+ab=flat[flat.lower().index("\\abstract"):flat.lower().index("\\keywords")] if "\\keywords" in flat else flat[:4000]
+m=INF["matched"]
+for label,needle in [("abstract risk difference", f"{m['risk_diff']*100:.1f} points"),
+                     ("abstract control rate",    f"{m['control_rate']*100:.2f} percent"),
+                     ("abstract CI low",          f"{m['ci_sets'][0]*100:.1f}"),
+                     ("abstract CI high",         f"{m['ci_sets'][1]*100:.1f}")]:
+    checks+=1
+    if needle.lower() not in ab.lower(): fails.append(f"ABSTRACT {label}: expected {needle!r}")
+for stale in ["38.5 points","15.4 to 61.5","0.0 percent among"]:
+    checks+=1
+    if stale.lower() in ab.lower(): fails.append(f"ABSTRACT stale value {stale!r}")
+
 print(f"{checks} checks run")
 if fails:
     print(f"\n{len(fails)} FAILED:")

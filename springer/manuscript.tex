@@ -49,8 +49,8 @@ well as form, and then normalising the ingredient key, 383 of 3{,}294 keys prove
 duplicates of another key, leaving 2{,}911 markets; FDA substance data, recorded independently
 of the name the key is built from, agrees with 293 of 294 testable merges. Across the whole
 panel the share of dispensing in markets where one labeler holds at least 95 percent falls from
-14.71 to 10.53 percent, and one in five apparent near-sole market-quarters, carrying a third of
-that volume, is reclassified; the reduction is attributable to the ingredient key, while
+14.71 to 10.53 percent, and 27.0 percent of apparent near-sole market-quarters, carrying 34.3
+percent of that volume, are reclassified; the reduction is attributable to the ingredient key, while
 correcting the route bucketing is close to neutral in aggregate. Seven of twenty apparent
 sole-labeler exits are not sole-labeler exits at all. In the clearest case a firm holding 16.1 percent of a nineteen-labeler pregabalin
 market had been recorded as its sole supplier. Of the thirteen that remain, three are not supply
@@ -59,8 +59,8 @@ switches. Three are documented supply disruptions, two of them the same recall e
 seven could not be classified. The concentration gradient survives the corrections: median
 replacement ratios are 1.79 where the departing share was under 35 percent, 0.82 at 65 to 95
 percent and 0.00 at 95 percent or more, and sole-labeler markets collapse below two percent of
-baseline dispensing at 38.5 percent against 0.0 percent among 325 matched risk-set control
-observations, a risk difference of 38.5 points (95\% CI 15.4 to 61.5). Measured from first
+baseline dispensing at 38.5 percent against 0.31 percent among 325 matched risk-set control
+observations, a risk difference of 38.2 points (95\% CI 15.1 to 68.0). Measured from first
 crossing with censoring, sole-labeler markets are slower to regain 90 percent of baseline
 (log-rank $p=0.056$). The zero-replacement result, however, is concentrated in events whose
 cause could not be established: among the three documented supply disruptions the median
@@ -86,8 +86,10 @@ served by a small number of manufacturers \cite{fda2019taskforce}; structural wo
 entry estimates how manufacturing complexity and regulatory cost hold that number down
 \cite{wang2023}; and descriptive work on the generic landscape tracks how many sellers a molecule
 has over time \cite{berndt2017,conti2020}. Reimbursement policy has been linked to shortage
-incidence through the same lens \cite{yurukoglu2017}, and the harms of shortages to patients are
-well documented \cite{phuong2019,aronson2023}.
+incidence through the same lens \cite{yurukoglu2017}, entry responses to price shocks have been
+studied in the generic cartel episode \cite{starc2022}, the long-run evolution of supply and
+demand in generic markets has been traced molecule by molecule \cite{frank2021}, and the harms of
+shortages to patients are well documented \cite{phuong2019,aronson2023}.
 
 Counting suppliers requires first defining the market they supply. The convention, following
 Berndt and colleagues, is an active ingredient paired with a dosage form \cite{berndt2017}.
@@ -97,7 +99,9 @@ linked-firm counts measure redundancy without normalisation by market type and v
 argument concerns what a supplier count means once you have one. This paper concerns something
 prior to it: whether the market being counted is a market at all.
 
-The ingredient string in Medicaid State Drug Utilization Data is free text. The same product
+The ingredient name used to build the market is free text. Medicaid data identify products by
+NDC; the ingredient and dosage form come from FDA's product listing, whose
+\texttt{NONPROPRIETARYNAME} field is free text. The same product
 appears under several spellings. Metformin hydrochloride tablets are recorded under three keys
 that differ only in whether the word ``tablet'' appears and in what number. Piperacillin and
 tazobactam appear under both orderings of the two ingredients. Terbinafine appears with and
@@ -478,29 +482,31 @@ relative reduction of 28 percent, and the single-labeler volume share falls from
 8.60 percent, a relative reduction of 25 percent.
 
 Following each near-sole market-quarter under specification A into its corrected market makes the
-consequence concrete. There are 58{,}905 such market-quarters; 58{,}045 can be matched to a
-corrected market and 860 cannot. Of those matched, 46{,}126 remain near-sole and 11{,}919, or
-20.5 percent, do not. The reclassified market-quarters carry 32.2 percent of the dispensing
-volume in that group, so the artefacts are systematically larger markets than the true near-sole
+consequence concrete. There are 58{,}905 such market-quarters and all of them map: where route
+correction splits a raw market into several corrected ones, which happens for 16{,}443 of them,
+we follow the raw market's dispensing into the corrected market that carries most of it. Of the
+58{,}905, 43{,}026 remain near-sole and 15{,}879, or 27.0 percent, do not. The reclassified
+market-quarters carry 34.3 percent of the dispensing volume in that group, so the artefacts are systematically larger markets than the true near-sole
 markets they were mixed with. The ingredients most often reclassified are not obscure:
-methylphenidate, mixed amphetamine salts, clindamycin phosphate, metoclopramide, cefoxitin and
-the sodium-chloride electrolyte solutions.
+the sodium-chloride electrolyte solutions, ciprofloxacin, methylphenidate, hydrocortisone,
+clindamycin phosphate, ketoconazole, diazepam and tacrolimus.
 
 This is the practical consequence. A monitoring programme that ranks markets by apparent
-near-sole status using this convention would place roughly one market-quarter in five, and
-roughly a third of the flagged volume, on a list it does not belong on.
+near-sole status using this convention would place more than a quarter of the market-quarters it
+flags, and a third of the flagged volume, on a list they do not belong on.
 
 \subsection{The merges are confirmed by independent ingredient data}\label{subsec:validres}
 
 Of 310 merge groups covering 693 raw keys, 294 are testable against FDA substance data. The
 substance data confirms 293 and contradicts 1, a precision of 99.7 percent; 16 groups are not
-testable because substance names are missing for every member. Of the 11 contradicted groups,
-most reflect FDA's own naming of hydrates rather than a false merge, with paroxetine recorded
-both as paroxetine and as paroxetine hemihydrate and darunavir both as darunavir and darunavir
-hydrate. One residual disagreement survives, and it is not a merge we can repair: two products both named
-Trace Elements 4 are recorded by FDA with different element sets, one including selenious acid and
-the other chromic chloride, so the disagreement is in the source listing rather than in our
-grouping. An earlier version of the rule also merged Trace Elements 4 with Trace Elements 5,
+testable because substance names are missing for every member. The single contradicted group is discussed below; FDA's own naming of
+hydrates and unspecified forms accounted for most of the disagreements in earlier versions of
+this check, and those are now adjudicated explicitly rather than counted as failures. One residual disagreement survives, and it exposes a limit of the method rather than an error in
+the source. Two products both named Trace Elements 4 are recorded by FDA with different element
+sets, one including selenious acid and the other chromic chloride. They are therefore different
+products carrying the same name, and no key built from the ingredient name can separate them.
+Doing so would require building the market key from structured composition rather than from the
+name, which is the natural next step for this method and which we did not take here. An earlier version of the rule also merged Trace Elements 4 with Trace Elements 5,
 because it discarded bare numerals; one- and two-digit formulation indices are now retained and
 that merge no longer occurs.
 
@@ -715,7 +721,10 @@ percent threshold.
 dispensing, measured from each market's first crossing below that threshold, with markets never
 restored censored at the end of follow-up. Shaded bands are Greenwood 95 percent intervals, tick
 marks denote censoring, and the counts below each panel are the numbers still at risk of
-restoration. The bands are wide and overlap throughout, which is the point: neither comparison is
+restoration, with the entering cohort shown at quarter zero. A market that first crosses the
+threshold in the final observed quarter has no follow-up and is censored immediately; two
+minority-loss markets at the 50 percent threshold and two at the 90 percent threshold are in that
+position and contribute to the entering count but not to the curve. The bands are wide and overlap throughout, which is the point: neither comparison is
 established by this sample.}\label{fig:recovery}
 \end{figure}
 
@@ -920,18 +929,19 @@ on the raw convention would flag markets that are not concentrated, and the ones
 are larger than the ones it gets right.
 
 What remains is a clear association between pre-exit concentration and the loss of a market's
-dispensing, robust to both corrections, together with a caution about what it means. In the three
-events from two episodes where a supply disruption is actually documented, remaining suppliers
-replaced part of the lost volume. The strong form of the single-source resilience claim, that such markets do not
+dispensing, robust to both corrections, together with a caution about what it means. In the three events from two episodes where a supply
+disruption is documented, two show partial replacement and one shows none. The strong form of the single-source resilience claim, that such markets do not
 recover after a supply disruption, is not what these data show once the events are verified.
 
 For researchers using these data, four practices follow: bucket markets by route of
 administration and not by dosage form alone, normalise the ingredient key before counting
 suppliers and validate the merges against structured ingredient data, validate events against
 records outside the dispensing series, and report events of undetermined cause as their own
-stratum rather than assuming them into the hypothesis under test. For policy, the count of single-source markets drawn from public dispensing data
-should be treated as an upper bound, and the subset of it that reflects genuine operational
-fragility is smaller than the raw figure implies.
+stratum rather than assuming them into the hypothesis under test. For policy, the count of single-source markets drawn from public
+dispensing data is upward biased under the correction tested here, by more than a quarter of the
+flagged market-quarters and a third of the flagged volume. We do not claim it is an upper bound
+in general, since the route correction pushes the other way for 849 market-quarters in this
+panel.
 
 \section*{Appendix: event-cause audit}\label{sec:appendix}
 
@@ -994,8 +1004,9 @@ and involves no human subjects.
 Product Labeling \cite{dailymed}.
 
 \textbf{Code availability.} The panel construction, the market-key normalisation map, the
-event-level cohort manifest and the event cause classification are released with the paper, so
-that every number above can be recomputed and every event-level classification inspected.
+event-level cohort manifest, the event cause classification and the consistency-checking scripts
+are at \url{https://github.com/vasu-atmakuri/pharmaceutical_supply_disruption_research}, so that
+every number above can be recomputed and every event-level classification inspected.
 
 \textbf{Author contributions.} V.A. designed the study, built the data pipeline, performed the
 analysis and wrote the manuscript. S.K. contributed to the clinical interpretation of the

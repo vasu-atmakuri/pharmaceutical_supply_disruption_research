@@ -19,8 +19,10 @@
     "sole_vol": 0.10529929272713345,
     "mean_hhi": 0.7534092989871367
   },
-  "reclassified": 11919,
-  "retained": 46126,
-  "unmatched": 860,
-  "reclassified_volume_share": 0.3218570884875003
+  "reclassified": 15879,
+  "retained": 43026,
+  "unmatched": 0,
+  "reclassified_volume_share": 0.3431853892985783,
+  "reclassified_share": 0.26956964604023426,
+  "route_split_raw_markets": 16443
 }

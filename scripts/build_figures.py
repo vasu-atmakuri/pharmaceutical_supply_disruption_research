@@ -137,7 +137,8 @@ for p,(thr,ttl) in enumerate([("50%","(a) Returning to half of baseline"),
             xs.append(t); ys.append(S)
             lo.append(max(0.0,S-1.96*se)); hi.append(min(1.0,S+1.96*se))
             if c>0: cens.append((t,S))
-            at-=(d+c); rk[t]=at
+            at-=(d+c)
+            if t>0: rk[t]=at          # time 0 keeps the full entering cohort, as is conventional
         F=[1-v for v in ys]
         a1.step(xs,F,where='post',color=col,lw=2.0,label=f"{lab} (n={n})")
         a1.fill_between(xs,[1-h for h in hi],[1-l for l in lo],step='post',color=col,alpha=.13,lw=0)
