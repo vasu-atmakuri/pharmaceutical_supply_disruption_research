@@ -1,0 +1,10 @@
+{
+  "merge_groups": 333,
+  "raw_keys_merged": 757,
+  "confirmed": 305,
+  "contradicted": 11,
+  "untestable": 17,
+  "precision": 0.9651898734177216,
+  "missed_duplicate_groups": 223,
+  "missed_keys": 504
+}

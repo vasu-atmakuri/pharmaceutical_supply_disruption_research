@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.10.21)  18 NOV 2026 00:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.10.21)  18 NOV 2026 07:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -848,55 +848,55 @@ LaTeX Info: Redefining \nameref on input line 16.
 \@outlinefile=\write4
 \openout4 = `manuscript.out'.
 
-LaTeX Font Info:    Calculating math sizes for size <12.045> on input line 68.
+LaTeX Font Info:    Calculating math sizes for size <12.045> on input line 76.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <8.43146> not available
-(Font)              size <8> substituted on input line 68.
+(Font)              size <8> substituted on input line 76.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <8.43146> not available
-(Font)              size <8> substituted on input line 68.
+(Font)              size <8> substituted on input line 76.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <8.43146> not available
-(Font)              size <8> substituted on input line 68.
+(Font)              size <8> substituted on input line 76.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <8.43146> not available
-(Font)              size <8> substituted on input line 68.
+(Font)              size <8> substituted on input line 76.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <8.43146> not available
-(Font)              size <8> substituted on input line 68.
+(Font)              size <8> substituted on input line 76.
 
-LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 68
+LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 76
 .
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <5.52061> not available
-(Font)              size <6> substituted on input line 68.
+(Font)              size <6> substituted on input line 76.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <5.52061> not available
-(Font)              size <6> substituted on input line 68.
+(Font)              size <6> substituted on input line 76.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <5.52061> not available
-(Font)              size <6> substituted on input line 68.
+(Font)              size <6> substituted on input line 76.
 
-LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 68.
+LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 76.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 68.
+(Font)              size <5> substituted on input line 76.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 68.
+(Font)              size <5> substituted on input line 76.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 68.
+(Font)              size <5> substituted on input line 76.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -904,7 +904,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 68
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 76
 .
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -913,77 +913,91 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [3]
-LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 188.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 188.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.015> not available
-(Font)              size <5> substituted on input line 188.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.015> not available
-(Font)              size <5> substituted on input line 188.
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [4]
+LaTeX Font Info:    Calculating math sizes for size <8.03> on input line 225.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.015> not available
+(Font)              size <5> substituted on input line 225.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.015> not available
+(Font)              size <5> substituted on input line 225.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.015> not available
+(Font)              size <5> substituted on input line 225.
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [5]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [6]
-<fig1.pdf, id=179, 737.15402pt x 245.718pt>
-File: fig1.pdf Graphic file (type pdf)
-<use fig1.pdf>
-Package pdftex.def Info: fig1.pdf  used on input line 305.
-(pdftex.def)             Requested size: 372.0pt x 124.00224pt.
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [7 <./fig1.pdf>]
-Overfull \hbox (34.71773pt too wide) in paragraph at lines 331--355
+ [7]
+Overfull \hbox (28.82582pt too wide) in paragraph at lines 348--369
  [] 
  []
 
-<fig2.pdf, id=238, 737.15402pt x 274.626pt>
-File: fig2.pdf Graphic file (type pdf)
-<use fig2.pdf>
-Package pdftex.def Info: fig2.pdf  used on input line 389.
-(pdftex.def)             Requested size: 372.0pt x 138.59074pt.
+<fig1.pdf, id=195, 737.15402pt x 245.718pt>
+File: fig1.pdf Graphic file (type pdf)
+<use fig1.pdf>
+Package pdftex.def Info: fig1.pdf  used on input line 383.
+(pdftex.def)             Requested size: 372.0pt x 124.00224pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [8]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [9 <./fig2.pdf>]
-<fig3.pdf, id=310, 737.15402pt x 274.626pt>
-File: fig3.pdf Graphic file (type pdf)
-<use fig3.pdf>
-Package pdftex.def Info: fig3.pdf  used on input line 465.
+ [9 <./fig1.pdf>]
+Overfull \hbox (35.73024pt too wide) in paragraph at lines 432--457
+ [] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10]
+<fig2.pdf, id=266, 737.15402pt x 274.626pt>
+File: fig2.pdf Graphic file (type pdf)
+<use fig2.pdf>
+Package pdftex.def Info: fig2.pdf  used on input line 504.
 (pdftex.def)             Requested size: 372.0pt x 138.59074pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10 <./fig3.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11]
+ [11 <./fig2.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [12]
+<fig3.pdf, id=336, 737.15402pt x 274.626pt>
+File: fig3.pdf Graphic file (type pdf)
+<use fig3.pdf>
+Package pdftex.def Info: fig3.pdf  used on input line 589.
+(pdftex.def)             Requested size: 372.0pt x 138.59074pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [13]
-(./manuscript.bbl
+ [13 <./fig3.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [14]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [15]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [16]
+(./manuscript.bbl
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [17]
 Underfull \hbox (badness 10000) in paragraph at lines 69--75
 \OT1/cmr/m/n/10 https://www.fda.gov/drugs/drug-approvals-and-databases/national
 -drug-code-
@@ -992,23 +1006,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 69--75
 )
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [15]
+ [18]
 (./manuscript.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.985pt have occurred.
 
 Package rerunfilecheck Info: File `manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: FAC2D90FCDF3C5FCB36ED63F9B52D913;4459.
+(rerunfilecheck)             Checksum: 7AF94D14F167814747929DE74C2579D5;5027.
  ) 
 Here is how much of TeX's memory you used:
- 21886 strings out of 480247
- 409456 string characters out of 5896150
- 681980 words of memory out of 5000000
- 39365 multiletter control sequences out of 15000+600000
- 482057 words of font info for 73 fonts, out of 8000000 for 9000
+ 21900 strings out of 480247
+ 409638 string characters out of 5896150
+ 681990 words of memory out of 5000000
+ 39372 multiletter control sequences out of 15000+600000
+ 482225 words of font info for 74 fonts, out of 8000000 for 9000
  24 hyphenation exceptions out of 8191
- 99i,11n,103p,434b,720s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 99i,14n,103p,524b,720s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
@@ -1019,16 +1033,18 @@ type1/public/amsfonts/cmextra/cmmib9.pfb></usr/share/texlive/texmf-dist/fonts/t
 ype1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb>
-Output written on manuscript.pdf (15 pages, 318697 bytes).
+cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmtt10.pfb>
+Output written on manuscript.pdf (18 pages, 355626 bytes).
 PDF statistics:
- 490 PDF objects out of 1000 (max. 8388607)
- 297 compressed objects within 3 object streams
- 62 named destinations out of 1000 (max. 500000)
- 212 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 527 PDF objects out of 1000 (max. 8388607)
+ 326 compressed objects within 4 object streams
+ 68 named destinations out of 1000 (max. 500000)
+ 228 words of extra memory for PDF output out of 10000 (max. 10000000)
 

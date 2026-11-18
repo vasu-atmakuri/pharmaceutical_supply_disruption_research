@@ -2,9 +2,9 @@ import duckdb, numpy as np, json, os, collections
 rng=np.random.default_rng(20261117)
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 MQ={}; LMQ={}
-for m,t,r in con.execute("SELECT mol,tq,rx FROM read_parquet('/tmp/molq_norm.parquet')").fetchall(): MQ.setdefault(m,{})[t]=r
-for l,m,t,r in con.execute("SELECT lab,mkt,tq,rx FROM read_parquet('/tmp/lmq_norm.parquet')").fetchall(): LMQ.setdefault(m,{}).setdefault(t,{})[l]=r
-SL=con.execute("SELECT mol,lab,t,shr FROM read_parquet('/tmp/sl_norm.parquet')").fetchall()
+for m,t,r in con.execute("SELECT mol,tq,rx FROM read_parquet('/tmp/molq_v2.parquet')").fetchall(): MQ.setdefault(m,{})[t]=r
+for l,m,t,r in con.execute("SELECT lab,mkt,tq,rx FROM read_parquet('/tmp/lmq_v2.parquet')").fetchall(): LMQ.setdefault(m,{}).setdefault(t,{})[l]=r
+SL=con.execute("SELECT mol,lab,t,shr FROM read_parquet('/tmp/sl_v2.parquet')").fetchall()
 TMAX=max(t for d in MQ.values() for t in d); YMIN=(2016-1991)*4+1; B0,B1=-6,-2
 first={}
 for m,l,t,s in sorted(SL,key=lambda x:x[2]):

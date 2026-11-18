@@ -1,0 +1,92 @@
+[
+  {
+    "tag": "A raw ingredient string, form-based bucket",
+    "markets": 3342,
+    "lmq": 246251,
+    "events": 285,
+    "ev_markets": 218,
+    "inwin": 115,
+    "baseline": 113,
+    "obs": 106,
+    "bands": {
+      "<35%": 73,
+      "sole": 20,
+      "35-65%": 7,
+      "65-95%": 6
+    },
+    "<35%": {
+      "n_R": 72,
+      "median_R": 1.5837504079116256,
+      "R_lt_002": 0.2916666666666667,
+      "n_coll": 73,
+      "collapse": 0.0
+    },
+    "sole": {
+      "n_R": 20,
+      "median_R": 0.0,
+      "R_lt_002": 0.8,
+      "n_coll": 20,
+      "collapse": 0.45
+    }
+  },
+  {
+    "tag": "B route-and-form bucket, raw ingredient string",
+    "markets": 3294,
+    "lmq": 244826,
+    "events": 286,
+    "ev_markets": 219,
+    "inwin": 115,
+    "baseline": 113,
+    "obs": 106,
+    "bands": {
+      "sole": 20,
+      "<35%": 73,
+      "35-65%": 7,
+      "65-95%": 6
+    },
+    "<35%": {
+      "n_R": 72,
+      "median_R": 1.5837504079116256,
+      "R_lt_002": 0.2916666666666667,
+      "n_coll": 73,
+      "collapse": 0.0
+    },
+    "sole": {
+      "n_R": 20,
+      "median_R": 0.0,
+      "R_lt_002": 0.8,
+      "n_coll": 20,
+      "collapse": 0.45
+    }
+  },
+  {
+    "tag": "C route-and-form bucket, normalized key",
+    "markets": 2870,
+    "lmq": 242235,
+    "events": 279,
+    "ev_markets": 207,
+    "inwin": 108,
+    "baseline": 106,
+    "obs": 100,
+    "bands": {
+      "sole": 13,
+      "<35%": 78,
+      "65-95%": 6,
+      "35-65%": 3
+    },
+    "<35%": {
+      "n_R": 77,
+      "median_R": 1.7667962016666154,
+      "R_lt_002": 0.2727272727272727,
+      "n_coll": 78,
+      "collapse": 0.0
+    },
+    "sole": {
+      "n_R": 13,
+      "median_R": 0.0,
+      "R_lt_002": 0.7692307692307693,
+      "n_coll": 13,
+      "collapse": 0.38461538461538464
+    }
+  }
+]

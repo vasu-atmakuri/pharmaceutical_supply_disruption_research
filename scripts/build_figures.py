@@ -13,25 +13,28 @@ def load(tag):
     for l,m,t,r in con.execute(f"SELECT lab,mkt,tq,rx FROM read_parquet('/tmp/lmq_{tag}.parquet')").fetchall(): LM.setdefault((m,t),{})[l]=r
     SL=con.execute(f"SELECT mol,lab,t,shr FROM read_parquet('/tmp/sl_{tag}.parquet')").fetchall()
     return MQ,LM,SL
-MQn,LMn,SLn=load('norm'); MQr,LMr,SLr=load('nat')
+MQn,LMn,SLn=load('v2'); MQr,LMr,SLr=load('nat')
 nmap=json.load(open(f"{RES}/market_key_normalization_map.json"))
 VER={}
 
 # ================= FIGURE 1: the measurement defect =================
-cases=[("Pregabalin, capsule","PREGABALIN CAPSULES, CV | CAPSULE","69097",(2024-1991)*4+2),
-       ("Mixed amphetamine salts, tablet",None,"42858",(2023-1991)*4+2),
-       ("Terbinafine, tablet","TERBINAFINE TABLETS 250 MG | TABLET","69097",(2023-1991)*4+4)]
+import csv
+TR=list(csv.DictReader(open(f"{RES}/sole_event_transition.csv")))
+PICK=["PREGABALIN CAPSULES, CV | CAPSULE",
+      "DORZOLAMIDE HYDROCHLORIDE AND TIMOLOL MALEATE OPHTHALMIC SOLUTION | ORAL LIQUID",
+      "BENZTROPINE | TABLET"]
+LABEL={"PREGABALIN CAPSULES, CV | CAPSULE":"Pregabalin, capsule",
+  "DORZOLAMIDE HYDROCHLORIDE AND TIMOLOL MALEATE OPHTHALMIC SOLUTION | ORAL LIQUID":"Dorzolamide and timolol, ophthalmic",
+  "BENZTROPINE | TABLET":"Benztropine, tablet"}
 rows=[]
-for nm,rawkey,lab,t in cases:
-    if rawkey is None:
-        cands=[k for k in MQr if k.startswith("DEXTROAMPHETAMINE SACCHARATE, AMPHETAMINE ASPARTATE MONOHYDRATE")]
-        rawkey=max(cands,key=lambda k:(LMr.get((k,t-1),{}).get(lab) or 0))
-    nkey=nmap[rawkey]
-    dr=LMr.get((rawkey,t-1),{}); dn=LMn.get((nkey,t-1),{})
-    sr=(dr.get(lab) or 0)/max(1e-9,sum(v or 0 for v in dr.values()))
-    sn=(dn.get(lab) or 0)/max(1e-9,sum(v or 0 for v in dn.values()))
-    rows.append((nm,sr,sn,len(dr),len(dn)))
-    print(f"  {nm}: raw {sr:.1%} of {len(dr)} labeler(s) -> normalized {sn:.1%} of {len(dn)}")
+for want in PICK:
+    r=next((x for x in TR if x["raw_market"]==want),None)
+    if r is None:
+        r=next(x for x in TR if x["raw_market"].startswith(want.split(" | ")[0][:24]))
+    rows.append((LABEL.get(r["raw_market"],r["raw_market"][:34]),
+                 float(r["raw_share"]), float(r["corrected_share"]),
+                 int(r["raw_labelers"]), int(r["corrected_labelers"])))
+    print(f"  {rows[-1][0]}: {rows[-1][1]:.0%} of {rows[-1][3]} -> {rows[-1][2]:.1%} of {rows[-1][4]}")
 grp=collections.Counter()
 for v in nmap.values(): grp[v]+=1
 dist=collections.Counter(grp.values())
