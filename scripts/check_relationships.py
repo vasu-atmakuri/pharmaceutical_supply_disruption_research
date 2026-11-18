@@ -164,6 +164,45 @@ for thr in ["50%","90%"]:
            f"landmark {m} vs crossed {len(RC[thr][key])}")
         ck(f"landmark recoveries at {thr} ({b}) do not exceed its n", k<=m)
 
+
+# 11. the near-sole event flow must reconcile against its own manifest, and the
+# manuscript's four exclusion stages must sum to the detected total
+import collections as _co
+_fl=SPEC["C"]["sole_flow"]
+_man=list(_csv.DictReader(open(f"{R}/results/near_sole_event_flow.csv")))
+_st=_co.Counter(r["stage"] for r in _man)
+ck("manifest has one row per detected near-sole exit", len(_man)==_fl["detected"],
+   f"{len(_man)} rows vs {_fl['detected']} detected")
+for k in ("outside_window","failed_baseline","all_post_suppressed","observed"):
+    ck(f"manifest stage {k} matches the event flow", _st[k]==_fl[k], f"{_st[k]} vs {_fl[k]}")
+ck("the four exclusion stages sum to the detected total",
+   _fl["outside_window"]+_fl["failed_baseline"]+_fl["all_post_suppressed"]+_fl["observed"]==_fl["detected"],
+   f"{_fl}")
+ck("observed stage equals the specification C sole band",
+   _fl["observed"]==SPEC["C"]["bands"]["sole"])
+ck("baseline-complete equals the bound denominator",
+   _fl["baseline_complete"]==NUMJ["bound_eligible"])
+ck("manifest collapse count equals the reported numerator",
+   sum(1 for r in _man if r["collapsed"]=="1")==NUMJ["bound_collapsed"],
+   f"{sum(1 for r in _man if r['collapsed']=='1')} vs {NUMJ['bound_collapsed']}")
+# every flow number in the text must come from the manifest, so assert the macros too
+_gv={m.group(2):m.group(1) for m in re.finditer(r"\\newcommand\{\\n(Flow[A-Za-z]+)\}\{([^}]*?)(?:\\xspace)?\}",
+                                               GEN.get("numbers",""))}
+
+
+# 12. Figure 1(a)'s labels must match the transition table's, dosage form included.
+# These disagreed about one amphetamine market because each had its own label map.
+from display_names import name as _dname
+_f1=figtext("fig1.pdf")
+for r in _rc:
+    lbl=_dname(r["corrected_market"])
+    if lbl.split(",")[0] in _f1:            # only the three panel (a) shows
+        ck(f"fig1(a) label agrees with the table for {lbl.split(',')[0]}",
+           lbl.replace(" ","") in _f1.replace(" ",""),
+           f"figure lacks {lbl!r}")
+        ck(f"fig1(a) dosage form agrees for {lbl.split(',')[0]}",
+           lbl.split(", ")[-1] in _f1, f"form {lbl.split(', ')[-1]!r} not in the figure")
+
 print(f"{n} relationship checks run")
 if fails:
     print(f"\n{len(fails)} FAILED:")

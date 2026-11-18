@@ -46,6 +46,23 @@ pdf=subprocess.run(["pdftotext",f"{S}/manuscript.pdf","-"],capture_output=True,t
 ck("no broken references in the PDF", "??" not in pdf and "efsubsec" not in pdf and "efsec" not in pdf)
 ck("no undefined macro text in the PDF", not re.search(r"\\n[A-Z]",pdf))
 
+
+# 6. the RENDERED PDF must not join a number to the following word. TeX swallows the
+# space after a control word, so a macro defined without \xspace silently produces
+# "292testable" throughout. Reading extracted text for presence does not catch this.
+WORDS=("percent","testable","matched","points","markets","market","events","event","exits",
+       "exit","buckets","labeler","labelers","groups","keys","minority","control","controls",
+       "sole","raw","of","in","and","observations","prescriptions","quarters","ingredient")
+joined=re.findall(r"\b\d[\d.,]*(?:"+"|".join(WORDS)+r")\b",pdf)
+ck("no number joined to a word in the rendered PDF", not joined,
+   f"{len(joined)} found, e.g. {sorted(set(joined))[:6]}")
+_nums=[l for l in open(f"{S}/generated/numbers.tex").read().splitlines()
+       if l.startswith("\\newcommand")]
+_noxs=[l for l in _nums if not l.rstrip().endswith("\\xspace}")]
+ck("every macro definition carries xspace", not _noxs,
+   f"{len(_noxs)} of {len(_nums)} lack it, e.g. {_noxs[:3]}")
+ck("xspace package loaded", "\\usepackage{xspace}" in TEX)
+
 # 4. the PDF must be newer than the sources it was built from
 pt=os.path.getmtime(f"{S}/manuscript.pdf")
 for f in ["manuscript.tex","generated/numbers.tex","generated/tab_flow.tex","generated/tab_concentration.tex",

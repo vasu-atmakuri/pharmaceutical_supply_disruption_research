@@ -66,7 +66,126 @@ agreement is 292 of 292 testable groups.
 
 ---
 
-## 1. Changes made in response to this round
+## 1. The near-sole event flow (your Section 2, P0)
+
+You were right and the arithmetic was wrong. The flow is now computed from one
+manifest and every stage is asserted against it:
+
+| Stage | Previously reported | Computed |
+|---|---|---|
+| Detected exits with departing share at least 95% | 39 | **41** |
+| Outside the event window | 20 | **21** |
+| Inside the window | — | 20 |
+| Fail the baseline rule | none | 0 |
+| Every post-event quarter suppressed | 6 | **7** |
+| Observed cohort | 13 | 13 |
+
+21 + 0 + 7 + 13 = 41.
+Three of the four previously reported numbers were wrong. Sections 2.5 and the
+limitations are rewritten from macros emitted by the same computation, so the two
+passages cannot disagree.
+
+`results/near_sole_event_flow.csv` is the manifest you asked for: one row per
+detected near-sole exit, with the stage at which it leaves the cohort, its departing
+share, and for observed events its replacement ratio and collapse flag. Nine checks
+assert the manifest against the flow, the flow against the cohort, and the manifest's
+collapse count against the reported numerator.
+
+We also flag a coincidence in the manuscript so it is not read as a further error: the
+corrected panel has 20 near-sole exits inside the window, and the raw
+convention's cohort separately contains 20 sole-labeler events.
+Those two counts are equal by accident and are measured on different panels. The text
+now says so.
+
+## 2. The two 34.1% figures (your C7, P0)
+
+You were right to ask. They are different quantities and we had used one number for
+both. Computed separately, of 853M flagged prescriptions:
+
+| Measure | Numerator | Share |
+|---|---|---|
+| Largest-component rule, whole raw market-quarters | 292M | **34.3%** |
+| Volume allocated across all corrected components | 291M | **34.1%** |
+
+Both appear in Table 4 with their numerators, and the text states that they are
+different operations which agree only approximately.
+
+## 3. Macro spacing (your C5, P0)
+
+Entirely our defect and introduced by the generation change itself: TeX swallows the
+space after a control word, so a macro defined without `\xspace` rendered
+"292testable". There were 55 such joins. All 208 macros now carry `\xspace`, the count is zero,
+and `verify_manuscript.py` reads the rendered PDF and fails on any digit joined to a
+word. Our previous checks read extracted text for presence only, which is exactly why
+they were blind to it.
+
+## 4. Trace Elements (your C3, P0)
+
+The limitation was outdated and is removed. In the final mapping, Trace Elements 4 and
+Trace Elements 5 are separate normalised keys, and the two manufacturers' Trace
+Elements 4 products that FDA records with different element sets are also separated by
+the composition tie-break. No residual false merge survives this check. Section 3.3 now
+states the order of operations explicitly: merge rule applied, substance data used to
+identify wrong joins, rule changed, check re-run. The agreement is therefore
+agreement after adjudication by the same field, which we say wherever we report it, and
+Section 2.4 no longer calls that field an independent referee.
+
+## 5. Missing-route handling (your C4, P0)
+
+Both descriptions were wrong, in opposite directions. The actual rule: where
+`ROUTENAME` is absent, a cascade on the form string is tried in the same order, and
+only records matching none of its tests go to `other`. That residue is large, not
+small: of 22,651 crosswalk records with no route, the cascade
+classifies 5,520
+(24.4%) and 17,131
+(75.6%) reach `other`. We state this in the methods and have
+rewritten the Table 9 caption to match. We also state why we keep them: dropping a
+product because FDA did not populate one field would remove it from its market's
+supplier count and could manufacture an apparent sole supplier, which is the error this
+paper is about.
+
+## 6. Formulation mismatch (your C2, P0)
+
+Table 2 was right and Figure 1(a) was wrong: the corrected market is
+`AMPHETAMINE,... | ORAL CAPSULE`. The figure had its own hard-coded label map with
+"tablet" as a fallback string. There is now one shared label map that both the table
+and the figure import, it raises an error on any key it does not cover, and a check
+compares the rendered figure's labels against the table's, dosage form included.
+
+## 7. Near-sole terminology (your C8)
+
+Adopted. The share-defined stratum is called near-sole-labeler throughout the event
+analysis, and we report the exact-labeler count you asked for:
+12 of the 13 observed events had exactly
+one active labeler across the four pre-exit quarters;
+1 had a second labeler whose dispensing was small enough
+that the departing share still rounded to 100 percent.
+
+## 8. Overstated claims (your C9)
+
+All three corrected. The recovery result is now described as suggestive and not
+statistically established, in the abstract and the discussion. The matched comparison
+reports 0.31% rather than "zero" everywhere. The
+duplicate-key prevalence is stated as 11.5%
+of route-aware raw market keys.
+
+## 9. One more we found while doing this
+
+`reclass_multi.py` was not reproducible. `max()` broke ties on component volume by
+dictionary order, so the headline reclassification count moved between
+15,743 and 15,744 across runs. Fixed with a
+deterministic tie-break; the correct count is 15,743. The
+determinism check now covers nine stages rather than four.
+
+Your observation that our checks were still incomplete was correct, and the two
+failures you found had a common shape: they compared numbers to a list of values rather
+than to each other. The checks now assert relationships, including figure-to-table label
+agreement and manifest-to-flow reconciliation, and one of them reads the rendered PDF
+rather than its extracted text.
+
+---
+
+## 10. Changes made in earlier rounds
 
 ### The construction of the reclassification rate (your Section 2)
 
@@ -78,7 +197,7 @@ allocation that requires no rule at all:
 
 | Rule | Reclassified | Rate |
 |---|---|---|
-| Largest corrected component no longer near-sole | 15,744 | 26.7% |
+| Largest corrected component no longer near-sole | 15,743 | 26.7% |
 | No component still near-sole | 9,549 | 16.2% |
 | At least one component no longer near-sole | 17,004 | 28.9% |
 | Volume allocated across all components | — | **34.1% of flagged dispensing** |
@@ -131,15 +250,15 @@ therefore governs about five percent of volume rather than a sixth of it. Added,
 
 Added, and it changed what we report. The minority band's median is stable under
 trimming (1.77 → 1.73 → 1.58 → 1.47 removing the largest one, three and five), but the
-mean falls from 19.39 to 11.42, 3.04 and -0.72, and the
-volume-weighted ratio from 14.68 to 6.92, -5.39 and -12.04, changing sign. The five largest ratios are 625, 370, 273, 170 and 107. **We have
+mean falls from 19.29 to 11.32, 2.94 and -0.83, and the
+volume-weighted ratio from 14.65 to 6.88, -5.43 and -12.08, changing sign. The five largest ratios are 625, 370, 273, 170 and 107. **We have
 withdrawn the volume-weighted figure for that band**, since no stable value exists.
 
 ### Suppression scenario (your C9)
 
 Reported alongside the primary estimate: the ten-prescription imputation moves one
 market, taking 5 of 13 to 4 of 13, or 38.5% to 30.8%. Stated as a scenario, not a bound,
-and kept separate from the missing-follow-up bounds of 26.3% to 57.9%.
+and kept separate from the missing-follow-up bounds of 25.0% to 60.0% (see Section 0).
 
 ### Market granularity (your C4)
 

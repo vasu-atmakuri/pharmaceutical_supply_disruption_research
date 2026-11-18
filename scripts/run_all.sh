@@ -17,7 +17,8 @@ echo "repo:  $PSDR_ROOT"
 echo "data:  $RESEARCH_ROOT"
 for f in rebuild_xw_route natpanel_route build_v2 validate_normalization national_impact \
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
-         threespec transition recall_matchlevel sensitivities collect_numbers build_figures emit_tex; do
+         threespec transition sole_flow_manifest recall_matchlevel sensitivities \
+         collect_numbers build_figures emit_tex; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
 S="$PSDR_ROOT/springer"
@@ -35,6 +36,7 @@ echo "==10. recovery =="                    ; python3 $W/recovery_censored.py   
 echo "==11. deficits and entry =="          ; python3 $W/deficit_entry.py          >/dev/null
 echo "==12. three specifications =="        ; python3 $W/threespec.py              >/dev/null
 echo "==13. event transition =="            ; python3 $W/transition.py             | tail -3
+echo "==13b. near-sole flow manifest ==" ; python3 $W/sole_flow_manifest.py | tail -6
 echo "==14. recall match level =="          ; python3 $W/recall_matchlevel.py      | tail -4
 echo "==15. sensitivities =="               ; python3 $W/sensitivities.py          >/dev/null
 echo "==16. collected numbers =="           ; python3 $W/collect_numbers.py        >/dev/null

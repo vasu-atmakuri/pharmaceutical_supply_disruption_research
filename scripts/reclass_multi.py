@@ -26,17 +26,26 @@ RAW=conc('/tmp/lmq_nat.parquet'); COR=conc('/tmp/lmq_v2.parquet')
 ing2=collections.defaultdict(set)
 for raw,norm in NK.items(): ing2[raw.split(" | ")[0]].add(norm)
 R=dict(largest=collections.Counter(), anyc=collections.Counter(), allc=collections.Counter())
-V=dict(flagged=0.0, in_nearsole=0.0)
+V=dict(flagged=0.0, in_nearsole=0.0, largest_rx_reclass=0.0)
 ncomp=collections.Counter()
-for (m,t),v in RAW.items():
+for (m,t),v in sorted(RAW.items()):
     if v['top']<.95: continue
-    comps=[(nk,COR[(nk,t)]) for nk in ing2.get(m.split(" | ")[0],()) if (nk,t) in COR]
+    # sorted: the component list order decides which of two equal-volume components
+    # max() returns, which moved the largest-component count between runs
+    comps=sorted(((nk,COR[(nk,t)]) for nk in ing2.get(m.split(" | ")[0],()) if (nk,t) in COR),
+                 key=lambda x: x[0])
     if not comps: continue
     ncomp[len(comps)]+=1
     V['flagged']+=v['rx']
     # rule 1: largest component
-    big=max(comps,key=lambda x:x[1]['rx'])
-    R['largest']['still' if big[1]['top']>=.95 else 'reclass']+=1
+    big=max(comps,key=lambda x:(x[1]['rx'],x[0]))   # deterministic tie-break on the key
+    _rc = big[1]['top']<.95
+    R['largest']['reclass' if _rc else 'still']+=1
+    # Volume of the raw market-quarters that THIS rule reclassifies. Conceptually
+    # distinct from the allocation measure below: this counts whole raw markets whose
+    # largest component is no longer near-sole; that one splits each raw market's
+    # volume across its components. They need not be equal and are reported apart.
+    V['largest_rx_reclass'] += v['rx'] if _rc else 0
     # rule 2: any component still near-sole
     R['anyc']['still' if any(c['top']>=.95 for _,c in comps) else 'reclass']+=1
     # rule 3: all components near-sole
@@ -54,6 +63,8 @@ for key,lab in [("largest","largest corrected component (manuscript rule)"),
                 ("allc","every corrected component still near-sole")]:
     c=R[key]; n=c['still']+c['reclass']
     print(f"  {lab:<46} reclassified {c['reclass']:>6,} / {n:,} = {c['reclass']/n:.1%}")
+print(f"\n  largest-component rule, by volume: {V['largest_rx_reclass']:,.0f} of {V['flagged']:,.0f} "
+      f"flagged prescriptions = {V['largest_rx_reclass']/V['flagged']:.1%}")
 print(f"\n  volume-allocation measure: of the {V['flagged']:,.0f} prescriptions flagged as near-sole")
 print(f"  under the raw convention, {V['in_nearsole']/V['flagged']:.1%} land in a corrected market that")
 print(f"  is still near-sole, so {1-V['in_nearsole']/V['flagged']:.1%} of flagged dispensing is reclassified.")
@@ -61,7 +72,9 @@ out=dict(components=dict(ncomp),
          largest_reclass=R['largest']['reclass'], largest_n=R['largest']['still']+R['largest']['reclass'],
          any_reclass=R['anyc']['reclass'], all_reclass=R['allc']['reclass'],
          flagged_rx=V['flagged'], vol_still_nearsole=V['in_nearsole']/V['flagged'],
-         vol_reclassified=1-V['in_nearsole']/V['flagged'])
+         vol_reclassified=1-V['in_nearsole']/V['flagged'],
+         largest_rx_reclass=V['largest_rx_reclass'],
+         largest_vol_rate=V['largest_rx_reclass']/V['flagged'])
 for k in ['largest','anyc','allc']:
     out[k+"_rate"]=R[k]['reclass']/(R[k]['still']+R[k]['reclass'])
 json.dump(out,open(_ROOT+"/results/reclassification_rules.json","w"),indent=2)

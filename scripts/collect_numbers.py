@@ -79,6 +79,12 @@ N["brand_share"]=11.4; N["biologic_share"]=2.6
 N["alt_baseline_minority_median"]=1.25; N["alt_baseline_minority_lt02"]=31.6
 N["colazo_markets"]=3344
 out=_ROOT+"/results/manuscript_numbers.json"
+# Merge rather than replace: earlier stages write keys into this file (the
+# missing-route breakdown from natpanel_route.py, the exact-labeler count from
+# sole_flow_manifest.py) and a full rewrite silently dropped them.
+try: _prev=json.load(open(out))
+except Exception: _prev={}
+_prev.update(N); N=_prev
 json.dump(N,open(out,"w"),indent=2)
 for k,v in N.items(): print(f"  {k:<34}{v}")
 print("\nwrote",os.path.basename(out))

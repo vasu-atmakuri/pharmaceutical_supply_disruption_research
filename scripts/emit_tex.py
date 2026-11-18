@@ -16,9 +16,13 @@ RUL=L("reclassification_rules.json"); RML=L("recall_match_level.json"); VAL=L("n
 DEF=L("deficit_entry_normalized.json"); RC=L("recovery_censored.json"); NUM=L("manuscript_numbers.json")
 SPEC={s["tag"][0]:s for s in L("three_specifications.json")}
 _W={14:"fourteen",13:"thirteen",15:"fifteen",12:"twelve",16:"sixteen"}
+_FL=SPEC["C"]["sole_flow"]
 _WORDS={0:"zero",1:"one",2:"two",3:"three",4:"four",5:"five",6:"six",7:"seven",8:"eight",
  9:"nine",10:"ten",11:"eleven",12:"twelve",13:"thirteen",14:"fourteen",15:"fifteen",16:"sixteen",
- 17:"seventeen",18:"eighteen",19:"nineteen",20:"twenty"}
+ 17:"seventeen",18:"eighteen",19:"nineteen",20:"twenty",21:"twenty-one",
+ 22:"twenty-two",23:"twenty-three",24:"twenty-four",25:"twenty-five",
+ 26:"twenty-six",27:"twenty-seven",28:"twenty-eight",39:"thirty-nine",
+ 40:"forty",41:"forty-one"}
 def _w(x): return _WORDS[int(x)]
 def _cc():
     import csv, collections
@@ -102,9 +106,14 @@ out=[f"Largest corrected component is no longer near-sole (used above) & {c(RUL[
 open(f"{G}/tab_rules.tex","w").write(
  "\\begin{tabular}{@{}lrr@{}}\n\\toprule\nCondition for withdrawing the alert & Alerts withdrawn & Rate \\\\\n\\midrule\n"
  +"\n".join(out)+"\n\\midrule\n"
- +"\\multicolumn{3}{@{}l}{Volume allocated across all components: "
- +f"{RUL['vol_reclassified']*100:.1f}" + "\\% of flagged dispensing} \\\\\n"
- +"\\multicolumn{3}{@{}l}{lands in a corrected market that is no longer near-sole} \\\\\n"
+ +"\\multicolumn{3}{@{}l}{\\emph{By dispensing volume, of "
+ +f"{RUL['flagged_rx']/1e6:,.0f}" + "M flagged prescriptions:}} \\\\\n"
+ +"\\multicolumn{3}{@{}l}{~~Largest-component rule, whole raw markets: "
+ +f"{RUL['largest_rx_reclass']/1e6:,.0f}" + "M, "
+ +f"{RUL['largest_vol_rate']*100:.1f}" + "\\%} \\\\\n"
+ +"\\multicolumn{3}{@{}l}{~~Volume allocated across all components: "
+ +f"{RUL['flagged_rx']*RUL['vol_reclassified']/1e6:,.0f}" + "M, "
+ +f"{RUL['vol_reclassified']*100:.1f}" + "\\%} \\\\\n"
  +"\\botrule\n\\end{tabular}")
 
 # ---------------- Table 5: replacement ratios ----------------
@@ -148,6 +157,10 @@ M.update(
  Confirmed=c(VAL["confirmed"]), Contradicted=c(VAL["contradicted"]), Untestable=c(VAL["untestable"]),
  Testable=c(VAL["confirmed"]+VAL["contradicted"]),
  RouteCovRec=f"{NUM['route_coverage']:.1f}",
+ RouteMissRec=c(NUM["route_missing_records"]), RouteMissOther=c(NUM["route_missing_to_other"]),
+ RouteMissClassPct=f"{NUM['route_missing_classified_pct']:.1f}",
+ RouteMissOtherPct=f"{NUM['route_missing_other_pct']:.1f}",
+ RouteMissClassified=c(NUM["route_missing_records"]-NUM["route_missing_to_other"]),
  RouteCovLo=f"{SEN['route_coverage_volume_min']:.1f}", RouteCovHi=f"{SEN['route_coverage_volume_max']:.1f}",
  MinorityMedian=f"{INF['R_<35%']['median']:.2f}", SoleMedian=f"{INF['R_sole']['median']:.2f}",
  MinorityN=str(INF["R_<35%"]["n"]), SoleN=str(INF["R_sole"]["n"]),
@@ -195,6 +208,12 @@ M.update(
  BootDraws=c(NUM["bootstrap_draws"]),
  MidMedian=f"{INF['R_35-65%']['median']:.2f}", HighMedian=f"{INF['R_65-95%']['median']:.2f}",
  RawKeysAbs=c(NUM["keys_absorbed"]),
+ ExactOne=c(NUM["cohort_exactly_one_labeler"]), ExactOneW=_w(NUM["cohort_exactly_one_labeler"]),
+ TwoPlus=c(NUM["cohort_two_plus_labelers"]), TwoPlusW=_w(NUM["cohort_two_plus_labelers"]),
+ DupKeyPct=f"{100*NUM['keys_absorbed']/NUM['raw_route_keys']:.1f}",
+ ReclassVolLargest=f"{RUL['largest_vol_rate']*100:.1f}",
+ FlaggedRx=f"{RUL['flagged_rx']/1e6:.0f}", LargestRxReclass=f"{RUL['largest_rx_reclass']/1e6:.0f}",
+ AllocRxReclass=f"{RUL['flagged_rx']*RUL['vol_reclassified']/1e6:.0f}",
  RecallIngLevel=c(RML["by_window"]["window_0"]["ingredient_level_matches"]),
  RecallLabLevel=c(RML["by_window"]["window_0"]["labeler_level_matches"]),
  RecallIngWide=c(RML["by_window"]["window_4"]["ingredient_level_matches"]),
@@ -203,9 +222,14 @@ M.update(
  RecallLabMid=c(RML["by_window"]["window_1"]["labeler_level_matches"]),
  BucketsW=_bucketsw(),
 FormBucketsW=_formbw(), DorzLabelersW=_dorzw(),
- NinetyFiveExits=c(NUM["exits_95pct"]) if "exits_95pct" in NUM else "39",
- OutOfWindow=c(NUM["exits_out_of_window"]) if "exits_out_of_window" in NUM else "20",
- OutOfWindowUC="Twenty", NineteenCollapseBase="nineteen",
+ FlowDetected=c(_FL["detected"]), FlowDetectedW=_w(_FL["detected"]),
+ FlowOutside=c(_FL["outside_window"]), FlowOutsideW=_w(_FL["outside_window"]),
+ FlowOutsideUC=_w(_FL["outside_window"]).capitalize(),
+ FlowInWindow=c(_FL["in_window"]), FlowInWindowW=_w(_FL["in_window"]),
+ FlowFailedBase=c(_FL["failed_baseline"]), FlowFailedBaseW=_w(_FL["failed_baseline"]),
+ FlowSuppressed=c(_FL["all_post_suppressed"]), FlowSuppressedW=_w(_FL["all_post_suppressed"]),
+ FlowObservedUC=_w(_FL["observed"]).capitalize(), FlowDetectedUC=_w(_FL["detected"]).capitalize(),
+ FlowObserved=c(_FL["observed"]), FlowObservedW=_w(_FL["observed"]),
  Undetermined=c(_cc()["undetermined"]), UndeterminedW=_w(_cc()["undetermined"]),
  UndeterminedUC=_w(_cc()["undetermined"]).capitalize(),
  CauseSupply=c(_cc()["supply"]), CauseNonSupply=c(_cc()["non-supply"]),
@@ -227,15 +251,7 @@ FormBucketsW=_formbw(), DorzLabelersW=_dorzw(),
 )
 
 # ---- Table: raw-to-corrected transition for the seven reclassified exits ----
-DISPLAY={
- "BENZTROPINE | ORAL TABLET":"Benztropine, tablet",
- "RANITIDINE | ORAL CAPSULE":"Ranitidine, capsule",
- "AMPHETAMINE,ASPARTATE,DEXTROAMPHETAMINE,SACCHARATE,SULFATE | ORAL CAPSULE":"Mixed amphetamine salts, capsule",
- "TERBINAFINE | ORAL TABLET":"Terbinafine, tablet",
- "DORZOLAMIDE,HYDROCHLORIDE,MALEATE,TIMOLOL | OPHTHALMIC":"Dorzolamide and timolol, ophthalmic",
- "PREGABALIN | ORAL CAPSULE":"Pregabalin, capsule",
-}
-LABELER={"69097":"Cipla","55111":"Dr. Reddy's","27241":"Ajanta","42858":"Rhodes","69315":"Leading"}
+from display_names import DISPLAY, LABELER, name as _dname, labeler as _dlab
 def emit_transition():
     import csv
     allrows=list(csv.DictReader(open(f"{R}/sole_event_transition.csv")))
@@ -250,11 +266,8 @@ def emit_transition():
     out=["\\begin{tabular}{@{}lllrrr@{}}","\\toprule",
          "Quarter & Market as recorded & Labeler & Raw share & Corrected share & Labelers \\\\","\\midrule"]
     for r in rows:
-        key=r["corrected_market"]
-        if key not in DISPLAY: raise SystemExit(f"no display name for corrected market {key!r}")
-        lab=LABELER.get(r["departing_labeler"])
-        if lab is None: raise SystemExit(f"no display name for labeler code {r['departing_labeler']!r}")
-        out.append(f"{r['event_quarter']} & {DISPLAY[key]} & {lab} & "
+        key=r["corrected_market"]; lab=_dlab(r["departing_labeler"])
+        out.append(f"{r['event_quarter']} & {_dname(key)} & {lab} & "
                    f"{100*float(r['raw_share']):.0f}\\% & {100*float(r['corrected_share']):.1f}\\% & "
                    f"{r['corrected_labelers']} \\\\")
     out+=["\\botrule","\\end{tabular}"]
@@ -302,10 +315,17 @@ _ntrans=emit_transition()
 _bad=[k for k in M if not k.isalpha()]
 if _bad: raise SystemExit(f"macro names must be letters only (TeX restriction): {_bad}")
 open(f"{G}/numbers.tex","w").write(
- "% generated by scripts/emit_tex.py -- do not edit\n"+
- "\n".join(f"\\newcommand{{\\n{k}}}{{{v}}}" for k,v in sorted(M.items()))+"\n")
+ "% generated by scripts/emit_tex.py -- do not edit\n"
+ "% Each value ends in \\xspace: TeX swallows the space after a control word, so a bare\n"
+ "% \\newcommand would render \"\\nConfirmed testable\" as \"292testable\". Requires\n"
+ "% \\usepackage{xspace} in the preamble.\n"+
+ "\n".join(f"\\newcommand{{\\n{k}}}{{{v}\\xspace}}" for k,v in sorted(M.items()))+"\n")
 
 
+import json as _j
+_nf=_ROOT+"/results/manuscript_numbers.json"
+_nd=_j.load(open(_nf)); _nd["generated_macro_count"]=len(M)
+_j.dump(_nd,open(_nf,"w"),indent=1)
 print(f"wrote {len(M)} macros and 7 table bodies ({_ntrans} transition rows, {_nrc} coverage years) to springer/generated/")
 for k in ["NormKeys","KeysAbsorbed","ReclassRate","ReclassVol","MinorityN","ReplEligible","Cohort","MinorityLtTwo"]:
     print(f"   \\n{k} = {M[k]}")

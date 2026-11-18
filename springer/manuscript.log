@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.10.21)  18 NOV 2026 22:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.10.21)  18 NOV 2026 23:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -731,6 +731,9 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count328
 )
+(/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
 (./generated/numbers.tex)
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
@@ -744,24 +747,24 @@ LaTeX Warning: Unused global option(s):
 (./manuscript.aux)
 \openout1 = `manuscript.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -813,22 +816,14 @@ LaTeX Font Info:    ... okay on input line 19.
 \everyMPtoPDFconversion=\toks42
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
-
-(/usr/share/texlive/texmf-dist/tex/latex/grfext/grfext.sty
-Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
-)
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 504.
 
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring ON on input line 19.
+Package hyperref Info: Link coloring ON on input line 20.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -841,63 +836,63 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count336
 )
-LaTeX Info: Redefining \ref on input line 19.
-LaTeX Info: Redefining \pageref on input line 19.
-LaTeX Info: Redefining \nameref on input line 19.
+LaTeX Info: Redefining \ref on input line 20.
+LaTeX Info: Redefining \pageref on input line 20.
+LaTeX Info: Redefining \nameref on input line 20.
 
 (./manuscript.out) (./manuscript.out)
 \@outlinefile=\write4
 \openout4 = `manuscript.out'.
 
-LaTeX Font Info:    Calculating math sizes for size <12.045> on input line 85.
+LaTeX Font Info:    Calculating math sizes for size <12.045> on input line 87.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <8.43146> not available
-(Font)              size <8> substituted on input line 85.
+(Font)              size <8> substituted on input line 87.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <8.43146> not available
-(Font)              size <8> substituted on input line 85.
+(Font)              size <8> substituted on input line 87.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <8.43146> not available
-(Font)              size <8> substituted on input line 85.
+(Font)              size <8> substituted on input line 87.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <8.43146> not available
-(Font)              size <8> substituted on input line 85.
+(Font)              size <8> substituted on input line 87.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <8.43146> not available
-(Font)              size <8> substituted on input line 85.
+(Font)              size <8> substituted on input line 87.
 
-LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 85
+LaTeX Font Info:    Calculating math sizes for size <11.04124> on input line 87
 .
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <5.52061> not available
-(Font)              size <6> substituted on input line 85.
+(Font)              size <6> substituted on input line 87.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <5.52061> not available
-(Font)              size <6> substituted on input line 85.
+(Font)              size <6> substituted on input line 87.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <5.52061> not available
-(Font)              size <6> substituted on input line 85.
+(Font)              size <6> substituted on input line 87.
 
-LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 85.
+LaTeX Font Info:    Calculating math sizes for size <9.03374> on input line 87.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 85.
+(Font)              size <5> substituted on input line 87.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.51686> not available
-(Font)              size <5> substituted on input line 85.
+(Font)              size <5> substituted on input line 87.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.51686> not available
-(Font)              size <5> substituted on input line 85.
+(Font)              size <5> substituted on input line 87.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -905,7 +900,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 85
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 87
 .
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -942,75 +937,70 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
-Underfull \hbox (badness 3954) in paragraph at lines 333--340
-[]\OT1/cmr/m/n/10 Confidence inter-vals for medi-ans are per-centile boot-strap
- inter-vals over
- []
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [8]
 (./generated/tab_transition.tex)
-Overfull \hbox (28.82582pt too wide) in paragraph at lines 383--388
+Overfull \hbox (28.82582pt too wide) in paragraph at lines 405--410
  [] 
  []
 
-<fig1.pdf, id=217, 737.15402pt x 245.718pt>
-File: fig1.pdf Graphic file (type pdf)
-<use fig1.pdf>
-Package pdftex.def Info: fig1.pdf  used on input line 402.
-(pdftex.def)             Requested size: 372.0pt x 124.00224pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [9]
-(./generated/tab_concentration.tex)
+<fig1.pdf, id=228, 737.15402pt x 245.718pt>
+File: fig1.pdf Graphic file (type pdf)
+<use fig1.pdf>
+Package pdftex.def Info: fig1.pdf  used on input line 424.
+(pdftex.def)             Requested size: 372.0pt x 124.00224pt.
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10 <./fig1.pdf>] (./generated/tab_rules.tex)
+ [10 <./fig1.pdf>] (./generated/tab_concentration.tex)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [11]
+(./generated/tab_rules.tex)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [12]
-Overfull \hbox (71.64047pt too wide) in paragraph at lines 536--561
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [13]
+Overfull \hbox (71.64047pt too wide) in paragraph at lines 574--599
  [] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [13]
+ [14]
 (./generated/tab_replacement.tex)
-<fig2.pdf, id=305, 737.15402pt x 274.626pt>
+<fig2.pdf, id=316, 737.15402pt x 274.626pt>
 File: fig2.pdf Graphic file (type pdf)
 <use fig2.pdf>
-Package pdftex.def Info: fig2.pdf  used on input line 608.
+Package pdftex.def Info: fig2.pdf  used on input line 646.
 (pdftex.def)             Requested size: 372.0pt x 138.59074pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [14]
+ [15 <./fig2.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [15 <./fig2.pdf>]
-<fig3.pdf, id=377, 737.15402pt x 354.12299pt>
+ [16]
+<fig3.pdf, id=387, 737.15402pt x 354.12299pt>
 File: fig3.pdf Graphic file (type pdf)
 <use fig3.pdf>
-Package pdftex.def Info: fig3.pdf  used on input line 714.
+Package pdftex.def Info: fig3.pdf  used on input line 752.
 (pdftex.def)             Requested size: 372.0pt x 178.7091pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [16]
+ [17]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [17 <./fig3.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [18]
+ [18 <./fig3.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [19]
@@ -1023,18 +1013,21 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [22]
-Overfull \hbox (46.16357pt too wide) in paragraph at lines 993--1015
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [23]
+Overfull \hbox (46.16357pt too wide) in paragraph at lines 1034--1056
  [] 
  []
 
 (./generated/tab_routecov.tex)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [23]
+ [24]
 (./manuscript.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [24]
+ [25]
 Underfull \hbox (badness 10000) in paragraph at lines 81--87
 \OT1/cmr/m/n/10 https://www.fda.gov/drugs/drug-approvals-and-databases/national
 -drug-code-
@@ -1043,24 +1036,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 81--87
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [25])
+ [26])
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [26]
+ [27]
 (./manuscript.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.985pt have occurred.
 
 Package rerunfilecheck Info: File `manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: 8458FC5CF3D49F6698070E2E1A848E05;5508.
+(rerunfilecheck)             Checksum: 14B9E63504F095848B0DCEFCC85E3E5A;5533.
  ) 
 Here is how much of TeX's memory you used:
- 22182 strings out of 480247
- 413691 string characters out of 5896150
- 685189 words of memory out of 5000000
- 39609 multiletter control sequences out of 15000+600000
- 482694 words of font info for 76 fonts, out of 8000000 for 9000
+ 22207 strings out of 480247
+ 413958 string characters out of 5896150
+ 685408 words of memory out of 5000000
+ 39635 multiletter control sequences out of 15000+600000
+ 482995 words of font info for 77 fonts, out of 8000000 for 9000
  24 hyphenation exceptions out of 8191
  99i,14n,103p,973b,720s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
@@ -1083,10 +1076,10 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist
 /type1/public/amsfonts/cm/cmti8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmtt8.pfb>
-Output written on manuscript.pdf (26 pages, 402382 bytes).
+Output written on manuscript.pdf (27 pages, 410335 bytes).
 PDF statistics:
- 628 PDF objects out of 1000 (max. 8388607)
- 412 compressed objects within 5 object streams
- 89 named destinations out of 1000 (max. 500000)
+ 636 PDF objects out of 1000 (max. 8388607)
+ 419 compressed objects within 5 object streams
+ 90 named destinations out of 1000 (max. 500000)
  244 words of extra memory for PDF output out of 10000 (max. 10000000)
 

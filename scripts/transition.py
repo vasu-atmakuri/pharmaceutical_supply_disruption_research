@@ -21,7 +21,7 @@ MQc,LMc,SLc=load('/tmp/molq_v2.parquet','/tmp/lmq_v2.parquet','/tmp/sl_v2.parque
 rt_keys=set(k for k in MQa)  # placeholder
 def firsts(SL):
     f={}
-    for m,l,t,s in sorted(SL,key=lambda x:x[2]):
+    for m,l,t,s in sorted(SL,key=lambda x:(x[2],x[0],x[1])):
         if m not in f: f[m]=(t,s,l)
     return f
 FA,FC=firsts(SLa),firsts(SLc)

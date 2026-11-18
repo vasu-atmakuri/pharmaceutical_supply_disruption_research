@@ -14,11 +14,19 @@ _DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 R=_ROOT
 W=_ROOT+"/scripts"   # the stages this re-runs live beside this file
 STAGES=[("inference.py",["inference_normalized.json"]),
+        ("reclass_multi.py",["reclassification_rules.json"]),
+        ("national_impact.py",["national_impact.json"]),
+        ("concentration_abc.py",["concentration_abc.json"]),
+        ("threespec.py",["three_specifications.json"]),
+        ("transition.py",["sole_event_transition.csv"]),
         ("validate_normalization.py",["normalization_validation.json"]),
         ("recovery_censored.py",["recovery_censored.json"]),
         ("sensitivities.py",["sensitivities.json"])]
 def h(f):
-    return hashlib.sha256(json.dumps(json.load(open(f"{R}/results/{f}")),sort_keys=True).encode()).hexdigest()[:16]
+    p=f"{R}/results/{f}"
+    if f.endswith(".csv"):
+        return hashlib.sha256(open(p,"rb").read()).hexdigest()[:16]
+    return hashlib.sha256(json.dumps(json.load(open(p)),sort_keys=True).encode()).hexdigest()[:16]
 fails=[]
 for script,outs in STAGES:
     before={f:h(f) for f in outs}

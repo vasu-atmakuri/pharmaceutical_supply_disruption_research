@@ -9,7 +9,7 @@ TMAX=max(t for d in MQ.values() for t in d); YMIN=(2016-1991)*4+1; B0,B1=-6,-2
 LO,HI=YMIN-B0+2,TMAX-6
 SL=con.execute("SELECT mol,lab,t,shr FROM read_parquet('/tmp/sl_nat.parquet')").fetchall()
 first={}
-for m,l,t,s in sorted(SL,key=lambda x:x[2]):
+for m,l,t,s in sorted(SL,key=lambda x:(x[2],x[0],x[1])):
     if m not in first: first[m]=(t,s,l)
 def basec(m,t):
     p=[MQ[m].get(t+k) for k in range(B0,B1)]

@@ -33,7 +33,8 @@ body=re.sub(r"\[[^\]]*\]\([^)]*\)","",body)  # links
 body=re.sub(r"[0-9]{4}Q[1-4]","",body)
 # Section 0 of the letter deliberately quotes the superseded bound so the reviewer
 # can see what changed; those two values are expected not to match current output.
-SUPERSEDED={"26.3","57.9"}
+# Values the letter quotes as superseded, so the reviewer can see what changed.
+SUPERSEDED={"26.3","57.9","15,744","39"}
 OK=SUPERSEDED|{"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16",
     "19","20","25","35","41","50","53","60","65","90","95","100","2016","2026","0.02","0.05"}
 found=sorted({t for t in re.findall(r"(?<![\w.])\d[\d,]*(?:\.\d+)?(?![\w.])",body)} - OK)

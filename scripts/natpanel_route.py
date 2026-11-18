@@ -63,3 +63,24 @@ for t,p in [("lmq","/tmp/lmq_rt.parquet"),("molq","/tmp/molq_rt.parquet")]:
     con.execute(f"COPY (SELECT * FROM {t}) TO '{p}' (FORMAT PARQUET)")
 con.execute("COPY (SELECT DISTINCT mkt mol,gen,frm,epc FROM j) TO '/tmp/meta_rt.parquet' (FORMAT PARQUET)")
 print("wrote route-aware panels")
+
+
+# ---- how the missing-route fallback actually allocates, for the methods section ----
+import json as _json
+_rows=con.execute("""
+  SELECT rbucket(COALESCE(route,''),COALESCE(form,'')) AS bucket, COUNT(*) n
+  FROM read_parquet('/tmp/xw_route.parquet')
+  WHERE route IS NULL OR route='' GROUP BY 1""").fetchall()
+_tot=sum(n for _,n in _rows); _oth=dict(_rows).get("OTHER",0)
+_f=_ROOT+"/results/manuscript_numbers.json"
+try: _d=_json.load(open(_f))
+except Exception: _d={}
+_d["route_missing_records"]=_tot
+_d["route_missing_to_other"]=_oth
+_d["route_missing_classified"]=_tot-_oth
+_d["route_missing_classified_pct"]=round(100*(_tot-_oth)/_tot,1)
+_d["route_missing_other_pct"]=round(100*_oth/_tot,1)
+_d["route_missing_buckets"]={b:n for b,n in sorted(_rows,key=lambda x:-x[1])}
+_json.dump(_d,open(_f,"w"),indent=1)
+print(f"route-missing records: {_tot:,}; classified by the form cascade "
+      f"{_tot-_oth:,} ({100*(_tot-_oth)/_tot:.1f}%); to OTHER {_oth:,} ({100*_oth/_tot:.1f}%)")

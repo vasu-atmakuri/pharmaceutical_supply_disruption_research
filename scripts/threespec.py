@@ -5,6 +5,23 @@ _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharma
 # Parent folder holding the raw FDA and SDUD downloads.
 _DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
+def _soleflow(first,inwin,COH,OBS,band,basec):
+    det=[m for m,v in first.items() if v[1]>=.95]
+    inw=[m for m in det if m in inwin]
+    bas=[m for m in inw if m in COH]
+    obs=[m for m in bas if m in OBS]
+    out=dict(detected=len(det), outside_window=len(det)-len(inw),
+             in_window=len(inw), failed_baseline=len(inw)-len(bas),
+             baseline_complete=len(bas), all_post_suppressed=len(bas)-len(obs),
+             observed=len(obs))
+    chk=out["outside_window"]+out["failed_baseline"]+out["all_post_suppressed"]+out["observed"]
+    if chk!=out["detected"]:
+        raise SystemExit(f"near-sole event flow does not reconcile: "
+                         f"{out['outside_window']}+{out['failed_baseline']}+"
+                         f"{out['all_post_suppressed']}+{out['observed']}={chk} "
+                         f"but {out['detected']} detected")
+    return out
+
 def spec(tag,mq,lq,sl):
     MQ={}; LMQ={}
     for m,t,r in con.execute(f"SELECT mol,tq,rx FROM read_parquet('{mq}')").fetchall(): MQ.setdefault(m,{})[t]=r
@@ -13,7 +30,7 @@ def spec(tag,mq,lq,sl):
     nlmq=con.execute(f"SELECT COUNT(*) FROM read_parquet('{lq}')").fetchone()[0]
     TMAX=max(t for d in MQ.values() for t in d); YMIN=(2016-1991)*4+1; B0,B1=-6,-2; LO,HI=YMIN-B0+2,TMAX-6
     first={}
-    for m,l,t,s in sorted(SL,key=lambda x:x[2]):
+    for m,l,t,s in sorted(SL,key=lambda x:(x[2],x[0],x[1])):
         if m not in first: first[m]=(t,s,l)
     def basec(m,t):
         p=[MQ[m].get(t+k) for k in range(B0,B1)]
@@ -41,7 +58,11 @@ def spec(tag,mq,lq,sl):
              # before dropping those whose every post-event quarter is suppressed.
              # This is the denominator of the worst-case bound on the collapse rate.
              sole_cal_eligible=sum(1 for m in COH if band(inwin[m][1])=="sole"),
-             sole_observed=sum(1 for m in OBS if band(inwin[m][1])=="sole"))
+             sole_observed=sum(1 for m in OBS if band(inwin[m][1])=="sole"),
+             # Full near-sole event flow, reconciled by construction. Each stage is a
+             # strict subset of the one above it, so the four exclusion counts and the
+             # final cohort must sum to the detected total.
+             sole_flow=_soleflow(first,inwin,COH,OBS,band,basec))
     for b in ["<35%","sole"]:
         sel=[m for m in OBS if band(inwin[m][1])==b]
         v=[R(m) for m in sel]; v=np.array([x for x in v if x is not None])

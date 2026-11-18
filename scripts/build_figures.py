@@ -25,18 +25,19 @@ VER={}
 # ================= FIGURE 1: the measurement defect =================
 import csv
 TR=list(csv.DictReader(open(f"{RES}/sole_event_transition.csv")))
-PICK=["PREGABALIN CAPSULES, CV | CAPSULE",
-      "DORZOLAMIDE HYDROCHLORIDE AND TIMOLOL MALEATE OPHTHALMIC SOLUTION | ORAL LIQUID",
-      "DEXTROAMPHETAMINE SACCHARATE, AMPHETAMINE ASPARTATE MONOHYDRATE"]
-LABEL={"PREGABALIN CAPSULES, CV | CAPSULE":"Pregabalin, capsule",
-  "DORZOLAMIDE HYDROCHLORIDE AND TIMOLOL MALEATE OPHTHALMIC SOLUTION | ORAL LIQUID":"Dorzolamide and timolol, ophthalmic"}
+from display_names import name as _dname
+# Panel (a) shows three of the reclassified exits. Both the label and the shares come
+# from the same transition file the table is built from, and the label comes from the
+# shared display map, so the figure cannot disagree with Table 2 about a dosage form.
+_PICK_CORRECTED=["PREGABALIN | ORAL CAPSULE",
+                 "DORZOLAMIDE,HYDROCHLORIDE,MALEATE,TIMOLOL | OPHTHALMIC",
+                 "AMPHETAMINE,ASPARTATE,DEXTROAMPHETAMINE,SACCHARATE,SULFATE | ORAL CAPSULE"]
 rows=[]
-for want in PICK:
-    r=next((x for x in TR if x["raw_market"]==want),None)
+for want in _PICK_CORRECTED:
+    r=next((x for x in TR if x["corrected_market"]==want), None)
     if r is None:
-        r=next(x for x in TR if x["raw_market"].startswith(want.split(" | ")[0][:24]))
-    nm=LABEL.get(r["raw_market"]) or "Mixed amphetamine salts, tablet"
-    rows.append((nm,
+        raise SystemExit(f"figure 1(a): no transition row with corrected market {want!r}")
+    rows.append((_dname(want),
                  float(r["raw_share"]), float(r["corrected_share"]),
                  int(r["raw_labelers"]), int(r["corrected_labelers"])))
     print(f"  {rows[-1][0]}: {rows[-1][1]:.0%} of {rows[-1][3]} -> {rows[-1][2]:.1%} of {rows[-1][4]}")

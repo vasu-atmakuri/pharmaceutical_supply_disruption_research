@@ -20,14 +20,14 @@
   "strength_nearsole_share": 62.0,
   "strength_nearsole_vol": 19.96,
   "minority_excl1_median": 1.73,
-  "minority_excl1_mean": 11.42,
-  "minority_excl1_volwtd": 6.92,
+  "minority_excl1_mean": 11.32,
+  "minority_excl1_volwtd": 6.88,
   "minority_excl3_median": 1.58,
-  "minority_excl3_mean": 3.04,
-  "minority_excl3_volwtd": -5.39,
+  "minority_excl3_mean": 2.94,
+  "minority_excl3_volwtd": -5.43,
   "minority_excl5_median": 1.47,
-  "minority_excl5_mean": -0.72,
-  "minority_excl5_volwtd": -12.04,
+  "minority_excl5_mean": -0.83,
+  "minority_excl5_volwtd": -12.08,
   "minority_top_ratios": [
     625.0,
     370.2,
@@ -38,7 +38,7 @@
   "suppression_scenario_rate": 30.8,
   "suppression_primary_rate": 38.5,
   "alt_baseline_n": 79,
-  "alt_baseline_lt02_k": 24,
+  "alt_baseline_lt02_k": 25,
   "alt_baseline_minority_median": 1.25,
-  "alt_baseline_minority_lt02": 30.4
+  "alt_baseline_minority_lt02": 31.6
 }

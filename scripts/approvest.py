@@ -25,7 +25,7 @@ for m,a,t in con.execute("SELECT mkt,appid,tq FROM aq WHERE rx>0").fetchall(): S
 TMAX=max(t for d in MQ.values() for t in d); YMIN=(2016-1991)*4+1; B0,B1=-6,-2; LO,HI=YMIN-B0+2,TMAX-6
 SL=con.execute("SELECT mol,appid,t,shr FROM ev").fetchall()
 first={}
-for m,a,t,s in sorted(SL,key=lambda x:x[2]):
+for m,a,t,s in sorted(SL,key=lambda x:(x[2],x[0],x[1])):
     if m not in first: first[m]=(t,s,a)
 inwin={m:v for m,v in first.items() if LO<=v[0]<=HI}
 def basec(m,t):
