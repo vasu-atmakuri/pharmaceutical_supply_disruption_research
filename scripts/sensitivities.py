@@ -1,4 +1,9 @@
 import duckdb, json, os, collections, numpy as np, re, glob
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 OUT={}
 # ---- 1. route coverage by year and by dispensing volume ----
@@ -24,7 +29,7 @@ con.execute(f"""CREATE OR REPLACE TABLE js AS SELECT n.lab,(n.yr-1991)*4+n.qtr t
   JOIN read_parquet('/tmp/ptype.parquet') pt ON pt.lab=lpad(n.lab,5,'0') AND pt.pcode=lpad(n.pcode,4,'0')
   LEFT JOIN (SELECT lpad(split_part(PRODUCTNDC,'-',1),5,'0') lab, lpad(split_part(PRODUCTNDC,'-',2),4,'0') pcode,
                     any_value(ACTIVE_NUMERATOR_STRENGTH) strength
-             FROM read_csv_auto('{os.path.expanduser("~/mnt/Research/crosswalk/product.txt")}',delim='\t',header=true,ignore_errors=true)
+             FROM read_csv_auto('{_DATA+"/crosswalk/product.txt"}',delim='\t',header=true,ignore_errors=true)
              GROUP BY 1,2) p ON p.lab=lpad(n.lab,5,'0') AND p.pcode=lpad(n.pcode,4,'0')
   WHERE n.rx IS NOT NULL AND xw.generic<>'' AND pt.ptype='HUMAN PRESCRIPTION DRUG'""")
 rows=con.execute("SELECT mkt,tq,lab,SUM(rx) rx FROM js GROUP BY 1,2,3").fetchall()
@@ -101,5 +106,5 @@ for B0b,B1b,tag in [(-4,0,"alt")]:
     OUT["alt_baseline_minority_median"]=round(float(np.median(v2)),2)
     OUT["alt_baseline_minority_lt02"]=round(k2/len(v2)*100,1)
     print(f"\nalternative outcome baseline: n={len(v2)} median={np.median(v2):.2f} R<0.02={k2}/{len(v2)}")
-json.dump(OUT,open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/sensitivities.json"),"w"),indent=2)
+json.dump(OUT,open(_ROOT+"/results/sensitivities.json","w"),indent=2)
 print("\nwrote results/sensitivities.json")

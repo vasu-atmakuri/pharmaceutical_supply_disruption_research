@@ -2,6 +2,11 @@
 so that the contribution of route correction and of ingredient normalisation can be
 separated, and so the direction of the route effect is measured rather than asserted."""
 import duckdb, json, os, collections, numpy as np
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 def conc(lq):
     d=collections.defaultdict(dict)
@@ -44,4 +49,4 @@ A,B=S["A raw string, form bucket"],S["B route-and-form, raw string"]
 created=sum(1 for k,v in B.items() if v['n']==1 and k not in A)
 print(f"\nmarket-quarters that exist only under B (created by route splitting): "
       f"{sum(1 for k in B if k not in A):,}, of which single-labeler: {created:,}")
-json.dump(OUT,open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/concentration_abc.json"),"w"),indent=2)
+json.dump(OUT,open(_ROOT+"/results/concentration_abc.json","w"),indent=2)

@@ -6,7 +6,12 @@ must hold between them, which is what the three errors found in external review
 actually violated.
 """
 import json, os, re, subprocess, sys, collections
-R=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+R=_ROOT+""
 L=lambda f: json.load(open(f"{R}/results/{f}"))
 TEX=open(f"{R}/springer/manuscript.tex").read()
 GEN={f[:-4]: open(f"{R}/springer/generated/{f}").read()

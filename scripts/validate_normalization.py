@@ -7,8 +7,13 @@ substance set; CONTRADICTED when they do not. A MISSED duplicate is a pair of
 distinct normalised keys with the same substance set and route bucket.
 """
 import duckdb, re, collections, json, os
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
-NK=json.load(open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/market_key_normalization_map.json")))
+NK=json.load(open(_ROOT+"/results/market_key_normalization_map.json"))
 # Recompute the raw market key per PRODUCT (lab,pcode) straight from the crosswalk.
 prod=con.execute("""SELECT lab,pcode,generic,substance,COALESCE(route,'') rt,COALESCE(form,'') fm
                     FROM read_parquet('/tmp/xw_route.parquet') WHERE generic<>''""").fetchall()
@@ -100,4 +105,4 @@ json.dump({"merge_groups":len(merged),"raw_keys_merged":sum(len(v) for v in merg
            "confirmed":ok,"contradicted":bad,"untestable":unk,
            "precision":(ok/(ok+bad) if ok+bad else None),
            "missed_duplicate_groups":len(missed),"missed_keys":sum(len(v) for v in missed.values())},
-  open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/normalization_validation.json"),"w"),indent=2)
+  open(_ROOT+"/results/normalization_validation.json","w"),indent=2)

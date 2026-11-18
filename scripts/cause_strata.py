@@ -1,4 +1,9 @@
 import duckdb, numpy as np, json, os, csv
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 MQ={}; LMQ={}
 for m,t,r in con.execute("SELECT mol,tq,rx FROM read_parquet('/tmp/molq_v2.parquet')").fetchall(): MQ.setdefault(m,{})[t]=r
@@ -40,7 +45,7 @@ for m in sole:
     rows.append(dict(market=m,event_quarter=cal(t),departing_labeler=lab,baseline_rx=round(bl,1),
                      post_over_base=round(np.mean([MQ[m].get(t+k) or 0.0 for k in range(1,7)])/bl,4),
                      replacement_ratio=round(R(m),4),cause_class=CLS[m][0],cause_evidence=CLS[m][1]))
-out=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/event_cause_classification.csv")
+out=_ROOT+"/results/event_cause_classification.csv"
 with open(out,"w",newline="") as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
 def rep(tag,sel):

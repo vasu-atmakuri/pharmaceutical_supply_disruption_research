@@ -1,6 +1,11 @@
 """Replacement ratios, cause strata, collapse bounds and a fully audited
 matched-control comparison, all on the normalized panel."""
 import duckdb, numpy as np, json, os, collections
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 rng=np.random.default_rng(20261117)
 # Every array fed to a bootstrap below is built from a sorted iteration. A fixed
 # seed is not sufficient on its own: the same draws index different elements if
@@ -109,6 +114,5 @@ OUT["matched"]=dict(sets=nt,control_obs=tot,unique_controls=uniq,
     used_once=int(sum(1 for v in reuse.values() if v==1)),max_reuse=int(max(reuse.values())),
     treated_rate=float(yt.mean()),control_rate=float(cm.mean()),risk_diff=rd,
     ci_sets=list(a),ci_sets_and_controls=list(b2))
-json.dump(OUT,open(os.path.expanduser(
-  "~/mnt/Research/pharmaceutical_supply_disruption_research/results/inference_normalized.json"),"w"),indent=2)
+json.dump(OUT,open(_ROOT+"/results/inference_normalized.json","w"),indent=2)
 print("\nwrote results/inference_normalized.json")

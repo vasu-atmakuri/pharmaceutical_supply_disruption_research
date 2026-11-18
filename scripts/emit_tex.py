@@ -2,8 +2,13 @@
 analysis outputs. Nothing in springer/generated/ is ever typed by hand, so a
 stale table cell or headline figure is structurally impossible."""
 import json, os, collections
-R=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results")
-G=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/springer/generated")
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+R=_ROOT+"/results"
+G=_ROOT+"/springer/generated"
 os.makedirs(G,exist_ok=True)
 L=lambda f: json.load(open(f"{R}/{f}"))
 INF=L("inference_normalized.json"); ABC=L("concentration_abc.json"); NI=L("national_impact.json")

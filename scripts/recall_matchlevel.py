@@ -8,8 +8,13 @@ Window: a recall initiated within four quarters either side of the exit quarter,
 which is the window used for the labeler-level classification.
 """
 import json, os, csv, re
-R=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results")
-ENF=os.path.expanduser("~/mnt/Research/enforcement/drug-enforcement-0001-of-0001.json")
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+R=_ROOT+"/results"
+ENF=_DATA+"/enforcement/drug-enforcement-0001-of-0001.json"
 
 def tq(year,month):                      # panel epoch: tq=1 is 1991Q1
     return (year-1991)*4 + (month-1)//3 + 1

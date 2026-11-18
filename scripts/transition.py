@@ -1,8 +1,13 @@
 """Every sole-labeler exit under the raw specification, and what becomes of it
 under the corrected market definition."""
 import duckdb, numpy as np, json, os, csv, re
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
-NK=json.load(open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/market_key_normalization_map.json")))
+NK=json.load(open(_ROOT+"/results/market_key_normalization_map.json"))
 def load(mq,lq,sl):
     MQ={}; LM={}
     for m,t,r in con.execute(f"SELECT mol,tq,rx FROM read_parquet('{mq}')").fetchall(): MQ.setdefault(m,{})[t]=r
@@ -69,7 +74,7 @@ for m,t,s,lab in soleA:
         corrected_labelers=nlab,
         still_sole_after_correction=int(bool(still_by_share)),
         detected_same_quarter=int(bool(detected_same_q))))
-out=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/sole_event_transition.csv")
+out=_ROOT+"/results/sole_event_transition.csv"
 with open(out,"w",newline="") as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
 print(f"{len(rows)} sole-labeler exits under the raw specification\n")

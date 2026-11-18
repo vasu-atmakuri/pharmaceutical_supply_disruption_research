@@ -1,10 +1,15 @@
 import duckdb, numpy as np, json, os, collections, matplotlib
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 matplotlib.use('Agg'); import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size':8.5,'axes.labelsize':8.5,'axes.titlesize':9.5,
  'xtick.labelsize':8,'ytick.labelsize':8,'legend.fontsize':7.6,'axes.linewidth':0.6,
  'xtick.major.width':0.6,'ytick.major.width':0.6})
 BLUE,RED,GREEN='#2166ac','#b2182b','#4d9221'
-ROOT=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+ROOT=_ROOT+""
 FIG, SPR, RES = f"{ROOT}/figures", f"{ROOT}/springer", f"{ROOT}/results"
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 def load(tag):

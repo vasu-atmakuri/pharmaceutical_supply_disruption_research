@@ -1,4 +1,9 @@
 import duckdb, re, collections, json, os, numpy as np
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 DROP={'TABLET','TABLETS','CAPSULE','CAPSULES','INJECTION','INJECTABLE','SOLUTION','SOLUTIONS',
       'USP','AND','THE','FOR','WITH','MG','MCG','ML','GM','CV','CII','CIII','CIV','PACKET','PACKETS',
@@ -88,7 +93,7 @@ print("events:",con.execute("SELECT COUNT(*) FROM ev").fetchone()[0],
       " distinct markets:",con.execute("SELECT COUNT(DISTINCT mol) FROM ev").fetchone()[0])
 for t,p in [("ev","/tmp/sl_v2.parquet"),("molq","/tmp/molq_v2.parquet"),("lmq","/tmp/lmq_v2.parquet")]:
     con.execute(f"COPY (SELECT * FROM {t}) TO '{p}' (FORMAT PARQUET)")
-json.dump(NK,open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/market_key_normalization_map.json"),"w"),indent=0)
+json.dump(NK,open(_ROOT+"/results/market_key_normalization_map.json","w"),indent=0)
 # cohort
 MQ={}
 for m,t,r in con.execute("SELECT mol,tq,rx FROM molq").fetchall(): MQ.setdefault(m,{})[t]=r

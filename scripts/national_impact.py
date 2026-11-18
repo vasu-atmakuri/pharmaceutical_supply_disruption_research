@@ -1,8 +1,13 @@
 """How much does the corrected market definition change the national picture of
 supplier concentration? Computed for every market-quarter, raw versus corrected."""
 import duckdb, json, os, collections, numpy as np
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
-NK=json.load(open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/market_key_normalization_map.json")))
+NK=json.load(open(_ROOT+"/results/market_key_normalization_map.json"))
 def shares(lq):
     d=collections.defaultdict(dict)
     for lab,m,t,rx in con.execute(f"SELECT lab,mkt,tq,rx FROM read_parquet('{lq}')").fetchall():
@@ -64,4 +69,4 @@ print("\n  ingredients most often reclassified out of single-source status:")
 for k,n in examples.most_common(12): print(f"      {n:>4}  {k}")
 json.dump(dict(spec_A=A,spec_C=C,reclassified=moved,retained=kept,unmatched=unmatched,
                reclassified_volume_share=moved_rx/(moved_rx+kept_rx) if tot else None),
-  open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/national_impact.json"),"w"),indent=2)
+  open(_ROOT+"/results/national_impact.json","w"),indent=2)

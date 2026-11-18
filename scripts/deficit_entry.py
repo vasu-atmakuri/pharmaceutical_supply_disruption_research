@@ -1,4 +1,9 @@
 import duckdb, numpy as np, json, os, collections
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 rng=np.random.default_rng(20261117)
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 MQ={}; LMQ={}
@@ -50,6 +55,5 @@ for b in ["under 35%","35-95%","at least 95%"]:
         if new: k+=1
     print(f"  {b:<16}{k}/{len(sel)}" + (f" = {k/len(sel):.1%}" if sel else ""))
     DEF.setdefault("entry",{})[b]=[k,len(sel)]
-json.dump(DEF,open(os.path.expanduser(
-  "~/mnt/Research/pharmaceutical_supply_disruption_research/results/deficit_entry_normalized.json"),"w"),indent=2)
+json.dump(DEF,open(_ROOT+"/results/deficit_entry_normalized.json","w"),indent=2)
 print("\nwrote results/deficit_entry_normalized.json")

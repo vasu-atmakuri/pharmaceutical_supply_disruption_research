@@ -6,6 +6,11 @@ little chance to recover). Anchoring on the first crossing and censoring the
 unrecovered fixes that.
 """
 import duckdb, numpy as np, json, os, collections
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 rng=np.random.default_rng(20261117)
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 MQ={}
@@ -90,6 +95,5 @@ for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
         print(f"     {b:<9} {k}/{n}" + (f" = {k/n:.1%}" if n else ""))
     RES[lbl]=dict(minority_rows=grp["minority"],sole_rows=grp["sole"],
                   logrank_z=z,logrank_p=p,landmark=lm)
-json.dump(RES,open(os.path.expanduser(
-  "~/mnt/Research/pharmaceutical_supply_disruption_research/results/recovery_censored.json"),"w"),indent=2)
+json.dump(RES,open(_ROOT+"/results/recovery_censored.json","w"),indent=2)
 print("\nwrote results/recovery_censored.json")

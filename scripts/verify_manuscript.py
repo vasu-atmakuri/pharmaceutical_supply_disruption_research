@@ -7,7 +7,12 @@ hand-typed figure, that every cross-reference and citation resolves, that each
 figure and table is referenced in the text, and that the compiled PDF is current.
 """
 import os, re, subprocess, sys, json, time
-R=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+R=_ROOT+""
 S=f"{R}/springer"; TEX=open(f"{S}/manuscript.tex").read()
 fails=[]; n=0
 def ck(l,c,d=""):

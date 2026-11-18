@@ -1,5 +1,10 @@
 import duckdb, os, csv, json, collections
-C=os.path.expanduser("~/mnt/Research/crosswalk")
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+C=_DATA+"/crosswalk"
 rows=[]
 with open(C+"/product.txt", encoding='latin-1') as f:
     for r in csv.DictReader(f, delimiter='\t'):

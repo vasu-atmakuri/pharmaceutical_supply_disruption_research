@@ -7,7 +7,12 @@ and is not on an explicit whitelist of legitimate non-result values. It is how
 '429', '350 controls from 43 markets' and 'fourteen sets' survived three rounds.
 """
 import json, os, re, sys, glob
-ROOT=os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+ROOT=_ROOT+""
 QUARTER_RE=None
 TEX=open(f"{ROOT}/springer/manuscript.tex").read()
 import re as _re

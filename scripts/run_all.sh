@@ -8,8 +8,19 @@
 #   3. the manuscript is compiled before the checks, and the checks run last.
 set -e
 cd "$(dirname "$0")"
-W="$HOME/work"
-S="$(cd .. && pwd)/springer"
+# Every stage lives in this folder. Set PSDR_ROOT and RESEARCH_ROOT to run outside
+# the analysis VM; they default to the VM's mount points.
+W="$(pwd)"
+export PSDR_ROOT="${PSDR_ROOT:-$(cd .. && pwd)}"
+export RESEARCH_ROOT="${RESEARCH_ROOT:-$(cd ../.. && pwd)}"
+echo "repo:  $PSDR_ROOT"
+echo "data:  $RESEARCH_ROOT"
+for f in rebuild_xw_route natpanel_route build_v2 validate_normalization national_impact \
+         concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
+         threespec transition recall_matchlevel sensitivities collect_numbers build_figures emit_tex; do
+  [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
+done
+S="$PSDR_ROOT/springer"
 
 echo "== 1. crosswalk with route =="        ; python3 $W/rebuild_xw_route.py       >/dev/null
 echo "== 2. route-aware panel =="           ; python3 $W/natpanel_route.py         >/dev/null

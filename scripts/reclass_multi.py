@@ -4,8 +4,13 @@ A raw market can split into several corrected markets. Assigning it to the large
 component is one choice among several, so all three are reported.
 """
 import duckdb, json, os, collections
+import os as _os
+# Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+# Parent folder holding the raw FDA and SDUD downloads.
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
-NK=json.load(open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/market_key_normalization_map.json")))
+NK=json.load(open(_ROOT+"/results/market_key_normalization_map.json"))
 def conc(lq):
     d=collections.defaultdict(dict)
     for lab,m,t,rx in con.execute(f"SELECT lab,mkt,tq,rx FROM read_parquet('{lq}')").fetchall():
@@ -59,4 +64,4 @@ out=dict(components=dict(ncomp),
          vol_reclassified=1-V['in_nearsole']/V['flagged'])
 for k in ['largest','anyc','allc']:
     out[k+"_rate"]=R[k]['reclass']/(R[k]['still']+R[k]['reclass'])
-json.dump(out,open(os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research/results/reclassification_rules.json"),"w"),indent=2)
+json.dump(out,open(_ROOT+"/results/reclassification_rules.json","w"),indent=2)
