@@ -1,0 +1,98 @@
+\begin{thebibliography}{10}
+\providecommand{\doi}[1]{\url{https://doi.org/#1}}
+\bibcommenthead
+
+\bibitem[\protect\citeauthoryear{{US Food and Drug Administration, Drug
+  Shortages Task Force}}{2019}]{fda2019taskforce}
+{US Food and Drug Administration, Drug Shortages Task Force}.
+\newblock Drug Shortages: Root Causes and Potential Solutions.
+\newblock Silver Spring, MD: US Food and Drug Administration; 2019.
+\newblock Available at
+  https://www.fda.gov/drugs/drug-shortages/report-drug-shortages-root-causes-and-potential-solutions.
+
+\bibitem[\protect\citeauthoryear{Wang et~al.}{2023}]{wang2023}
+Wang Y, Li J, Anupindi R.
+\newblock Manufacturing and Regulatory Barriers to Generic Drug Competition: A
+  Structural Model Approach.
+\newblock Management Science. 2023;69(3):1449--1467.
+\newblock \doi{10.1287/mnsc.2022.4423}.
+
+\bibitem[\protect\citeauthoryear{Berndt et~al.}{2017}]{berndt2017}
+Berndt ER, Conti RM, Murphy SJ.
+\newblock The Landscape of {US} Generic Prescription Drug Markets, 2004--2016.
+\newblock National Bureau of Economic Research; 2017. 23640.
+
+\bibitem[\protect\citeauthoryear{Conti and Berndt}{2020}]{conti2020}
+Conti RM, Berndt ER.
+\newblock Four Facts Concerning Competition in {US} Generic Prescription Drug
+  Markets.
+\newblock International Journal of the Economics of Business.
+  2020;27(1):27--48.
+\newblock \doi{10.1080/13571516.2019.1654324}.
+
+\bibitem[\protect\citeauthoryear{Yurukoglu et~al.}{2017}]{yurukoglu2017}
+Yurukoglu A, Liebman E, Ridley DB.
+\newblock The Role of Government Reimbursement in Drug Shortages.
+\newblock American Economic Journal: Economic Policy. 2017;9(2):348--382.
+\newblock \doi{10.1257/pol.20160035}.
+
+\bibitem[\protect\citeauthoryear{Phuong et~al.}{2019}]{phuong2019}
+Phuong JM, Penm J, Chaar B, Oldfield LD, Moles R.
+\newblock The Impacts of Medication Shortages on Patient Outcomes: A Scoping
+  Review.
+\newblock PLoS ONE. 2019;14(5):e0215837.
+\newblock \doi{10.1371/journal.pone.0215837}.
+
+\bibitem[\protect\citeauthoryear{Aronson et~al.}{2023}]{aronson2023}
+Aronson JK, Heneghan C, Ferner RE.
+\newblock Drug Shortages. Part 1. Definitions and Harms.
+\newblock British Journal of Clinical Pharmacology. 2023;89(10):2950--2956.
+\newblock \doi{10.1111/bcp.15842}.
+
+\bibitem[\protect\citeauthoryear{Colazo}{2026}]{colazo2026}
+Colazo J.
+\newblock Innovators and Transformers: When Supplier Counts Mislead About
+  Pharmaceutical Supply Resilience.
+\newblock International Journal of Physical Distribution and Logistics
+  Management. 2026;p. 1--11.
+\newblock Published online 12 November 2026. \doi{10.1108/IJPDLM-05-2026-0289}.
+
+\bibitem[\protect\citeauthoryear{{Centers for Medicare and Medicaid
+  Services}}{2026}]{cms_sdud}
+{Centers for Medicare and Medicaid Services}.
+\newblock State Drug Utilization Data.
+\newblock Baltimore, MD: Centers for Medicare and Medicaid Services; 2026.
+\newblock Available at https://data.medicaid.gov. Accessed November 2026.
+
+\bibitem[\protect\citeauthoryear{{US Food and Drug
+  Administration}}{2026}]{fda_ndc}
+{US Food and Drug Administration}.
+\newblock National Drug Code Directory.
+\newblock Silver Spring, MD: US Food and Drug Administration; 2026.
+\newblock Available at
+  https://www.fda.gov/drugs/drug-approvals-and-databases/national-drug-code-directory.
+  Accessed November 2026.
+
+\bibitem[\protect\citeauthoryear{{US Food and Drug
+  Administration}}{2026}]{openfda}
+{US Food and Drug Administration}.
+\newblock {openFDA} drug {NDC} and drug enforcement datasets.
+\newblock Silver Spring, MD: US Food and Drug Administration; 2026.
+\newblock Available at https://open.fda.gov/apis/drug/. Accessed November 2026.
+
+\bibitem[\protect\citeauthoryear{{National Library of
+  Medicine}}{2026}]{dailymed}
+{National Library of Medicine}.
+\newblock {DailyMed} Structured Product Labeling Resources.
+\newblock Bethesda, MD: National Library of Medicine; 2026.
+\newblock Establishment registration and business operation data. Available at
+  https://dailymed.nlm.nih.gov. Accessed November 2026.
+
+\bibitem[\protect\citeauthoryear{{US Food and Drug
+  Administration}}{2026}]{fda_shortages}
+{US Food and Drug Administration}.
+\newblock Drug Shortages Database.
+\newblock Silver Spring, MD: US Food and Drug Administration; 2026.
+\newblock Accessed via the openFDA drug shortages endpoint, November 2026.
+
+\end{thebibliography}

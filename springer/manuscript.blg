@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: manuscript.aux
+The style file: sn-vancouver-num.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: refs.bib
+You've used 13 entries,
+            3503 wiz_defined-function locations,
+            784 strings with 7652 characters,
+and the built_in function-call counts, 18659 in all, are:
+= -- 2437
+> -- 117
+< -- 1
++ -- 60
+- -- 26
+* -- 1460
+:= -- 2011
+add.period$ -- 57
+call.type$ -- 13
+change.case$ -- 7
+chr.to.int$ -- 0
+cite$ -- 13
+duplicate$ -- 1760
+empty$ -- 1738
+format.name$ -- 47
+if$ -- 4400
+int.to.chr$ -- 0
+int.to.str$ -- 13
+missing$ -- 121
+newline$ -- 82
+num.names$ -- 26
+pop$ -- 207
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 183
+stack$ -- 0
+substring$ -- 3269
+swap$ -- 281
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 89
+width$ -- 15
+write$ -- 224

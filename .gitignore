@@ -10,3 +10,5 @@ wget.log
 __pycache__/
 .venv/
 .DS_Store
+
+springer/manuscript_new.tex

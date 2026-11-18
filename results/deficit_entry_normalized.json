@@ -1,0 +1,447 @@
+{
+  "under 35%": {
+    "n": 58,
+    "post_median": 0.009809975580318297,
+    "post_ci": [
+      0.0,
+      0.4226859028732438
+    ],
+    "total_median": 0.21121819615022575,
+    "total_ci": [
+      0.01355552564024064,
+      0.6287896285029481
+    ],
+    "loo_min": 0.0,
+    "loo_max": 0.019619951160636594,
+    "events": [
+      [
+        "ESZOPICLONE | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "CLONAZEPAM | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "GUANFACINE | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "ARIPIPRAZOLE | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "VALSARTAN | TABLET",
+        2.67,
+        5.08
+      ],
+      [
+        "HYDROCHLOROTHIAZIDE,VALSARTAN | TABLET",
+        2.222,
+        4.217
+      ],
+      [
+        "MEMANTINE | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "MORPHINE,SULFATE | TABLET",
+        2.321,
+        3.059
+      ],
+      [
+        "ZONISAMIDE | CAPSULE",
+        0.0,
+        0.0
+      ],
+      [
+        "AMPHETAMINE,ASPARTATE,DEXTROAMPHETAMINE,SACCHARATE,SULFATE | TABLET",
+        0.469,
+        0.469
+      ],
+      [
+        "NITROFURANTOIN | ORAL LIQUID",
+        7.905,
+        11.665
+      ],
+      [
+        "ZOLMITRIPTAN | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "HYDROCHLOROTHIAZIDE,LOSARTAN,POTASSIUM | TABLET",
+        0.644,
+        1.384
+      ],
+      [
+        "SULFAMETHOXAZOLE,TRIMETHOPRIM | TABLET",
+        1.202,
+        1.618
+      ],
+      [
+        "BENZTROPINE | TABLET",
+        0.0,
+        0.66
+      ],
+      [
+        "MOXIFLOXACIN | ORAL LIQUID",
+        0.385,
+        0.789
+      ],
+      [
+        "IBUPROFEN | TABLET",
+        0.886,
+        1.216
+      ],
+      [
+        "METHYLPHENIDATE | TABLET",
+        0.0,
+        0.013
+      ],
+      [
+        "DULOXETINE | CAPSULE",
+        0.0,
+        0.0
+      ],
+      [
+        "CLARITHROMYCIN | TABLET",
+        1.643,
+        2.386
+      ],
+      [
+        "ACETAMINOPHEN,BITARTRATE,HYDROCODONE | TABLET",
+        0.923,
+        1.481
+      ],
+      [
+        "DOXYCYCLINE,HYCLATE | TABLET",
+        0.0,
+        0.211
+      ],
+      [
+        "CITALOPRAM | TABLET",
+        1.2,
+        1.653
+      ],
+      [
+        "CYCLOBENZAPRINE | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "PARICALCITOL | INJECTABLE",
+        0.218,
+        0.218
+      ],
+      [
+        "DUTASTERIDE | CAPSULE",
+        0.0,
+        0.0
+      ],
+      [
+        "OSELTAMIVIR,PHOSPHATE | ORAL LIQUID",
+        5.11,
+        8.968
+      ],
+      [
+        "OSELTAMIVIR | CAPSULE",
+        4.403,
+        8.136
+      ],
+      [
+        "METFORMIN | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "AZELASTINE | INHALED/SPRAY",
+        0.0,
+        0.113
+      ],
+      [
+        "CLOBETASOL,PROPIONATE | ORAL LIQUID",
+        0.0,
+        0.0
+      ],
+      [
+        "RAMIPRIL | CAPSULE",
+        1.578,
+        1.852
+      ],
+      [
+        "MEROPENEM | INJECTABLE",
+        0.0,
+        0.0
+      ],
+      [
+        "ONDANSETRON | TABLET",
+        0.0,
+        0.212
+      ],
+      [
+        "ALBUTEROL,SULFATE | INHALED/SPRAY",
+        0.0,
+        0.0
+      ],
+      [
+        "HYDROCHLORIDE,NORTRIPTYLINE | CAPSULE",
+        0.089,
+        0.089
+      ],
+      [
+        "AMBRISENTAN | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "ALENDRONATE,SODIUM | TABLET",
+        1.02,
+        1.423
+      ],
+      [
+        "BENZONATATE | CAPSULE",
+        0.0,
+        0.38
+      ],
+      [
+        "NAPROXEN | TABLET",
+        0.423,
+        0.501
+      ],
+      [
+        "CAPECITABINE | TABLET",
+        0.02,
+        0.227
+      ],
+      [
+        "LIDOCAINE | TOPICAL",
+        0.0,
+        0.0
+      ],
+      [
+        "DIGOXIN | TABLET",
+        2.394,
+        3.295
+      ],
+      [
+        "GABAPENTIN | TABLET",
+        0.098,
+        0.098
+      ],
+      [
+        "OXYCODONE | TABLET",
+        0.0,
+        0.014
+      ],
+      [
+        "HYDROXYCHLOROQUINE,SULFATE | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "QUETIAPINE | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "TINIDAZOLE | TABLET",
+        0.049,
+        0.049
+      ],
+      [
+        "ESTRADIOL,ETHINYL,FERROUS,FUMARATE,NORETHINDRONE | OTHER",
+        1.961,
+        2.2
+      ],
+      [
+        "METHADONE | TABLET",
+        0.365,
+        0.365
+      ],
+      [
+        "MONTELUKAST | TABLET",
+        1.636,
+        1.728
+      ],
+      [
+        "FEBUXOSTAT | TABLET",
+        0.0,
+        0.0
+      ],
+      [
+        "ACETAMINOPHEN,OXYCODONE | TABLET",
+        1.708,
+        2.031
+      ],
+      [
+        "ADAPALENE | TOPICAL",
+        0.0,
+        0.0
+      ],
+      [
+        "HYDROCHLORIDE,METHADONE | ORAL LIQUID",
+        5.314,
+        7.752
+      ],
+      [
+        "ESTRADIOL,ETHINYL,NORGESTIMATE | OTHER",
+        3.365,
+        4.045
+      ],
+      [
+        "AMPHETAMINE,ASPARTATE,DEXTROAMPHETAMINE,SACCHARATE,SULFATE | CAPSULE",
+        0.0,
+        0.049
+      ],
+      [
+        "CYPIONATE,TESTOSTERONE | INJECTABLE",
+        0.0,
+        0.0
+      ]
+    ]
+  },
+  "35-95%": {
+    "n": 6,
+    "post_median": 3.818653266802494,
+    "post_ci": [
+      1.2541266794625718,
+      8.0
+    ],
+    "total_median": 5.6047486754525355,
+    "total_ci": [
+      2.041454163465513,
+      11.72589744313151
+    ],
+    "loo_min": 2.8607217417238298,
+    "loo_max": 4.776584791881159,
+    "events": [
+      [
+        "FLURBIPROFEN,SODIUM | ORAL LIQUID",
+        2.861,
+        4.02
+      ],
+      [
+        "HYDROCHLORIDE,OXYMORPHONE | TABLET",
+        4.777,
+        6.393
+      ],
+      [
+        "CARISOPRODOL | TABLET",
+        0.0,
+        0.063
+      ],
+      [
+        "RANITIDINE | CAPSULE",
+        8.0,
+        11.527
+      ],
+      [
+        "PINDOLOL | TABLET",
+        2.508,
+        4.817
+      ],
+      [
+        "QUINAPRIL | TABLET",
+        8.0,
+        11.925
+      ]
+    ]
+  },
+  "at least 95%": {
+    "n": 12,
+    "post_median": 6.6451462409835935,
+    "post_ci": [
+      3.7297730623089693,
+      7.964473755060991
+    ],
+    "total_median": 10.440420402639257,
+    "total_ci": [
+      7.547546722306276,
+      11.869340359788403
+    ],
+    "loo_min": 5.525072856999296,
+    "loo_max": 7.765219624967891,
+    "events": [
+      [
+        "ACETATE,ACID,ALPHA,ASCORBIC,BETA,BIOTIN,CAROTENE,CHOLECALCIFEROL,CUPRIC,CYANOCOBALAMIN,FLUORIDE,FOLIC,GLUCONATE,GLUCOSAMINE,LEVOMEFOLATE,NIACINAMIDE,OXIDE,PYRIDOXINE,RIBOFLAVIN,SODIUM,THIAMINE,TOCOPHEROL,VITAMIN,ZINC | TABLET",
+        7.765,
+        11.461
+      ],
+      [
+        "ACID,FOLIC,IRON,MINERAL,SUPPLEMENT,VITAMIN | OTHER",
+        7.937,
+        11.83
+      ],
+      [
+        "ACETIC,ACID,HYDROCORTISONE | ORAL LIQUID",
+        3.676,
+        7.549
+      ],
+      [
+        "DICLOFENAC,POTASSIUM | TABLET",
+        5.061,
+        8.949
+      ],
+      [
+        "RANITIDINE | TABLET",
+        7.934,
+        11.904
+      ],
+      [
+        "BRIMONIDINE,BRINZOLAMIDE,TARTRATE | ORAL LIQUID",
+        1.122,
+        4.998
+      ],
+      [
+        "VARENICLINE | OTHER",
+        3.784,
+        7.546
+      ],
+      [
+        "HYDROCHLORIDE,OLOPATADINE | ORAL LIQUID",
+        8.0,
+        11.875
+      ],
+      [
+        "VARENICLINE | TABLET",
+        1.804,
+        3.723
+      ],
+      [
+        "GOSERELIN | OTHER",
+        7.992,
+        11.946
+      ],
+      [
+        "TRIMETHOPRIM | TABLET",
+        5.525,
+        9.42
+      ],
+      [
+        "ALCAFTADINE | ORAL LIQUID",
+        8.0,
+        11.864
+      ]
+    ]
+  },
+  "entry": {
+    "under 35%": [
+      41,
+      58
+    ],
+    "35-95%": [
+      2,
+      6
+    ],
+    "at least 95%": [
+      4,
+      12
+    ]
+  }
+}

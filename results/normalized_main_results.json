@@ -1,0 +1,104 @@
+{
+  "cohort_baseline": 106,
+  "cohort_obs": 100,
+  "sole": [
+    {
+      "market": "ACETATE,ACID,ALPHA,ASCORBIC,BETA,BIOTIN,CAROTENE,CHOLECALCIFEROL,CUPRIC,CYANOCOBALAMIN,FLUORIDE,FOLIC,GLUCONATE,GLUCOSAMINE,LEVOMEFOLATE,NIACINAMIDE,OXIDE,PYRIDOXINE,RIBOFLAVIN,SODIUM,THIAMINE,TOCOPHEROL,VITAMIN,ZINC | TABLET",
+      "t": "2018Q2",
+      "lab": "52796",
+      "base": 1946.5,
+      "R": 0.0
+    },
+    {
+      "market": "ACID,FOLIC,IRON,MINERAL,SUPPLEMENT,VITAMIN | OTHER",
+      "t": "2018Q3",
+      "lab": "50967",
+      "base": 5044.8,
+      "R": 0.0
+    },
+    {
+      "market": "ACETIC,ACID,HYDROCORTISONE | ORAL LIQUID",
+      "t": "2019Q3",
+      "lab": "51672",
+      "base": 2019.5,
+      "R": 0.0
+    },
+    {
+      "market": "DICLOFENAC,POTASSIUM | TABLET",
+      "t": "2019Q3",
+      "lab": "00093",
+      "base": 22315.5,
+      "R": 0.0003
+    },
+    {
+      "market": "RANITIDINE | TABLET",
+      "t": "2020Q2",
+      "lab": "53746",
+      "base": 39964.8,
+      "R": 0.0
+    },
+    {
+      "market": "BRIMONIDINE,BRINZOLAMIDE,TARTRATE | ORAL LIQUID",
+      "t": "2021Q2",
+      "lab": "00065",
+      "base": 4483.5,
+      "R": 0.0
+    },
+    {
+      "market": "VARENICLINE | OTHER",
+      "t": "2021Q3",
+      "lab": "00069",
+      "base": 55919.0,
+      "R": 0.2444
+    },
+    {
+      "market": "HYDROCHLORIDE,OLOPATADINE | ORAL LIQUID",
+      "t": "2021Q3",
+      "lab": "62332",
+      "base": 2670.8,
+      "R": 0.0
+    },
+    {
+      "market": "VARENICLINE | TABLET",
+      "t": "2021Q4",
+      "lab": "00069",
+      "base": 92632.5,
+      "R": 0.6937
+    },
+    {
+      "market": "GOSERELIN | OTHER",
+      "t": "2021Q4",
+      "lab": "70720",
+      "base": 3280.8,
+      "R": 0.0
+    },
+    {
+      "market": "TRIMETHOPRIM | TABLET",
+      "t": "2022Q1",
+      "lab": "43386",
+      "base": 2487.8,
+      "R": 0.0823
+    },
+    {
+      "market": "ALCAFTADINE | ORAL LIQUID",
+      "t": "2022Q2",
+      "lab": "00023",
+      "base": 809.5,
+      "R": 0.0
+    },
+    {
+      "market": "GRISOFULVIN | ORAL LIQUID",
+      "t": "2023Q3",
+      "lab": "69097",
+      "base": 15508.2,
+      "R": 0.0
+    },
+    {
+      "market": "DORZOLAMIDE,HYDROCHLORIDE,MALEATE,OPHTHALMIC,TIMOLOL | ORAL LIQUID",
+      "t": "2024Q1",
+      "lab": "69315",
+      "base": 6058.2,
+      "R": 0.2486
+    }
+  ]
+}
