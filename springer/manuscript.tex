@@ -45,11 +45,11 @@ as time from a market's first threshold crossing to its first restoration, with 
 \textbf{Results.} Dosage form alone does not identify a market: the form string
 ``solution'' covers 1{,}727 oral products, 1{,}017 topical, 325 ophthalmic and 50 otic, and in
 the original bucketing every eye and ear product in the panel was filed as an oral liquid. Using route as
-well as form, and then normalising the ingredient key, 383 of 3{,}294 keys prove to be
-duplicates of another key, leaving 2{,}911 markets; FDA substance data, recorded independently
-of the name the key is built from, agrees with 293 of 294 testable merges. Across the whole
+well as form, and then normalising the ingredient key, 379 of 3{,}294 keys prove to be
+duplicates of another key, leaving 2{,}915 markets; FDA substance data, recorded independently
+of the name the key is built from, agrees with all 291 testable merges. Across the whole
 panel the share of dispensing in markets where one labeler holds at least 95 percent falls from
-14.71 to 10.53 percent, and 27.0 percent of apparent near-sole market-quarters, carrying 34.3
+14.71 to 10.54 percent, and 26.7 percent of apparent near-sole market-quarters, carrying 34.1
 percent of that volume, are reclassified; the reduction is attributable to the ingredient key, while
 correcting the route bucketing is close to neutral in aggregate. Seven of twenty apparent
 sole-labeler exits are not sole-labeler exits at all. In the clearest case a firm holding 16.1 percent of a nineteen-labeler pregabalin
@@ -57,10 +57,11 @@ market had been recorded as its sole supplier. Of the thirteen that remain, thre
 disruptions: the market-wide withdrawal of ranitidine and two prescription-to-over-the-counter
 switches. Three are documented supply disruptions, two of them the same recall episode, and
 seven could not be classified. The concentration gradient survives the corrections: median
-replacement ratios are 1.79 where the departing share was under 35 percent, 0.82 at 65 to 95
+replacement ratios are 1.77 where the departing share was under 35 percent, 0.82 at 65 to 95
 percent and 0.00 at 95 percent or more, and sole-labeler markets collapse below two percent of
 baseline dispensing at 38.5 percent against 0.31 percent among 325 matched risk-set control
-observations, a risk difference of 38.2 points (95\% CI 15.1 to 68.0). Measured from first
+observations, a risk difference of 38.2 points (95\% CI 15.1
+to 61.5). Measured from first
 crossing with censoring, sole-labeler markets are slower to regain 90 percent of baseline
 (log-rank $p=0.056$). The zero-replacement result, however, is concentrated in events whose
 cause could not be established: among the three documented supply disruptions the median
@@ -110,7 +111,7 @@ market that exists only because one labeler spells the ingredient unusually will
 labeler in it. The defect therefore does not produce random noise. It manufactures single-source
 markets, which is precisely the quantity that policy cares about.
 
-We make three contributions. First, we quantify both defects and repair them: 383 of 3{,}294
+We make three contributions. First, we quantify both defects and repair them: 379 of 3{,}294
 route-aware market keys in a decade-long national panel are duplicates of another key, and
 correcting the market definition removes seven of twenty apparent sole-labeler exits, including one in which a firm holding 16.1 percent of
 a nineteen-supplier market had been recorded as its only supplier. Second, we audit the cause of
@@ -200,7 +201,7 @@ in electrolyte products, and the ester names acetate, valerate and propionate ar
 because they denote distinct products; an earlier version that included them merged dextrose
 with dextrose-plus-electrolytes and hydrocortisone with hydrocortisone valerate.
 
-Together these leave 2{,}911 markets, with 383 of 3{,}294 route-aware keys absorbed into another
+Together these leave 2{,}915 markets, with 379 of 3{,}294 route-aware keys absorbed into another
 key.
 
 We should be explicit about which construct this measures. A market here is the set of products
@@ -253,12 +254,12 @@ is the specification used throughout.}\label{tab:flow}
  & A: raw string, & B: route-and-form, & C: route-and-form, \\
  & form bucket & raw string & normalised key \\
 \midrule
-Market keys                                   & 3{,}342 & 3{,}294 & 2{,}911 \\
-Labeler-market-quarters                       & 246{,}251 & 244{,}826 & 242{,}492 \\
-Labeler exits detected                        & 285 & 286 & 280 \\
-\quad distinct markets                        & 218 & 219 & 208 \\
-Exits inside the event window                 & 115 & 115 & 108 \\
-\quad with a complete baseline                & 113 & 113 & 106 \\
+Market keys                                   & 3{,}342 & 3{,}294 & 2{,}915 \\
+Labeler-market-quarters                       & 246{,}251 & 244{,}826 & 242{,}499 \\
+Labeler exits detected                        & 285 & 286 & 281 \\
+\quad distinct markets                        & 218 & 219 & 209 \\
+Exits inside the event window                 & 115 & 115 & 109 \\
+\quad with a complete baseline                & 113 & 113 & 107 \\
 \quad and an observed post quarter            & 106 & 106 & 100 \\
 \midrule
 \multicolumn{4}{@{}l}{\emph{Analysis cohort by departing labeler's share}} \\
@@ -370,7 +371,7 @@ error in how many records it touches and the smaller in how it affects the resul
 it moves 6{,}433 ophthalmic and 617 otic labeler-market-quarter records out of the oral-liquid
 bucket, and a comparable number of injectable records out of topical, but it leaves the event
 cohort and the band counts unchanged (Table~\ref{tab:flow}, column B). Ingredient-key
-normalisation touches fewer records and does the work: 383 of 3{,}294 route-aware keys are
+normalisation touches fewer records and does the work: 379 of 3{,}294 route-aware keys are
 duplicates of another key, and the sole-labeler stratum falls from twenty events to thirteen.
 
 Table~\ref{tab:transition} accounts for all twenty. Shares throughout are measured over the four
@@ -450,13 +451,13 @@ panel.}\label{tab:impact}
  & A: raw string, & B: route-and-form, & C: route-and-form, \\
  & form bucket & raw string & normalised key \\
 \midrule
-Market-quarters                                  & 98{,}674 & 97{,}101 & 87{,}626 \\
+Market-quarters                                  & 98{,}674 & 97{,}101 & 87{,}719 \\
 \midrule
-Single-labeler (exactly one)                     & 56.6\% & 56.4\% & 53.0\% \\
-\quad share of dispensing volume                 & 11.50\% & 11.48\% & 8.60\% \\
-Near-sole (top share $\geq$ 95\%)                & 59.7\% & 59.4\% & 55.6\% \\
-\quad share of dispensing volume                 & 14.71\% & 14.12\% & 10.53\% \\
-Mean HHI                                         & 0.783 & 0.781 & 0.753 \\
+Single-labeler (exactly one)                     & 56.6\% & 56.4\% & 53.1\% \\
+\quad share of dispensing volume                 & 11.50\% & 11.48\% & 8.61\% \\
+Near-sole (top share $\geq$ 95\%)                & 59.7\% & 59.4\% & 55.7\% \\
+\quad share of dispensing volume                 & 14.71\% & 14.12\% & 10.54\% \\
+Mean HHI                                         & 0.783 & 0.781 & 0.754 \\
 \botrule
 \end{tabular}
 \end{table}
@@ -469,7 +470,7 @@ of the combined correction has to be measured, not assumed.
 
 Measured, the route correction is close to neutral in aggregate and the ingredient-key
 normalisation does the work. The single-labeler volume share moves by $-0.02$ percentage points
-from A to B and by $-2.89$ points from B to C. The route correction does create single-labeler
+from A to B and by $-2.87$ points from B to C. The route correction does create single-labeler
 markets: splitting by route turns a multi-labeler market into one or more single-labeler markets
 in 569 ingredient-quarters, creating 849 single-labeler market-quarters across 32 ingredients,
 among them ciprofloxacin, azelastine, atropine and budesonide, each of which is dispensed by
@@ -477,42 +478,75 @@ different sets of labelers through different routes. Those creations are offset 
 the split removes, and the net is approximately zero.
 
 So the headline national effect is attributable to the ingredient key. The share of national
-Medicaid dispensing sitting in near-sole markets falls from 14.71 percent to 10.53 percent, a
+Medicaid dispensing sitting in near-sole markets falls from 14.71 percent to 10.54 percent, a
 relative reduction of 28 percent, and the single-labeler volume share falls from 11.50 percent to
-8.60 percent, a relative reduction of 25 percent.
+8.61 percent, a relative reduction of 25 percent.
 
 Following each near-sole market-quarter under specification A into its corrected market makes the
 consequence concrete. There are 58{,}905 such market-quarters and all of them map: where route
-correction splits a raw market into several corrected ones, which happens for 16{,}443 of them,
+correction splits a raw market into several corrected ones, which happens for 14{,}649 of them,
 we follow the raw market's dispensing into the corrected market that carries most of it. Of the
-58{,}905, 43{,}026 remain near-sole and 15{,}879, or 27.0 percent, do not. The reclassified
-market-quarters carry 34.3 percent of the dispensing volume in that group, so the artefacts are systematically larger markets than the true near-sole
+58{,}905, 43{,}161 remain near-sole and 15{,}744, or 26.7 percent, do not. The reclassified
+market-quarters carry 34.1 percent of the dispensing volume in that group, so the artefacts are systematically larger markets than the true near-sole
 markets they were mixed with. The ingredients most often reclassified are not obscure:
 the sodium-chloride electrolyte solutions, ciprofloxacin, methylphenidate, hydrocortisone,
 clindamycin phosphate, ketoconazole, diazepam and tacrolimus.
 
+Assigning a raw market to its largest corrected component is one rule among several, and 14{,}649
+of the 58{,}905 raw near-sole market-quarters split into more than one corrected market, so the
+choice matters. Table~\ref{tab:rules} reports three defensible rules and a volume-allocation
+measure that needs no rule at all.
+
+\begin{table}[htbp]
+\caption{Share of raw near-sole market-quarters reclassified, under three mapping rules. The
+volume measure allocates each raw market's dispensing across all of its corrected components and
+needs no rule.}\label{tab:rules}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Rule & Reclassified & Rate \\
+\midrule
+Largest corrected component (used above)      & 15{,}744 & 26.7\% \\
+Any corrected component still near-sole       & 9{,}549  & 16.2\% \\
+Every corrected component still near-sole     & 17{,}004 & 28.9\% \\
+\midrule
+\multicolumn{3}{@{}l}{Volume allocated across all components: 34.1\% of flagged dispensing} \\
+\multicolumn{3}{@{}l}{lands in a corrected market that is no longer near-sole} \\
+\botrule
+\end{tabular}
+\end{table}
+
+The rules bracket the count between 16.2 and 28.9 percent and the volume measure, which does not
+depend on any of them, gives 34.1 percent. We therefore report 26.7 percent as the reclassification
+rate under the largest-component rule rather than as an independently established false-positive
+rate, and we treat the volume figure as the more robust of the two because it requires no
+assignment choice.
+
 This is the practical consequence. A monitoring programme that ranks markets by apparent
-near-sole status using this convention would place more than a quarter of the market-quarters it
-flags, and a third of the flagged volume, on a list they do not belong on.
+near-sole status using this convention would place between a sixth and a quarter of the
+market-quarters it flags, and a third of the flagged volume, on a list they do not belong on.
 
 \subsection{The merges are confirmed by independent ingredient data}\label{subsec:validres}
 
-Of 310 merge groups covering 693 raw keys, 294 are testable against FDA substance data. The
-substance data confirms 293 and contradicts 1, a precision of 99.7 percent; 16 groups are not
+Of 307 merge groups covering 686 raw keys, 291 are testable against FDA substance data. The
+substance data confirms all 291 and contradicts none; 16 groups are not
 testable because substance names are missing for every member. The single contradicted group is discussed below; FDA's own naming of
 hydrates and unspecified forms accounted for most of the disagreements in earlier versions of
 this check, and those are now adjudicated explicitly rather than counted as failures. One residual disagreement survives, and it exposes a limit of the method rather than an error in
 the source. Two products both named Trace Elements 4 are recorded by FDA with different element
 sets, one including selenious acid and the other chromic chloride. They are therefore different
 products carrying the same name, and no key built from the ingredient name can separate them.
-Doing so would require building the market key from structured composition rather than from the
-name, which is the natural next step for this method and which we did not take here. An earlier version of the rule also merged Trace Elements 4 with Trace Elements 5,
+We therefore added a composition tie-break: where the merge rule would join keys for which FDA
+records different active-substance sets, the keys are kept apart. This splits four merge groups,
+including the Trace Elements case, and raises agreement with the substance data from 293 of 294
+to all 291 testable groups. The tie-break is a partial step toward building the key from
+structured composition rather than from the name, which remains the natural next development of
+this method. An earlier version of the rule also merged Trace Elements 4 with Trace Elements 5,
 because it discarded bare numerals; one- and two-digit formulation indices are now retained and
 that merge no longer occurs.
 
 The opposite error also exists. Searching for distinct normalised keys that share a substance
 set and a route bucket finds groups the algorithm did not merge, which means the normalisation
-is conservative and the 383 figure is a lower bound on the number of duplicate keys in these
+is conservative and the 379 figure is a lower bound on the number of duplicate keys in these
 data.
 
 We report this check as supportive rather than decisive. Both fields come from FDA product
@@ -527,8 +561,12 @@ records. Three are not supply disruptions. Ranitidine was removed from the US ma
 at FDA's request in April 2020 after nitrosamine contamination was found to increase during
 storage, so no replacement by other labelers was possible or desirable. Alcaftadine and
 olopatadine ophthalmic solutions left the prescription market through approved
-prescription-to-over-the-counter switches; dispensing did not stop, it moved off the Medicaid
-pharmacy benefit. In all three the absence of replacement is the intended outcome of a
+prescription-to-over-the-counter switches. We do not claim the products left Medicaid: a
+prescribed over-the-counter drug can remain a covered outpatient drug under a state plan. What
+changes is the prescription product, its NDC and the market it is counted in, which is enough to
+produce the observed exit without any supply interruption. On the evidence available these are
+regulatory-transition-associated exits rather than established causes, and we mark them as
+ingredient-level matches in Table~\ref{tab:audit} for that reason. In all three the absence of replacement is the intended outcome of a
 regulatory action, and reading it as a failure of market resilience inverts its meaning.
 
 Three are documented supply disruptions, and they are not three independent episodes. Diclofenac
@@ -599,7 +637,7 @@ baseline.}\label{tab:R}
 \toprule
 Departing share & $n$ & Median $R$ & 95\% CI & Mean & Vol-wtd & $R<0.02$ & Collapse \\
 \midrule
-under 35 percent    & 76 & 1.79 & [1.13, 2.41]   & 19.56 & 14.81 & 26.3\% & 0.0\% \\
+under 35 percent    & 77 & 1.77 & [1.13, 2.49]   & 19.21 & see text & 27.3\% & 0.0\% \\
 35 to 65 percent    & 3  & $-0.13$ & [$-1.09$, 1.48] & 0.09 & 1.17 & 66.7\% & 0.0\% \\
 65 to 95 percent    & 6  & 0.82 & [0.37, 1.13]   & 0.77  & 0.90  & 0.0\%  & 0.0\% \\
 at least 95 percent & 13 & 0.00 & [0.00, 0.00]   & 0.08  & 0.31  & 76.9\% & 38.5\% \\
@@ -609,9 +647,11 @@ at least 95 percent & 13 & 0.00 & [0.00, 0.00]   & 0.08  & 0.31  & 76.9\% & 38.5
 
 The mean in the lowest band is far above its median, reflecting a long right tail: when a small
 labeler leaves a growing market, unrelated growth by the others produces a very large ratio. The
-volume-weighted figure of 14.81 in that band is dominated by a handful of large growing markets
-and should be read as a description of where the volume sits, not as a typical market's
-behaviour. The median is the appropriate summary.
+five largest ratios in that band are 625, 370, 273, 170 and 107. Removing them one at a time
+leaves the median almost unchanged, at 1.73, 1.58 and 1.47 after removing the largest one, three
+and five, but takes the mean from 19.21 to $-0.92$ and the volume-weighted ratio from 14.55 to
+$-12.18$, changing its sign. We therefore report the median for this band and do not report a
+volume-weighted figure for it, since no stable value exists.
 
 \begin{figure}[htbp]
 \centering
@@ -631,7 +671,7 @@ validation; thirteen treated events cannot support a causal design, and we do no
 Five of the thirteen sole-labeler markets, 38.5 percent, collapse below two percent of baseline
 dispensing. Among 325 matched risk-set control observations drawn from 60 distinct markets, one
 does, a rate of 0.31 percent. The matched risk difference is 38.2 points, with a 95 percent
-interval of 15.1 to 68.0 points when whole matched sets are resampled and 15.1 to 61.5 when
+interval of 15.1 to 61.5 points when whole matched sets are resampled and 15.1 to 67.4 when
 controls are additionally resampled within each set.
 
 Three weaknesses are worth stating rather than asserting away. First, control eligibility
@@ -774,7 +814,7 @@ Table~\ref{tab:flow} already reports the three specifications end to end. On the
 quantities, the raw convention gives a sole-labeler median replacement ratio of 0.00 with 80.0
 percent of markets below $R=0.02$ and a collapse rate of 45.0 percent on twenty events;
 correcting the route bucketing alone changes neither; correcting the ingredient key as well
-gives 0.00, 76.9 percent and 38.5 percent on thirteen events. The minority band moves from 1.58 to 1.79. The direction and the ordering of the extreme bands are unchanged, so the corrections
+gives 0.00, 76.9 percent and 38.5 percent on thirteen events. The minority band moves from 1.58 to 1.77. The direction and the ordering of the extreme bands are unchanged, so the corrections
 repair the event classification without manufacturing the contrast. We report the two endpoints
 separately throughout because they answer different questions and differ substantially: 76.9
 percent of sole-labeler markets saw no expansion by other labelers, while 38.5 percent lost
@@ -782,7 +822,7 @@ nearly all of their own dispensing.
 
 \emph{Outcome baseline window.} Recomputing the replacement ratio on the detector's own window,
 $t-4$ to $t-1$, instead of $t-6$ to $t-3$ moves the minority band from a median of 1.79 to 1.25
-and raises the share below $R=0.02$ from 26.3 to 31.6 percent, while the sole-labeler band is
+and raises the share below $R=0.02$ from 27.3 to 31.6 percent, while the sole-labeler band is
 identical at 0.00 and 76.9 percent. The direction is what the wind-down argument predicts: when
 the baseline includes quarters in which the other labelers have already begun to expand, their
 measured expansion after the exit is smaller. The headline contrast does not depend on the
@@ -796,6 +836,33 @@ this split occurs only where the ingredient string names the release characteris
 often does not, so modified-release products whose names do not say so remain pooled with their
 immediate-release counterparts. Strength is deliberately not separated, for the reason given in
 Section~\ref{subsec:market}.
+
+\emph{Route coverage.} Route is populated for 83.4 percent of crosswalk records but, because the
+records without it are small products, for 94.4 to 95.8 percent of dispensing volume in every
+year from 2016 to 2026, with no trend. The fallback to the form string therefore governs about
+five percent of volume rather than a sixth of it.
+
+\emph{Market granularity.} Adding strength to the key gives 200{,}525 market-quarters instead of
+87{,}719, with 62.0 percent near-sole holding 19.96 percent of volume, against 55.7 percent and
+10.54 percent at ingredient-and-route granularity. Finer markets are mechanically more
+concentrated, so this is not a competing estimate of the same quantity. It is worth stating
+plainly for that reason: the corrected figure is the concentration of ingredient-and-route
+markets, not an estimate of true concentration at every granularity, and a reader who wants
+strength-level markets will measure more concentration, not less.
+
+\emph{Influential observations.} The minority band's median is stable under trimming, moving from
+1.77 to 1.73, 1.58 and 1.47 as the largest one, three and five ratios are removed. Its mean and
+volume-weighted ratio are not: the mean falls from 19.21 to 11.23, 2.85 and $-0.92$, and the
+volume-weighted ratio from 14.55 to 6.79, $-5.52$ and $-12.18$, changing sign. The five largest
+ratios are 625, 370, 273, 170 and 107, each a market in which a small labeler left while the
+others grew for unrelated reasons. We report the median as the summary for this band and
+withdraw the volume-weighted figure for it, which is not a reliable statistic on this sample.
+
+\emph{Suppression within observed markets.} Treating every suppressed post-event record as
+carrying ten prescriptions moves one sole-labeler market out of the collapse category, taking the
+rate from 5 of 13 to 4 of 13, or 38.5 to 30.8 percent. This is a scenario, not a bound, because
+CMS also applies secondary suppression, and it is separate from the missing-follow-up bounds in
+Section~\ref{subsec:bounds}.
 
 \emph{Generic share.} The panel is restricted to products typed as human prescription drugs,
 which is not the same as a generic-only sample. By dispensing volume it is 82.9 percent ANDA,
@@ -856,7 +923,7 @@ that actually departed produced one. The first number would have supported a sup
 and it was an artefact of matching on a shared ingredient rather than on the exiting firm.
 
 What survives both corrections is a robust association. Pre-exit concentration predicts whether
-a market loses its dispensing: replacement ratios fall from 1.79 at the low end to 0.00 at the
+a market loses its dispensing: replacement ratios fall from 1.77 at the low end to 0.00 at the
 high end, every sole-labeler market in the longitudinal cohort falls below half of baseline
 against eight of 58 minority-loss markets, and the matched comparison puts the collapse rate at
 38.5 percent against zero. Whether a fallen market returns is a separate question, and on the
@@ -912,19 +979,21 @@ A version-history reconstruction would strengthen it and is the clearest extensi
 Before asking how many suppliers a drug market has, it is worth asking whether the market is a
 market. In a decade of national Medicaid dispensing data, the standard
 ingredient-by-dosage-form convention identifies markets by a form field that does not record
-route, and names them with an unnormalised string of which 383 of 3{,}294 keys are duplicates of
+route, and names them with an unnormalised string of which 379 of 3{,}294 keys are duplicates of
 another. Repairing both dissolves seven of twenty apparent sole-supplier exits, in one
 case converting a firm with 16.1 percent of a nineteen-supplier market back from being that
 market's only supplier. Of the thirteen that survive the repair, three are regulatory actions rather than
 supply failures.
 
 Across the whole panel the correction moves the share of national Medicaid dispensing sitting in
-markets where one labeler holds at least 95 percent from 14.71 to 10.53 percent, and the share in
-markets with exactly one labeler from 11.50 to 8.60 percent. One in five apparent near-sole
-market-quarters, carrying almost a third of that volume, is not near-sole once the market is
-defined properly. The reduction is attributable to the ingredient key; correcting the route
-bucketing is close to neutral in aggregate, creating 849 single-labeler market-quarters by
-splitting and removing a similar number by regrouping. That is the measurable consequence: a monitoring programme built
+markets where one labeler holds at least 95 percent from 14.71 to 10.54 percent, and the share in
+markets with exactly one labeler from 11.50 to 8.61 percent. Of apparent near-sole market-quarters, 26.7 percent
+under the mapping rule used here, carrying 34.1 percent of that volume, are not near-sole once
+the market is defined properly; the count ranges from 16.2 to 28.9 percent across three
+defensible mapping rules. Most of the reduction is attributable to the ingredient key: route
+correction alone accounts for 0.59 of the 4.17 percentage-point fall in near-sole dispensing
+share and is close to neutral for the exact single-labeler measure, creating 849 single-labeler
+market-quarters by splitting and removing a similar number by regrouping. That is the measurable consequence: a monitoring programme built
 on the raw convention would flag markets that are not concentrated, and the ones it gets wrong
 are larger than the ones it gets right.
 

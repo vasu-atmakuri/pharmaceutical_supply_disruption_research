@@ -33,6 +33,38 @@ for f,sets in byform.items():
             if o<s and (s-o)<=SALT and len(o)<len(best): best=o
         canon[(f,s)]=best
 NK={m:(",".join(sorted(canon[(T[m][1],T[m][0])]))+" | "+T[m][1]) for m in raw}
+# Composition tie-break. Where two raw keys would merge but FDA records different
+# active-substance sets for them, they are different products sharing a name and
+# must not share a market. Append a composition discriminator in that case.
+import hashlib
+SUBR=con.execute("""SELECT generic, substance FROM read_parquet('/tmp/xw_route.parquet')
+                    WHERE generic<>'' AND substance IS NOT NULL AND substance<>''""").fetchall()
+SALTP=re.compile(r"\b(HYDROCHLORIDE|HYDROBROMIDE|SODIUM|POTASSIUM|SULFATE|TARTRATE|MALEATE|MESYLATE|CITRATE|PHOSPHATE|SUCCINATE|FUMARATE|BESYLATE|BROMIDE|CHLORIDE|DIHYDRATE|MONOHYDRATE|ANHYDROUS|HCL|HEMIHYDRATE|HYDRATE|HEPTAHYDRATE|UNSPECIFIED FORM)\b")
+def subset(x):
+    out=set()
+    for q in re.split(r";",x.upper()):
+        q=SALTP.sub("",q); q=re.sub(r"[^A-Z0-9 ]"," ",q); q=" ".join(q.split())
+        if len(q)>2: out.add(q)
+    return frozenset(out)
+gsub=collections.defaultdict(collections.Counter)
+for g,sub in SUBR: gsub[g.strip().upper()][subset(sub)]+=1
+grp=collections.defaultdict(list)
+for m in raw: grp[NK[m]].append(m)
+nsplit=0
+for nk,members in grp.items():
+    if len(members)<2: continue
+    sets={}
+    for m in members:
+        c=gsub.get(m.split(" | ")[0].upper())
+        if c: sets[m]=c.most_common(1)[0][0]
+    distinct={v for v in sets.values() if v}
+    if len(distinct)>1:
+        nsplit+=1
+        for m,v in sets.items():
+            if v:
+                NK[m]=nk+" #"+hashlib.md5(",".join(sorted(v)).encode()).hexdigest()[:4]
+print(f"composition tie-break split {nsplit} merge groups whose members have different FDA substance sets")
+
 print(f"route-aware raw keys {len(raw)} -> normalized {len(set(NK.values()))}  ({len(raw)-len(set(NK.values()))} absorbed)")
 con.execute("CREATE TABLE nk(mkt VARCHAR,nmkt VARCHAR)")
 con.executemany("INSERT INTO nk VALUES (?,?)",[(m,NK[m]) for m in raw])

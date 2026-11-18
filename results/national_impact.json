@@ -10,19 +10,18 @@
     "mean_hhi": 0.7831833742204335
   },
   "spec_C": {
-    "mq": 87626,
+    "mq": 87719,
     "rx": 5799300092.0,
-    "single": 46436,
-    "sole": 48725,
-    "near": 60291,
-    "single_vol": 0.08597938132014156,
-    "sole_vol": 0.10529929272713345,
-    "mean_hhi": 0.7534092989871367
+    "single": 46611,
+    "sole": 48884,
+    "near": 60420,
+    "single_vol": 0.08608823393855852,
+    "sole_vol": 0.10539341943058739,
+    "mean_hhi": 0.753944865280114
   },
-  "reclassified": 15879,
-  "retained": 43026,
-  "unmatched": 0,
-  "reclassified_volume_share": 0.3431853892985783,
-  "reclassified_share": 0.26956964604023426,
-  "route_split_raw_markets": 16443
+  "reclassified": 11523,
+  "retained": 46564,
+  "unmatched": 818,
+  "reclassified_volume_share": 0.3012335995866499,
+  "route_split_raw_markets": 14649
 }

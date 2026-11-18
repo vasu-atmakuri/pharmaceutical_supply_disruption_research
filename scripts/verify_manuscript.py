@@ -48,14 +48,14 @@ must("deficit LOO high", f"{DE['at least 95%']['loo_max']:.1f}")
 for k in ["under 35%","35-95%","at least 95%"]:
     a,b=DE["entry"][k]; must(f"entry {k}", f"{a/b*100:.1f} percent")
 # --- structural claims ---
-for n in ["3{,}342","2{,}911","383","3{,}294","16.1 percent","8.9 percent","2.1 percent",
-          "99.7 percent","1{,}727","293","83.4 percent","14.71","10.53","27.0 percent",
-          "34.3 percent","26.3 to 57.9","85.6 percent","1.25"]:
+for n in ["3{,}342","2{,}915","379","3{,}294","16.1 percent","8.9 percent","2.1 percent",
+          "1{,}727","291","16.2 percent","28.9 percent","94.4","30.8","83.4 percent","14.71","10.54","26.7 percent",
+          "34.1 percent","26.3 to 57.9","85.6 percent","1.25"]:
     must("structural", n)
 # --- numbers that must NOT survive from the previous framing ---
-for n in ["1.45","0.00005","118-market","21 sole","2{,}913","2{,}870","1.73","1.77","35.7","0.053",
+for n in ["1.45","0.00005","118-market","21 sole","2{,}913","2{,}870","35.7","0.053",
           "fourteen sole-labeler exits","four documented supply","96.5 percent","424 of",
-          "Six of twenty apparent","is an upper bound on manufacturing","Twenty less six","20.5 percent","32.2 percent","860","should be treated as an upper bound"]:
+          "Six of twenty apparent","is an upper bound on manufacturing","Twenty less six","20.5 percent","32.2 percent","860","should be treated as an upper bound","27.0 percent","34.3 percent","2{,}911","moved off the Medicaid"]:
     must_not("prior-version number", n)
 # --- figures must agree with the tables ---
 for fig,need in [("fig1",["16% of 19 labelers","100% of 1 labeler"]),

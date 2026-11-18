@@ -61,23 +61,23 @@
   },
   {
     "tag": "C route-and-form bucket, normalized key",
-    "markets": 2911,
-    "lmq": 242492,
-    "events": 280,
-    "ev_markets": 208,
-    "inwin": 108,
-    "baseline": 106,
+    "markets": 2915,
+    "lmq": 242499,
+    "events": 281,
+    "ev_markets": 209,
+    "inwin": 109,
+    "baseline": 107,
     "obs": 100,
     "bands": {
-      "<35%": 78,
       "sole": 13,
+      "<35%": 78,
       "65-95%": 6,
       "35-65%": 3
     },
     "<35%": {
-      "n_R": 76,
-      "median_R": 1.7900976082224704,
-      "R_lt_002": 0.2631578947368421,
+      "n_R": 77,
+      "median_R": 1.7667962016666154,
+      "R_lt_002": 0.2727272727272727,
       "n_coll": 78,
       "collapse": 0.0
     },

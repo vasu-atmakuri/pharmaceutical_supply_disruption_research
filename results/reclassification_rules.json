@@ -1,0 +1,21 @@
+{
+  "components": {
+    "1": 44256,
+    "3": 3293,
+    "2": 9750,
+    "4": 1239,
+    "5": 342,
+    "6": 16,
+    "7": 9
+  },
+  "largest_reclass": 15744,
+  "largest_n": 58905,
+  "any_reclass": 9549,
+  "all_reclass": 17004,
+  "flagged_rx": 852986290.0,
+  "vol_still_nearsole": 0.6588861080335849,
+  "vol_reclassified": 0.34111389196641506,
+  "largest_rate": 0.2672778202189967,
+  "anyc_rate": 0.16210847975553858,
+  "allc_rate": 0.2886681945505475
+}
