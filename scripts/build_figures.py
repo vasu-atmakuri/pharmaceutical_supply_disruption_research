@@ -118,29 +118,58 @@ VER['fig2']=[f"n={sum(1 for m in OBS if band(inwin[m][1])=='sole')}"]
 
 # ================= FIGURE 3: recovery from first crossing, censored =================
 RC=json.load(open(f"{RES}/recovery_censored.json"))
-fig,ax=plt.subplots(1,2,figsize=(10.2,3.8))
-for p,(thr,ttl) in enumerate([("50%","(a) Returning to half of baseline"),("90%","(b) Returning to 90% of baseline")]):
-    a=ax[p]
-    for key,col,mk,lab in [("minority_rows",BLUE,'s',"departing share under 35%"),("sole_rows",RED,'o',"at least 95%")]:
+fig,ax=plt.subplots(2,2,figsize=(10.2,4.9),gridspec_kw={'height_ratios':[3.1,1]})
+for p,(thr,ttl) in enumerate([("50%","(a) Returning to half of baseline"),
+                              ("90%","(b) Returning to 90% of baseline")]):
+    a1=ax[0][p]; a2=ax[1][p]; risk={}
+    for key,col,lab in [("minority_rows",BLUE,"departing share under 35%"),
+                        ("sole_rows",RED,"at least 95%")]:
         rows=[tuple(r) for r in RC[thr][key]]
-        n=len(rows); at=n; S=1.0; xs=[0]; ys=[1.0]; cens=[]
+        n=len(rows); at=n; S=1.0; V=0.0
+        xs=[0]; ys=[1.0]; lo=[1.0]; hi=[1.0]; cens=[]; rk={0:n}
         for t in sorted(set(t for t,_ in rows)):
-            d=sum(1 for tt,e in rows if tt==t and e==1); c=sum(1 for tt,e in rows if tt==t and e==0)
-            if at>0 and d>0: S*=1-d/at
+            d=sum(1 for tt,e in rows if tt==t and e==1)
+            c=sum(1 for tt,e in rows if tt==t and e==0)
+            if at>0 and d>0:
+                S*=1-d/at
+                V+=d/(at*(at-d)) if at>d else 0.0     # Greenwood
+            se=S*np.sqrt(V) if V>0 else 0.0
             xs.append(t); ys.append(S)
+            lo.append(max(0.0,S-1.96*se)); hi.append(min(1.0,S+1.96*se))
             if c>0: cens.append((t,S))
-            at-=(d+c)
-        a.step(xs,[1-v for v in ys],where='post',color=col,lw=2.0,label=f"{lab} (n={n})")
-        if cens: a.plot([c[0] for c in cens],[1-c[1] for c in cens],marker='|',ls='none',ms=7,mew=1.4,color=col)
-    z=RC[thr]["logrank_z"]; pv=RC[thr]["logrank_p"]
-    a.text(.97,.06,f"log-rank p = {pv:.3f}",transform=a.transAxes,ha='right',fontsize=7.6,color='#333')
-    a.set_xlabel("quarters since the market first fell below the threshold")
-    a.set_ylabel("cumulative share restored"); a.set_ylim(0,1); a.set_xlim(0,11)
-    a.set_title(ttl,loc='left'); a.legend(frameon=False,loc='upper left'); a.grid(alpha=.18); a.set_axisbelow(True)
-    for s in ('top','right'): a.spines[s].set_visible(False)
-    print(f"  fig3 {thr}: log-rank p={pv:.3f}")
-fig.tight_layout(); fig.savefig(f"{FIG}/fig3_recovery_censored.pdf"); fig.savefig(f"{FIG}/fig3_recovery_censored.png",dpi=300)
+            at-=(d+c); rk[t]=at
+        F=[1-v for v in ys]
+        a1.step(xs,F,where='post',color=col,lw=2.0,label=f"{lab} (n={n})")
+        a1.fill_between(xs,[1-h for h in hi],[1-l for l in lo],step='post',color=col,alpha=.13,lw=0)
+        if cens: a1.plot([c[0] for c in cens],[1-c[1] for c in cens],marker='|',ls='none',
+                         ms=7,mew=1.4,color=col)
+        risk[lab]=rk
+    pv=RC[thr]["logrank_p"]
+    a1.text(.97,.06,f"log-rank p = {pv:.3f}",transform=a1.transAxes,ha='right',fontsize=7.6,color='#333')
+    a1.set_ylabel("cumulative share restored"); a1.set_ylim(0,1); a1.set_xlim(0,11)
+    a1.set_title(ttl,loc='left'); a1.legend(frameon=False,loc='upper left')
+    a1.grid(alpha=.18); a1.set_axisbelow(True); a1.set_xticklabels([])
+    for sp in ('top','right'): a1.spines[sp].set_visible(False)
+    # numbers at risk
+    ticks=list(range(0,12,2))
+    a2.set_xlim(-3.2,11); a2.set_ylim(0,2.4); a2.axis('off')
+    a2.text(-3.1,1.75,"numbers at risk",fontsize=7,color='#444',ha='left')
+    for i,(lab,rk) in enumerate(risk.items()):
+        col=BLUE if 'under' in lab else RED
+        y=1.15-0.65*i
+        for t in ticks:
+            v=max(rk.get(k,0) for k in rk if k<=t) if any(k<=t for k in rk) else 0
+            keys=[k for k in sorted(rk) if k<=t]
+            v=rk[keys[-1]] if keys else 0
+            a2.text(t,y,str(v),fontsize=7,ha='center',color=col)
+        a2.text(-3.1,y,("minority" if 'under' in lab else "sole"),fontsize=7,color=col,ha='left')
+    for t in ticks: a2.text(t,0.05,str(t),fontsize=7.5,ha='center',color='#333')
+    a2.text(5.5,-0.5,"quarters since the market first fell below the threshold",
+            fontsize=8.5,ha='center',color='#333')
+fig.tight_layout()
+fig.savefig(f"{FIG}/fig3_recovery_censored.pdf"); fig.savefig(f"{FIG}/fig3_recovery_censored.png",dpi=300)
 VER['fig3']=[f"p = {RC['90%']['logrank_p']:.3f}"]
+print(f"  fig3 50%: p={RC['50%']['logrank_p']:.3f}   fig3 90%: p={RC['90%']['logrank_p']:.3f}  (bands + risk table)")
 import shutil
 for src,dst in [("fig1_measurement_defect","fig1"),("fig2_dispensing_and_replacement","fig2"),("fig3_recovery_censored","fig3")]:
     shutil.copyfile(f"{FIG}/{src}.pdf",f"{SPR}/{dst}.pdf")

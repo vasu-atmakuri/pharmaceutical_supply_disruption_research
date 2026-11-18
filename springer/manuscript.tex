@@ -44,11 +44,15 @@ as time from a market's first threshold crossing to its first restoration, with 
 
 \textbf{Results.} Dosage form alone does not identify a market: the form string
 ``solution'' covers 1{,}727 oral products, 1{,}017 topical, 325 ophthalmic and 50 otic, and in
-the original bucketing every eye and ear product was filed as an oral liquid. Using route as
+the original bucketing every eye and ear product in the panel was filed as an oral liquid. Using route as
 well as form, and then normalising the ingredient key, 383 of 3{,}294 keys prove to be
-duplicates of another key, leaving 2{,}911 markets; FDA substance data confirms 293 of 294
-testable merges (99.7 percent). Seven of twenty apparent sole-labeler exits are not sole-labeler
-exits at all. In the clearest case a firm holding 16.1 percent of a nineteen-labeler pregabalin
+duplicates of another key, leaving 2{,}911 markets; FDA substance data, recorded independently
+of the name the key is built from, agrees with 293 of 294 testable merges. Across the whole
+panel the share of dispensing in markets where one labeler holds at least 95 percent falls from
+14.71 to 10.53 percent, and one in five apparent near-sole market-quarters, carrying a third of
+that volume, is reclassified; the reduction is attributable to the ingredient key, while
+correcting the route bucketing is close to neutral in aggregate. Seven of twenty apparent
+sole-labeler exits are not sole-labeler exits at all. In the clearest case a firm holding 16.1 percent of a nineteen-labeler pregabalin
 market had been recorded as its sole supplier. Of the thirteen that remain, three are not supply
 disruptions: the market-wide withdrawal of ranitidine and two prescription-to-over-the-counter
 switches. Three are documented supply disruptions, two of them the same recall episode, and
@@ -102,12 +106,12 @@ market that exists only because one labeler spells the ingredient unusually will
 labeler in it. The defect therefore does not produce random noise. It manufactures single-source
 markets, which is precisely the quantity that policy cares about.
 
-We make three contributions. First, we quantify the defect and repair it: 429 of 3{,}342 market
-keys in a decade-long national panel are duplicates of another key, and collapsing them removes
-seven of twenty apparent sole-labeler exits, including one in which a firm holding 16.1 percent of
+We make three contributions. First, we quantify both defects and repair them: 383 of 3{,}294
+route-aware market keys in a decade-long national panel are duplicates of another key, and
+correcting the market definition removes seven of twenty apparent sole-labeler exits, including one in which a firm holding 16.1 percent of
 a nineteen-supplier market had been recorded as its only supplier. Second, we audit the cause of
 every remaining sole-labeler exit against public regulatory records rather than inferring cause
-from the dispensing series itself, and find that three of fourteen are not supply disruptions at
+from the dispensing series itself, and find that three of thirteen are not supply disruptions at
 all. Third, we report what survives both corrections, which is a robust association between
 pre-exit concentration and subsequent dispensing loss, together with the finding that cuts against
 the obvious interpretation of it: in the small subset where a supply disruption is actually
@@ -145,8 +149,9 @@ and end at 2026Q1.
 
 SDUD reports an eleven-digit NDC in 5-4-2 format, in which the first five digits are the labeler
 code; the FDA directory publishes the same products in variable-length 4-4-2, 5-3-2 and 5-4-1
-formats, so we zero-pad the directory's labeler and product segments to five and four digits
-before joining. All labeler identities in this paper are therefore the padded five-digit code.
+formats. We join on the labeler and product segments only, padded to five and four digits
+respectively; the package segment takes no part in the join, so the 5-4-1 layout raises no
+ambiguity here. All labeler identities in this paper are the padded five-digit code.
 
 A labeler is the firm whose name appears on the package. It need not own the plant that made the
 product, and two labelers may source from one establishment. We previously called a labeler
@@ -166,7 +171,7 @@ here is the one in general use. Two separate things go wrong with it.
 
 \emph{Dosage form does not identify a route.} FDA's dosage-form field describes physical form,
 not where the product acts. The string ``solution'' is attached to 1{,}727 oral products,
-1{,}321 intradermal or subcutaneous, 1{,}017 topical, 325 ophthalmic, 166 respiratory and 50
+1{,}321 intradermal or subcutaneous, 1{,}017 topical, 325 ophthalmic, 175 respiratory and 50
 otic. ``Solution/ drops'' is ophthalmic 831 times but oral 134 times and sublingual 123 times.
 A bucketing built from the form string alone therefore places eye drops, ear drops, topical
 solutions and oral syrups in one market whenever they share an ingredient. We instead bucket on
@@ -203,8 +208,7 @@ molecule-form convention, on the grounds that a 10 mg and a 20 mg tablet of the 
 supplied by the same production line and substitute for one another in dispensing. Modified
 release is the case where that reasoning is weakest, since extended-release and immediate-release
 products are clinically distinct and separately approved, and we report a sensitivity splitting
-them in Section~
-ef{subsec:robust}.
+them in Section~\ref{subsec:robust}.
 
 \subsection{Validating the normalisation}\label{subsec:validate}
 
@@ -270,9 +274,9 @@ from twenty events to thirteen. Section~\ref{subsec:defect} accounts for every o
 seven.
 
 Replacement ratios are computed on the subset of each cohort in which the departing labeler has
-a positive baseline, which is 98 of the 100 events in column C; the one exclusion is a market
-whose departing labeler dispensed only in quarters that are suppressed at baseline, leaving its
-denominator undefined.
+a positive baseline, which is 98 of the 100 events in column C. The two exclusions are markets whose
+departing labeler dispensed only in quarters that are suppressed across the outcome baseline,
+leaving the denominator undefined.
 
 Sole-labeler exits are rare, and most are lost to the panel's edges rather than to any choice of
 ours. The panel contains 39 exits with a departing share of at least 95 percent. Twenty fall
@@ -349,10 +353,9 @@ Each treated market is matched to risk-set controls: markets with no detected ex
 $t+6$, with a complete baseline at the same calendar time, and with a labeler whose baseline
 share is as close as possible to the treated market's departing share. Because the treated share
 is near one, a good control must itself contain a near-sole labeler, and such markets are scarce.
-We report how scarce, since the strength of the comparison depends on it: the matched sets draw
-350 control observations from only 43 distinct markets, six of which are used once and one of
-which appears in all fourteen sets. Inference resamples whole matched sets; we also report an
-interval that additionally resamples controls within each set.
+We report how scarce, since the strength of the comparison depends on it; the figures are in
+Section~\ref{subsec:matched}. Inference resamples whole matched sets; we also report an interval
+that additionally resamples controls within each set.
 
 \section{Results}\label{sec:results}
 
@@ -360,8 +363,8 @@ interval that additionally resamples controls within each set.
 
 The two defects are separable and we report them separately. Route bucketing is the larger
 error in how many records it touches and the smaller in how it affects the results: correcting
-it moves 7{,}838 ophthalmic and 699 otic records out of the oral-liquid bucket, along with
-22{,}000 injectable records that the original rule had sent to topical, but it leaves the event
+it moves 6{,}433 ophthalmic and 617 otic labeler-market-quarter records out of the oral-liquid
+bucket, and a comparable number of injectable records out of topical, but it leaves the event
 cohort and the band counts unchanged (Table~\ref{tab:flow}, column B). Ingredient-key
 normalisation touches fewer records and does the work: 383 of 3{,}294 route-aware keys are
 duplicates of another key, and the sole-labeler stratum falls from twenty events to thirteen.
@@ -411,9 +414,10 @@ only supplier, because it was the only firm writing the ingredient as ``pregabal
 CV''. Mixed amphetamine salts is the largest correction, from an apparent 100 percent to 2.1
 percent of a nine-labeler market.
 
-The error is one-sided with respect to the quantity of interest. Merging keys can only add
-labelers to a market, so correcting the defect can only reduce an apparent supplier shortfall,
-never create one.
+Merging duplicate keys can only add labelers to a market, so that half of the correction can only
+reduce an apparent supplier shortfall. The route correction is not one-sided, because splitting a
+market can leave fewer labelers in each part; Section~\ref{subsec:impact} measures both directions
+across the whole panel rather than assuming either.
 
 \begin{figure}[htbp]
 \centering
@@ -426,46 +430,64 @@ each normalised key across the panel; the vertical scale is logarithmic.}\label{
 \subsection{How much of the national picture changes}\label{subsec:impact}
 
 Examples establish that the defect exists. To establish that it matters we recompute
-concentration for every market-quarter in the panel under both specifications.
-Table~\ref{tab:impact} reports the result.
+concentration for every market-quarter in the panel under each of the three specifications of
+Table~\ref{tab:flow}. Two distinct measures are involved and we keep them apart throughout: a
+\emph{single-labeler} market-quarter is one in which exactly one labeler dispensed, and a
+\emph{near-sole} market-quarter is one in which the largest labeler held at least 95 percent of
+dispensing. Every near-sole market-quarter is not single-labeler and the two counts differ by
+about three thousand, so the distinction is not cosmetic.
 
 \begin{table}[htbp]
-\caption{Supplier concentration across all market-quarters, 2016Q1 to 2026Q1, under the raw
-convention and the corrected definition. Volume shares are of all 5.80 billion reimbursed
-prescriptions in the panel.}\label{tab:impact}
-\begin{tabular}{@{}lrr@{}}
+\caption{Supplier concentration across all market-quarters, 2016Q1 to 2026Q1, under the three
+specifications. Volume shares are of all 5.80 billion reimbursed prescriptions in the
+panel.}\label{tab:impact}
+\begin{tabular}{@{}lrrr@{}}
 \toprule
- & Raw convention & Corrected \\
+ & A: raw string, & B: route-and-form, & C: route-and-form, \\
+ & form bucket & raw string & normalised key \\
 \midrule
-Market-quarters                                  & 98{,}674 & 87{,}626 \\
-Single-labeler market-quarters                   & 56.6\% & 53.0\% \\
-\quad share of dispensing volume                 & 11.50\% & 8.60\% \\
-Top labeler share at least 95 percent            & 59.7\% & 55.6\% \\
-\quad share of dispensing volume                 & 14.71\% & 10.53\% \\
-Top labeler share at least 65 percent            & 73.1\% & 68.8\% \\
-\quad share of dispensing volume                 & 26.55\% & 20.49\% \\
-Mean HHI                                         & 0.783 & 0.753 \\
-Volume-weighted HHI                              & 0.444 & 0.398 \\
+Market-quarters                                  & 98{,}674 & 97{,}101 & 87{,}626 \\
+\midrule
+Single-labeler (exactly one)                     & 56.6\% & 56.4\% & 53.0\% \\
+\quad share of dispensing volume                 & 11.50\% & 11.48\% & 8.60\% \\
+Near-sole (top share $\geq$ 95\%)                & 59.7\% & 59.4\% & 55.6\% \\
+\quad share of dispensing volume                 & 14.71\% & 14.12\% & 10.53\% \\
+Mean HHI                                         & 0.783 & 0.781 & 0.753 \\
 \botrule
 \end{tabular}
 \end{table}
 
-The apparent prevalence of single-source markets falls by about four percentage points, which
-sounds modest. The volume figure is the one that matters for policy: the share of national
-Medicaid dispensing sitting in markets that look single-source falls from 14.71 percent to 10.53
-percent, a relative reduction of 28 percent. More than a quarter of the dispensing volume that
-the raw convention assigns to single-source markets is not in single-source markets.
+The three columns separate the two defects, and the separation matters because we previously
+asserted that the correction can only reduce apparent concentration. That is true of merging
+duplicate keys, which can only add labelers to a market. It is not true of the route correction,
+which splits markets and can therefore create markets with fewer labelers in them. The direction
+of the combined correction has to be measured, not assumed.
 
-Following each raw single-source market-quarter into its corrected market makes the point
-directly. Of 58{,}045 such market-quarters that can be matched, 46{,}126 remain single-source
-and 11{,}919, or 20.5 percent, do not. Those reclassified market-quarters carry 32.2 percent of
-the dispensing volume in that group, so the artefacts are systematically larger markets than the
-true single-source markets they were mixed with. The ingredients most often reclassified are not
-obscure: methylphenidate, mixed amphetamine salts, clindamycin phosphate, metoclopramide,
-cefoxitin and the sodium-chloride electrolyte solutions.
+Measured, the route correction is close to neutral in aggregate and the ingredient-key
+normalisation does the work. The single-labeler volume share moves by $-0.02$ percentage points
+from A to B and by $-2.89$ points from B to C. The route correction does create single-labeler
+markets: splitting by route turns a multi-labeler market into one or more single-labeler markets
+in 569 ingredient-quarters, creating 849 single-labeler market-quarters across 32 ingredients,
+among them ciprofloxacin, azelastine, atropine and budesonide, each of which is dispensed by
+different sets of labelers through different routes. Those creations are offset by the markets
+the split removes, and the net is approximately zero.
+
+So the headline national effect is attributable to the ingredient key. The share of national
+Medicaid dispensing sitting in near-sole markets falls from 14.71 percent to 10.53 percent, a
+relative reduction of 28 percent, and the single-labeler volume share falls from 11.50 percent to
+8.60 percent, a relative reduction of 25 percent.
+
+Following each near-sole market-quarter under specification A into its corrected market makes the
+consequence concrete. There are 58{,}905 such market-quarters; 58{,}045 can be matched to a
+corrected market and 860 cannot. Of those matched, 46{,}126 remain near-sole and 11{,}919, or
+20.5 percent, do not. The reclassified market-quarters carry 32.2 percent of the dispensing
+volume in that group, so the artefacts are systematically larger markets than the true near-sole
+markets they were mixed with. The ingredients most often reclassified are not obscure:
+methylphenidate, mixed amphetamine salts, clindamycin phosphate, metoclopramide, cefoxitin and
+the sodium-chloride electrolyte solutions.
 
 This is the practical consequence. A monitoring programme that ranks markets by apparent
-single-source status using this convention would place roughly one market-quarter in five, and
+near-sole status using this convention would place roughly one market-quarter in five, and
 roughly a third of the flagged volume, on a list it does not belong on.
 
 \subsection{The merges are confirmed by independent ingredient data}\label{subsec:validres}
@@ -475,8 +497,12 @@ substance data confirms 293 and contradicts 1, a precision of 99.7 percent; 16 g
 testable because substance names are missing for every member. Of the 11 contradicted groups,
 most reflect FDA's own naming of hydrates rather than a false merge, with paroxetine recorded
 both as paroxetine and as paroxetine hemihydrate and darunavir both as darunavir and darunavir
-hydrate. One is a genuine residual failure: Trace Elements 4 and Trace Elements 5 differ in the
-number of elements they contain and our rule, which discards bare numerals, merges them.
+hydrate. One residual disagreement survives, and it is not a merge we can repair: two products both named
+Trace Elements 4 are recorded by FDA with different element sets, one including selenious acid and
+the other chromic chloride, so the disagreement is in the source listing rather than in our
+grouping. An earlier version of the rule also merged Trace Elements 4 with Trace Elements 5,
+because it discarded bare numerals; one- and two-digit formulation indices are now retained and
+that merge no longer occurs.
 
 The opposite error also exists. Searching for distinct normalised keys that share a substance
 set and a route bucket finds groups the algorithm did not merge, which means the normalisation
@@ -687,7 +713,10 @@ percent threshold.
 \includegraphics[width=\textwidth]{fig3.pdf}
 \caption{Cumulative share of markets restored to (a) half and (b) 90 percent of baseline
 dispensing, measured from each market's first crossing below that threshold, with markets never
-restored censored at the end of follow-up. Tick marks denote censoring.}\label{fig:recovery}
+restored censored at the end of follow-up. Shaded bands are Greenwood 95 percent intervals, tick
+marks denote censoring, and the counts below each panel are the numbers still at risk of
+restoration. The bands are wide and overlap throughout, which is the point: neither comparison is
+established by this sample.}\label{fig:recovery}
 \end{figure}
 
 Two things follow. The difference in whether a market falls at all is stark: every sole-labeler
@@ -858,8 +887,11 @@ patients going without, and we do not claim to.
 The validation of the normalisation uses FDA substance data, which shares an upstream source
 with the field being validated. Agreement between two representations of the same product
 listing is weaker evidence than agreement with an external terminology would be. RxNorm is the
-right reference; its web service was unreachable from the analysis environment and its offline
-release requires a UMLS licence we do not hold. One residual false merge survives, in which two
+right reference. Its web service was unreachable from the analysis environment; the offline
+release is available under a UMLS licence, which is free but requires an account and approval
+that we did not obtain in time for this version. We regard this as an access limitation of this
+analysis rather than a limitation of the method, and an RxNorm-adjudicated replication is the
+single most valuable extension of this work. One residual false merge survives, in which two
 manufacturers' Trace Elements 4 products are recorded by FDA with different element sets, and we
 report it rather than suppress it.
 
@@ -878,9 +910,12 @@ market's only supplier. Of the thirteen that survive the repair, three are regul
 supply failures.
 
 Across the whole panel the correction moves the share of national Medicaid dispensing sitting in
-apparently single-source markets from 14.71 to 10.53 percent, and one in five apparent
-single-source market-quarters, carrying almost a third of that volume, is not single-source once
-the market is defined properly. That is the measurable consequence: a monitoring programme built
+markets where one labeler holds at least 95 percent from 14.71 to 10.53 percent, and the share in
+markets with exactly one labeler from 11.50 to 8.60 percent. One in five apparent near-sole
+market-quarters, carrying almost a third of that volume, is not near-sole once the market is
+defined properly. The reduction is attributable to the ingredient key; correcting the route
+bucketing is close to neutral in aggregate, creating 849 single-labeler market-quarters by
+splitting and removing a similar number by regrouping. That is the measurable consequence: a monitoring programme built
 on the raw convention would flag markets that are not concentrated, and the ones it gets wrong
 are larger than the ones it gets right.
 
@@ -897,6 +932,50 @@ records outside the dispensing series, and report events of undetermined cause a
 stratum rather than assuming them into the hypothesis under test. For policy, the count of single-source markets drawn from public dispensing data
 should be treated as an upper bound, and the subset of it that reflects genuine operational
 fragility is smaller than the raw figure implies.
+
+\section*{Appendix: event-cause audit}\label{sec:appendix}
+
+Table~\ref{tab:audit} records the evidence behind each classification in
+Table~\ref{tab:cause}, with the labeler code as it appears in the NDC, the regulatory record
+relied on, and the strength of the link. We distinguish a \emph{product-and-firm} match, where
+the record names the departing firm and the formulation that left, from an \emph{ingredient-level}
+match, where a regulatory event covers the molecule but does not name the firm. Only
+product-and-firm matches support a supply-disruption classification; ingredient-level matches are
+recorded as undetermined. The machine-readable version, with dates and source URLs, is released
+as \texttt{results/event\_cause\_classification.csv}.
+
+\begin{table}[htbp]
+\caption{Evidence behind each event classification. Labeler codes are the five-digit NDC labeler
+segment.}\label{tab:audit}
+\begin{tabular}{@{}lllp{4.4cm}l@{}}
+\toprule
+Quarter & Market & Code & Regulatory record & Link \\
+\midrule
+2019Q3 & Diclofenac potassium & 00093 & ASHP shortage opened Feb 2019; Teva named, no reason given & product and firm \\
+2020Q2 & Ranitidine & 53746 & FDA request to withdraw all ranitidine, 1 Apr 2020 & molecule-wide \\
+2021Q3 & Varenicline, other & 00069 & Pfizer recall of all lots, Sep 2021; FDA records a shortage & product and firm \\
+2021Q4 & Varenicline, tablet & 00069 & Same episode as above & product and firm \\
+2021Q3 & Olopatadine & 62332 & Rx-to-OTC switch approved Feb 2020; OTC at retail from 2020--21 & ingredient level \\
+2022Q2 & Alcaftadine & 00023 & Rx-to-OTC switch approved Dec 2021; OTC at retail Mar 2022 & ingredient level \\
+2018Q2 & Multivitamin with minerals & 52796 & none found & --- \\
+2018Q3 & Iron, folic acid, vitamin & 50967 & none found & --- \\
+2019Q3 & Hydrocortisone and acetic acid & 51672 & none found & --- \\
+2021Q2 & Brinzolamide and brimonidine & 00065 & none found & --- \\
+2021Q4 & Goserelin & 70720 & none found & --- \\
+2022Q1 & Trimethoprim & 43386 & none found & --- \\
+2023Q3 & Griseofulvin & 69097 & ASHP record closed 2020, before this exit & not contemporaneous \\
+\botrule
+\end{tabular}
+\end{table}
+
+Two entries deserve comment. The olopatadine and alcaftadine switches are classified as
+non-supply on an ingredient-level match: FDA approved the switch for the brand application, and
+the generic prescription market contracted afterwards, but the records do not state that the
+departing generic labeler withdrew because of the switch. We classify them as non-supply because
+the mechanism is independent of supply either way, and we flag the weaker link rather than
+implying a firm-level record we do not have. The griseofulvin record exists but closed in 2020,
+three years before the exit, so it does not support a supply classification and the event is left
+undetermined.
 
 \backmatter
 
