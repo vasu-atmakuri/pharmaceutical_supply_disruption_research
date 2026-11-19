@@ -11,6 +11,7 @@ _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharma
 S=f"{_ROOT}/scripts"
 sh=open(f"{S}/run_all.sh").read()
 order=[m.group(1) for m in re.finditer(r"\$W/([a-z0-9_]+)\.py", sh)]
+order=[s for s in order if not s.startswith("check_")]   # preflight, not a stage
 seen=set(); fails=[]; n=0
 for st in order:
     src=open(f"{S}/{st}.py").read()

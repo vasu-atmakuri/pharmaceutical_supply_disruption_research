@@ -11,6 +11,15 @@ cd "$(dirname "$0")"
 # Every stage lives in this folder. Set PSDR_ROOT and RESEARCH_ROOT to run outside
 # the analysis VM; they default to the VM's mount points.
 W="$(pwd)"
+# Interpreter. A repo-local .venv wins if present, because Homebrew python3 refuses
+# pip installs under PEP 668 and may be missing packages the pipeline needs. Override
+# with PY=/path/to/python.
+if [ -z "$PY" ]; then
+  if   [ -x "$(cd .. && pwd)/.venv/bin/python" ]; then PY="$(cd .. && pwd)/.venv/bin/python"
+  else PY="python3"; fi
+fi
+export PY
+echo "python: $PY"
 export PSDR_ROOT="${PSDR_ROOT:-$(cd .. && pwd)}"
 export RESEARCH_ROOT="${RESEARCH_ROOT:-$(cd ../.. && pwd)}"
 # Where the per-year SDUD parquet parts live. Stage 0 builds them if absent.
@@ -27,31 +36,31 @@ done
 S="$PSDR_ROOT/springer"
 
 echo "== preflight: interpreter, packages, TeX =="
-python3 "$W/check_environment.py" || exit 1
+"$PY" "$W/check_environment.py" || exit 1
 
-echo "== 0. SDUD year parts (skips what exists) ==" ; python3 $W/build_sdud_parts.py | tail -3
-echo "== 1a. form-only crosswalk =="       ; python3 $W/xwalk.py               >/dev/null
-echo "== 1b. crosswalk with route =="      ; python3 $W/rebuild_xw_route.py    >/dev/null
-echo "== 2a. form-based panel (spec A) ==" ; python3 $W/natpanel.py             >/dev/null
-echo "== 2b. route-aware panel (spec B) ==" ; python3 $W/natpanel_route.py       >/dev/null
-echo "== 3. normalised panel + events =="   ; python3 $W/build_v2.py               | head -3
-echo "== 4. normalisation validation =="    ; python3 $W/validate_normalization.py | head -6
-echo "== 5. national concentration =="      ; python3 $W/national_impact.py        >/dev/null
-echo "== 6. A/B/C decomposition =="         ; python3 $W/concentration_abc.py      >/dev/null
-echo "== 7. mapping rules =="               ; python3 $W/reclass_multi.py          | tail -5
-echo "== 8. inference =="                   ; python3 $W/inference.py              | tail -4
-echo "== 9. cause strata =="                ; python3 $W/cause_strata.py           >/dev/null
-echo "==10. recovery =="                    ; python3 $W/recovery_censored.py      >/dev/null
-echo "==11. deficits and entry =="          ; python3 $W/deficit_entry.py          >/dev/null
-echo "==12. three specifications =="        ; python3 $W/threespec.py              >/dev/null
-echo "==13. event transition =="            ; python3 $W/transition.py             | tail -3
-echo "==13b. near-sole flow manifest ==" ; python3 $W/sole_flow_manifest.py | tail -6
-echo "==13c. unknown-route sensitivity ==" ; python3 $W/route_unknown_sensitivity.py | tail -4
-echo "==14. recall match level =="          ; python3 $W/recall_matchlevel.py      | tail -4
-echo "==15. sensitivities =="               ; python3 $W/sensitivities.py          >/dev/null
-echo "==16. collected numbers =="           ; python3 $W/collect_numbers.py        >/dev/null
-echo "==17. FIGURES (after the panel) =="   ; python3 $W/build_figures.py          | tail -4
-echo "==18. LaTeX macros and tables =="     ; python3 $W/emit_tex.py               | head -1
+echo "== 0. SDUD year parts (skips what exists) ==" ; "$PY" $W/build_sdud_parts.py | tail -3
+echo "== 1a. form-only crosswalk =="       ; "$PY" $W/xwalk.py               >/dev/null
+echo "== 1b. crosswalk with route =="      ; "$PY" $W/rebuild_xw_route.py    >/dev/null
+echo "== 2a. form-based panel (spec A) ==" ; "$PY" $W/natpanel.py             >/dev/null
+echo "== 2b. route-aware panel (spec B) ==" ; "$PY" $W/natpanel_route.py       >/dev/null
+echo "== 3. normalised panel + events =="   ; "$PY" $W/build_v2.py               | head -3
+echo "== 4. normalisation validation =="    ; "$PY" $W/validate_normalization.py | head -6
+echo "== 5. national concentration =="      ; "$PY" $W/national_impact.py        >/dev/null
+echo "== 6. A/B/C decomposition =="         ; "$PY" $W/concentration_abc.py      >/dev/null
+echo "== 7. mapping rules =="               ; "$PY" $W/reclass_multi.py          | tail -5
+echo "== 8. inference =="                   ; "$PY" $W/inference.py              | tail -4
+echo "== 9. cause strata =="                ; "$PY" $W/cause_strata.py           >/dev/null
+echo "==10. recovery =="                    ; "$PY" $W/recovery_censored.py      >/dev/null
+echo "==11. deficits and entry =="          ; "$PY" $W/deficit_entry.py          >/dev/null
+echo "==12. three specifications =="        ; "$PY" $W/threespec.py              >/dev/null
+echo "==13. event transition =="            ; "$PY" $W/transition.py             | tail -3
+echo "==13b. near-sole flow manifest ==" ; "$PY" $W/sole_flow_manifest.py | tail -6
+echo "==13c. unknown-route sensitivity ==" ; "$PY" $W/route_unknown_sensitivity.py | tail -4
+echo "==14. recall match level =="          ; "$PY" $W/recall_matchlevel.py      | tail -4
+echo "==15. sensitivities =="               ; "$PY" $W/sensitivities.py          >/dev/null
+echo "==16. collected numbers =="           ; "$PY" $W/collect_numbers.py        >/dev/null
+echo "==17. FIGURES (after the panel) =="   ; "$PY" $W/build_figures.py          | tail -4
+echo "==18. LaTeX macros and tables =="     ; "$PY" $W/emit_tex.py               | head -1
 
 echo "==19. compile the manuscript =="
 cd "$S"
@@ -66,14 +75,14 @@ if [ "$E" != "0" ]; then grep -A3 '^!' /tmp/tex3.log | head -20; exit 1; fi
 cd - >/dev/null
 
 echo "==20. CHECKS (last, always) =="
-python3 audit_numbers.py
-python3 verify_manuscript.py
-python3 check_relationships.py
-python3 audit_letter.py
-python3 check_pipeline_closure.py
-python3 check_stage_portability.py
-python3 check_released_files.py
-python3 check_determinism.py
+"$PY" audit_numbers.py
+"$PY" verify_manuscript.py
+"$PY" check_relationships.py
+"$PY" audit_letter.py
+"$PY" check_pipeline_closure.py
+"$PY" check_stage_portability.py
+"$PY" check_released_files.py
+"$PY" check_determinism.py
 
 echo
 echo "ALL STAGES AND CHECKS COMPLETE"

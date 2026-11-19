@@ -4,7 +4,9 @@ The run failed at stage 2a with ModuleNotFoundError after stages 0 and 1 had alr
 spent time, because duckdb was installed and numpy was not. A preflight costs a second
 and reports everything missing at once, with the command to fix it.
 """
-import importlib, shutil, sys
+import importlib.util, shutil, sys   # importlib.util must be imported explicitly:
+# 'import importlib' alone leaves importlib.util undefined on some builds, which is
+# how this preflight crashed on the first machine it was actually needed on
 MODS=[("duckdb","duckdb"),("numpy","numpy"),("matplotlib","matplotlib")]
 BINS=[("pdflatex","a TeX distribution, e.g. MacTeX or TeX Live"),
       ("bibtex","a TeX distribution"),

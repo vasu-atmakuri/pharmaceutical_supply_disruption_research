@@ -31,6 +31,7 @@ for f in PROMISED:
 # every pipeline stage run_all.sh invokes must be tracked too
 sh=open(f"{R}/scripts/run_all.sh").read()
 for m in re.finditer(r"\$W/([a-z0-9_]+\.py)",sh):
+    if m.group(1).startswith("check_"): continue
     ck(f"stage {m.group(1)} is tracked", f"scripts/{m.group(1)}" in tracked)
 
 # the manuscript must not promise a file that is absent

@@ -39,7 +39,7 @@ for _s,_o in STAGES:
 try:
   for script,outs in STAGES:
     before={f:h(f) for f in outs}
-    p=subprocess.run(["python3",f"{W}/{script}"],capture_output=True,text=True)
+    p=subprocess.run([sys.executable,f"{W}/{script}"],capture_output=True,text=True)
     if p.returncode!=0:
         fails.append(f"{script} failed to re-run: {p.stderr.strip().splitlines()[-1:]}" ); continue
     for f in outs:
