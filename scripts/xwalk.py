@@ -1,10 +1,17 @@
 import os as _os
-_ROOT=_os.environ.get("PSDR_ROOT") or __ROOT+""
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
 _DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 _PARTS=_os.environ.get("SDUD_PARTS") or (_DATA+"/sdud_parts/*.parquet")
 import duckdb, os, csv, json, re
 C=_DATA+"/crosswalk"
-con=duckdb.connect('/tmp/xw.duckdb'); con.execute("SET memory_limit='1200MB'")
+# A per-run database in a temporary directory, removed on exit. A fixed path such
+# as /tmp/xw.duckdb survives between runs, and a file written by one duckdb version
+# cannot be opened by another: a stale file from duckdb 2.0 blocked 1.5 with
+# "database file with version number 69". Nothing here needs to persist.
+import tempfile, atexit, shutil as _sh
+_tmpdir=tempfile.mkdtemp(prefix="xwalk-")
+atexit.register(_sh.rmtree, _tmpdir, True)
+con=duckdb.connect(_os.path.join(_tmpdir,"xw.duckdb")); con.execute("SET memory_limit='1200MB'")
 rows=[]
 with open(C+"/product.txt", encoding='latin-1') as f:
     rd=csv.DictReader(f, delimiter='\t')

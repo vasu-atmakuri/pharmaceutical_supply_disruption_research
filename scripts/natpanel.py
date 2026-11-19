@@ -1,5 +1,5 @@
 import os as _os
-_ROOT=_os.environ.get("PSDR_ROOT") or __ROOT+""
+_ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
 _DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 _PARTS=_os.environ.get("SDUD_PARTS") or (_DATA+"/sdud_parts/*.parquet")
 import duckdb, glob, os, numpy as np, json
