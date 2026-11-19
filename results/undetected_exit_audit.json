@@ -1,0 +1,79 @@
+{
+ "panel_last_quarter": "2026Q1",
+ "undetected_complete_exits": 58,
+ "total_rx_at_stake": 38871.7,
+ "largest": [
+  {
+   "labeler": "82347",
+   "market": "LEVOTHYROXINE,SODIUM | ORAL CAPSULE",
+   "last_quarter": "2024Q3",
+   "baseline_rx": 4631.0
+  },
+  {
+   "labeler": "71858",
+   "market": "LEVOTHYROXINE,SODIUM | ORAL LIQUID",
+   "last_quarter": "2024Q3",
+   "baseline_rx": 3103.5
+  },
+  {
+   "labeler": "82347",
+   "market": "DICLOFENAC,EPOLAMINE | TOPICAL",
+   "last_quarter": "2024Q3",
+   "baseline_rx": 2231.0
+  },
+  {
+   "labeler": "51267",
+   "market": "BUPROPION,HYDROCHLORIDE,NALTREXONE | ORAL TABLET",
+   "last_quarter": "2023Q3",
+   "baseline_rx": 2014.0
+  },
+  {
+   "labeler": "44183",
+   "market": "DOXEPIN | ORAL TABLET",
+   "last_quarter": "2023Q3",
+   "baseline_rx": 1395.8
+  },
+  {
+   "labeler": "62541",
+   "market": "PHENTERMINE,TOPIRAMATE | ORAL CAPSULE",
+   "last_quarter": "2022Q4",
+   "baseline_rx": 1388.8
+  },
+  {
+   "labeler": "62541",
+   "market": "AMYLASE,LIPASE,PANCRELIPASE,PROTEASE | ORAL CAPSULE",
+   "last_quarter": "2022Q4",
+   "baseline_rx": 1262.5
+  },
+  {
+   "labeler": "61748",
+   "market": "HYDROCHLORIDE,TRIHEXYPHENIDYL | ORAL LIQUID",
+   "last_quarter": "2023Q2",
+   "baseline_rx": 1146.0
+  },
+  {
+   "labeler": "64253",
+   "market": "CHLORIDE,SODIUM | INJECTABLE",
+   "last_quarter": "2023Q3",
+   "baseline_rx": 1030.5
+  },
+  {
+   "labeler": "68180",
+   "market": "AMLODIPINE,HYDROCHLOROTHIAZIDE,VALSARTAN | ORAL TABLET",
+   "last_quarter": "2021Q3",
+   "baseline_rx": 938.3
+  },
+  {
+   "labeler": "13913",
+   "market": "DICLOFENAC,POTASSIUM | ORAL LIQUID",
+   "last_quarter": "2022Q3",
+   "baseline_rx": 912.5
+  },
+  {
+   "labeler": "72143",
+   "market": "ISOTRETINOIN | ORAL CAPSULE",
+   "last_quarter": "2023Q2",
+   "baseline_rx": 858.5
+  }
+ ]
+}
