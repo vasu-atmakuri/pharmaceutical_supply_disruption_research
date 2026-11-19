@@ -17,13 +17,21 @@ DEF=L("deficit_entry_normalized.json"); RU=L("route_unknown_sensitivity.json"); 
 SPEC={s["tag"][0]:s for s in L("three_specifications.json")}
 _W={14:"fourteen",13:"thirteen",15:"fifteen",12:"twelve",16:"sixteen"}
 _FL=SPEC["C"]["sole_flow"]
-_WORDS={0:"zero",1:"one",2:"two",3:"three",4:"four",5:"five",6:"six",7:"seven",8:"eight",
- 9:"nine",10:"ten",11:"eleven",12:"twelve",13:"thirteen",14:"fourteen",15:"fifteen",16:"sixteen",
- 17:"seventeen",18:"eighteen",19:"nineteen",20:"twenty",21:"twenty-one",
- 22:"twenty-two",23:"twenty-three",24:"twenty-four",25:"twenty-five",
- 26:"twenty-six",27:"twenty-seven",28:"twenty-eight",39:"thirty-nine",
- 40:"forty",41:"forty-one"}
-def _w(x): return _WORDS[int(x)]
+# Number to words, for counts the text spells out. A fixed dictionary broke the
+# build when a rebuilt panel moved a count from 41 to 42: any count the pipeline can
+# produce must render, so this covers the whole range and falls back to the numeral.
+_ONES=["zero","one","two","three","four","five","six","seven","eight","nine","ten",
+       "eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen",
+       "eighteen","nineteen"]
+_TENS=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"]
+def _w(x):
+    n=int(x)
+    if n<0: return c(n)
+    if n<20: return _ONES[n]
+    if n<100:
+        t,o=divmod(n,10)
+        return _TENS[t] + ("-"+_ONES[o] if o else "")
+    return c(n)          # past ninety-nine the numeral reads better anyway
 def _cc():
     import csv, collections
     rows=list(csv.DictReader(open(f"{R}/event_cause_classification.csv")))
@@ -186,6 +194,7 @@ M.update(
  ControlObs=c(INF["matched"]["control_obs"]), UniqueControls=c(INF["matched"]["unique_controls"]),
  ControlsOnce=c(INF["matched"]["used_once"]), TreatedSets=c(INF["matched"]["sets"]),
  LogrankFifty=f"{RC['50%']['logrank_p']:.3f}", LogrankNinety=f"{RC['90%']['logrank_p']:.3f}",
+ NormMQ=c(ABC["C"]["mq"]), NearSoleMQPctC=f"{100*ABC['C']['sole_sh']:.1f}",
  StrengthMQ=c(SEN["strength_market_quarters"]),
  StrengthNearSole=f"{SEN['strength_nearsole_share']:.1f}", StrengthNearSoleVol=f"{SEN['strength_nearsole_vol']:.2f}",
  GenericShare=f"{NUM['generic_share']:.1f}", AndaShare=f"{NUM['anda_share']:.1f}",

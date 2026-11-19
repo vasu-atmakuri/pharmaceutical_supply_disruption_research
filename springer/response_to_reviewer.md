@@ -34,7 +34,7 @@ attached version:
 **The bound on the sole-labeler collapse rate was wrong.** It was reported as 26.3 to
 57.9 percent over 19 calendar-eligible exits. Computed from the panel, the
 calendar-eligible population is 20 and seven of those are dropped because every
-post-event quarter is suppressed, not six. The bound is 25.0 to 60.0 percent. The cause
+post-event quarter is suppressed, not six. The bound is 23.8 to 61.9 percent. The cause
 was a hard-coded `5/19` in the script that collected reported numbers; that denominator
 is now derived from the event flow and asserted against the cohort.
 
@@ -191,7 +191,7 @@ rather than its extracted text.
 
 You were right that assigning a split raw market to its largest corrected component is
 a modelling choice rather than a mapping, and that the headline should not rest on it.
-Of the 58,905 raw near-sole market-quarters, those that split into more than one corrected
+Of the 58,914 raw near-sole market-quarters, those that split into more than one corrected
 market. The manuscript now reports all three rules you proposed, plus a volume
 allocation that requires no rule at all:
 
@@ -258,11 +258,11 @@ withdrawn the volume-weighted figure for that band**, since no stable value exis
 
 Reported alongside the primary estimate: the ten-prescription imputation moves one
 market, taking 5 of 13 to 4 of 13, or 38.5% to 30.8%. Stated as a scenario, not a bound,
-and kept separate from the missing-follow-up bounds of 25.0% to 60.0% (see Section 0).
+and kept separate from the missing-follow-up bounds of 23.8% to 61.9% (see Section 0).
 
 ### Market granularity (your C4)
 
-We ran it. Adding strength gives 200,525 market-quarters, with 62.0% near-sole holding
+We ran it. Adding strength gives 200,534 market-quarters, with 62.0% near-sole holding
 19.96% of volume, against 55.7% and 10.54% at ingredient-and-route granularity. Finer
 markets are mechanically more concentrated, so this is not a competing estimate of the
 same quantity, and we now say so explicitly: the corrected figure is the concentration

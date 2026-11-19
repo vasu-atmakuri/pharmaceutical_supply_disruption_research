@@ -180,7 +180,7 @@ direction that dominates in these data. Throughout, we say ``labeler'' and not
 
 Following the molecule-form convention \cite{berndt2017,conti2020}, a market is an active
 ingredient paired with a dosage form. Applied to the raw ingredient string with forms collapsed
-into \nFormBucketsW buckets this yields 3{,}342 markets, within two of the 3{,}344 reported by
+into \nFormBucketsW buckets this yields \nFormBucketMarkets markets, close to the \nColazoMarkets reported by
 Colazo \cite{colazo2026} on the same convention, which indicates that the procedure replicated
 here is the one in general use. Two separate things go wrong with it.
 
@@ -850,9 +850,9 @@ near-sole volume share moves by \nRUNearSoleDelta points. The \textsc{other} buc
 not bind here, and we report the test rather than the reassurance alone.
 
 \emph{Market granularity.} Adding strength to the key gives \nStrengthMQ market-quarters instead of
-87{,}719, with \nStrengthNearSole percent near-sole holding
+\nNormMQ, with \nStrengthNearSole percent near-sole holding
 \nStrengthNearSoleVol percent of volume, against \nNearSoleVolC-level concentration, namely
-55.7 percent of market-quarters and \nNearSoleVolC percent of volume, at ingredient-and-route granularity. Finer markets are mechanically more
+\nNearSoleMQPctC percent of market-quarters and \nNearSoleVolC percent of volume, at ingredient-and-route granularity. Finer markets are mechanically more
 concentrated, so this is not a competing estimate of the same quantity. It is worth stating
 plainly for that reason: the corrected figure is the concentration of ingredient-and-route
 markets, not an estimate of true concentration at every granularity, and a reader who wants

@@ -30,7 +30,8 @@ echo "parts: $SDUD_PARTS"
 for f in build_sdud_parts xwalk rebuild_xw_route natpanel natpanel_route build_v2 validate_normalization national_impact \
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
-         route_unknown_sensitivity collect_numbers build_figures emit_tex; do
+         route_unknown_sensitivity collect_numbers build_figures emit_tex \
+         emit_letter_numbers; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
 S="$PSDR_ROOT/springer"
@@ -61,6 +62,7 @@ echo "==15. sensitivities =="               ; "$PY" $W/sensitivities.py         
 echo "==16. collected numbers =="           ; "$PY" $W/collect_numbers.py        >/dev/null
 echo "==17. FIGURES (after the panel) =="   ; "$PY" $W/build_figures.py          | tail -4
 echo "==18. LaTeX macros and tables =="     ; "$PY" $W/emit_tex.py               | head -1
+echo "==18b. response-letter numbers =="     ; "$PY" $W/emit_letter_numbers.py   | tail -1
 
 # The document build needs a TeX distribution and poppler. Both are large and the
 # analysis needs neither, so their absence skips the compile and the two checks that
