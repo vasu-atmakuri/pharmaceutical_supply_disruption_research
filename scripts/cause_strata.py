@@ -76,13 +76,19 @@ def rep(tag,sel):
           f"vol-wtd R={np.sum(v*bw)/np.sum(bw):>5.2f}")
 print()
 rep("ALL near-sole (normalized)",sole)
-# The primary stratum removes only the documented market-wide withdrawal, which is the
-# one event whose absence of replacement is certainly the intended regulatory outcome.
-rep("  excluding documented withdrawal  [PRIMARY]",[m for m in sole if CLS[m][0]!="withdrawal"])
-rep("  excluding withdrawal and transitions",[m for m in sole if CLS[m][0] not in ("withdrawal","transition")])
+# The strata now follow the eight classes. The primary contrast is between exits a
+# supply-chain reading can claim and exits explained by regulation, labeler identity,
+# coverage or a measurement error.
+_NOT_SUPPLY=("withdrawal","transition","coverage","transfer","artefact")
+rep("  excluding everything not a supply failure  [PRIMARY]",
+    [m for m in sole if CLS[m][0] not in _NOT_SUPPLY])
 rep("  documented product-and-firm supply only",[m for m in sole if CLS[m][0]=="supply"])
-rep("  documented market-wide withdrawal only",[m for m in sole if CLS[m][0]=="withdrawal"])
-rep("  regulatory-transition-associated only",[m for m in sole if CLS[m][0]=="transition"])
+rep("  market-wide regulatory withdrawal only",[m for m in sole if CLS[m][0]=="withdrawal"])
+rep("  regulatory transitions only",[m for m in sole if CLS[m][0]=="transition"])
+rep("  Medicaid coverage withdrawal only",[m for m in sole if CLS[m][0]=="coverage"])
+rep("  marketing-rights transfer only",[m for m in sole if CLS[m][0]=="transfer"])
+rep("  measurement artefact (misspelled key) only",[m for m in sole if CLS[m][0]=="artefact"])
+rep("  supply continued by another labeler",[m for m in sole if CLS[m][0]=="continued"])
 rep("  undetermined cause only",[m for m in sole if CLS[m][0]=="undetermined"])
 print()
 for m in sole:
@@ -96,12 +102,17 @@ def _st(sel):
                 volwtd=float(np.sum(v*bw)/np.sum(bw)))
 _out=dict(counts=dict(_cnt), total=len(sole),
   all=_st(sole),
-  ex_withdrawal=_st([m for m in sole if CLS[m][0]!="withdrawal"]),
-  ex_withdrawal_transition=_st([m for m in sole if CLS[m][0] not in ("withdrawal","transition")]),
+  ex_not_supply=_st([m for m in sole if CLS[m][0] not in
+                     ("withdrawal","transition","coverage","transfer","artefact")]),
   supply=_st([m for m in sole if CLS[m][0]=="supply"]),
   withdrawal=_st([m for m in sole if CLS[m][0]=="withdrawal"]),
   transition=_st([m for m in sole if CLS[m][0]=="transition"]),
-  undetermined=_st([m for m in sole if CLS[m][0]=="undetermined"]))
+  coverage=_st([m for m in sole if CLS[m][0]=="coverage"]),
+  transfer=_st([m for m in sole if CLS[m][0]=="transfer"]),
+  artefact=_st([m for m in sole if CLS[m][0]=="artefact"]),
+  continued=_st([m for m in sole if CLS[m][0]=="continued"]),
+  undetermined=_st([m for m in sole if CLS[m][0]=="undetermined"]),
+  )
 if sum(_cnt.values())!=len(sole):
     raise SystemExit("cause classification does not cover every event")
 _j.dump(_out,open(_ROOT+"/results/cause_strata.json","w"),indent=1)

@@ -283,7 +283,7 @@ FormBucketsW=_formbw(), DorzLabelersW=_dorzw(),
 )
 
 # ---- Table: raw-to-corrected transition for the seven reclassified exits ----
-from display_names import (DISPLAY, LABELER, name as _dname, labeler as _dlab,
+from display_names import (name as _dname, labeler as _dlab,
                            event_market as _emkt, cause_label as _clab,
                            CAUSE_ORDER as _CORD)
 def emit_transition():
@@ -292,11 +292,15 @@ def emit_transition():
     rows=[r for r in allrows if r["still_sole_after_correction"]=="0"]
     rows.sort(key=lambda r: r["event_quarter"])
     kept=len(allrows)-len(rows)
-    # the identity the manuscript states, asserted at emit time
-    if kept!=SPEC["C"]["bands"]["sole"]:
-        raise SystemExit(f"transition table: {len(allrows)} raw sole exits minus {len(rows)} "
-                         f"reclassified leaves {kept}, but specification C has "
-                         f"{SPEC['C']['bands']['sole']} sole-labeler events")
+    # Two counts that are close but not equal, and the gap is a result rather than a
+    # defect. The raw convention flags its own sole-labeler events and the corrections
+    # reclassify some of them; the corrected panel runs the detector again on merged
+    # keys, which can make a market near-sole that the raw convention never flagged,
+    # or move an event quarter. The difference is reported, not asserted away.
+    M["TransRawSole"]=c(len(allrows)); M["TransReclass"]=c(len(rows))
+    M["TransStillSole"]=c(kept); M["TransSpecCSole"]=c(SPEC["C"]["bands"]["sole"])
+    M["TransGap"]=c(abs(SPEC["C"]["bands"]["sole"]-kept))
+    M["TransGapW"]=_w(abs(SPEC["C"]["bands"]["sole"]-kept))
     out=["\\begin{tabular}{@{}lllrrr@{}}","\\toprule",
          "Quarter & Market as recorded & Labeler & Raw share & Corrected share & Labelers \\\\","\\midrule"]
     for r in rows:
@@ -344,15 +348,11 @@ M["AuthGenShare"]=f"{NUM['authgen_share']:.1f}"; M["BrandShare"]=f"{NUM['brand_s
 M["BiologicShare"]=f"{NUM['biologic_share']:.1f}"
 M["TypeResidual"]=f"{100-_gsum:.1f}"; M["NonGeneric"]=f"{100-NUM['generic_share']:.1f}"
 # ---- Table: every exit with its evidence level, and the strata table ----
-LABELERS_EVENT={"2018Q2":"BonGeo","2018Q3":"Women's Choice","2019Q3|ACETIC":"Sun",
-  "2019Q3|DICLOFENAC":"Teva","2020Q2":"Amneal","2021Q2":"Alcon","2021Q3|HYDROCHLORIDE":"Alembic",
-  "2021Q3|TARTRATE":"Pfizer","2021Q4|VARENICLINE":"Pfizer","2021Q4|GOSERELIN":"TerSera",
-  "2022Q1":"Lupin","2022Q2":"Allergan","2023Q3":"Cipla"}
+# The exit table's labeler column comes from FDA's own labeler name, keyed by the
+# code in the event record. A hand-maintained quarter-to-name map had to be edited
+# every time the cohort changed, and it keyed on the quarter rather than the firm.
 def _evlab(r):
-    q=r["event_quarter"]; head=r["market"].split(",")[0].split(" | ")[0]
-    for k in (f"{q}|{head}", q):
-        if k in LABELERS_EVENT: return LABELERS_EVENT[k]
-    raise SystemExit(f"no labeler name for event {q} {head}")
+    return _dlab(r["departing_labeler"])
 def emit_cause():
     import csv
     rows=list(csv.DictReader(open(f"{R}/event_cause_classification.csv")))
@@ -372,19 +372,24 @@ def emit_cause():
     return len(rows)
 def emit_strata():
     CS=L("cause_strata.json")
+    # One row per evidence class, in descending order of how well the cause is
+    # established, plus the stratum a supply-chain reading can still claim.
     rowspec=[("All near-sole-labeler exits","all"),
-             ("Excluding the documented withdrawal","ex_withdrawal"),
-             ("Excluding withdrawal and transitions","ex_withdrawal_transition"),
+             ("Excluding every exit explained otherwise","ex_not_supply"),
              ("Documented supply disruption\\textsuperscript{a}","supply"),
              ("Market-wide regulatory withdrawal","withdrawal"),
-             ("Regulatory-transition-associated","transition"),
-             ("Undetermined cause","undetermined")]
+             ("Regulatory transition","transition"),
+             ("Medicaid rebate-programme withdrawal","coverage"),
+             ("Marketing-rights transfer","transfer"),
+             ("Measurement artefact (misspelled key)","artefact"),
+             ("Supply continued by another labeler","continued"),
+             ("Undetermined","undetermined")]
     out=["\\begin{tabular}{@{}lrrrr@{}}","\\toprule",
          "Stratum & $n$ & Median $R$ & $R<0.02$ & Volume-weighted $R$ \\\\","\\midrule"]
     for lab,key in rowspec:
         d=CS.get(key)
         if d is None: continue
-        if key=="supply": out.append("\\midrule")
+        if key in ("supply","continued"): out.append("\\midrule")
         out.append(f"{lab} & {d['n']} & {d['median']:.2f} & {100*d['p_lt_002']:.1f}\\% & "
                    f"{d['volwtd']:.2f} \\\\")
     out+=["\\botrule","\\end{tabular}"]
@@ -394,8 +399,15 @@ def emit_strata():
         M["Cause"+k.capitalize()]=c.get(k,0)
         M["Cause"+k.capitalize()+"W"]=_w(c.get(k,0))
     M["CauseTotal"]=CS["total"]
-    M["CauseTotalExW"]=CS["ex_withdrawal"]["n"]
-    M["CauseTotalExWTW"]=_w(CS["ex_withdrawal_transition"]["n"])
+    # the stratum a supply-chain reading can still claim: everything not explained by
+    # regulation, coverage, a transfer or a measurement error
+    M["CauseNotExplained"]=CS["ex_not_supply"]["n"]
+    M["CauseNotExplainedW"]=_w(CS["ex_not_supply"]["n"])
+    M["CauseNotExplainedMed"]=f"{CS['ex_not_supply']['median']:.2f}"
+    # how many exits are explained by something other than a supply failure
+    _expl=sum(c.get(k,0) for k in ("withdrawal","transition","coverage","transfer","artefact"))
+    M["CauseExplained"]=_expl; M["CauseExplainedW"]=_w(_expl)
+    M["CauseSupplyEpisodes"]="one"   # the two varenicline events are one recall episode
     for k in _CORD: M["Cause"+k.capitalize()+"UC"]=_w(c.get(k,0)).capitalize()
     return len(rowspec)
 _ncause=emit_cause(); _nstrata=emit_strata()

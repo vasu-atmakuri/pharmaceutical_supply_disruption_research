@@ -111,3 +111,34 @@ def labeler(code):
 
 def labeler_full(code):
     return _labs().get(str(code).zfill(5),"")
+
+
+# ---- exports the manuscript emitter uses ----
+# The eight classes, in descending order of how well the cause is established, and
+# their table labels. Adding a class without a label raises rather than printing a
+# bare identifier into the paper.
+CAUSE_ORDER=["supply","withdrawal","transition","coverage","transfer","artefact",
+             "continued","undetermined"]
+CAUSE_LABEL={
+ "supply":"documented supply disruption",
+ "withdrawal":"market-wide regulatory withdrawal",
+ "transition":"regulatory transition",
+ "coverage":"Medicaid rebate withdrawal",
+ "transfer":"marketing-rights transfer",
+ "artefact":"measurement artefact",
+ "continued":"supply continued by another labeler",
+ "undetermined":"undetermined",
+}
+def cause_label(level):
+    if level not in CAUSE_LABEL:
+        raise SystemExit(f"display_names.py has no label for cause class {level!r}")
+    return CAUSE_LABEL[level]
+
+def event_market(key):
+    """Name for the exit table. Same derivation as the reclassification table, so the
+    two cannot disagree about a dosage form the way they once did."""
+    return name(key)
+
+# Kept for callers that import them by name; both are derived now.
+DISPLAY=_OVERRIDE
+LABELER=None
