@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.10.21)  18 NOV 2026 23:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.10.21)  19 NOV 2026 00:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1024,10 +1024,10 @@ Overfull \hbox (46.16357pt too wide) in paragraph at lines 1034--1056
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [24]
-(./manuscript.bbl
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [25]
+(./manuscript.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 81--87
 \OT1/cmr/m/n/10 https://www.fda.gov/drugs/drug-approvals-and-databases/national
 -drug-code-
@@ -1051,7 +1051,7 @@ Package rerunfilecheck Info: File `manuscript.out' has not changed.
 Here is how much of TeX's memory you used:
  22207 strings out of 480247
  413958 string characters out of 5896150
- 685408 words of memory out of 5000000
+ 685406 words of memory out of 5000000
  39635 multiletter control sequences out of 15000+600000
  482995 words of font info for 77 fonts, out of 8000000 for 9000
  24 hyphenation exceptions out of 8191
@@ -1076,10 +1076,10 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist
 /type1/public/amsfonts/cm/cmti8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmtt8.pfb>
-Output written on manuscript.pdf (27 pages, 410335 bytes).
+Output written on manuscript.pdf (27 pages, 411765 bytes).
 PDF statistics:
- 636 PDF objects out of 1000 (max. 8388607)
- 419 compressed objects within 5 object streams
+ 637 PDF objects out of 1000 (max. 8388607)
+ 420 compressed objects within 5 object streams
  90 named destinations out of 1000 (max. 500000)
  244 words of extra memory for PDF output out of 10000 (max. 10000000)
 

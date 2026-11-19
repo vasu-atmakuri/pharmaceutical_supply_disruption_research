@@ -60,6 +60,7 @@ python3 audit_numbers.py
 python3 verify_manuscript.py
 python3 check_relationships.py
 python3 audit_letter.py
+python3 check_released_files.py
 python3 check_determinism.py
 
 # Note: stages 1 to 6 rebuild the panels from the raw SDUD and FDA listings and take

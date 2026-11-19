@@ -1093,9 +1093,19 @@ and involves no human subjects.
 Product Labeling \cite{dailymed}.
 
 \textbf{Code availability.} The panel construction, the market-key normalisation map, the
-event-level cohort manifest, the event cause classification and the consistency-checking scripts
-are at \url{https://github.com/vasu-atmakuri/pharmaceutical_supply_disruption_research}, so that
-every number above can be recomputed and every event-level classification inspected.
+near-sole event-flow manifest, the event-level cohort manifest, the event cause classification and
+the consistency-checking scripts are in a public repository at
+\url{https://github.com/vasu-atmakuri/pharmaceutical_supply_disruption_research}, so that every
+number above can be recomputed and every event-level classification inspected. The pipeline runs
+as a single script, \texttt{scripts/run\_all.sh}, which rebuilds the panel, regenerates the
+figures and the reported quantities, recompiles this manuscript and then runs six checks: that
+every number in the text traces to an analysis output, that the structure and the rendered PDF
+are sound, that the quantities agree with one another and with the figures, that the response
+letter agrees with the same outputs, that every promised artifact is tracked, and that each
+stochastic stage reproduces byte for byte. All six must pass for a build to be considered
+complete. The near-sole event-flow manifest, \texttt{results/near\_sole\_event\_flow.csv},
+carries one row per detected exit with the stage at which it leaves the cohort, so the event flow
+in Section~\ref{subsec:treat} can be reconciled independently.
 
 \textbf{Author contributions.} V.A. designed the study, built the data pipeline, performed the
 analysis and wrote the manuscript. S.K. contributed to the clinical interpretation of the

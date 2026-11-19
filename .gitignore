@@ -1,5 +1,8 @@
 # raw data: large, public, reproducible from source
 *.csv
+# but the event-level result files ARE the paper's released artifacts: the manuscript
+# cites them and a reviewer cannot reconcile the event flow without them
+!results/*.csv
 *.parquet
 *.zip
 *.txt

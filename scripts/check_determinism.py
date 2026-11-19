@@ -5,7 +5,7 @@ the input array order changes, and Counter.most_common breaks ties by insertion
 order. Both produced numbers that moved between runs of this pipeline, so the
 guarantee is enforced here rather than assumed.
 """
-import hashlib, json, os, subprocess, sys
+import hashlib, json, os, shutil, subprocess, sys, tempfile
 import os as _os
 # Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
@@ -28,7 +28,16 @@ def h(f):
         return hashlib.sha256(open(p,"rb").read()).hexdigest()[:16]
     return hashlib.sha256(json.dumps(json.load(open(p)),sort_keys=True).encode()).hexdigest()[:16]
 fails=[]
-for script,outs in STAGES:
+# Re-running a stage rewrites its output and bumps its mtime, which would make the
+# figures look stale to verify_manuscript.py afterwards. Snapshot each file with its
+# timestamp and restore both, so this check leaves the tree exactly as it found it.
+_snap=tempfile.mkdtemp(prefix="determinism-")
+for _s,_o in STAGES:
+    for _f in _o:
+        _src=f"{R}/results/{_f}"
+        shutil.copy2(_src, os.path.join(_snap, _f))
+try:
+  for script,outs in STAGES:
     before={f:h(f) for f in outs}
     p=subprocess.run(["python3",f"{W}/{script}"],capture_output=True,text=True)
     if p.returncode!=0:
@@ -39,8 +48,14 @@ for script,outs in STAGES:
         print(f"  {script:<28} {f:<34} {status}")
         if after!=before[f]:
             fails.append(f"{script} -> {f} changed on re-run ({before[f]} then {after})")
+finally:
+  for _s,_o in STAGES:
+    for _f in _o:
+        _dst=f"{R}/results/{_f}"
+        shutil.copy2(os.path.join(_snap,_f), _dst)   # copy2 restores the mtime too
+  shutil.rmtree(_snap, ignore_errors=True)
 if fails:
     print(f"\n{len(fails)} NOT REPRODUCIBLE:")
     for f in fails: print("   "+f)
     sys.exit(1)
-print("ALL STOCHASTIC STAGES REPRODUCIBLE")
+print("ALL STOCHASTIC STAGES REPRODUCIBLE (tree restored)")
