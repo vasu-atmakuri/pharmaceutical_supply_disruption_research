@@ -4,10 +4,11 @@ import os as _os
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
 # Parent folder holding the raw FDA and SDUD downloads.
 _DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+_PARTS=_os.environ.get("SDUD_PARTS") or (_DATA+"/sdud_parts/*.parquet")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
 OUT={}
 # ---- 1. route coverage by year and by dispensing volume ----
-px=sorted(glob.glob(os.path.expanduser("~/work/partsxx/*.parquet")))
+px=sorted(glob.glob(_PARTS))
 q=f"""SELECT n.yr, SUM(n.rx) rx,
        SUM(CASE WHEN xw.route IS NOT NULL AND xw.route<>'' THEN n.rx ELSE 0 END) rx_route
       FROM read_parquet({px!r}) n

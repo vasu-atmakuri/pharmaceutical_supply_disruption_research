@@ -1,8 +1,9 @@
 import os as _os
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
 _DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+_PARTS=_os.environ.get("SDUD_PARTS") or (_DATA+"/sdud_parts/*.parquet")
 import duckdb, glob, os, numpy as np
-px=sorted(glob.glob(_os.environ.get("SDUD_PARTS") or _os.path.expanduser("~/work/partsxx/*.parquet")))
+px=sorted(glob.glob(_PARTS))
 con=duckdb.connect(); con.execute("SET memory_limit='1500MB'"); con.execute("SET threads=4")
 con.execute("SET preserve_insertion_order=false")
 # Route-primary bucket. Route decides where a product acts; dosage form only

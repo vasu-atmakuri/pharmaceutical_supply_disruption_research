@@ -1,5 +1,9 @@
+import os as _os
+_ROOT=_os.environ.get("PSDR_ROOT") or __ROOT+""
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+_PARTS=_os.environ.get("SDUD_PARTS") or (_DATA+"/sdud_parts/*.parquet")
 import duckdb, os, csv, json, re
-C=os.path.expanduser("~/mnt/Research/crosswalk")
+C=_DATA+"/crosswalk"
 con=duckdb.connect('/tmp/xw.duckdb'); con.execute("SET memory_limit='1200MB'")
 rows=[]
 with open(C+"/product.txt", encoding='latin-1') as f:

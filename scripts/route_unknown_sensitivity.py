@@ -13,8 +13,10 @@ with both an unknown-route and a named-route product no longer pools them.
 import duckdb, glob, json, os
 import os as _os
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
+_DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
+_PARTS=_os.environ.get("SDUD_PARTS") or (_DATA+"/sdud_parts/*.parquet")
 con=duckdb.connect(); con.execute("SET memory_limit='2000MB'")
-px=sorted(glob.glob(_os.environ.get("SDUD_PARTS") or _os.path.expanduser("~/work/partsxx/*.parquet")))
+px=sorted(glob.glob(_PARTS))
 
 # the production macro, verbatim from natpanel_route.py, so the two cannot drift
 src=open(f"{_ROOT}/scripts/natpanel_route.py").read()

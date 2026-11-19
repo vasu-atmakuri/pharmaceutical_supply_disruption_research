@@ -13,9 +13,12 @@ cd "$(dirname "$0")"
 W="$(pwd)"
 export PSDR_ROOT="${PSDR_ROOT:-$(cd .. && pwd)}"
 export RESEARCH_ROOT="${RESEARCH_ROOT:-$(cd ../.. && pwd)}"
+# Where the per-year SDUD parquet parts live. Stage 0 builds them if absent.
+export SDUD_PARTS="${SDUD_PARTS:-$RESEARCH_ROOT/sdud_parts/*.parquet}"
 echo "repo:  $PSDR_ROOT"
 echo "data:  $RESEARCH_ROOT"
-for f in xwalk rebuild_xw_route natpanel natpanel_route build_v2 validate_normalization national_impact \
+echo "parts: $SDUD_PARTS"
+for f in build_sdud_parts xwalk rebuild_xw_route natpanel natpanel_route build_v2 validate_normalization national_impact \
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
          route_unknown_sensitivity collect_numbers build_figures emit_tex; do
@@ -23,6 +26,7 @@ for f in xwalk rebuild_xw_route natpanel natpanel_route build_v2 validate_normal
 done
 S="$PSDR_ROOT/springer"
 
+echo "== 0. SDUD year parts (skips what exists) ==" ; python3 $W/build_sdud_parts.py | tail -3
 echo "== 1a. form-only crosswalk =="       ; python3 $W/xwalk.py               >/dev/null
 echo "== 1b. crosswalk with route =="      ; python3 $W/rebuild_xw_route.py    >/dev/null
 echo "== 2a. form-based panel (spec A) ==" ; python3 $W/natpanel.py             >/dev/null
@@ -64,6 +68,7 @@ python3 verify_manuscript.py
 python3 check_relationships.py
 python3 audit_letter.py
 python3 check_pipeline_closure.py
+python3 check_stage_portability.py
 python3 check_released_files.py
 python3 check_determinism.py
 
