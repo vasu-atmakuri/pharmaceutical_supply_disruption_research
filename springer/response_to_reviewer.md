@@ -114,7 +114,7 @@ different operations which agree only approximately.
 
 Entirely our defect and introduced by the generation change itself: TeX swallows the
 space after a control word, so a macro defined without `\xspace` rendered
-"292testable". There were 55 such joins. All 245 macros now carry `\xspace`, the count is zero,
+"292testable". There were 55 such joins. All 247 macros now carry `\xspace`, the count is zero,
 and `verify_manuscript.py` reads the rendered PDF and fails on any digit joined to a
 word. Our previous checks read extracted text for presence only, which is exactly why
 they were blind to it.
