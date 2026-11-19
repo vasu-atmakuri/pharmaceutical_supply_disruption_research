@@ -1,12 +1,18 @@
 {
- "events": 20,
+ "events": 26,
  "by_window": {
   "window_0": {
    "window_quarters": 0,
-   "ingredient_level_matches": 6,
-   "labeler_level_matches": 3,
-   "both": 2,
+   "ingredient_level_matches": 7,
+   "labeler_level_matches": 6,
+   "both": 3,
    "detail": [
+    {
+     "event": "2018Q2",
+     "market": "ACETATE,HYDROCORTISONE",
+     "labeler_level": 0,
+     "ingredient_level": 1
+    },
     {
      "event": "2018Q2",
      "market": "ACETATE,ACID,ALPHA,ASCORBIC,BETA,BIOTIN,CAROTENE,CHOLECALCIFEROL,CUPRIC,CYANOCOBALAMIN,FLUORIDE,FOLIC,GLUCONATE,GLUCOSAMINE,LEVOMEFOLATE,NIACINAMIDE,OXIDE,PYRIDOXINE,RIBOFLAVIN,SODIUM,THIAMINE,TOCOPHEROL,VITAMIN,ZINC",
@@ -20,28 +26,22 @@
      "ingredient_level": 1
     },
     {
-     "event": "2019Q3",
-     "market": "BENZTROPINE",
+     "event": "2019Q1",
+     "market": "TRIAMTERENE",
      "labeler_level": 0,
      "ingredient_level": 0
     },
     {
-     "event": "2019Q3",
-     "market": "DICLOFENAC,POTASSIUM",
-     "labeler_level": 0,
-     "ingredient_level": 1
-    },
-    {
-     "event": "2019Q3",
-     "market": "ACETIC,ACID,HYDROCORTISONE",
+     "event": "2019Q4",
+     "market": "ACETATE,ESTRADIOL,NORETHINDRONE",
      "labeler_level": 1,
      "ingredient_level": 1
     },
     {
-     "event": "2020Q1",
+     "event": "2019Q4",
      "market": "RANITIDINE",
-     "labeler_level": 0,
-     "ingredient_level": 0
+     "labeler_level": 1,
+     "ingredient_level": 1
     },
     {
      "event": "2020Q2",
@@ -53,11 +53,17 @@
      "event": "2020Q2",
      "market": "RANITIDINE",
      "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2021Q1",
+     "market": "HYDROCHLORIDE,NEFAZODONE",
+     "labeler_level": 1,
      "ingredient_level": 0
     },
     {
      "event": "2021Q2",
-     "market": "BRIMONIDINE,BRINZOLAMIDE,TARTRATE",
+     "market": "ALIROCUMAB",
      "labeler_level": 0,
      "ingredient_level": 0
     },
@@ -87,6 +93,12 @@
     },
     {
      "event": "2022Q1",
+     "market": "4,ELEMENTS,TRACE",
+     "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2022Q1",
      "market": "TRIMETHOPRIM",
      "labeler_level": 0,
      "ingredient_level": 0
@@ -94,6 +106,18 @@
     {
      "event": "2022Q2",
      "market": "ALCAFTADINE",
+     "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2022Q4",
+     "market": "DICLOFENAC,POTASSIUM",
+     "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2022Q4",
+     "market": "INDOMETHACIN",
      "labeler_level": 0,
      "ingredient_level": 0
     },
@@ -120,6 +144,18 @@
      "market": "DORZOLAMIDE,HYDROCHLORIDE,MALEATE,TIMOLOL",
      "labeler_level": 0,
      "ingredient_level": 1
+    },
+    {
+     "event": "2024Q2",
+     "market": "ESCITSLOPRAM",
+     "labeler_level": 1,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2024Q2",
+     "market": "5,LIDOCAINE",
+     "labeler_level": 0,
+     "ingredient_level": 0
     },
     {
      "event": "2024Q2",
@@ -132,9 +168,15 @@
   "window_1": {
    "window_quarters": 1,
    "ingredient_level_matches": 10,
-   "labeler_level_matches": 9,
-   "both": 6,
+   "labeler_level_matches": 11,
+   "both": 7,
    "detail": [
+    {
+     "event": "2018Q2",
+     "market": "ACETATE,HYDROCORTISONE",
+     "labeler_level": 1,
+     "ingredient_level": 1
+    },
     {
      "event": "2018Q2",
      "market": "ACETATE,ACID,ALPHA,ASCORBIC,BETA,BIOTIN,CAROTENE,CHOLECALCIFEROL,CUPRIC,CYANOCOBALAMIN,FLUORIDE,FOLIC,GLUCONATE,GLUCOSAMINE,LEVOMEFOLATE,NIACINAMIDE,OXIDE,PYRIDOXINE,RIBOFLAVIN,SODIUM,THIAMINE,TOCOPHEROL,VITAMIN,ZINC",
@@ -148,25 +190,19 @@
      "ingredient_level": 1
     },
     {
-     "event": "2019Q3",
-     "market": "BENZTROPINE",
-     "labeler_level": 1,
+     "event": "2019Q1",
+     "market": "TRIAMTERENE",
+     "labeler_level": 0,
      "ingredient_level": 0
     },
     {
-     "event": "2019Q3",
-     "market": "DICLOFENAC,POTASSIUM",
-     "labeler_level": 0,
-     "ingredient_level": 1
-    },
-    {
-     "event": "2019Q3",
-     "market": "ACETIC,ACID,HYDROCORTISONE",
+     "event": "2019Q4",
+     "market": "ACETATE,ESTRADIOL,NORETHINDRONE",
      "labeler_level": 1,
      "ingredient_level": 1
     },
     {
-     "event": "2020Q1",
+     "event": "2019Q4",
      "market": "RANITIDINE",
      "labeler_level": 1,
      "ingredient_level": 1
@@ -181,11 +217,17 @@
      "event": "2020Q2",
      "market": "RANITIDINE",
      "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2021Q1",
+     "market": "HYDROCHLORIDE,NEFAZODONE",
+     "labeler_level": 1,
      "ingredient_level": 0
     },
     {
      "event": "2021Q2",
-     "market": "BRIMONIDINE,BRINZOLAMIDE,TARTRATE",
+     "market": "ALIROCUMAB",
      "labeler_level": 0,
      "ingredient_level": 0
     },
@@ -215,6 +257,12 @@
     },
     {
      "event": "2022Q1",
+     "market": "4,ELEMENTS,TRACE",
+     "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2022Q1",
      "market": "TRIMETHOPRIM",
      "labeler_level": 1,
      "ingredient_level": 1
@@ -222,6 +270,18 @@
     {
      "event": "2022Q2",
      "market": "ALCAFTADINE",
+     "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2022Q4",
+     "market": "DICLOFENAC,POTASSIUM",
+     "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2022Q4",
+     "market": "INDOMETHACIN",
      "labeler_level": 0,
      "ingredient_level": 0
     },
@@ -248,6 +308,18 @@
      "market": "DORZOLAMIDE,HYDROCHLORIDE,MALEATE,TIMOLOL",
      "labeler_level": 0,
      "ingredient_level": 1
+    },
+    {
+     "event": "2024Q2",
+     "market": "ESCITSLOPRAM",
+     "labeler_level": 1,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2024Q2",
+     "market": "5,LIDOCAINE",
+     "labeler_level": 0,
+     "ingredient_level": 0
     },
     {
      "event": "2024Q2",
@@ -259,10 +331,16 @@
   },
   "window_4": {
    "window_quarters": 4,
-   "ingredient_level_matches": 15,
-   "labeler_level_matches": 15,
+   "ingredient_level_matches": 17,
+   "labeler_level_matches": 17,
    "both": 12,
    "detail": [
+    {
+     "event": "2018Q2",
+     "market": "ACETATE,HYDROCORTISONE",
+     "labeler_level": 1,
+     "ingredient_level": 1
+    },
     {
      "event": "2018Q2",
      "market": "ACETATE,ACID,ALPHA,ASCORBIC,BETA,BIOTIN,CAROTENE,CHOLECALCIFEROL,CUPRIC,CYANOCOBALAMIN,FLUORIDE,FOLIC,GLUCONATE,GLUCOSAMINE,LEVOMEFOLATE,NIACINAMIDE,OXIDE,PYRIDOXINE,RIBOFLAVIN,SODIUM,THIAMINE,TOCOPHEROL,VITAMIN,ZINC",
@@ -276,46 +354,46 @@
      "ingredient_level": 1
     },
     {
-     "event": "2019Q3",
-     "market": "BENZTROPINE",
+     "event": "2019Q1",
+     "market": "TRIAMTERENE",
+     "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2019Q4",
+     "market": "ACETATE,ESTRADIOL,NORETHINDRONE",
+     "labeler_level": 1,
+     "ingredient_level": 1
+    },
+    {
+     "event": "2019Q4",
+     "market": "RANITIDINE",
+     "labeler_level": 1,
+     "ingredient_level": 1
+    },
+    {
+     "event": "2020Q2",
+     "market": "RANITIDINE",
+     "labeler_level": 1,
+     "ingredient_level": 1
+    },
+    {
+     "event": "2020Q2",
+     "market": "RANITIDINE",
+     "labeler_level": 1,
+     "ingredient_level": 1
+    },
+    {
+     "event": "2021Q1",
+     "market": "HYDROCHLORIDE,NEFAZODONE",
      "labeler_level": 1,
      "ingredient_level": 0
     },
     {
-     "event": "2019Q3",
-     "market": "DICLOFENAC,POTASSIUM",
-     "labeler_level": 1,
-     "ingredient_level": 1
-    },
-    {
-     "event": "2019Q3",
-     "market": "ACETIC,ACID,HYDROCORTISONE",
-     "labeler_level": 1,
-     "ingredient_level": 1
-    },
-    {
-     "event": "2020Q1",
-     "market": "RANITIDINE",
-     "labeler_level": 1,
-     "ingredient_level": 1
-    },
-    {
-     "event": "2020Q2",
-     "market": "RANITIDINE",
-     "labeler_level": 1,
-     "ingredient_level": 1
-    },
-    {
-     "event": "2020Q2",
-     "market": "RANITIDINE",
-     "labeler_level": 1,
-     "ingredient_level": 1
-    },
-    {
      "event": "2021Q2",
-     "market": "BRIMONIDINE,BRINZOLAMIDE,TARTRATE",
+     "market": "ALIROCUMAB",
      "labeler_level": 1,
-     "ingredient_level": 1
+     "ingredient_level": 0
     },
     {
      "event": "2021Q3",
@@ -343,6 +421,12 @@
     },
     {
      "event": "2022Q1",
+     "market": "4,ELEMENTS,TRACE",
+     "labeler_level": 0,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2022Q1",
      "market": "TRIMETHOPRIM",
      "labeler_level": 1,
      "ingredient_level": 1
@@ -352,6 +436,18 @@
      "market": "ALCAFTADINE",
      "labeler_level": 0,
      "ingredient_level": 0
+    },
+    {
+     "event": "2022Q4",
+     "market": "DICLOFENAC,POTASSIUM",
+     "labeler_level": 0,
+     "ingredient_level": 1
+    },
+    {
+     "event": "2022Q4",
+     "market": "INDOMETHACIN",
+     "labeler_level": 1,
+     "ingredient_level": 1
     },
     {
      "event": "2023Q2",
@@ -379,6 +475,18 @@
     },
     {
      "event": "2024Q2",
+     "market": "ESCITSLOPRAM",
+     "labeler_level": 1,
+     "ingredient_level": 0
+    },
+    {
+     "event": "2024Q2",
+     "market": "5,LIDOCAINE",
+     "labeler_level": 0,
+     "ingredient_level": 1
+    },
+    {
+     "event": "2024Q2",
      "market": "PREGABALIN",
      "labeler_level": 1,
      "ingredient_level": 1
@@ -386,6 +494,6 @@
    ]
   }
  },
- "ingredient_level_matches": 6,
- "labeler_level_matches": 3
+ "ingredient_level_matches": 7,
+ "labeler_level_matches": 6
 }

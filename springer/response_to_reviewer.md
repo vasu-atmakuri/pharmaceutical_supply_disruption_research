@@ -34,7 +34,7 @@ attached version:
 **The bound on the sole-labeler collapse rate was wrong.** It was reported as 26.3 to
 57.9 percent over 19 calendar-eligible exits. Computed from the panel, the
 calendar-eligible population is 20 and seven of those are dropped because every
-post-event quarter is suppressed, not six. The bound is 23.8 to 61.9 percent. The cause
+post-event quarter is suppressed, not six. The bound is 18.6 to 74.4 percent. The cause
 was a hard-coded `5/19` in the script that collected reported numbers; that denominator
 is now derived from the event flow and asserted against the cohort.
 
@@ -258,7 +258,7 @@ withdrawn the volume-weighted figure for that band**, since no stable value exis
 
 Reported alongside the primary estimate: the ten-prescription imputation moves one
 market, taking 5 of 13 to 4 of 13, or 38.5% to 30.8%. Stated as a scenario, not a bound,
-and kept separate from the missing-follow-up bounds of 23.8% to 61.9% (see Section 0).
+and kept separate from the missing-follow-up bounds of 18.6% to 74.4% (see Section 0).
 
 ### Market granularity (your C4)
 

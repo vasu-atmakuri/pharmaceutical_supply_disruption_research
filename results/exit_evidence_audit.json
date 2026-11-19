@@ -1,0 +1,232 @@
+[
+ {
+  "market": "4,ELEMENTS,TRACE | INJECTABLE #94f1",
+  "event_quarter": "2022Q1",
+  "departing_labeler": "00517",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": false,
+  "near_identical_keys": [
+   {
+    "key": "5,ELEMENTS,TRACE | INJECTABLE",
+    "labelers": 1,
+    "rx": 5951.0,
+    "similarity": 0.938
+   }
+  ]
+ },
+ {
+  "market": "ACETATE,ACID,ALPHA,ASCORBIC,BETA,BIOTIN,CAROTENE,CHOLECALCIFEROL,CUPRIC,CYANOCOBALAMIN,FLUORIDE,FOLIC,GLUCONATE,GLUCOSAMINE,LEVOMEFOLATE,NIACINAMIDE,OXIDE,PYRIDOXINE,RIBOFLAVIN,SODIUM,THIAMINE,TOCOPHEROL,VITAMIN,ZINC | ORAL TABLET",
+  "event_quarter": "2018Q2",
+  "departing_labeler": "52796",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "ACETATE,HYDROCORTISONE | TOPICAL",
+  "event_quarter": "2018Q2",
+  "departing_labeler": "00037",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "ACID,FOLIC,IRON,MINERAL,SUPPLEMENT,VITAMIN | OTHER",
+  "event_quarter": "2018Q3",
+  "departing_labeler": "50967",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "ALCAFTADINE | OPHTHALMIC",
+  "event_quarter": "2022Q2",
+  "departing_labeler": "00023",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": false,
+  "near_identical_keys": []
+ },
+ {
+  "market": "ALIROCUMAB | INJECTABLE",
+  "event_quarter": "2021Q2",
+  "departing_labeler": "00024",
+  "successor_rx_post": 30556.0,
+  "successor_labelers_post": 1,
+  "other_labeler_rx_pre": 33.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": false,
+  "near_identical_keys": []
+ },
+ {
+  "market": "BRIMONIDINE | TOPICAL",
+  "event_quarter": "2023Q1",
+  "departing_labeler": "00299",
+  "successor_rx_post": 2817.0,
+  "successor_labelers_post": 1,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": true,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "DICLOFENAC,POTASSIUM | ORAL LIQUID",
+  "event_quarter": "2022Q4",
+  "departing_labeler": "13913",
+  "successor_rx_post": 2969.0,
+  "successor_labelers_post": 4,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": true,
+  "departing_labeler_returns": false,
+  "near_identical_keys": []
+ },
+ {
+  "market": "ESCITSLOPRAM | ORAL TABLET",
+  "event_quarter": "2024Q2",
+  "departing_labeler": "68180",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": false,
+  "near_identical_keys": [
+   {
+    "key": "ESCITALOPRAM | ORAL TABLET",
+    "labelers": 16,
+    "rx": 51453436.0,
+    "similarity": 0.917
+   }
+  ]
+ },
+ {
+  "market": "GOSERELIN | INJECTABLE",
+  "event_quarter": "2021Q4",
+  "departing_labeler": "70720",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "GRISOFULVIN | ORAL LIQUID",
+  "event_quarter": "2023Q3",
+  "departing_labeler": "69097",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": [
+   {
+    "key": "GRISEOFULVIN | ORAL LIQUID",
+    "labelers": 2,
+    "rx": 580728.0,
+    "similarity": 0.957
+   }
+  ]
+ },
+ {
+  "market": "HYDROCHLORIDE,NEFAZODONE | ORAL TABLET",
+  "event_quarter": "2021Q1",
+  "departing_labeler": "00093",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "HYDROCHLORIDE,OLOPATADINE | OPHTHALMIC",
+  "event_quarter": "2021Q3",
+  "departing_labeler": "62332",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "INDOMETHACIN | ORAL LIQUID",
+  "event_quarter": "2022Q4",
+  "departing_labeler": "69344",
+  "successor_rx_post": 144.0,
+  "successor_labelers_post": 1,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": true,
+  "departing_labeler_returns": false,
+  "near_identical_keys": []
+ },
+ {
+  "market": "RANITIDINE | ORAL TABLET",
+  "event_quarter": "2020Q2",
+  "departing_labeler": "53746",
+  "successor_rx_post": 0.0,
+  "successor_labelers_post": 0,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "TARTRATE,VARENICLINE | OTHER",
+  "event_quarter": "2021Q3",
+  "departing_labeler": "00069",
+  "successor_rx_post": 81987.0,
+  "successor_labelers_post": 1,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": true,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ },
+ {
+  "market": "TRIAMTERENE | ORAL CAPSULE",
+  "event_quarter": "2019Q1",
+  "departing_labeler": "59212",
+  "successor_rx_post": 1254.0,
+  "successor_labelers_post": 2,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": true,
+  "departing_labeler_returns": false,
+  "near_identical_keys": []
+ },
+ {
+  "market": "TRIMETHOPRIM | ORAL TABLET",
+  "event_quarter": "2022Q1",
+  "departing_labeler": "43386",
+  "successor_rx_post": 1229.0,
+  "successor_labelers_post": 1,
+  "other_labeler_rx_pre": 0.0,
+  "new_labeler_appears": true,
+  "departing_labeler_returns": false,
+  "near_identical_keys": []
+ },
+ {
+  "market": "VARENICLINE | ORAL TABLET",
+  "event_quarter": "2021Q4",
+  "departing_labeler": "00069",
+  "successor_rx_post": 385541.0,
+  "successor_labelers_post": 2,
+  "other_labeler_rx_pre": 30.0,
+  "new_labeler_appears": false,
+  "departing_labeler_returns": true,
+  "near_identical_keys": []
+ }
+]

@@ -1,14 +1,20 @@
 market,event_quarter,departing_labeler,baseline_rx,post_over_base,replacement_ratio,cause_class,cause_evidence
 "ACETATE,ACID,ALPHA,ASCORBIC,BETA,BIOTIN,CAROTENE,CHOLECALCIFEROL,CUPRIC,CYANOCOBALAMIN,FLUORIDE,FOLIC,GLUCONATE,GLUCOSAMINE,LEVOMEFOLATE,NIACINAMIDE,OXIDE,PYRIDOXINE,RIBOFLAVIN,SODIUM,THIAMINE,TOCOPHEROL,VITAMIN,ZINC | ORAL TABLET",2018Q2,52796,1946.5,0.0421,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
+"ACETATE,HYDROCORTISONE | TOPICAL",2018Q2,00037,590.0,0.0031,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
 "ACID,FOLIC,IRON,MINERAL,SUPPLEMENT,VITAMIN | OTHER",2018Q3,50967,5044.8,0.0114,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
-"ACETIC,ACID,HYDROCORTISONE | OTIC",2019Q3,51672,2019.5,0.1931,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
-"DICLOFENAC,POTASSIUM | ORAL TABLET",2019Q3,00093,22315.5,0.0522,0.0003,supply,"ASHP shortage Feb 2019 to Aug 2020; Teva named, no reason given"
+TRIAMTERENE | ORAL CAPSULE,2019Q1,59212,261.0,0.8008,0.8008,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
 RANITIDINE | ORAL TABLET,2020Q2,53746,39964.8,0.011,0.0,withdrawal,"FDA requested withdrawal of all ranitidine, 1 Apr 2020 (NDMA); market-wide and firm-independent"
-"BRIMONIDINE,BRINZOLAMIDE,TARTRATE | OPHTHALMIC",2021Q2,00065,4483.5,0.3386,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
+"HYDROCHLORIDE,NEFAZODONE | ORAL TABLET",2021Q1,00093,1724.0,0.0632,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
+ALIROCUMAB | INJECTABLE,2021Q2,00024,934.2,5.4532,5.4511,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
 "HYDROCHLORIDE,OLOPATADINE | OPHTHALMIC",2021Q3,62332,2670.8,0.0039,0.0,transition,Rx-to-OTC switch for the brand from Feb 2020; no firm-level record of why this labeler left
 "TARTRATE,VARENICLINE | OTHER",2021Q3,00069,55919.0,0.2477,0.2444,supply,Pfizer nitrosamine recall 2021; FDA recorded a varenicline shortage
 GOSERELIN | INJECTABLE,2021Q4,70720,3280.8,0.0029,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
 VARENICLINE | ORAL TABLET,2021Q4,00069,92632.5,0.6971,0.6937,supply,Pfizer nitrosamine recall 2021; FDA recorded a varenicline shortage
+"4,ELEMENTS,TRACE | INJECTABLE #94f1",2022Q1,00517,897.0,0.0037,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
 TRIMETHOPRIM | ORAL TABLET,2022Q1,43386,2487.8,0.0888,0.0823,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
 ALCAFTADINE | OPHTHALMIC,2022Q2,00023,809.5,0.0146,0.0,transition,"Rx-to-OTC switch approved for the brand Dec 2021, retail Mar 2022; no firm-level record of why this labeler left"
+"DICLOFENAC,POTASSIUM | ORAL LIQUID",2022Q4,13913,931.5,0.5312,0.5312,supply,"ASHP shortage Feb 2019 to Aug 2020; Teva named, no reason given"
+INDOMETHACIN | ORAL LIQUID,2022Q4,69344,293.5,0.0818,0.0818,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
+BRIMONIDINE | TOPICAL,2023Q1,00299,297.2,1.5795,1.5795,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
 GRISOFULVIN | ORAL LIQUID,2023Q3,69097,15508.2,0.0461,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"
+ESCITSLOPRAM | ORAL TABLET,2024Q2,68180,5113.0,0.0015,0.0,undetermined,"no shortage, withdrawal, recall or switch record found for this firm and period"

@@ -78,3 +78,19 @@ con.executemany("INSERT INTO ptype VALUES (?,?,?)",
 con.execute("COPY (SELECT * FROM ptype) TO '/tmp/ptype.parquet' (FORMAT PARQUET)")
 print(f"product types: {len(_seen):,} NDCs; "
       f"{sum(1 for t in _seen.values() if t=='HUMAN PRESCRIPTION DRUG'):,} human prescription drug")
+
+
+# ---- labeler display names, from FDA's own LABELERNAME field ----
+# display_names.py used a hand-maintained list, which stopped the build as soon as the
+# event cohort grew. Deriving them means a new labeler never needs a code change.
+_ln={}
+with open(C+"/product.txt", encoding='latin-1') as f:
+    for r in csv.DictReader(f, delimiter='\t'):
+        ndc=(r.get('PRODUCTNDC') or '').strip()
+        if '-' not in ndc: continue
+        lab=ndc.split('-')[0].zfill(5)
+        nm=(r.get('LABELERNAME') or '').strip()
+        if nm: _ln.setdefault(lab,collections.Counter())[nm]+=1
+_names={k:v.most_common(1)[0][0] for k,v in _ln.items()}
+json.dump(_names,open(_ROOT+"/results/labeler_names.json","w"),indent=1)
+print(f"labeler names: {len(_names):,} codes written to results/labeler_names.json")

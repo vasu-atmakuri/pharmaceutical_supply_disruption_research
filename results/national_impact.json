@@ -7,7 +7,7 @@
     "near": 72157,
     "single_vol": 0.11499876559152412,
     "sole_vol": 0.14708552002575026,
-    "mean_hhi": 0.7832031481392645
+    "mean_hhi": 0.7832031481392643
   },
   "spec_C": {
     "mq": 87728,
@@ -19,8 +19,8 @@
     "sole_vol": 0.10539464565062237,
     "mean_hhi": 0.7539701080328551
   },
-  "reclassified": 11692,
-  "retained": 46195,
-  "unmatched": 1027,
-  "reclassified_volume_share": 0.2940795495588979
+  "reclassified": 11657,
+  "retained": 46274,
+  "unmatched": 983,
+  "reclassified_volume_share": 0.2849121444479631
 }

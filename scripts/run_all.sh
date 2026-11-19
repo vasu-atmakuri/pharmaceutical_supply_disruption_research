@@ -30,7 +30,7 @@ echo "parts: $SDUD_PARTS"
 for f in build_sdud_parts xwalk rebuild_xw_route natpanel natpanel_route build_v2 validate_normalization national_impact \
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
-         route_unknown_sensitivity collect_numbers build_figures emit_tex \
+         route_unknown_sensitivity exit_evidence_audit collect_numbers build_figures emit_tex \
          emit_letter_numbers; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
@@ -56,6 +56,7 @@ echo "==11. deficits and entry =="          ; "$PY" $W/deficit_entry.py         
 echo "==12. three specifications =="        ; "$PY" $W/threespec.py              >/dev/null
 echo "==13. event transition =="            ; "$PY" $W/transition.py             | tail -3
 echo "==13b. near-sole flow manifest ==" ; "$PY" $W/sole_flow_manifest.py | tail -6
+echo "==13d. exit evidence audit ==" ; "$PY" $W/exit_evidence_audit.py | head -4
 echo "==13c. unknown-route sensitivity ==" ; "$PY" $W/route_unknown_sensitivity.py | tail -4
 echo "==14. recall match level =="          ; "$PY" $W/recall_matchlevel.py      | tail -4
 echo "==15. sensitivities =="               ; "$PY" $W/sensitivities.py          >/dev/null
