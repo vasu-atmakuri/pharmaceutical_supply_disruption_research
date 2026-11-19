@@ -31,16 +31,28 @@ sole=sorted([m for m in OBS if inwin[m][1]>=.95],key=lambda m:inwin[m][0])
 #                 coverage, so this is an alternative explanation, not a verified one.
 #   undetermined- no record found for this firm and period
 # See results/event_cause_classification.csv for the per-event evidence.
+# Classification lives in exit_causes.py, keyed on the exact event, and the
+# successor-labeler signal comes from exit_evidence_audit.py. Matching on an
+# ingredient substring here once gave Assertio's diclofenac the evidence from Teva's,
+# and a growing cohort makes that failure mode certain rather than possible.
+from exit_causes import classify, declared_keys
+import json as _json
+_aud={}
+_ap=_ROOT+"/results/exit_evidence_audit.json"
+if os.path.exists(_ap):
+    for x in _json.load(open(_ap)):
+        _aud[(x["market"],x["event_quarter"],x["departing_labeler"])]=x
 CLS={}
 for m in sole:
-    k=m.upper()
-    if "RANITIDINE" in k: CLS[m]=("withdrawal","FDA requested withdrawal of all ranitidine, 1 Apr 2020 (NDMA); market-wide and firm-independent")
-    elif "ALCAFTADINE" in k: CLS[m]=("transition","Rx-to-OTC switch approved for the brand Dec 2021, retail Mar 2022; no firm-level record of why this labeler left")
-    elif "OLOPATADINE" in k: CLS[m]=("transition","Rx-to-OTC switch for the brand from Feb 2020; no firm-level record of why this labeler left")
-    elif "VARENICLINE" in k: CLS[m]=("supply","Pfizer nitrosamine recall 2021; FDA recorded a varenicline shortage")
-    elif "DICLOFENAC" in k: CLS[m]=("supply","ASHP shortage Feb 2019 to Aug 2020; Teva named, no reason given")
-    elif "DORZOLAMIDE" in k: CLS[m]=("supply","ASHP dorzolamide shortage lists Leading; no reason given")
-    else: CLS[m]=("undetermined","no shortage, withdrawal, recall or switch record found for this firm and period")
+    t,s_,lab=inwin[m]; k=(m,cal(t),lab)
+    CLS[m]=classify(m,cal(t),lab,
+                    new_labeler_appears=_aud.get(k,{}).get("new_labeler_appears",False))
+_present={(m,cal(inwin[m][0]),inwin[m][2]) for m in sole}
+_drifted=declared_keys()-_present
+if _drifted:
+    raise SystemExit("exit_causes.py declares events that are no longer in the cohort, "
+                     "so its evidence would go unreported:\n  " +
+                     "\n  ".join(repr(x) for x in sorted(_drifted)))
 def R(m):
     t,s,dl=inwin[m]
     db=np.mean([LMQ.get((m,dl),{}).get(t+k) or 0.0 for k in range(B0,B1)])

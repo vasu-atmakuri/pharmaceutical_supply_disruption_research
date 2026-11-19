@@ -1,9 +1,13 @@
 {
  "counts": {
-  "undetermined": 13,
+  "undetermined": 4,
+  "continued": 5,
   "withdrawal": 1,
-  "transition": 2,
-  "supply": 3
+  "transfer": 1,
+  "transition": 3,
+  "supply": 2,
+  "coverage": 1,
+  "artefact": 2
  },
  "total": 19,
  "all": {
@@ -19,16 +23,16 @@
   "volwtd": 0.4411812229023625
  },
  "ex_withdrawal_transition": {
-  "n": 16,
-  "median": 0.04088586030664395,
-  "p_lt_002": 0.5,
-  "volwtd": 0.4493543985535405
+  "n": 15,
+  "median": 0.0817717206132879,
+  "p_lt_002": 0.4666666666666667,
+  "volwtd": 0.4515102729224164
  },
  "supply": {
-  "n": 3,
-  "median": 0.531222043299338,
+  "n": 2,
+  "median": 0.4690186037257274,
   "p_lt_002": 0.0,
-  "volwtd": 0.5245825054799989
+  "volwtd": 0.5245408719086199
  },
  "withdrawal": {
   "n": 1,
@@ -37,15 +41,15 @@
   "volwtd": 0.0
  },
  "transition": {
-  "n": 2,
+  "n": 3,
   "median": 0.0,
   "p_lt_002": 1.0,
   "volwtd": 0.0
  },
  "undetermined": {
-  "n": 13,
+  "n": 4,
   "median": 0.0,
-  "p_lt_002": 0.6153846153846154,
-  "volwtd": 0.15633956954505185
+  "p_lt_002": 1.0,
+  "volwtd": 0.0
  }
 }
