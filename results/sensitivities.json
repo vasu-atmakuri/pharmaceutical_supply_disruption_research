@@ -37,6 +37,26 @@
   ],
   "suppression_scenario_rate": 30.8,
   "suppression_primary_rate": 38.5,
+  "baseline_common_cohort": {
+    "n": 77,
+    "primary": {
+      "n": 77,
+      "median": 1.77,
+      "lt02_k": 21,
+      "lt02_pct": 27.3
+    },
+    "alternative": {
+      "n": 77,
+      "median": 1.18,
+      "lt02_k": 25,
+      "lt02_pct": 32.5
+    },
+    "only_in_alternative": [
+      "DRONABINOL | ORAL CAPSULE",
+      "HYDROCHLORIDE,NALTREXONE | ORAL TABLET"
+    ],
+    "only_in_primary": []
+  },
   "alt_baseline_n": 79,
   "alt_baseline_lt02_k": 25,
   "alt_baseline_minority_median": 1.25,

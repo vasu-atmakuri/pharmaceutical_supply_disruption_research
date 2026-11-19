@@ -92,16 +92,40 @@ for B0b,B1b,tag in [(-4,0,"alt")]:
         return None if any(v is None or v<=0 for v in p) else float(np.mean(p))
     inw={m:v for m,v in first.items() if LO<=v[0]<HI}
     O2=[m for m,v in inw.items() if basec2(m,v[0]) is not None and any(MQ[m].get(v[0]+k) is not None for k in range(1,7))]
-    vals=[]
-    for m in O2:
-        t,s_,dl=inw[m]
-        if s_>=.35: continue
-        db=np.mean([LMQ.get((m,dl),{}).get(t+k) or 0.0 for k in range(B0b,B1b)])
-        if db<=0: continue
-        ob=np.mean([(MQ[m].get(t+k) or 0.0)-(LMQ.get((m,dl),{}).get(t+k) or 0.0) for k in range(B0b,B1b)])
-        op=np.mean([(MQ[m].get(t+k) or 0.0)-(LMQ.get((m,dl),{}).get(t+k) or 0.0) for k in range(1,7)])
-        vals.append((op-ob)/db)
-    v2=np.array(vals); k2=int((v2<.02).sum())
+    # Changing the baseline window also changes which events qualify, so the raw
+    # comparison mixes a window effect with a sample effect. Keep both: the common
+    # cohort isolates the window, the expanded one is an eligibility sensitivity.
+    def ratios(markets, B0x, B1x, winmap):
+        out={}
+        for m in markets:
+            t,s_,dl=winmap[m]
+            if s_>=.35: continue
+            db=np.mean([LMQ.get((m,dl),{}).get(t+k) or 0.0 for k in range(B0x,B1x)])
+            if db<=0: continue
+            ob=np.mean([(MQ[m].get(t+k) or 0.0)-(LMQ.get((m,dl),{}).get(t+k) or 0.0) for k in range(B0x,B1x)])
+            op=np.mean([(MQ[m].get(t+k) or 0.0)-(LMQ.get((m,dl),{}).get(t+k) or 0.0) for k in range(1,7)])
+            out[m]=(op-ob)/db
+        return out
+    alt_all=ratios(O2,B0b,B1b,inw)
+    pri_all=ratios(OBS,B0,B1,inwin)
+    common=sorted(set(alt_all)&set(pri_all))
+    def _sm(d,keys):
+        v=np.array([d[m] for m in keys]); return dict(
+            n=int(len(v)),median=round(float(np.median(v)),2),
+            lt02_k=int((v<.02).sum()),lt02_pct=round(100*float((v<.02).mean()),1))
+    OUT["baseline_common_cohort"]=dict(
+        n=len(common),
+        primary=_sm(pri_all,common), alternative=_sm(alt_all,common),
+        only_in_alternative=sorted(set(alt_all)-set(pri_all)),
+        only_in_primary=sorted(set(pri_all)-set(alt_all)))
+    print(f"\ncommon-cohort baseline comparison on n={len(common)}:")
+    print(f"   primary window t-6..t-3  median {OUT['baseline_common_cohort']['primary']['median']:.2f}"
+          f"  R<0.02 {OUT['baseline_common_cohort']['primary']['lt02_pct']:.1f}%")
+    print(f"   detector window t-4..t-1 median {OUT['baseline_common_cohort']['alternative']['median']:.2f}"
+          f"  R<0.02 {OUT['baseline_common_cohort']['alternative']['lt02_pct']:.1f}%")
+    print(f"   events only eligible under the detector window: "
+          f"{len(OUT['baseline_common_cohort']['only_in_alternative'])}")
+    v2=np.array([alt_all[m] for m in sorted(alt_all)]); k2=int((v2<.02).sum())
     OUT["alt_baseline_n"]=len(v2); OUT["alt_baseline_lt02_k"]=k2
     OUT["alt_baseline_minority_median"]=round(float(np.median(v2)),2)
     OUT["alt_baseline_minority_lt02"]=round(k2/len(v2)*100,1)

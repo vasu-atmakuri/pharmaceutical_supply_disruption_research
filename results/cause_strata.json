@@ -1,0 +1,51 @@
+{
+ "counts": {
+  "undetermined": 7,
+  "supply": 3,
+  "withdrawal": 1,
+  "transition": 2
+ },
+ "total": 13,
+ "all": {
+  "n": 13,
+  "median": 0.0,
+  "p_lt_002": 0.7692307692307693,
+  "volwtd": 0.3136785730057852
+ },
+ "ex_withdrawal": {
+  "n": 12,
+  "median": 0.0,
+  "p_lt_002": 0.75,
+  "volwtd": 0.37362592695759456
+ },
+ "ex_withdrawal_transition": {
+  "n": 10,
+  "median": 0.0,
+  "p_lt_002": 0.7,
+  "volwtd": 0.37994923117322676
+ },
+ "supply": {
+  "n": 3,
+  "median": 0.24436238130152543,
+  "p_lt_002": 0.3333333333333333,
+  "volwtd": 0.4560691453976875
+ },
+ "withdrawal": {
+  "n": 1,
+  "median": 0.0,
+  "p_lt_002": 1.0,
+  "volwtd": 0.0
+ },
+ "transition": {
+  "n": 2,
+  "median": 0.0,
+  "p_lt_002": 1.0,
+  "volwtd": 0.0
+ },
+ "undetermined": {
+  "n": 7,
+  "median": 0.0,
+  "p_lt_002": 0.8571428571428571,
+  "volwtd": 0.005890924429361633
+ }
+}

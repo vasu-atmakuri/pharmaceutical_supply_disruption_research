@@ -15,16 +15,18 @@ export PSDR_ROOT="${PSDR_ROOT:-$(cd .. && pwd)}"
 export RESEARCH_ROOT="${RESEARCH_ROOT:-$(cd ../.. && pwd)}"
 echo "repo:  $PSDR_ROOT"
 echo "data:  $RESEARCH_ROOT"
-for f in rebuild_xw_route natpanel_route build_v2 validate_normalization national_impact \
+for f in xwalk rebuild_xw_route natpanel natpanel_route build_v2 validate_normalization national_impact \
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
-         collect_numbers build_figures emit_tex; do
+         route_unknown_sensitivity collect_numbers build_figures emit_tex; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
 S="$PSDR_ROOT/springer"
 
-echo "== 1. crosswalk with route =="        ; python3 $W/rebuild_xw_route.py       >/dev/null
-echo "== 2. route-aware panel =="           ; python3 $W/natpanel_route.py         >/dev/null
+echo "== 1a. form-only crosswalk =="       ; python3 $W/xwalk.py               >/dev/null
+echo "== 1b. crosswalk with route =="      ; python3 $W/rebuild_xw_route.py    >/dev/null
+echo "== 2a. form-based panel (spec A) ==" ; python3 $W/natpanel.py             >/dev/null
+echo "== 2b. route-aware panel (spec B) ==" ; python3 $W/natpanel_route.py       >/dev/null
 echo "== 3. normalised panel + events =="   ; python3 $W/build_v2.py               | head -3
 echo "== 4. normalisation validation =="    ; python3 $W/validate_normalization.py | head -6
 echo "== 5. national concentration =="      ; python3 $W/national_impact.py        >/dev/null
@@ -37,6 +39,7 @@ echo "==11. deficits and entry =="          ; python3 $W/deficit_entry.py       
 echo "==12. three specifications =="        ; python3 $W/threespec.py              >/dev/null
 echo "==13. event transition =="            ; python3 $W/transition.py             | tail -3
 echo "==13b. near-sole flow manifest ==" ; python3 $W/sole_flow_manifest.py | tail -6
+echo "==13c. unknown-route sensitivity ==" ; python3 $W/route_unknown_sensitivity.py | tail -4
 echo "==14. recall match level =="          ; python3 $W/recall_matchlevel.py      | tail -4
 echo "==15. sensitivities =="               ; python3 $W/sensitivities.py          >/dev/null
 echo "==16. collected numbers =="           ; python3 $W/collect_numbers.py        >/dev/null
@@ -60,6 +63,7 @@ python3 audit_numbers.py
 python3 verify_manuscript.py
 python3 check_relationships.py
 python3 audit_letter.py
+python3 check_pipeline_closure.py
 python3 check_released_files.py
 python3 check_determinism.py
 

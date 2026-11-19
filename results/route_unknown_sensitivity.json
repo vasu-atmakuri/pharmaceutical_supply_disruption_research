@@ -1,0 +1,44 @@
+{
+ "other_bucket_composition": {
+  "other_bucket_ingredients": 4570,
+  "ingredients_mixing_known_and_unknown": 3,
+  "other_bucket_vol_pct": 1.406
+ },
+ "delta_nearsole_vol": 0.0,
+ "base": {
+  "market_quarters": 97110,
+  "markets": 3295,
+  "single_mq_pct": 56.37,
+  "nearsole_mq_pct": 59.42,
+  "single_vol_pct": 11.48,
+  "nearsole_vol_pct": 14.12
+ },
+ "unknown_route_separate": {
+  "market_quarters": 97110,
+  "markets": 3295,
+  "single_mq_pct": 56.37,
+  "nearsole_mq_pct": 59.42,
+  "single_vol_pct": 11.48,
+  "nearsole_vol_pct": 14.12
+ },
+ "unknown_route_dropped": {
+  "market_quarters": 92818,
+  "markets": 3133,
+  "single_mq_pct": 55.41,
+  "nearsole_mq_pct": 58.45,
+  "single_vol_pct": 11.26,
+  "nearsole_vol_pct": 13.85
+ },
+ "other_bucket_route_present": 27,
+ "unknown_bucket_mq": 4292,
+ "unknown_bucket_nearsole_mq": 3447,
+ "delta_drop_nearsole_vol_pp": -0.27,
+ "delta_drop_nearsole_mq_pp": -0.97,
+ "unknown_route_lmq": 6765,
+ "unknown_route_rx": 80146739.0,
+ "unknown_route_vol_share": 1.382,
+ "ingredients_split_by_change": 61,
+ "delta_nearsole_vol_pp": 0.0,
+ "delta_nearsole_mq_pp": 0.0,
+ "delta_single_vol_pp": 0.0
+}

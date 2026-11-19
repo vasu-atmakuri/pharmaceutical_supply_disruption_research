@@ -203,6 +203,34 @@ for r in _rc:
         ck(f"fig1(a) dosage form agrees for {lbl.split(',')[0]}",
            lbl.split(", ")[-1] in _f1, f"form {lbl.split(', ')[-1]!r} not in the figure")
 
+
+# 13. the four evidence levels must cover the cohort and the strata must be nested
+CS=L("cause_strata.json")
+ck("evidence levels sum to the cohort", sum(CS["counts"].values())==CS["total"])
+ck("cohort equals the observed event count", CS["total"]==SPEC["C"]["bands"]["sole"])
+ck("excluding the withdrawal removes exactly the withdrawal events",
+   CS["ex_withdrawal"]["n"]==CS["total"]-CS["counts"].get("withdrawal",0))
+ck("excluding withdrawal and transitions removes exactly those",
+   CS["ex_withdrawal_transition"]["n"]
+   ==CS["total"]-CS["counts"].get("withdrawal",0)-CS["counts"].get("transition",0))
+_cc=list(_csv.DictReader(open(f"{R}/results/event_cause_classification.csv")))
+ck("classification file covers every observed event", len(_cc)==CS["total"])
+import collections as _c2
+ck("classification file agrees with the strata counts",
+   dict(_c2.Counter(r["cause_class"] for r in _cc))==CS["counts"])
+# the generated table must print the four labels and nothing else
+from display_names import CAUSE_LABEL as _CL
+_tc=GEN.get("tab_cause","")
+for lvl,lab in _CL.items():
+    if CS["counts"].get(lvl):
+        ck(f"cause table prints the {lvl} label", lab in _tc, f"missing {lab!r}")
+ck("cause table does not use the retired non-supply label", "non-supply" not in _tc)
+# The phrase may appear where the paper explains why it does NOT use that label.
+# What must be gone is the macro and any use of it as a classification.
+ck("no macro survives for the retired non-supply count", "nCauseNonSupply" not in TEX)
+ck("the retired label is not used as a classification",
+   not re.search(r"classified as (?:a )?non-supply|& non-supply", TEX))
+
 print(f"{n} relationship checks run")
 if fails:
     print(f"\n{len(fails)} FAILED:")

@@ -49,3 +49,32 @@ cur=None
 for f,rt,c in con.execute(q).fetchall():
     if f!=cur: print(f"  {f}"); cur=f
     print(f"      {rt[:46]:<48}{c:>7,}")
+
+
+# ---- product type, needed to restrict the panel to human prescription drugs ----
+# This was previously built by an ad-hoc command and not by any script, so a clean
+# machine could not run the pipeline: natpanel_route.py joins /tmp/ptype.parquet and
+# failed with "No files found". It comes from the same two listings as the crosswalk.
+_pt=[]
+with open(C+"/product.txt", encoding='latin-1') as f:
+    for r in csv.DictReader(f, delimiter='\t'):
+        ndc=(r.get('PRODUCTNDC') or '').strip()
+        if '-' not in ndc: continue
+        a,b=ndc.split('-')[0],ndc.split('-')[1]
+        _pt.append((a.zfill(5),b.zfill(4),(r.get('PRODUCTTYPENAME') or '').strip().upper()))
+with open(C+"/drug-ndc-0001-of-0001.json", encoding='utf-8', errors='replace') as f:
+    _d=json.load(f)
+for r in _d.get('results',[]):
+    ndc=(r.get('product_ndc') or '')
+    if '-' not in ndc: continue
+    a,b=ndc.split('-')[0],ndc.split('-')[1]
+    _pt.append((a.zfill(5),b.zfill(4),(r.get('product_type') or '').strip().upper()))
+_seen={}
+for a,b,t in _pt:
+    if t and (a,b) not in _seen: _seen[(a,b)]=t
+con.execute("CREATE OR REPLACE TABLE ptype(lab VARCHAR,pcode VARCHAR,ptype VARCHAR)")
+con.executemany("INSERT INTO ptype VALUES (?,?,?)",
+                [(a,b,t) for (a,b),t in sorted(_seen.items())])
+con.execute("COPY (SELECT * FROM ptype) TO '/tmp/ptype.parquet' (FORMAT PARQUET)")
+print(f"product types: {len(_seen):,} NDCs; "
+      f"{sum(1 for t in _seen.values() if t=='HUMAN PRESCRIPTION DRUG'):,} human prescription drug")

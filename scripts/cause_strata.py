@@ -21,13 +21,22 @@ inwin={m:v for m,v in first.items() if LO<=v[0]<HI}
 OBS=[m for m,v in inwin.items() if basec(m,v[0]) is not None
      and any(MQ[m].get(v[0]+k) is not None for k in range(1,7))]
 sole=sorted([m for m in OBS if inwin[m][1]>=.95],key=lambda m:inwin[m][0])
-# Verified classification from public records (see results/event_cause_classification.csv)
+# Classification from public records, graded by the strength of the evidence rather
+# than by whether the cause is a supply failure. Four levels:
+#   supply      - a shortage or recall record naming this product AND this firm
+#   withdrawal  - a documented market-wide regulatory action removing the product
+#   transition  - a documented regulatory action overlapping the exit, but the records
+#                 do not establish that THIS firm left because of it (ingredient-level
+#                 evidence only). An Rx-to-OTC switch does not by itself end Medicaid
+#                 coverage, so this is an alternative explanation, not a verified one.
+#   undetermined- no record found for this firm and period
+# See results/event_cause_classification.csv for the per-event evidence.
 CLS={}
 for m in sole:
     k=m.upper()
-    if "RANITIDINE" in k: CLS[m]=("non-supply","FDA requested withdrawal of all ranitidine, 1 Apr 2020 (NDMA)")
-    elif "ALCAFTADINE" in k: CLS[m]=("non-supply","Rx-to-OTC switch: OTC approved Dec 2021, retail Mar 2022")
-    elif "OLOPATADINE" in k: CLS[m]=("non-supply","Rx-to-OTC switch: Pataday OTC from Feb 2020")
+    if "RANITIDINE" in k: CLS[m]=("withdrawal","FDA requested withdrawal of all ranitidine, 1 Apr 2020 (NDMA); market-wide and firm-independent")
+    elif "ALCAFTADINE" in k: CLS[m]=("transition","Rx-to-OTC switch approved for the brand Dec 2021, retail Mar 2022; no firm-level record of why this labeler left")
+    elif "OLOPATADINE" in k: CLS[m]=("transition","Rx-to-OTC switch for the brand from Feb 2020; no firm-level record of why this labeler left")
     elif "VARENICLINE" in k: CLS[m]=("supply","Pfizer nitrosamine recall 2021; FDA recorded a varenicline shortage")
     elif "DICLOFENAC" in k: CLS[m]=("supply","ASHP shortage Feb 2019 to Aug 2020; Teva named, no reason given")
     elif "DORZOLAMIDE" in k: CLS[m]=("supply","ASHP dorzolamide shortage lists Leading; no reason given")
@@ -54,12 +63,35 @@ def rep(tag,sel):
     print(f"{tag:<46}n={len(v):>3}  median R={np.median(v):>5.2f}  P(R<0.02)={np.mean(v<.02):>5.1%}  "
           f"vol-wtd R={np.sum(v*bw)/np.sum(bw):>5.2f}")
 print()
-rep("ALL sole (normalized)",sole)
-rep("  excluding verified non-supply  [PRIMARY]",[m for m in sole if CLS[m][0]!="non-supply"])
-rep("  verified supply-side only",[m for m in sole if CLS[m][0]=="supply"])
+rep("ALL near-sole (normalized)",sole)
+# The primary stratum removes only the documented market-wide withdrawal, which is the
+# one event whose absence of replacement is certainly the intended regulatory outcome.
+rep("  excluding documented withdrawal  [PRIMARY]",[m for m in sole if CLS[m][0]!="withdrawal"])
+rep("  excluding withdrawal and transitions",[m for m in sole if CLS[m][0] not in ("withdrawal","transition")])
+rep("  documented product-and-firm supply only",[m for m in sole if CLS[m][0]=="supply"])
+rep("  documented market-wide withdrawal only",[m for m in sole if CLS[m][0]=="withdrawal"])
+rep("  regulatory-transition-associated only",[m for m in sole if CLS[m][0]=="transition"])
 rep("  undetermined cause only",[m for m in sole if CLS[m][0]=="undetermined"])
-rep("  verified non-supply only",[m for m in sole if CLS[m][0]=="non-supply"])
 print()
 for m in sole:
     print(f"  {CLS[m][0]:<13} R={R(m):>5.2f}  {cal(inwin[m][0])}  {m.split(' | ')[0][:44]}")
+import json as _j, collections as _c
+_cnt=_c.Counter(CLS[m][0] for m in sole)
+def _st(sel):
+    if not sel: return None
+    v=np.array([R(m) for m in sel]); bw=np.array([basec(m,inwin[m][0]) for m in sel])
+    return dict(n=int(len(v)),median=float(np.median(v)),p_lt_002=float(np.mean(v<.02)),
+                volwtd=float(np.sum(v*bw)/np.sum(bw)))
+_out=dict(counts=dict(_cnt), total=len(sole),
+  all=_st(sole),
+  ex_withdrawal=_st([m for m in sole if CLS[m][0]!="withdrawal"]),
+  ex_withdrawal_transition=_st([m for m in sole if CLS[m][0] not in ("withdrawal","transition")]),
+  supply=_st([m for m in sole if CLS[m][0]=="supply"]),
+  withdrawal=_st([m for m in sole if CLS[m][0]=="withdrawal"]),
+  transition=_st([m for m in sole if CLS[m][0]=="transition"]),
+  undetermined=_st([m for m in sole if CLS[m][0]=="undetermined"]))
+if sum(_cnt.values())!=len(sole):
+    raise SystemExit("cause classification does not cover every event")
+_j.dump(_out,open(_ROOT+"/results/cause_strata.json","w"),indent=1)
+print("wrote results/cause_strata.json  counts:",dict(_cnt))
 print("\nwrote results/event_cause_classification.csv")

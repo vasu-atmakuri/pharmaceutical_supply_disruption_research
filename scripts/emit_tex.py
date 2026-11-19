@@ -12,8 +12,8 @@ G=_ROOT+"/springer/generated"
 os.makedirs(G,exist_ok=True)
 L=lambda f: json.load(open(f"{R}/{f}"))
 INF=L("inference_normalized.json"); ABC=L("concentration_abc.json"); NI=L("national_impact.json")
-RUL=L("reclassification_rules.json"); RML=L("recall_match_level.json"); VAL=L("normalization_validation.json"); SEN=L("sensitivities.json")
-DEF=L("deficit_entry_normalized.json"); RC=L("recovery_censored.json"); NUM=L("manuscript_numbers.json")
+RUL=L("reclassification_rules.json"); RML=L("recall_match_level.json"); RUS=L("route_unknown_sensitivity.json"); VAL=L("normalization_validation.json"); SEN=L("sensitivities.json")
+DEF=L("deficit_entry_normalized.json"); RU=L("route_unknown_sensitivity.json"); RC=L("recovery_censored.json"); NUM=L("manuscript_numbers.json")
 SPEC={s["tag"][0]:s for s in L("three_specifications.json")}
 _W={14:"fourteen",13:"thirteen",15:"fifteen",12:"twelve",16:"sixteen"}
 _FL=SPEC["C"]["sole_flow"]
@@ -157,6 +157,17 @@ M.update(
  Confirmed=c(VAL["confirmed"]), Contradicted=c(VAL["contradicted"]), Untestable=c(VAL["untestable"]),
  Testable=c(VAL["confirmed"]+VAL["contradicted"]),
  RouteCovRec=f"{NUM['route_coverage']:.1f}",
+ UnkOtherPresent=c(RUS["other_bucket_route_present"]),
+ UnkMQ=c(RUS["unknown_bucket_mq"]), UnkNearSoleMQ=c(RUS["unknown_bucket_nearsole_mq"]),
+ UnkNearSolePct=f"{100*RUS['unknown_bucket_nearsole_mq']/RUS['unknown_bucket_mq']:.1f}",
+ UnkVolShare=f"{RUS['unknown_route_vol_share']:.2f}",
+ UnkBaseNearSoleVol=f"{RUS['base']['nearsole_vol_pct']:.2f}",
+ UnkDropNearSoleVol=f"{RUS['unknown_route_dropped']['nearsole_vol_pct']:.2f}",
+ UnkDropDelta=f"{abs(RUS['delta_drop_nearsole_vol_pp']):.2f}",
+ UnkBaseNearSoleMQ=f"{RUS['base']['nearsole_mq_pct']:.2f}",
+ UnkDropNearSoleMQ=f"{RUS['unknown_route_dropped']['nearsole_mq_pct']:.2f}",
+ UnkDropMarkets=c(RUS["unknown_route_dropped"]["markets"]),
+ UnkSplitIngredients=c(RUS["ingredients_split_by_change"]),
  RouteMissRec=c(NUM["route_missing_records"]), RouteMissOther=c(NUM["route_missing_to_other"]),
  RouteMissClassPct=f"{NUM['route_missing_classified_pct']:.1f}",
  RouteMissOtherPct=f"{NUM['route_missing_other_pct']:.1f}",
@@ -210,6 +221,18 @@ M.update(
  RawKeysAbs=c(NUM["keys_absorbed"]),
  ExactOne=c(NUM["cohort_exactly_one_labeler"]), ExactOneW=_w(NUM["cohort_exactly_one_labeler"]),
  TwoPlus=c(NUM["cohort_two_plus_labelers"]), TwoPlusW=_w(NUM["cohort_two_plus_labelers"]),
+ BaseCommonN=c(SEN["baseline_common_cohort"]["n"]),
+ BaseCommonPriMed=f"{SEN['baseline_common_cohort']['primary']['median']:.2f}",
+ BaseCommonAltMed=f"{SEN['baseline_common_cohort']['alternative']['median']:.2f}",
+ BaseCommonPriPct=f"{SEN['baseline_common_cohort']['primary']['lt02_pct']:.1f}",
+ BaseCommonAltPct=f"{SEN['baseline_common_cohort']['alternative']['lt02_pct']:.1f}",
+ BaseOnlyAlt=c(len(SEN["baseline_common_cohort"]["only_in_alternative"])),
+ BaseOnlyAltW=_w(len(SEN["baseline_common_cohort"]["only_in_alternative"])),
+ RUIngredients=c(RU["other_bucket_composition"]["other_bucket_ingredients"]),
+ RUMixed=c(RU["other_bucket_composition"]["ingredients_mixing_known_and_unknown"]),
+ RUMixedW=_w(RU["other_bucket_composition"]["ingredients_mixing_known_and_unknown"]),
+ RUOtherVol=f"{RU['other_bucket_composition']['other_bucket_vol_pct']:.2f}",
+ RUNearSoleDelta=f"{RU['delta_nearsole_vol']:+.2f}",
  DupKeyPct=f"{100*NUM['keys_absorbed']/NUM['raw_route_keys']:.1f}",
  ReclassVolLargest=f"{RUL['largest_vol_rate']*100:.1f}",
  FlaggedRx=f"{RUL['flagged_rx']/1e6:.0f}", LargestRxReclass=f"{RUL['largest_rx_reclass']/1e6:.0f}",
@@ -251,7 +274,9 @@ FormBucketsW=_formbw(), DorzLabelersW=_dorzw(),
 )
 
 # ---- Table: raw-to-corrected transition for the seven reclassified exits ----
-from display_names import DISPLAY, LABELER, name as _dname, labeler as _dlab
+from display_names import (DISPLAY, LABELER, name as _dname, labeler as _dlab,
+                           event_market as _emkt, cause_label as _clab,
+                           CAUSE_ORDER as _CORD)
 def emit_transition():
     import csv
     allrows=list(csv.DictReader(open(f"{R}/sole_event_transition.csv")))
@@ -309,6 +334,62 @@ _gsum=NUM["anda_share"]+NUM["authgen_share"]+NUM["brand_share"]+NUM["biologic_sh
 M["AuthGenShare"]=f"{NUM['authgen_share']:.1f}"; M["BrandShare"]=f"{NUM['brand_share']:.1f}"
 M["BiologicShare"]=f"{NUM['biologic_share']:.1f}"
 M["TypeResidual"]=f"{100-_gsum:.1f}"; M["NonGeneric"]=f"{100-NUM['generic_share']:.1f}"
+# ---- Table: every exit with its evidence level, and the strata table ----
+LABELERS_EVENT={"2018Q2":"BonGeo","2018Q3":"Women's Choice","2019Q3|ACETIC":"Sun",
+  "2019Q3|DICLOFENAC":"Teva","2020Q2":"Amneal","2021Q2":"Alcon","2021Q3|HYDROCHLORIDE":"Alembic",
+  "2021Q3|TARTRATE":"Pfizer","2021Q4|VARENICLINE":"Pfizer","2021Q4|GOSERELIN":"TerSera",
+  "2022Q1":"Lupin","2022Q2":"Allergan","2023Q3":"Cipla"}
+def _evlab(r):
+    q=r["event_quarter"]; head=r["market"].split(",")[0].split(" | ")[0]
+    for k in (f"{q}|{head}", q):
+        if k in LABELERS_EVENT: return LABELERS_EVENT[k]
+    raise SystemExit(f"no labeler name for event {q} {head}")
+def emit_cause():
+    import csv
+    rows=list(csv.DictReader(open(f"{R}/event_cause_classification.csv")))
+    rows.sort(key=lambda r:(r["event_quarter"],r["market"]))
+    out=["\\begin{tabular}{@{}llllr@{}}","\\toprule",
+         "Quarter & Market & Departing labeler & Evidence level & $R$ \\\\","\\midrule"]
+    for r in rows:
+        Rv=float(r["replacement_ratio"])
+        # a ratio that rounds to zero but is not zero is printed as such: the reviewer
+        # correctly noted that one documented event has R near 0.0003, not exactly 0
+        rs=f"{Rv:.2f}" if (Rv==0 or abs(Rv)>=0.005) else "$<$0.01"
+        mark="\\textsuperscript{a}" if "VARENICLINE" in r["market"] else ""
+        out.append(f"{r['event_quarter']} & {_emkt(r['market'])} & {_evlab(r)} & "
+                   f"{_clab(r['cause_class'])}{mark} & {rs} \\\\")
+    out+=["\\botrule","\\end{tabular}"]
+    open(f"{G}/tab_cause.tex","w").write("\n".join(out)+"\n")
+    return len(rows)
+def emit_strata():
+    CS=L("cause_strata.json")
+    rowspec=[("All near-sole-labeler exits","all"),
+             ("Excluding the documented withdrawal","ex_withdrawal"),
+             ("Excluding withdrawal and transitions","ex_withdrawal_transition"),
+             ("Documented supply disruption\\textsuperscript{a}","supply"),
+             ("Market-wide regulatory withdrawal","withdrawal"),
+             ("Regulatory-transition-associated","transition"),
+             ("Undetermined cause","undetermined")]
+    out=["\\begin{tabular}{@{}lrrrr@{}}","\\toprule",
+         "Stratum & $n$ & Median $R$ & $R<0.02$ & Volume-weighted $R$ \\\\","\\midrule"]
+    for lab,key in rowspec:
+        d=CS.get(key)
+        if d is None: continue
+        if key=="supply": out.append("\\midrule")
+        out.append(f"{lab} & {d['n']} & {d['median']:.2f} & {100*d['p_lt_002']:.1f}\\% & "
+                   f"{d['volwtd']:.2f} \\\\")
+    out+=["\\botrule","\\end{tabular}"]
+    open(f"{G}/tab_strata.tex","w").write("\n".join(out)+"\n")
+    c=CS["counts"]
+    for k in _CORD:
+        M["Cause"+k.capitalize()]=c.get(k,0)
+        M["Cause"+k.capitalize()+"W"]=_w(c.get(k,0))
+    M["CauseTotal"]=CS["total"]
+    M["CauseTotalExW"]=CS["ex_withdrawal"]["n"]
+    M["CauseTotalExWTW"]=_w(CS["ex_withdrawal_transition"]["n"])
+    for k in _CORD: M["Cause"+k.capitalize()+"UC"]=_w(c.get(k,0)).capitalize()
+    return len(rowspec)
+_ncause=emit_cause(); _nstrata=emit_strata()
 _ntrans=emit_transition()
 
 # the macro file is written LAST, so every table emitter can contribute to it
@@ -326,6 +407,6 @@ import json as _j
 _nf=_ROOT+"/results/manuscript_numbers.json"
 _nd=_j.load(open(_nf)); _nd["generated_macro_count"]=len(M)
 _j.dump(_nd,open(_nf,"w"),indent=1)
-print(f"wrote {len(M)} macros and 7 table bodies ({_ntrans} transition rows, {_nrc} coverage years) to springer/generated/")
+print(f"wrote {len(M)} macros and 9 table bodies ({_ntrans} transition rows, {_ncause} exits, {_nrc} coverage years) to springer/generated/")
 for k in ["NormKeys","KeysAbsorbed","ReclassRate","ReclassVol","MinorityN","ReplEligible","Cohort","MinorityLtTwo"]:
     print(f"   \\n{k} = {M[k]}")
