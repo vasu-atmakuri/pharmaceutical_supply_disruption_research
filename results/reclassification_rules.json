@@ -1,6 +1,6 @@
 {
   "components": {
-    "1": 44256,
+    "1": 44265,
     "2": 9750,
     "3": 3293,
     "5": 342,
@@ -9,15 +9,15 @@
     "7": 9
   },
   "largest_reclass": 15743,
-  "largest_n": 58905,
+  "largest_n": 58914,
   "any_reclass": 9549,
   "all_reclass": 17004,
-  "flagged_rx": 852986290.0,
-  "vol_still_nearsole": 0.6588861080335845,
-  "vol_reclassified": 0.3411138919664155,
+  "flagged_rx": 852994239.0,
+  "vol_still_nearsole": 0.6588892868526237,
+  "vol_reclassified": 0.3411107131473763,
   "largest_rx_reclass": 292186563.0,
-  "largest_vol_rate": 0.34254543880183586,
-  "largest_rate": 0.26726084373143194,
-  "anyc_rate": 0.16210847975553858,
-  "allc_rate": 0.2886681945505475
+  "largest_vol_rate": 0.3425422466423012,
+  "largest_rate": 0.26722001561598263,
+  "anyc_rate": 0.16208371524595172,
+  "allc_rate": 0.28862409614013645
 }

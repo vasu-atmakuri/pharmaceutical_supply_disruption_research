@@ -60,6 +60,25 @@ con.execute("CREATE OR REPLACE TABLE lmq AS SELECT lab,mkt,tq,SUM(rx) rx,SUM(amt
 con.execute("CREATE OR REPLACE TABLE molq AS SELECT mkt mol,tq,SUM(rx) rx,SUM(amt) amt FROM lmq GROUP BY 1,2")
 print("\nmarkets:",con.execute("SELECT COUNT(DISTINCT mol) FROM molq").fetchone()[0])
 print("labeler-market-quarters:",con.execute("SELECT COUNT(*) FROM lmq").fetchone()[0])
+# The specification-B event list. natpanel.py detects events on the form-based panel
+# and writes sl_nat.parquet; nothing produced the route-aware equivalent, so
+# threespec.py read a /tmp/sl_rt.parquet that no stage had ever created. The rule is
+# identical by construction: the same SQL, lifted from natpanel.py.
+con.execute("""CREATE OR REPLACE TABLE ev AS
+WITH s AS (SELECT lab,mkt,tq,
+   AVG(rx) OVER (PARTITION BY lab,mkt ORDER BY tq ROWS BETWEEN 4 PRECEDING AND 1 PRECEDING) pre4,
+   AVG(rx) OVER (PARTITION BY lab,mkt ORDER BY tq ROWS BETWEEN 0 FOLLOWING AND 3 FOLLOWING) post4 FROM lmq),
+ e AS (SELECT lab,mkt,tq FROM s WHERE pre4>=200 AND post4<0.05*pre4),
+ f AS (SELECT lab,mkt,MIN(tq) t FROM e GROUP BY 1,2),
+ fr AS (SELECT f.lab,f.mkt,f.t,SUM(l.rx) firm_rx FROM f JOIN lmq l ON l.lab=f.lab AND l.mkt=f.mkt
+        AND l.tq BETWEEN f.t-4 AND f.t-1 GROUP BY 1,2,3),
+ tt AS (SELECT f.mkt,f.t,SUM(m.rx) mol_rx FROM f JOIN molq m ON m.mol=f.mkt AND m.tq BETWEEN f.t-4 AND f.t-1 GROUP BY 1,2)
+SELECT fr.lab,fr.mkt mol,fr.t,fr.firm_rx/NULLIF(tt.mol_rx,0) shr
+FROM fr JOIN tt ON tt.mkt=fr.mkt AND tt.t=fr.t WHERE tt.mol_rx>0""")
+r=con.execute("SELECT COUNT(*) FROM ev").fetchone()[0]
+print("supplier-loss events (route-aware):",r,flush=True)
+con.execute("COPY (SELECT * FROM ev) TO '/tmp/sl_rt.parquet' (FORMAT PARQUET)")
+
 for t,p in [("lmq","/tmp/lmq_rt.parquet"),("molq","/tmp/molq_rt.parquet")]:
     con.execute(f"COPY (SELECT * FROM {t}) TO '{p}' (FORMAT PARQUET)")
 con.execute("COPY (SELECT DISTINCT mkt mol,gen,frm,epc FROM j) TO '/tmp/meta_rt.parquet' (FORMAT PARQUET)")
