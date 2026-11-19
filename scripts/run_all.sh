@@ -26,6 +26,9 @@ for f in build_sdud_parts xwalk rebuild_xw_route natpanel natpanel_route build_v
 done
 S="$PSDR_ROOT/springer"
 
+echo "== preflight: interpreter, packages, TeX =="
+python3 "$W/check_environment.py" || exit 1
+
 echo "== 0. SDUD year parts (skips what exists) ==" ; python3 $W/build_sdud_parts.py | tail -3
 echo "== 1a. form-only crosswalk =="       ; python3 $W/xwalk.py               >/dev/null
 echo "== 1b. crosswalk with route =="      ; python3 $W/rebuild_xw_route.py    >/dev/null
@@ -71,6 +74,9 @@ python3 check_pipeline_closure.py
 python3 check_stage_portability.py
 python3 check_released_files.py
 python3 check_determinism.py
+
+echo
+echo "ALL STAGES AND CHECKS COMPLETE"
 
 # Note: stages 1 to 6 rebuild the panels from the raw SDUD and FDA listings and take
 # the bulk of the runtime. Running the whole file takes roughly 6 to 8 minutes on a
