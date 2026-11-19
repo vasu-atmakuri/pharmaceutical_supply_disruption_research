@@ -109,7 +109,14 @@ for bnd,col,lab in [("minority",BLUE,"under 35%"),("mid",GREEN,"35 to 95%"),("so
     v=[x for x in v if x is not None]
     data.append(np.clip(v,-0.5,3.0)); labs.append(f"{lab}\n(n={len(v)})"); cols.append(col)
     print(f"  fig2 band {bnd}: n={len(v)} median={np.median(v):.2f}")
-bp=b2.boxplot(data,labels=labs,patch_artist=True,widths=.5,showfliers=False,medianprops=dict(color='#222',lw=1.6))
+# boxplot's "labels" was renamed "tick_labels" in matplotlib 3.9 and removed in
+# 3.11, so pick the name this installation actually accepts rather than pinning a
+# matplotlib version.
+import inspect as _insp
+from matplotlib.axes import Axes as _Axes
+_bpkw="tick_labels" if "tick_labels" in _insp.signature(_Axes.boxplot).parameters else "labels"
+bp=b2.boxplot(data,patch_artist=True,widths=.5,showfliers=False,
+              medianprops=dict(color='#222',lw=1.6),**{_bpkw:labs})
 for p,c in zip(bp['boxes'],cols): p.set_facecolor(c); p.set_alpha(.45); p.set_edgecolor(c)
 for i,(v,c) in enumerate(zip(data,cols)):
     x=np.random.default_rng(7).normal(i+1,0.055,len(v))

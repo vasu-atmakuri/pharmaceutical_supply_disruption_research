@@ -62,6 +62,15 @@ echo "==16. collected numbers =="           ; "$PY" $W/collect_numbers.py       
 echo "==17. FIGURES (after the panel) =="   ; "$PY" $W/build_figures.py          | tail -4
 echo "==18. LaTeX macros and tables =="     ; "$PY" $W/emit_tex.py               | head -1
 
+# The document build needs a TeX distribution and poppler. Both are large and the
+# analysis needs neither, so their absence skips the compile and the two checks that
+# read a PDF rather than failing the run. SKIP_DOC_BUILD=1 forces that path.
+HAVE_TEX=0; HAVE_POPPLER=0
+command -v pdflatex >/dev/null 2>&1 && command -v bibtex >/dev/null 2>&1 && HAVE_TEX=1
+command -v pdftotext >/dev/null 2>&1 && command -v pdfinfo >/dev/null 2>&1 && HAVE_POPPLER=1
+if [ -n "$SKIP_DOC_BUILD" ]; then HAVE_TEX=0; HAVE_POPPLER=0; fi
+
+if [ "$HAVE_TEX" = 1 ] && [ "$HAVE_POPPLER" = 1 ]; then
 echo "==19. compile the manuscript =="
 cd "$S"
 rm -f manuscript.aux manuscript.bbl manuscript.blg
@@ -73,11 +82,19 @@ E=$(grep -c '^!' /tmp/tex3.log || true)
 echo "   LaTeX errors: $E, pages: $(pdfinfo manuscript.pdf | awk '/Pages/{print $2}')"
 if [ "$E" != "0" ]; then grep -A3 '^!' /tmp/tex3.log | head -20; exit 1; fi
 cd - >/dev/null
+else
+echo "==19. compile the manuscript == SKIPPED"
+echo "   pdflatex or poppler is not on PATH, so the PDF is not rebuilt here. Every"
+echo "   analysis result and every generated number above is still current; only the"
+echo "   compiled document is stale. See SETUP.md."
+fi
 
 echo "==20. CHECKS (last, always) =="
 "$PY" audit_numbers.py
-"$PY" verify_manuscript.py
-"$PY" check_relationships.py
+if [ "$HAVE_TEX" = 1 ] && [ "$HAVE_POPPLER" = 1 ]; then "$PY" verify_manuscript.py
+else echo "verify_manuscript.py SKIPPED (needs pdflatex and poppler: it inspects the rendered PDF)"; fi
+if [ "$HAVE_POPPLER" = 1 ]; then "$PY" check_relationships.py
+else echo "check_relationships.py SKIPPED (needs poppler: it reads the figure PDFs)"; fi
 "$PY" audit_letter.py
 "$PY" check_pipeline_closure.py
 "$PY" check_stage_portability.py
@@ -85,7 +102,13 @@ echo "==20. CHECKS (last, always) =="
 "$PY" check_determinism.py
 
 echo
-echo "ALL STAGES AND CHECKS COMPLETE"
+if [ "$HAVE_TEX" = 1 ] && [ "$HAVE_POPPLER" = 1 ]; then
+  echo "ALL STAGES AND CHECKS COMPLETE"
+else
+  echo "ANALYSIS COMPLETE; THE DOCUMENT BUILD WAS SKIPPED"
+  echo "  Install poppler (brew install poppler) to enable check_relationships.py,"
+  echo "  and a TeX distribution to compile the manuscript and run verify_manuscript.py."
+fi
 
 # Note: stages 1 to 6 rebuild the panels from the raw SDUD and FDA listings and take
 # the bulk of the runtime. Running the whole file takes roughly 6 to 8 minutes on a
