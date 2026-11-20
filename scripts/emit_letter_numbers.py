@@ -20,6 +20,22 @@ def g(d,*k):
     return d
 # (pattern, replacement) - the pattern must capture nothing and match exactly once
 SUBS=[
+ (r"trimming \([\d.]+ → [\d.]+ → [\d.]+ → [\d.]+ removing",
+  f"trimming ({INF['R_<35%']['median']:.2f} \u2192 "
+  f"{SEN['minority_excl1_median']:.2f} \u2192 {SEN['minority_excl3_median']:.2f} \u2192 "
+  f"{SEN['minority_excl5_median']:.2f} removing"),
+ (r"mean falls from [-\d.]+ to [-\d.]+, [-\d.]+ and [-\d.]+, and the\nvolume-weighted ratio from [-\d.]+ to [-\d.]+, [-\d.]+ and [-\d.]+, changing sign\.",
+  f"mean falls from {INF['R_<35%']['mean']:.2f} to {SEN['minority_excl1_mean']:.2f}, "
+  f"{SEN['minority_excl3_mean']:.2f} and {SEN['minority_excl5_mean']:.2f}, and the\n"
+  f"volume-weighted ratio from {INF['R_<35%']['volwtd']:.2f} to {SEN['minority_excl1_volwtd']:.2f}, "
+  f"{SEN['minority_excl3_volwtd']:.2f} and {SEN['minority_excl5_volwtd']:.2f}, changing sign."),
+ (r"The five largest ratios are [\d, ]+and [\d.]+\.",
+  "The five largest ratios are "
+  + ", ".join(f"{x:.0f}" for x in SEN["minority_top_ratios"][:-1])
+  + f" and {SEN['minority_top_ratios'][-1]:.0f}."),
+ (r"matched-set interval is [\d.]+ to [\d.]+ points",
+  f"matched-set interval is {100*INF['matched']['ci_sets'][0]:.1f} to "
+  f"{100*INF['matched']['ci_sets'][1]:.1f} points"),
  (r"Of the [\d,]+ raw near-sole market-quarters",
   f"Of the {RUL['largest_n']:,} raw near-sole market-quarters"),
  (r"Adding strength gives [\d,]+ market-quarters, with [\d.]+% near-sole",

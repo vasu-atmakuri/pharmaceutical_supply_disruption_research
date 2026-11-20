@@ -184,6 +184,8 @@ M.update(
  MinorityMedian=f"{INF['R_<35%']['median']:.2f}", SoleMedian=f"{INF['R_sole']['median']:.2f}",
  MinorityN=str(INF["R_<35%"]["n"]), SoleN=str(INF["R_sole"]["n"]),
  MinorityLtTwo=f"{INF['R_<35%']['p_lt_2pct']*100:.1f}", SoleLtTwo=f"{INF['R_sole']['p_lt_2pct']*100:.1f}",
+ ReplEligibleW=_w(sum(INF["R_"+b]["n"] for b in ["<35%","35-65%","65-95%","sole"])) if sum(INF["R_"+b]["n"] for b in ["<35%","35-65%","65-95%","sole"])<=99 else c(sum(INF["R_"+b]["n"] for b in ["<35%","35-65%","65-95%","sole"])),
+ ReplExcluded=c(sum(SPEC["C"]["bands"].values())-sum(INF["R_"+b]["n"] for b in ["<35%","35-65%","65-95%","sole"])),
  ReplEligible=str(sum(INF["R_"+k]["n"] for k in ["<35%","35-65%","65-95%","sole"])),
  Cohort=str(sum(SPEC["C"]["bands"].values())),
  AltN=str(SEN["alt_baseline_n"]), AltK=str(SEN["alt_baseline_lt02_k"]),
@@ -408,6 +410,25 @@ def emit_strata():
     _expl=sum(c.get(k,0) for k in ("withdrawal","transition","coverage","transfer","artefact"))
     M["CauseExplained"]=_expl; M["CauseExplainedW"]=_w(_expl)
     M["CauseSupplyEpisodes"]="one"   # the two varenicline events are one recall episode
+    M["CauseExplainedUC"]=_w(_expl).capitalize()
+    M["AllSoleLtTwo"]=f"{100*CS['all']['p_lt_002']:.1f}"
+    M["SupplyMedian"]=f"{CS['supply']['median']:.2f}"
+    M["TransferR"]=f"{CS['transfer']['median']:.2f}" if CS.get("transfer",{}).get("n") else "0.00"
+    # the two misspelling artefacts, with the real markets they sit beside
+    import csv as _c, duckdb as _d
+    _con=_d.connect()
+    def _mk(k):
+        r=_con.execute("SELECT COUNT(DISTINCT lab),SUM(rx) FROM read_parquet('/tmp/lmq_v2.parquet') "
+                       "WHERE mkt=? AND rx IS NOT NULL",[k]).fetchone()
+        return r[0], r[1] or 0
+    _el,_erx=_mk("ESCITALOPRAM | ORAL TABLET")
+    if not _el: raise SystemExit("ESCITALOPRAM | ORAL TABLET not in the panel; "
+                                 "the artefact comparison in Section 3.4 needs it")
+    # "c" is shadowed by the local counts dict in this function
+    M["EscitalopramLabelers"]=f"{_el:,}".replace(",","{,}")
+    M["EscitalopramRx"]=f"{_erx/1e6:.1f}"
+    _gl,_grx=_mk("GRISEOFULVIN | ORAL LIQUID")
+    M["GriseofulvinLabelers"]=f"{_gl:,}".replace(",","{,}")
     for k in _CORD: M["Cause"+k.capitalize()+"UC"]=_w(c.get(k,0)).capitalize()
     return len(rowspec)
 _ncause=emit_cause(); _nstrata=emit_strata()

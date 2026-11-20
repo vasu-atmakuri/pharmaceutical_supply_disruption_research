@@ -61,7 +61,7 @@ cross-referenced; four references were uncited. All are fixed.
 validation count both moved between runs despite a fixed seed: array order determined
 which elements the draws indexed, and `Counter.most_common` broke a tie by insertion
 order, letting an empty substance set win. Both are fixed and the determinism check is
-now part of the build. The matched-set interval is 15.1 to 61.7 points and the merge
+now part of the build. The matched-set interval is 20.6 to 63.2 points and the merge
 agreement is 292 of 292 testable groups.
 
 ---
@@ -114,7 +114,7 @@ different operations which agree only approximately.
 
 Entirely our defect and introduced by the generation change itself: TeX swallows the
 space after a control word, so a macro defined without `\xspace` rendered
-"292testable". There were 55 such joins. All 247 macros now carry `\xspace`, the count is zero,
+"292testable". There were 55 such joins. All 278 macros now carry `\xspace`, the count is zero,
 and `verify_manuscript.py` reads the rendered PDF and fails on any digit joined to a
 word. Our previous checks read extracted text for presence only, which is exactly why
 they were blind to it.
@@ -249,9 +249,9 @@ therefore governs about five percent of volume rather than a sixth of it. Added,
 ### Replacement-ratio influence (your C7)
 
 Added, and it changed what we report. The minority band's median is stable under
-trimming (1.77 → 1.73 → 1.58 → 1.47 removing the largest one, three and five), but the
-mean falls from 19.29 to 11.32, 2.94 and -0.83, and the
-volume-weighted ratio from 14.65 to 6.88, -5.43 and -12.08, changing sign. The five largest ratios are 625, 370, 273, 170 and 107. **We have
+trimming (1.66 → 1.56 → 1.47 → 1.46 removing the largest one, three and five), but the
+mean falls from 287.71 to 5.83, -3.36 and -7.04, and the
+volume-weighted ratio from 420.49 to -0.08, -17.22 and -24.56, changing sign. The five largest ratios are 31012, 625, 370, 273 and 107. **We have
 withdrawn the volume-weighted figure for that band**, since no stable value exists.
 
 ### Suppression scenario (your C9)

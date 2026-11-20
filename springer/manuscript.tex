@@ -58,11 +58,15 @@ panel the share of dispensing in markets where one labeler holds at least 95 per
 percent of that volume, are reclassified; the reduction is attributable to the ingredient key, while
 correcting the route bucketing is close to neutral in aggregate. \nReclassSoleUC of \nRawSoleW apparent
 near-sole-labeler exits are not near-sole-labeler exits at all. In the clearest case a firm holding \nPregShare percent of a \nPregLabelersW-labeler pregabalin
-market had been recorded as its sole supplier. Of the \nRemainSoleW that remain, \nCauseWithdrawalW
-is a documented market-wide regulatory withdrawal and \nCauseTransitionW are
-regulatory-transition-associated exits whose firm-specific cause the records do not establish;
-\nCauseSupplyW are documented supply disruptions, two of them the same recall episode, and
-\nUndeterminedW could not be classified. The concentration gradient survives the corrections: median
+market had been recorded as its sole supplier. Of the \nCauseTotal near-sole-labeler exits the
+corrected panel does observe, \nCauseSupplyW are a documented supply disruption and they are
+\nCauseSupplyEpisodes recall episode. \nCauseExplainedUC are explained by something other than
+supply: \nCauseWithdrawalW market-wide regulatory withdrawal, \nCauseTransitionW regulatory
+transitions, \nCauseCoverageW withdrawal from the Medicaid Drug Rebate Program by a firm whose
+product remains marketed, \nCauseTransferW transfer of marketing rights to another firm, and
+\nCauseArtefactW markets whose apparent sole supplier is an artefact of a misspelled ingredient
+string. In \nCauseContinuedW more, a labeler absent before the exit supplies the market
+afterwards. \nCauseUndeterminedUC could not be classified. The concentration gradient survives the corrections: median
 replacement ratios are \nMinorityMedian where the departing share was under 35 percent, \nHighMedian at 65 to 95
 percent and \nSoleMedian at 95 percent or more, and near-sole-labeler markets collapse below two percent of
 baseline dispensing at \nTreatedRate percent against \nControlRate percent among \nControlObs matched risk-set control
@@ -124,8 +128,10 @@ duplicates of another key, and
 correcting the market definition removes \nReclassSoleW of \nRawSoleW apparent near-sole-labeler exits, including one in which a firm holding \nPregShare percent of
 a \nPregLabelersW-supplier market had been recorded as its only supplier. Second, we audit the cause of
 every remaining near-sole-labeler exit against public regulatory records rather than inferring cause
-from the dispensing series itself, and find that \nCauseWithdrawalW of \nRemainSoleW is a
-documented regulatory withdrawal rather than a supply failure, while \nCauseTransitionW more
+from the dispensing series itself, and find that only \nCauseSupplyW of \nCauseTotal are a
+documented supply disruption, while \nCauseExplainedW are explained by regulation, by a
+withdrawal from the Medicaid rebate programme, by a transfer of marketing rights, or by a
+misspelling that manufactures a single-source market, and \nCauseContinuedW more
 overlap a regulatory transition whose connection to the departing firm the records do not
 establish. Third, we report what survives both corrections, which is a robust association between
 pre-exit concentration and subsequent dispensing loss, together with the finding that cuts against
@@ -283,9 +289,9 @@ from \nRawSoleW events to \nRemainSoleW. Section~\ref{subsec:defect} accounts fo
 seven.
 
 Replacement ratios are computed on the subset of each cohort in which the departing labeler has
-a positive baseline, which is 99 of the 100 events in column C. The one exclusion is a market whose
-departing labeler dispensed only in quarters that are suppressed across the outcome baseline,
-leaving its denominator undefined.
+a positive baseline, which is \nReplEligible of the \nCohort events in column C. The
+\nReplExcluded exclusions are markets whose departing labeler dispensed only in quarters that are
+suppressed across the outcome baseline, leaving the denominator undefined.
 
 Near-sole exits are rare, and most are lost to the panel's edges rather than to any choice of
 ours. The panel contains \nFlowDetected exits with a departing share of at least 95 percent.
@@ -296,7 +302,11 @@ fail the baseline rule and \nFlowSuppressed have every post-event quarter suppre
 the corrected panel has \nFlowInWindow near-sole exits inside the window, while the \emph{raw}
 convention's cohort separately contains \nRawSole sole-labeler events, of which \nReclassSole are
 reclassified by the corrections (Table~\ref{tab:transition}). They are different quantities
-measured on different panels and neither is derived from the other. The four stages sum to the \nFlowDetected detected by construction,
+measured on different panels and neither is derived from the other. Subtracting gives
+\nTransStillSole where the corrected panel's own detector finds \nTransSpecCSole, a gap of
+\nTransGapW, and the gap is itself a result: merging duplicate keys can make a market near-sole
+that the raw convention never flagged, and can move an event quarter. We report the two counts
+separately rather than forcing an identity between them. The four stages sum to the \nFlowDetected detected by construction,
 and the event-level manifest released with the paper carries one row per detected exit with the
 stage at which it leaves the cohort, so the flow can be reconciled independently. This is a hard limit on the power of
 any analysis of sole-supplier exits in these data, and we state it here rather than in a
@@ -556,51 +566,97 @@ reach it from the analysis environment.
 
 \subsection{What actually caused each near-sole-labeler exit}\label{subsec:causeres}
 
-Table~\ref{tab:cause} classifies all \nRemainSoleW remaining near-sole-labeler exits against public
+Table~\ref{tab:cause} classifies all \nCauseTotal observed near-sole-labeler exits against public
 records, grading each by what the evidence establishes rather than by whether the cause is a
-supply failure. \nCauseWithdrawalUC is a documented market-wide regulatory withdrawal: ranitidine
-was removed from the US market altogether
-at FDA's request in April 2020 after nitrosamine contamination was found to increase during
-storage, so no replacement by other labelers was possible or desirable. Alcaftadine and
-olopatadine ophthalmic solutions left the prescription market through approved
-prescription-to-over-the-counter switches. We do not claim the products left Medicaid: a
-prescribed over-the-counter drug can remain a covered outpatient drug under a state plan. What
-changes is the prescription product, its NDC and the market it is counted in, which is enough to
-produce the observed exit without any supply interruption. On the evidence available these are
-regulatory-transition-associated exits rather than established causes, and we mark them as
-ingredient-level matches in Table~\ref{tab:audit} for that reason. For the ranitidine withdrawal
-the absence of replacement is certainly the intended outcome of a regulatory action, because the
-action removed the product from the prescription market for every labeler at once. For the two
-switches it is the most likely explanation but not a demonstrated one: a prescription-to-over-the-counter
-switch does not by itself end Medicaid coverage, since a prescribed over-the-counter product can
-remain covered under a state plan, and no record ties either labeler's departure to the switch.
-We therefore keep the two apart from the withdrawal throughout, in Table~\ref{tab:cause}, in
-Table~\ref{tab:strata} and in the conclusion, and we do not count them as verified non-supply
-events.
+supply failure. The result is the paper's sharpest: \nCauseSupplyW of \nCauseTotal are a
+documented supply disruption, and those \nCauseSupplyW are \nCauseSupplyEpisodes episode.
 
-\nCauseSupplyW are documented supply disruptions, and they are not \nCauseSupplyW independent
-episodes. Diclofenac potassium tablets entered the ASHP shortage record in February 2019 with
-Teva, the departing labeler here, named and offering no public reason; the exit falls inside that
-shortage. Its replacement ratio is not exactly zero but below 0.01, which we print as such rather
-than rounding it to zero: one documented event shows negligible net replacement and the other two
-show partial replacement.
-Varenicline accounts for the other two, both exits by Pfizer in the quarters during which it
-recalled all lots of the product for nitrosamine content and FDA acknowledged a resulting
-shortage. Those two are one disruption affecting two formulations, so the verified-supply
-stratum rests on two episodes, not three events, and we treat it accordingly throughout.
+\nCauseExplainedUC exits are explained by a mechanism other than supply, and four of those
+mechanisms are distinct.
 
-\nUndeterminedUC exits could not be classified. Several are small multivitamin, prenatal and combination
-otic products of the kind whose withdrawal is more often commercial than operational, but we did
-not find records sufficient to say so, and we do not.
+\emph{A market-wide regulatory withdrawal.} \nCauseWithdrawalUC exit is ranitidine, removed from
+the US market altogether at FDA's request in April 2020 after nitrosamine contamination was found
+to increase during storage. No replacement by other labelers was possible or desirable, and the
+action was firm-independent.
+
+\emph{Regulatory transitions.} \nCauseTransitionUC exits overlap a documented regulatory action
+that removes a product from the prescription market irrespective of supply. Alcaftadine and
+olopatadine follow prescription-to-over-the-counter switches approved for the brand application.
+We keep these apart from the withdrawal because the evidence is at ingredient level: a switch does
+not by itself end Medicaid coverage, since a prescribed over-the-counter product can remain
+covered under a state plan, and no record ties either labeler's departure to the switch. The third
+is Trace Elements 4, where American Regent retired its unapproved Multitrace line under FDA's
+initiative to remove unapproved drugs from the market and replaced it with the approved Tralement
+and Multrys. That case is worth stating plainly because it implicates our own method: the
+successor product dispenses in the panel from 2020Q4, but FDA records a different element
+composition for it, so the composition tie-break of Section~\ref{subsec:market} holds it in a
+sibling market key. A product-generation change therefore reads as an exit with no replacement.
+The tie-break is right on its own terms, and the cost of being right is visible here.
+
+\emph{Withdrawal from the Medicaid rebate programme.} \nCauseCoverageUC exit is goserelin.
+TerSera withdrew from the Medicaid Drug Rebate Program effective 1 October 2021, after which
+state programmes stopped covering its products; the detected exit is 2021Q4. Zoladex remains an
+FDA-approved, marketed product. Section~\ref{subsec:limits} states as a limitation that a product
+leaving the Medicaid benefit while remaining available elsewhere is indistinguishable here from a
+product leaving the market. This is that limitation instantiated, with a date, and it is the
+cleanest demonstration we have that the data source and the market are different things.
+
+\emph{A transfer of marketing rights.} \nCauseTransferUC exit is alirocumab. Regeneron took sole
+United States responsibility for Praluent effective 1 April 2020, and availability was not
+expected to be affected. In these data the labeler code \emph{is} the firm, so a transfer is
+indistinguishable from an exit unless the successor happens to share the market key, as it does
+here: the replacement ratio for this event is \nTransferR, meaning other labelers dispensed over
+five times the departing labeler's own baseline. A measure built to detect abandonment scores
+this event as the most thoroughly replaced in the cohort, which is the correct answer to the
+wrong question.
+
+\emph{A misspelled ingredient string.} \nCauseArtefactUC exits are not single-source markets at
+all. \textsc{escitslopram} oral tablet carries one labeler; \textsc{escitalopram} oral tablet,
+one letter away, carries \nEscitalopramLabelers labelers and \nEscitalopramRx million
+prescriptions. \textsc{grisofulvin} oral liquid sits beside \textsc{griseofulvin} oral liquid in
+the same way. The normalisation of Section~\ref{subsec:market} merges exact token sets after
+cleaning, so it cannot reach a typographic variant, and Section~\ref{subsec:validres} reports
+that the \nKeysAbsorbed absorbed keys are a lower bound for exactly this reason. These two events
+are that bound made concrete: an apparent sole supplier created by a spelling error.
+
+\emph{Supply continued by another labeler.} In \nCauseContinuedW further exits a labeler that was
+absent before the event supplies the market afterwards, so the market was not left unsupplied. We
+do not claim these are transfers, because no record names why the particular firm left; what the
+data establishes is that the market kept its supply.
+
+\nCauseUndeterminedUC exits remain undetermined. Several are small multivitamin, prenatal and
+combination products of the kind whose withdrawal is more often commercial than operational, but
+we did not find records sufficient to say so, and we do not.
 
 \begin{table}[htbp]
-\caption{Every near-sole-labeler exit in the analysis cohort, with its classification against public
-records and its replacement ratio. Markets are named by ingredient and route-and-form
+\caption{Every near-sole-labeler exit the corrected panel observes, with what the public record
+establishes about its cause and its replacement ratio. Classes are ordered by how well the cause
+is established, not by whether it is a supply failure. Markets are named by ingredient and route-and-form
 bucket.}\label{tab:cause}
 \input{generated/tab_cause}
 \footnotetext[1]{The two varenicline exits are the same recall episode affecting two
 formulations, not independent disruptions.}
 \end{table}
+
+Two choices govern how many exits look recall-associated, and the weaker of the two is the one
+usually reported. Matching FDA enforcement records to the \nRawSoleW raw near-sole-labeler exits in the
+exit quarter itself flags \nRecallIngLevel exits when the match is on a shared ingredient and
+\nRecallLabLevel when it is on the departing labeler, so the matching level roughly doubles the
+count. Widening the window matters far more: at one quarter either side the counts are
+\nRecallIngMid and \nRecallLabMid, and at four quarters either side both saturate at
+\nRecallIngWide of \nRawSoleW. Large generic labelers have recalls in most quarters, so a
+generous window matches nearly every exit regardless of matching level. Recall association is
+close to uninformative here unless both the firm and the quarter are pinned, which is why
+Table~\ref{tab:cause} rests on shortage, withdrawal and switch records for the specific firm and
+period rather than on recall co-occurrence. We report the same-quarter, same-labeler figure and
+
+Table~\ref{tab:strata} stratifies replacement by class, and the pattern runs against a
+supply-resilience reading. Across all \nCauseTotal exits the median replacement ratio is
+\nSoleMedian and \nAllSoleLtTwo percent fall below $R=0.02$. Excluding the \nCauseExplainedW
+exits explained otherwise leaves \nCauseNotExplained, whose median is \nCauseNotExplainedMed. The
+\nCauseSupplyW documented supply disruptions have a median of \nSupplyMedian. The
+zero-replacement result is concentrated in the exits that are not supply failures, not in the
+ones that are.
 
 Two choices govern how many exits look recall-associated, and the weaker of the two is the one
 usually reported. Matching FDA enforcement records to the \nRawSoleW raw near-sole-labeler exits in the
@@ -699,13 +755,14 @@ into one number.
 
 Table~\ref{tab:strata} stratifies replacement by the classification in Table~\ref{tab:cause}.
 Removing only the documented withdrawal, which is the minimum correction any supply-chain
-interpretation requires, leaves the median at zero on \nCauseTotalExW events; removing the two
+interpretation requires, leaves the median at \nCauseNotExplainedMed on \nCauseNotExplained events; removing the
 regulatory-transition-associated exits as well leaves it at zero on
-\nCauseTotalExWTW. We report both because the second removal rests on weaker evidence than the
+\nCauseNotExplainedW. We report both because the second removal rests on weaker evidence than the
 first. But the three events in which a supply
 disruption is documented have a median replacement ratio of 0.24, and only one of the three
-collapses. The zero-replacement result is carried by the \nUndeterminedW events whose cause we could not
-establish, where the median is zero and six of \nUndeterminedW have a replacement ratio under 0.02.
+collapses. The zero-replacement result is carried by the exits that are not supply failures: the
+\nCauseExplainedW explained otherwise and the \nCauseUndeterminedW undetermined, where the median is
+\nSoleMedian, against \nSupplyMedian in the \nCauseSupplyW documented disruptions.
 
 \begin{table}[htbp]
 \caption{Replacement among near-sole-labeler exits, by what the exit is verified to be. The

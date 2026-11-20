@@ -27,7 +27,7 @@ export SDUD_PARTS="${SDUD_PARTS:-$RESEARCH_ROOT/sdud_parts/*.parquet}"
 echo "repo:  $PSDR_ROOT"
 echo "data:  $RESEARCH_ROOT"
 echo "parts: $SDUD_PARTS"
-for f in build_sdud_parts xwalk rebuild_xw_route natpanel natpanel_route build_v2 validate_normalization national_impact \
+for f in build_sdud_parts rebuild_xw_route xwalk natpanel natpanel_route build_v2 validate_normalization national_impact \
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
          route_unknown_sensitivity exit_evidence_audit collect_numbers build_figures emit_tex \
@@ -40,8 +40,8 @@ echo "== preflight: interpreter, packages, TeX =="
 "$PY" "$W/check_environment.py" || exit 1
 
 echo "== 0. SDUD year parts (skips what exists) ==" ; "$PY" $W/build_sdud_parts.py | tail -3
-echo "== 1a. form-only crosswalk =="       ; "$PY" $W/xwalk.py               >/dev/null
-echo "== 1b. crosswalk with route =="      ; "$PY" $W/rebuild_xw_route.py    >/dev/null
+echo "== 1a. crosswalk with route =="      ; "$PY" $W/rebuild_xw_route.py    >/dev/null
+echo "== 1b. form-only crosswalk =="       ; "$PY" $W/xwalk.py               | tail -1
 echo "== 2a. form-based panel (spec A) ==" ; "$PY" $W/natpanel.py             >/dev/null
 echo "== 2b. route-aware panel (spec B) ==" ; "$PY" $W/natpanel_route.py       >/dev/null
 echo "== 3. normalised panel + events =="   ; "$PY" $W/build_v2.py               | head -3
