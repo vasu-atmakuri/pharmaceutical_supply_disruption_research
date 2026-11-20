@@ -59,7 +59,14 @@ if m2:
     ck("check count matches run_all.sh", int(m2.group(2))==checks,
        f"README says {m2.group(2)}, run_all.sh runs {checks}")
 
-# 4. every number in the README traces to an analysis output
+# 4. the runtime the README quotes is the one run_all.sh quotes
+_a=re.search(r"roughly (\d+) to (\d+) minutes", flat)
+_b=re.search(r"roughly (\d+) to (\d+) minutes", sh)
+ck("README and run_all.sh quote the same runtime",
+   _a is not None and _b is not None and _a.groups()==_b.groups(),
+   f"README {_a.groups() if _a else None} vs run_all.sh {_b.groups() if _b else None}")
+
+# 5. every number in the README traces to an analysis output
 vals=set()
 def walk(x):
     if isinstance(x,dict):
@@ -80,7 +87,7 @@ body=re.sub(r"[0-9]{4}Q[1-4]","",body)
 body=re.sub(r"^\s*\d+\.\s","",body,flags=re.M) # ordered-list markers
 # Counts the README states in words rather than from a results file, plus the ORCID,
 # the stage and check counts checked above, and the runtime estimate.
-OK={"0","1","2","3","4","5","6","7","8","9","10","11","12","19","26","30","45","95",
+OK={"0","1","2","3","4","5","6","7","8","9","10","11","12","19","27","95",
     "0009","0007","5955","2466","2016","2026","379","3,295"}
 found=sorted({t for t in re.findall(r"(?<![\w.])\d[\d,]*(?:\.\d+)?(?![\w.])",body)}-OK)
 orphans=[t for t in found if t not in vals and t.replace(",","") not in vals]

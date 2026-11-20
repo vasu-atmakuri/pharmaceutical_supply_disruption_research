@@ -74,8 +74,8 @@ PSDR_ROOT=$(pwd) RESEARCH_ROOT=$(dirname $(pwd)) bash scripts/run_all.sh
 
 The run executes 27 analysis stages and then 9 checks, and ends with
 `ALL STAGES AND CHECKS COMPLETE`. Stages 0 to 6 rebuild the panels from the raw SDUD and FDA
-listings; on a warm machine the whole run takes roughly 30 to 45 minutes, most of it in those
-stages. Without a TeX distribution the document build is skipped and the run ends with
+listings and take the bulk of the runtime; the whole run takes roughly 6 to 8 minutes on a warm
+machine, and it has to run in a session that stays alive for its duration. Without a TeX distribution the document build is skipped and the run ends with
 `ANALYSIS COMPLETE; THE DOCUMENT BUILD WAS SKIPPED`; every analysis number is still produced.
 
 ## Why the checks are part of the pipeline
