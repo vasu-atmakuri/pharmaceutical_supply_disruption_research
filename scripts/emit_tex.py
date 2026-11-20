@@ -231,7 +231,11 @@ M.update(
  LmMinNinety=c(RC["90%"]["landmark"]["minority"][0]), LmMinNNinety=c(RC["90%"]["landmark"]["minority"][1]),
  LmSoleNinety=c(RC["90%"]["landmark"]["sole"][0]), LmSoleNNinety=c(RC["90%"]["landmark"]["sole"][1]),
  SuppPrimary=f"{SEN['suppression_primary_rate']:.1f}",
- SuppScenColl=c(round(SEN["suppression_scenario_rate"]/100*NUM["bound_observed"])),
+ # the scenario's own numerator and denominator, as its stage computed them, rather
+ # than a numerator reconstructed from a rounded percentage and another cohort's size
+ SuppScenColl=c(SEN["suppression_scenario_n"]),
+ SuppPrimColl=c(SEN["suppression_primary_n"]),
+ SuppScenN=c(SEN["suppression_n"]),
  BoundElig=c(NUM["bound_eligible"]), BoundEligW=_w(NUM["bound_eligible"]),
  BoundEligUC=_w(NUM["bound_eligible"]).capitalize(),
  BoundObs=c(NUM["bound_observed"]), BoundDropped=c(NUM["bound_dropped"]),
@@ -467,7 +471,13 @@ open(f"{G}/numbers.tex","w").write(
 
 import json as _j
 _nf=_ROOT+"/results/manuscript_numbers.json"
-_nd=_j.load(open(_nf)); _nd["generated_macro_count"]=len(M)
+import re as _re, os as _os
+_nd=_j.load(open(_nf))
+# Macros reach the manuscript from two generated files. Counting only this script's
+# left the response letter understating the total by the detector macros.
+_dm=f"{G}/detector_macros.tex"
+_extra=len(_re.findall(r"^\\newcommand", open(_dm).read(), _re.M)) if _os.path.exists(_dm) else 0
+_nd["generated_macro_count"]=len(M)+_extra
 _j.dump(_nd,open(_nf,"w"),indent=1)
 print(f"wrote {len(M)} macros and 9 table bodies ({_ntrans} transition rows, {_ncause} exits, {_nrc} coverage years) to springer/generated/")
 for k in ["NormKeys","KeysAbsorbed","ReclassRate","ReclassVol","MinorityN","ReplEligible","Cohort","MinorityLtTwo"]:

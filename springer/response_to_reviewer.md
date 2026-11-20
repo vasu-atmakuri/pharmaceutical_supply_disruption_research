@@ -6,98 +6,174 @@ we list what changed, and then set out our standing position on a small number o
 that have recurred, so that the remaining disagreements are explicit rather than
 repeated.
 
-We also report, in Section 0 below, four errors that we found ourselves in the course
-of rebuilding the manuscript's reporting pipeline. None of them was raised in review.
-We report them because two changed published quantities and one withdrew a claim.
+We also report, in Section 0 below, that testing your P0 on the event windows uncovered a
+larger defect in the same code, that fixing both changed the event cohort, and that the
+correction changes one of the paper's conclusions in our favour and another against us. We
+report all of it.
 
-The manuscript is now generated rather than transcribed. Every reported quantity in the
-text, including the spelled-out counts, is a LaTeX macro emitted from the analysis
-output files, and seven of the tables and the abstract are emitted whole, so a stale
-number is not representable. Four scripts are run after every build and all pass on the
-attached version:
+The manuscript is generated rather than transcribed. Every reported quantity in the text,
+including the spelled-out counts, is a LaTeX macro emitted from the analysis output files, and
+11 of the tables and the abstract are emitted whole, so a stale number is not representable.
+Nine checks run after every build and all pass on the attached version:
 
 - `audit_numbers.py` fails if any number in the source appears in no analysis output.
-- `verify_manuscript.py` checks structure: that the abstract contains no hand-typed
-  statistic, that every cross-reference and citation resolves, that every float is
-  referenced, and that the PDF is newer than every source it was built from.
-- `check_relationships.py` runs 53 assertions on relationships rather than presence:
-  that band counts sum to their cohort, that figure sample sizes equal their table's,
-  that the key-collapse distribution reconstructs both market counts, that the bound
-  arithmetic closes, and that each generated table reproduces its source file.
-- `check_determinism.py` re-runs every stochastic stage and requires byte-identical
-  output.
+- `verify_manuscript.py` checks structure: that the abstract contains no hand-typed statistic,
+  that every cross-reference and citation resolves, that every float is referenced, that no
+  macro has run into the following word in the rendered PDF, and that the PDF is newer than
+  every source it was built from.
+- `check_relationships.py` runs 93 assertions on relationships rather than presence: that band
+  counts sum to their cohort, that figure sample sizes equal their table's, that the
+  key-collapse distribution reconstructs both market counts, that the bound arithmetic closes,
+  that every macro the manuscript cites is defined, and that each generated table reproduces
+  its source file.
+- `audit_letter.py` applies the same rule to this letter, which is not macro-driven.
+- `check_readme.py` asserts that the repository README describes this paper: its title, its
+  headline counts, its stage and check counts, and every number in it.
+- `check_pipeline_closure.py` asserts that each stage reads only files an earlier stage wrote.
+- `check_stage_portability.py` asserts that no stage hard-codes a path on our machine.
+- `check_released_files.py` asserts that every artifact the paper promises is tracked.
+- `check_determinism.py` re-runs every stochastic stage and requires byte-identical output.
 
 ---
 
-## 0. Errors we found ourselves
+## 0. What testing your P0 uncovered
 
-**The bound on the sole-labeler collapse rate was wrong.** It was reported as 26.3 to
-57.9 percent over 19 calendar-eligible exits. Computed from the panel, the
-calendar-eligible population is 20 and seven of those are dropped because every
-post-event quarter is suppressed, not six. The bound is 18.6 to 74.4 percent. The cause
-was a hard-coded `5/19` in the script that collected reported numbers; that denominator
-is now derived from the event flow and asserted against the cohort.
+**Your window comment was right, and it was the smaller of two defects.** You observed that the
+event windows were implemented with SQL `ROWS` frames while the manuscript defines them in
+calendar quarters. That is correct: 13.1 percent of labeler-market series have at least one
+missing quarter, so for those the window was not four quarters wide. Fixing it moved the event
+count from 282 to 292.
 
-**We have withdrawn the claim that ingredient-level recall matching flagged fourteen of
-twenty exits against one at firm level.** That pair of figures is not reproducible from
-the FDA enforcement data. Recomputed with the window held fixed at the exit quarter, the
-counts are six on a shared ingredient and three on the departing firm. At four quarters
-either side both saturate at fifteen of twenty. The revised text reports these and makes
-the stronger point they support: the window dominates the matching level, so a recall
-flag defined on a generous window carries almost no information about cause. The
-classification in Table 5 never rested on recall co-occurrence and is unchanged.
+Testing the fix exposed something worse in the same code. A labeler that stops dispensing
+altogether has no records after its exit, so its post-event average was null, the comparison was
+null, and the event never fired. The detector could only see labelers that kept dispensing a
+little. It was blind to the exits the paper is about. We now evaluate the detector on a dense
+calendar grid running from each series' first appearance to the end of the panel, with an absent
+quarter read as zero dispensing, which is what absence means in these data. We count 66
+labeler-market series that stop at least four quarters before the panel ends with a final
+four-quarter mean of 200 prescriptions or more and that the previous detector never reported.
 
-**The form-based bucketing yields eight buckets, not nine.** Counted from the
-specification A panel.
+Fixing that raised the event count from 292 to 500, and inspecting the new events exposed a
+third issue: 67 of the 500 were labelers whose dispensing resumed later, which is a suppression
+gap or a short interruption rather than an exit. We therefore added a persistence requirement,
+that the labeler not return to half its own baseline at any quarter from four to twelve after
+the event. That leaves 433 events, which is the specification the paper now uses. All four
+counts are in Table 4 of the manuscript, computed by `scripts/detector_variants.py`, which
+refuses to write its output unless the last row agrees with the panel's own recorded total.
 
-**Two reporting defects.** The raw-to-corrected transition table printed a bootstrap
-confidence bound in place of one market's corrected share, and listed the two ranitidine
-exits as two markets when the normalisation makes them one. That table is now generated
-from its source file, with the identity 20 minus 7 equals 13 asserted at emit time. A
-paragraph was also duplicated verbatim in two sections; three floats were never
-cross-referenced; four references were uncited. All are fixed.
+**What the correction did to the results.** The observed near-sole cohort grew from 13 events to
+19. The matched-set interval widened from its previous value to 20.6 to 63.2 points. The
+recovery log-rank at the 90 percent threshold improved from p = 0.056 to p = 0.002, which we
+previously reported as suggestive and now report as established at that threshold while still
+not established at 50 percent. Against us: the larger cohort let us audit six more events, and
+the audit found three mechanisms we had not described, one of which is a defect in our own
+method. Section 2 below sets them out.
 
-**Two stages were not reproducible.** The matched-set confidence interval and the merge
-validation count both moved between runs despite a fixed seed: array order determined
-which elements the draws indexed, and `Counter.most_common` broke a tie by insertion
-order, letting an empty substance set win. Both are fixed and the determinism check is
-now part of the build. The matched-set interval is 20.6 to 63.2 points and the merge
-agreement is 292 of 292 testable groups.
+**Four figures in the manuscript were stale and are corrected.** The abstract and the
+discussion both gave 0.24 as the median replacement ratio among documented supply disruptions;
+the current value is 0.47. `audit_numbers.py` had not caught it because 0.24 is a real value in
+the results, the varenicline ratio in Table 5, so the number was traceable while being the wrong
+number in its sentence. The crossing comparison cited eight of 58 minority markets when the
+recovery cohort now holds 77; that cohort's own band sizes are now written by the stage that
+computes it, so the manuscript cannot pair a count with a denominator from a different cohort.
+The conclusion said three events from two episodes where there are two from one. The evidence
+appendix was typed against the thirteen-event cohort and is now generated from its source file.
+
+**Three figures from the last round carry forward, recomputed on the new cohort.** The bound on
+the near-sole collapse rate is computed from the event flow rather than a hard-coded
+denominator: 43 calendar-eligible exits, 24 of them dropped because every post-event quarter is
+suppressed. The bound is 18.6 to 74.4 percent, and we continue to report the complete-case rate
+and the bound separately rather than collapsing them into one number.
+The matched-set interval is 20.6 to 63.2 points.
+Against FDA substance data the merge agreement is 292 of 292 testable groups, after the
+adjudication the manuscript describes, and we continue to state that this is not an independent
+test.
 
 ---
 
-## 1. The near-sole event flow (your Section 2, P0)
+## 1. The near-sole event flow, recomputed (your Section 2, P0)
 
-You were right and the arithmetic was wrong. The flow is now computed from one
-manifest and every stage is asserted against it:
+The flow is computed from one manifest and every stage is asserted against it. Under the
+corrected detector:
 
-| Stage | Previously reported | Computed |
+| Stage | Count |
+|---|---|
+| Detected exits with departing share at least 95% | 72 |
+| Outside the event window | 28 |
+| Inside the window | 44 |
+| Fail the baseline rule | 1 |
+| Every post-event quarter suppressed | 24 |
+| Observed cohort | 19 |
+
+28 + 44 = 72, and 1 + 24 + 19 = 44.
+
+`results/near_sole_event_flow.csv` is the manifest you asked for: one row per detected near-sole
+exit, with the stage at which it leaves the cohort, its departing share, and for observed events
+its replacement ratio and collapse flag.
+
+Two counts in the paper are close and we now say explicitly that they are not the same
+quantity. The corrected panel has 44 near-sole exits inside the window. The raw convention's
+cohort separately contains 26 sole-labeler events, of which 9 are reclassified by the
+corrections, leaving 17 where the corrected panel's own detector finds 19. The gap of 2 is
+itself a result: merging duplicate keys can make a market near-sole that the raw convention
+never flagged, and can move an event quarter. We report both counts and the gap rather than
+forcing an identity between them, and the relationship check now asserts the gap is small and
+cited rather than asserting an equality that does not hold.
+
+---
+
+## 2. What the nineteen observed exits actually are
+
+The audit is the part of the paper we would most like read, and the larger cohort changed it.
+Of the 19 near-sole-labeler exits the corrected panel observes:
+
+| Class | Events | What the record shows |
 |---|---|---|
-| Detected exits with departing share at least 95% | 39 | **41** |
-| Outside the event window | 20 | **21** |
-| Inside the window | — | 20 |
-| Fail the baseline rule | none | 0 |
-| Every post-event quarter suppressed | 6 | **7** |
-| Observed cohort | 13 | 13 |
+| Documented supply disruption | 2 | One recall episode affecting two formulations |
+| Market-wide regulatory withdrawal | 1 | Every labeler asked to leave at once |
+| Regulatory transition | 3 | Two prescription-to-over-the-counter switches and one product-generation change |
+| Medicaid rebate withdrawal | 1 | Firm left the rebate programme; product still marketed |
+| Marketing-rights transfer | 1 | Rights moved to the originator; supply continued |
+| Measurement artefact | 2 | The ingredient string is a misspelling of a multi-supplier market |
+| Supply continued by another labeler | 5 | A labeler absent before the exit supplies the market afterwards |
+| Undetermined | 4 | No record found for this firm and period |
 
-21 + 0 + 7 + 13 = 41.
-Three of the four previously reported numbers were wrong. Sections 2.5 and the
-limitations are rewritten from macros emitted by the same computation, so the two
-passages cannot disagree.
+Three of these are new in this round and two of the three work against claims we previously
+made.
 
-`results/near_sole_event_flow.csv` is the manifest you asked for: one row per
-detected near-sole exit, with the stage at which it leaves the cohort, its departing
-share, and for observed events its replacement ratio and collapse flag. Nine checks
-assert the manifest against the flow, the flow against the cohort, and the manifest's
-collapse count against the reported numerator.
+**The rebate-programme withdrawal.** One firm withdrew from the Medicaid Drug Rebate Program
+effective 1 October 2021, after which state programmes stopped covering its products while the
+product itself remained FDA-approved and marketed. In the previous version we could state the
+risk that Medicaid dispensing is not US dispensing but not demonstrate it. We can now, with a
+date, and the limitation is rewritten accordingly.
 
-We also flag a coincidence in the manuscript so it is not read as a further error: the
-corrected panel has 20 near-sole exits inside the window, and the raw
-convention's cohort separately contains 20 sole-labeler events.
-Those two counts are equal by accident and are measured on different panels. The text
-now says so.
+**The marketing-rights transfer.** One exit is a transfer of US responsibility for a product
+from one firm to its originator, announced with the statement that availability was not expected
+to be affected, and the other firm does dispense in the market afterwards. Its replacement ratio
+is 5.45, the largest in the cohort.
 
-## 2. The two 34.1% figures (your C7, P0)
+**A defect in our own method.** One exit is a firm retiring an unapproved multi-element
+injectable line under FDA's unapproved drugs initiative and replacing it with approved products.
+Those products dispense in the panel, but their composition differs enough that our own
+composition tie-break holds them in a sibling key. A product-generation change therefore reads
+as an exit with no replacement. We report it against ourselves in Section 3.4 and in the
+appendix, because the same mechanism will affect any study that keys markets on composition, and
+because it bounds how far a composition tie-break can be trusted.
+
+**What this does to the headline.** The stratified result is stronger than before, in the
+direction that is uncomfortable for a supply-resilience reading. The median replacement ratio is
+0.00 across all 19 observed exits, 0.08 across the 11 the records do not explain, and 0.47
+across the 2 documented supply disruptions, neither of which collapses below two percent of
+baseline. Zero replacement is concentrated in the exits that are not supply failures.
+
+---
+
+## 3. The remaining items from your last review
+
+Each of these was addressed in the version you last saw and is unchanged by the detector
+correction unless noted. They are kept here so the record is in one document.
+
+### The two 34.1% figures (your C7, P0)
 
 You were right to ask. They are different quantities and we had used one number for
 both. Computed separately, of 853M flagged prescriptions:
@@ -110,16 +186,16 @@ both. Computed separately, of 853M flagged prescriptions:
 Both appear in Table 4 with their numerators, and the text states that they are
 different operations which agree only approximately.
 
-## 3. Macro spacing (your C5, P0)
+### Macro spacing (your C5, P0)
 
 Entirely our defect and introduced by the generation change itself: TeX swallows the
 space after a control word, so a macro defined without `\xspace` rendered
-"292testable". There were 55 such joins. All 278 macros now carry `\xspace`, the count is zero,
+"292testable". There were 55 such joins. All 307 macros now carry `\xspace`, the count is zero,
 and `verify_manuscript.py` reads the rendered PDF and fails on any digit joined to a
 word. Our previous checks read extracted text for presence only, which is exactly why
 they were blind to it.
 
-## 4. Trace Elements (your C3, P0)
+### Trace Elements (your C3, P0)
 
 The limitation was outdated and is removed. In the final mapping, Trace Elements 4 and
 Trace Elements 5 are separate normalised keys, and the two manufacturers' Trace
@@ -130,7 +206,7 @@ identify wrong joins, rule changed, check re-run. The agreement is therefore
 agreement after adjudication by the same field, which we say wherever we report it, and
 Section 2.4 no longer calls that field an independent referee.
 
-## 5. Missing-route handling (your C4, P0)
+### Missing-route handling (your C4, P0)
 
 Both descriptions were wrong, in opposite directions. The actual rule: where
 `ROUTENAME` is absent, a cascade on the form string is tried in the same order, and
@@ -144,7 +220,7 @@ product because FDA did not populate one field would remove it from its market's
 supplier count and could manufacture an apparent sole supplier, which is the error this
 paper is about.
 
-## 6. Formulation mismatch (your C2, P0)
+### Formulation mismatch (your C2, P0)
 
 Table 2 was right and Figure 1(a) was wrong: the corrected market is
 `AMPHETAMINE,... | ORAL CAPSULE`. The figure had its own hard-coded label map with
@@ -152,16 +228,16 @@ Table 2 was right and Figure 1(a) was wrong: the corrected market is
 and the figure import, it raises an error on any key it does not cover, and a check
 compares the rendered figure's labels against the table's, dosage form included.
 
-## 7. Near-sole terminology (your C8)
+### Near-sole terminology (your C8)
 
 Adopted. The share-defined stratum is called near-sole-labeler throughout the event
 analysis, and we report the exact-labeler count you asked for:
-12 of the 13 observed events had exactly
+17 of the 19 observed events had exactly
 one active labeler across the four pre-exit quarters;
-1 had a second labeler whose dispensing was small enough
+2 had a second labeler whose dispensing was small enough
 that the departing share still rounded to 100 percent.
 
-## 8. Overstated claims (your C9)
+### Overstated claims (your C9)
 
 All three corrected. The recovery result is now described as suggestive and not
 statistically established, in the abstract and the discussion. The matched comparison
@@ -169,7 +245,7 @@ reports 0.31% rather than "zero" everywhere. The
 duplicate-key prevalence is stated as 11.5%
 of route-aware raw market keys.
 
-## 9. One more we found while doing this
+### One more we found while doing this
 
 `reclass_multi.py` was not reproducible. `max()` broke ties on component volume by
 dictionary order, so the headline reclassification count moved between
@@ -185,7 +261,7 @@ rather than its extracted text.
 
 ---
 
-## 10. Changes made in earlier rounds
+### Items settled in rounds before the last one
 
 ### The construction of the reclassification rate (your Section 2)
 
@@ -256,8 +332,9 @@ withdrawn the volume-weighted figure for that band**, since no stable value exis
 
 ### Suppression scenario (your C9)
 
-Reported alongside the primary estimate: the ten-prescription imputation moves one
-market, taking 5 of 13 to 4 of 13, or 38.5% to 30.8%. Stated as a scenario, not a bound,
+Reported alongside the primary estimate: reading every suppressed post-event quarter as ten
+prescriptions, which is the most generous reading the suppression rule allows,
+takes 8 of 19 to 7 of 19, or 42.1% to 36.8%. Stated as a scenario, not a bound,
 and kept separate from the missing-follow-up bounds of 18.6% to 74.4% (see Section 0).
 
 ### Market granularity (your C4)
@@ -272,12 +349,16 @@ not less.
 
 ### Repository
 
-The repository was private. It is being made public before submission, and the claim in
-the code-availability statement will be verified from a signed-out session.
+The repository is public and the code-availability statement has been verified from a
+signed-out session. The README described the previous paper, with findings this analysis does
+not support, which was your first comment. It is rewritten, and `check_readme.py` now asserts
+that its title is the manuscript's title, that its headline counts are the ones the results
+files hold, that the stage and check counts it promises match `run_all.sh`, and that every
+number in it traces to an analysis output.
 
 ---
 
-## 2. Standing positions on recurring items
+## 4. Standing positions on recurring items
 
 These have each been raised more than once. We state our position so the disagreement,
 where there is one, is on the record.
@@ -298,20 +379,23 @@ multiplies that fragmentation by a factor of more than two. The comparison belon
 robustness, which is where it now sits.
 
 **The matched-control comparison.** We agree with you entirely and have acted on it by
-demotion rather than by engineering. Thirteen treated events will not support a
-defensible causal design under any control construction. The comparison is labelled
-descriptive and secondary, the forward-looking eligibility rule is disclosed rather than
-defended, and the control reuse is quantified in the text (325 observations from 60
-distinct markets, one appearing in all thirteen sets). We do not intend to expand it
-further, and we would rather it were read as a descriptive contrast than as an estimate.
+demotion rather than by engineering. Nineteen treated events will not support a defensible
+causal design under any control construction, and the corrected detector raising the count
+from thirteen does not change that. The comparison is labelled descriptive and secondary, the
+forward-looking eligibility rule is disclosed rather than defended, and the control reuse is
+quantified in the text (475 observations from 88 distinct markets, one appearing in 18 of the
+19 sets). We do not intend to expand it further, and we would rather it were read as a
+descriptive contrast than as an estimate.
 
 **The recovery and verified-disruption analyses.** We agree these cannot carry general
-conclusions and have not asked them to. Three observations from two episodes are
-reported as a case-based illustration. The log-rank result of p = 0.056 is described as
-suggestive and not established, and Figure 3 now carries confidence bands that overlap
-across the whole follow-up, which makes the point visually. Our only claim from this
-material is negative: the data do not support the statement that sole-supplier markets
-fail to replace lost volume after a documented supply disruption.
+conclusions and have not asked them to. Two observations from one episode are reported as a
+case-based illustration, and two is weaker than the three we previously had. The recovery
+comparison is the one place the corrected detector made a result stronger: the log-rank at the
+90 percent threshold is now p = 0.002 where it was 0.056, and we report it as established at
+that threshold and still not established at 50 percent, where it is p = 0.188. Figure 3 carries
+confidence bands throughout. Our only claim from the verified-disruption material is negative:
+the data do not support the statement that sole-supplier markets fail to replace lost volume
+after a documented supply disruption.
 
 **The manufacturing-establishment analysis.** We accept it is supporting context rather
 than an established contribution, and the manuscript labels it that way. Current
@@ -320,15 +404,22 @@ study.
 
 ---
 
-## 3. What we believe the paper now establishes, and what it does not
+## 5. What we believe the paper now establishes, and what it does not
 
-**Establishes.** That the standard ingredient-by-dosage-form market definition, applied
-to public Medicaid dispensing data, contains two measurement defects; that correcting
-them changes the national picture materially, moving dispensing in near-sole markets
-from 14.71% to 10.54% and reclassifying between 16.2% and 28.9% of apparent near-sole
-market-quarters carrying 34.1% of flagged volume; that seven of twenty apparent
-sole-labeler exits are not sole-labeler exits; and that three of the thirteen that
-survive are regulatory actions rather than supply failures.
+**Establishes.** That the standard ingredient-by-dosage-form market definition, applied to
+public Medicaid dispensing data, contains two measurement defects; that correcting them changes
+the national picture materially, moving dispensing in near-sole markets from 14.71% to 10.54%
+and reclassifying between 16.2% and 28.9% of apparent near-sole market-quarters carrying 34.3%
+of flagged volume; that 9 of 26 apparent sole-labeler exits are not sole-labeler exits; and
+that of the 19 the corrected panel observes, 2 are a documented supply disruption, 8 are
+explained by something that is not a supply failure, 5 have supply continued by another
+labeler, and 4 are undetermined.
+
+We would add one methodological claim we did not make before, because this round earned it: an
+event detector built on administrative dispensing data has to be tested against the case where
+the series stops, not only against the case where it falls. Ours was not, for two rounds, and
+the defect was invisible in every number we reported because the events it hid never appeared
+anywhere to be counted.
 
 **Does not establish.** That the corrected definition is the clinically correct one at
 every granularity; that the reclassification rate is an independently adjudicated

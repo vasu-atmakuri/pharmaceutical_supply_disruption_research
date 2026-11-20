@@ -18,8 +18,19 @@ FL=SPEC["C"]["sole_flow"]
 def g(d,*k):
     for x in k: d=d[x]
     return d
+import glob as _g, subprocess as _sp
+# How many generated tables and relationship assertions there actually are. Both were
+# typed in the letter and both changed this round.
+_NTAB=len(_g.glob(f"{_ROOT}/springer/generated/tab_*.tex"))
+_NREL=int(_sp.run([sys.executable,f"{_ROOT}/scripts/check_relationships.py"],
+                  capture_output=True,text=True,
+                  env={**os.environ,"PSDR_ROOT":_ROOT}).stdout.split(" relationship checks")[0].split()[-1])
 # (pattern, replacement) - the pattern must capture nothing and match exactly once
 SUBS=[
+ (r"(?:\d+|nine|ten|eleven|twelve) of the tables and the abstract are emitted whole",
+  "%d of the tables and the abstract are emitted whole" % _NTAB),
+ (r"runs \d+ assertions on relationships",
+  "runs %d assertions on relationships" % _NREL),
  (r"trimming \([\d.]+ → [\d.]+ → [\d.]+ → [\d.]+ removing",
   f"trimming ({INF['R_<35%']['median']:.2f} \u2192 "
   f"{SEN['minority_excl1_median']:.2f} \u2192 {SEN['minority_excl3_median']:.2f} \u2192 "
@@ -36,6 +47,14 @@ SUBS=[
  (r"matched-set interval is [\d.]+ to [\d.]+ points",
   f"matched-set interval is {100*INF['matched']['ci_sets'][0]:.1f} to "
   f"{100*INF['matched']['ci_sets'][1]:.1f} points"),
+ (r"\d+ of the \d+ observed events had exactly",
+  f"{NUM['cohort_exactly_one_labeler']} of the {FL['observed']} observed events had exactly"),
+ (r"\d+ had a second labeler whose dispensing was small enough",
+  f"{NUM['cohort_two_plus_labelers']} had a second labeler whose dispensing was small enough"),
+ (r"takes \d+ of \d+ to \d+ of \d+, or [\d.]+% to [\d.]+%\.",
+  f"takes {SEN['suppression_primary_n']} of {SEN['suppression_n']} to "
+  f"{SEN['suppression_scenario_n']} of {SEN['suppression_n']}, or "
+  f"{SEN['suppression_primary_rate']}% to {SEN['suppression_scenario_rate']}%."),
  (r"Of the [\d,]+ raw near-sole market-quarters",
   f"Of the {RUL['largest_n']:,} raw near-sole market-quarters"),
  (r"Adding strength gives [\d,]+ market-quarters, with [\d.]+% near-sole",

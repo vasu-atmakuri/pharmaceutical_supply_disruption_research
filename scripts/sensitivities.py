@@ -85,8 +85,28 @@ print("   largest ratios:", [f"{x[1]:.0f}" for x in sel[:5]])
 OUT["minority_top_ratios"]=[round(float(x[1]),1) for x in sel[:5]]
 # ---- 4. suppression scenario and alternative outcome baseline ----
 SL2=con.execute("SELECT mol,lab,t,shr FROM read_parquet('/tmp/sl_v2.parquet')").fetchall()
-OUT["suppression_scenario_rate"]=30.8          # 4 of 13, from the ten-prescription imputation
-OUT["suppression_primary_rate"]=38.5           # 5 of 13 complete case
+# The suppression scenario, computed rather than typed. These two rates were
+# hard-coded as 38.5 and 30.8, which were 5 of 13 and 4 of 13 on a cohort that the
+# detector correction replaced. A suppressed quarter carries somewhere between zero
+# and ten prescriptions; the primary rate reads it as zero, and the scenario reads
+# every suppressed post-event quarter as ten, which is the most generous reading the
+# suppression rule allows.
+# inwin and OBS above are the same cohort the rest of the paper uses; reusing them
+# here rather than rederiving keeps the two from drifting apart.
+_sole=[m for m in OBS if inwin[m][1]>=0.95]
+def _coll(m,fill):
+    t=inwin[m][0]; bl=basec(m,t)
+    post=[MQ[m].get(t+k) for k in range(1,7)]
+    return float(np.mean([fill if v is None else v for v in post])) < 0.02*bl
+_p=sum(_coll(m,0.0) for m in _sole); _q=sum(_coll(m,10.0) for m in _sole)
+OUT["suppression_n"]=len(_sole)
+OUT["suppression_primary_n"]=_p; OUT["suppression_scenario_n"]=_q
+OUT["suppression_primary_rate"]=round(100*_p/len(_sole),1)
+OUT["suppression_scenario_rate"]=round(100*_q/len(_sole),1)
+OUT["suppression_markets_moved"]=_p-_q
+print(f"suppression scenario: complete case {_p} of {len(_sole)} "
+      f"({100*_p/len(_sole):.1f}%), ten-prescription imputation {_q} of {len(_sole)} "
+      f"({100*_q/len(_sole):.1f}%)")
 for B0b,B1b,tag in [(-4,0,"alt")]:
     def basec2(m,t):
         p=[MQ[m].get(t+k) for k in range(B0b,B1b)]

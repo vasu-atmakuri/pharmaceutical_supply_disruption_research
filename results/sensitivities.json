@@ -35,8 +35,12 @@
     272.9,
     107.4
   ],
-  "suppression_scenario_rate": 30.8,
-  "suppression_primary_rate": 38.5,
+  "suppression_n": 19,
+  "suppression_primary_n": 8,
+  "suppression_scenario_n": 7,
+  "suppression_primary_rate": 42.1,
+  "suppression_scenario_rate": 36.8,
+  "suppression_markets_moved": 1,
   "baseline_common_cohort": {
     "n": 110,
     "primary": {
