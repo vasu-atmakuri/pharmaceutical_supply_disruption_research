@@ -49,9 +49,23 @@ if os.path.exists(_pp):
     _h=_head.stdout.strip() if _head.returncode==0 else None
     ck("build_provenance names a commit", bool(_pv.get("commit")))
     if _h:
-        ck("build_provenance matches HEAD", _pv.get("commit")==_h,
+        # Writing the file changes the tree, so the commit that contains it cannot be
+        # the commit it names. One commit of lag is therefore allowed, and only when
+        # the sole difference between the two commits is this file; anything else is a
+        # provenance record that does not describe the build.
+        _ok = _pv.get("commit")==_h
+        _lag=""
+        if not _ok:
+            _par=subprocess.run(["git","-C",R,"rev-parse","HEAD^"],
+                                capture_output=True,text=True).stdout.strip()
+            _dif=subprocess.run(["git","-C",R,"diff","--name-only","HEAD^","HEAD"],
+                                capture_output=True,text=True).stdout.split()
+            if _pv.get("commit")==_par and _dif==["results/build_provenance.json"]:
+                _ok=True; _lag=" (one commit of lag, provenance file only)"
+        ck("build_provenance matches HEAD", _ok,
            f"provenance {str(_pv.get('commit'))[:12]} vs HEAD {_h[:12]}; "
            f"re-run build_provenance.py after committing")
+        if _ok and _lag: print(f"   provenance names {str(_pv.get('commit'))[:12]}{_lag}")
     ck("build_provenance names the public remote",
        bool(_pv.get("remote")) and "pharmaceutical_supply_disruption_research" in str(_pv.get("remote")),
        f"remote is {_pv.get('remote')!r}")

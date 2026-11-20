@@ -66,9 +66,10 @@ Because writing it changes the tree, a submission build is three steps:
 ```
 git add -A && git commit -m "<message>"
 PSDR_ROOT=$(pwd) RESEARCH_ROOT=$(dirname $(pwd)) bash scripts/run_all.sh
-git add -A && git commit --amend --no-edit
+git add -A && git commit -m "Record the build provenance"
 ```
 
-The third step folds the regenerated provenance and outputs into the same commit, so the commit
-the file names is the commit that contains it. Push that commit before submitting: the
+Writing the file changes the tree, so the commit that contains it cannot be the commit it names.
+The check allows exactly one commit of lag, and only when the sole difference between the two
+commits is `results/build_provenance.json`. Cite the second commit: it contains the first. Push that commit before submitting: the
 repository a reviewer clones has to be the one the paper describes.
