@@ -408,13 +408,13 @@
       0.0,
       4.776584791881159
     ],
-    "total_median": 4.816890595009596,
+    "total_median": 4.816890595009597,
     "total_ci": [
       0.5266558966074313,
       7.0338780390593865
     ],
     "loo_min": 2.5892631476306924,
-    "loo_max": 2.7654973390300355,
+    "loo_max": 2.765497339030035,
     "events": [
       [
         "VALSARTAN | ORAL TABLET",
@@ -475,18 +475,18 @@
   },
   "at least 95%": {
     "n": 20,
-    "post_median": 7.137233298046399,
+    "post_median": 7.137233298046398,
     "post_ci": [
       4.3623246973833805,
       7.948792334034123
     ],
     "total_median": 11.060104368211675,
     "total_ci": [
-      8.243232796598315,
+      8.243232796598317,
       11.862565299777012
     ],
-    "loo_min": 6.659124739505804,
-    "loo_max": 7.615341856586994,
+    "loo_min": 6.659124739505805,
+    "loo_max": 7.615341856586992,
     "events": [
       [
         "ACETATE,ACID,ALPHA,ASCORBIC,BETA,BIOTIN,CAROTENE,CHOLECALCIFEROL,CUPRIC,CYANOCOBALAMIN,FLUORIDE,FOLIC,GLUCONATE,GLUCOSAMINE,LEVOMEFOLATE,NIACINAMIDE,OXIDE,PYRIDOXINE,RIBOFLAVIN,SODIUM,THIAMINE,TOCOPHEROL,VITAMIN,ZINC | ORAL TABLET",

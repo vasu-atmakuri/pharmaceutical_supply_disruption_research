@@ -121,3 +121,47 @@ if sum(_cnt.values())!=len(sole):
 _j.dump(_out,open(_ROOT+"/results/cause_strata.json","w"),indent=1)
 print("wrote results/cause_strata.json  counts:",dict(_cnt))
 print("\nwrote results/event_cause_classification.csv")
+
+# ---- collapse by class, not only replacement by class ----
+# The reviewer's point, and it is correct: the pooled collapse rate answers a
+# different question from the per-class one. A collapse in a market the regulator
+# emptied, or in a market whose key is a misspelling, is not evidence about supply
+# resilience. This records which classes the collapses actually fall in.
+def _coll(m):
+    t=inwin[m][0]; bl=basec(m,t)
+    post=[MQ[m].get(t+k) for k in range(1,7)]
+    if all(v is None for v in post): return None
+    return 1 if np.mean([0.0 if v is None else v for v in post])<0.02*bl else 0
+CL={}
+for cls in sorted({CLS[m][0] for m in sole}):
+    sel=[m for m in sole if CLS[m][0]==cls]
+    cv=[_coll(m) for m in sel]; cv=[x for x in cv if x is not None]
+    CL[cls]={"n":len(sel),"n_collapse_obs":len(cv),"collapsed":int(sum(cv)),
+             "rate":(float(np.mean(cv)) if cv else None)}
+_all=[_coll(m) for m in sole]; _all=[x for x in _all if x is not None]
+_expl={"withdrawal","transition","coverage","transfer","artefact"}
+_rem=[m for m in sole if CLS[m][0] not in _expl]
+_rv=[_coll(m) for m in _rem]; _rv=[x for x in _rv if x is not None]
+_sup=[m for m in sole if CLS[m][0]=="supply"]
+_sv=[_coll(m) for m in _sup]; _sv=[x for x in _sv if x is not None]
+OUTC={"by_class":CL,
+      "pooled":{"n":len(_all),"collapsed":int(sum(_all)),"rate":float(np.mean(_all))},
+      "excluding_explained":{"n":len(_rv),"collapsed":int(sum(_rv)),
+                             "rate":float(np.mean(_rv))},
+      "documented_supply":{"n":len(_sv),"collapsed":int(sum(_sv)),
+                           "rate":(float(np.mean(_sv)) if _sv else None)},
+      "note":("Three populations, not three estimates of one thing. The pooled rate is "
+              "every observed near-sole exit. The second excludes the classes an outside "
+              "record explains as something other than a supply failure. The third is the "
+              "documented supply disruptions alone, and it is two events from one episode.")}
+json.dump(OUTC,open(_ROOT+"/results/cause_collapse.json","w"),indent=1,sort_keys=True)
+print("\ncollapse by class:")
+for cls in sorted(CL,key=lambda k:-CL[k]["collapsed"]):
+    d=CL[cls]
+    print(f"  {cls:<14}{d['collapsed']:>2} of {d['n']:>2}" +
+          (f"  {100*d['rate']:>5.1f}%" if d["rate"] is not None else "      ---"))
+print(f"  pooled {OUTC['pooled']['collapsed']} of {OUTC['pooled']['n']}, "
+      f"excluding explained {OUTC['excluding_explained']['collapsed']} of "
+      f"{OUTC['excluding_explained']['n']}, documented supply "
+      f"{OUTC['documented_supply']['collapsed']} of {OUTC['documented_supply']['n']}")
+print("wrote results/cause_collapse.json")

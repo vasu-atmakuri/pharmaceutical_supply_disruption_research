@@ -30,7 +30,7 @@ echo "parts: $SDUD_PARTS"
 for f in build_sdud_parts rebuild_xw_route xwalk natpanel natpanel_route build_v2 validate_normalization national_impact \
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
-         route_unknown_sensitivity exit_evidence_audit detector_variants collect_numbers \
+         route_unknown_sensitivity exit_evidence_audit detector_variants typo_sensitivity release_split collect_numbers \
          build_figures emit_tex emit_appendix_tables emit_letter_numbers; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
@@ -59,6 +59,8 @@ echo "==13b. near-sole flow manifest ==" ; "$PY" $W/sole_flow_manifest.py | tail
 echo "==13d. exit evidence audit ==" ; "$PY" $W/exit_evidence_audit.py | head -4
 echo "==13c. unknown-route sensitivity ==" ; "$PY" $W/route_unknown_sensitivity.py | tail -4
 echo "==13e. detector window variants ==" ; "$PY" $W/detector_variants.py | tail -5
+echo "==13f. typo-corrected sensitivity ==" ; "$PY" $W/typo_sensitivity.py | tail -2
+echo "==13g. modified-release split ==" ; "$PY" $W/release_split.py | tail -4
 echo "==14. recall match level =="          ; "$PY" $W/recall_matchlevel.py      | tail -4
 echo "==15. sensitivities =="               ; "$PY" $W/sensitivities.py          >/dev/null
 echo "==16. collected numbers =="           ; "$PY" $W/collect_numbers.py        >/dev/null
@@ -104,6 +106,7 @@ else echo "check_relationships.py SKIPPED (needs poppler: it reads the figure PD
 "$PY" check_pipeline_closure.py
 "$PY" check_stage_portability.py
 "$PY" check_released_files.py
+"$PY" check_literals.py
 "$PY" check_readme.py
 "$PY" check_determinism.py
 

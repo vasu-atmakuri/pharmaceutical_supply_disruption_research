@@ -105,6 +105,52 @@ for nm,frame,src,per in (("rows_sparse","ROWS",SPARSE,False),
     n,sole=count(frame,src,per)
     out[nm]={"events":int(n),"near_sole":int(sole)}
     print(f"{nm:22s} events {n:5d}   near-sole {sole:4d}")
+# ---- how much of the persistence window each event actually has ----
+# The rule asks that a labeler not return to half its baseline between t+4 and t+12.
+# An event late in the panel has fewer than twelve quarters of follow-up, so the rule
+# is evaluated on a shorter window there. This records how many events are in that
+# position and what the detector finds when they are excluded, so the rule's
+# dependence on event date is reported rather than assumed away.
+_last=c.execute("SELECT MAX(tq) FROM lmq").fetchone()[0]
+c.execute(f"""CREATE OR REPLACE TABLE ev_final AS WITH {DENSE},
+ s AS (SELECT lab,mkt,tq,
+   AVG(rx) OVER (PARTITION BY lab,mkt ORDER BY tq RANGE BETWEEN 4 PRECEDING AND 1 PRECEDING) pre4,
+   AVG(rx) OVER (PARTITION BY lab,mkt ORDER BY tq RANGE BETWEEN 0 FOLLOWING AND 3 FOLLOWING) post4
+   FROM dense),
+ e AS (SELECT lab,mkt,tq FROM s WHERE pre4>=200 AND post4<0.05*pre4),
+ f0 AS (SELECT lab,mkt,MIN(tq) t FROM e GROUP BY 1,2),
+ base AS (SELECT f0.lab,f0.mkt,f0.t,
+   (SELECT AVG(x.rx) FROM lmq x WHERE x.lab=f0.lab AND x.mkt=f0.mkt
+      AND x.tq BETWEEN f0.t-4 AND f0.t-1) pre,
+   (SELECT MAX(x.rx) FROM lmq x WHERE x.lab=f0.lab AND x.mkt=f0.mkt
+      AND x.tq BETWEEN f0.t+4 AND f0.t+12) later_max FROM f0)
+SELECT lab,mkt,t FROM base WHERE later_max IS NULL OR later_max < 0.5*pre""")
+_tot=c.execute("SELECT COUNT(*) FROM ev_final").fetchone()[0]
+_full=c.execute(f"SELECT COUNT(*) FROM ev_final WHERE t+12<={_last}").fetchone()[0]
+# The count that bears on the results is the near-sole subset, since that is the
+# cohort every later section uses.
+c.execute("""CREATE OR REPLACE TABLE ns AS
+ WITH fr AS (SELECT f.lab,f.mkt,f.t,SUM(l.rx) firm_rx FROM ev_final f JOIN lmq l
+             ON l.lab=f.lab AND l.mkt=f.mkt AND l.tq BETWEEN f.t-4 AND f.t-1 GROUP BY 1,2,3),
+  tt AS (SELECT f.mkt,f.t,SUM(m.rx) mol_rx FROM ev_final f JOIN molq m
+         ON m.mol=f.mkt AND m.tq BETWEEN f.t-4 AND f.t-1 GROUP BY 1,2),
+  ev AS (SELECT fr.mkt,fr.t,fr.firm_rx/NULLIF(tt.mol_rx,0) shr FROM fr
+         JOIN tt ON tt.mkt=fr.mkt AND tt.t=fr.t WHERE tt.mol_rx>0),
+  fe AS (SELECT mkt,MIN(t) t FROM ev GROUP BY 1)
+ SELECT e.mkt,e.t FROM ev e JOIN fe ON fe.mkt=e.mkt AND fe.t=e.t WHERE e.shr>=0.95""")
+_nst=c.execute("SELECT COUNT(*) FROM ns").fetchone()[0]
+_nsf=c.execute(f"SELECT COUNT(*) FROM ns WHERE t+12<={_last}").fetchone()[0]
+print(f"  near-sole subset: {_nsf} of {_nst} have the full twelve quarters")
+out["persistence_window"]={"events":int(_tot),"full_twelve_quarters":int(_full),
+ "truncated":int(_tot-_full),
+ "near_sole_events":int(_nst),"near_sole_full_twelve":int(_nsf),
+ "near_sole_truncated":int(_nst-_nsf),
+ "note":("Events whose t+12 falls beyond the panel are evaluated on a shorter "
+         "persistence window. The rule is the same; the follow-up available to it "
+         "is not.")}
+print(f"persistence window: {_full} of {_tot} events have the full twelve quarters, "
+      f"{_tot-_full} are evaluated on a shorter window")
+
 # The last row is what the paper reports, so it is checked against the panel's own
 # recorded totals rather than trusted. If the detector changes and this file is not
 # regenerated, this fails instead of publishing two different numbers.

@@ -34,10 +34,15 @@ measure, and finds two errors that operate before any supplier is counted.
 
 What survives both corrections is a conditional association: among detected exits, markets
 whose departing labeler held at least 95 percent collapse below two percent of baseline
-dispensing at 42.1 percent against 0.21 percent among matched risk-set controls. The
-zero-replacement result, however, is concentrated in the exits that are not supply failures:
-the median replacement ratio is 0.00 across all 19 observed exits but 0.47 in the two
-documented supply disruptions.
+dispensing at 42.1 percent against 0.21 percent among matched risk-set controls.
+
+But the collapse result is concentrated in the exits that are not supply failures. Of the 8
+collapses among the 19 observed exits, none is one of the 2 documented supply disruptions. All 3
+regulatory transitions collapse, as do the market-wide withdrawal and the rebate-programme
+withdrawal. Excluding the 8 exits an outside record explains as something other than a supply
+failure leaves 2 collapses in 11 events, or 18.2 percent against the pooled 42.1 percent. The
+median replacement ratio tells the same story: 0.00 across all 19 observed exits, 0.47 in the
+two documented disruptions.
 
 The headline claim is therefore negative. These data do not support the statement that
 sole-supplier markets fail to replace lost volume after a supply disruption, because in the
@@ -72,7 +77,7 @@ See `SETUP.md` for the interpreter and package requirements and the expected dat
 PSDR_ROOT=$(pwd) RESEARCH_ROOT=$(dirname $(pwd)) bash scripts/run_all.sh
 ```
 
-The run executes 27 analysis stages and then 9 checks, and ends with
+The run executes 29 analysis stages and then 10 checks, and ends with
 `ALL STAGES AND CHECKS COMPLETE`. Stages 0 to 6 rebuild the panels from the raw SDUD and FDA
 listings and take the bulk of the runtime; the whole run takes roughly 6 to 8 minutes on a warm
 machine, and it has to run in a session that stays alive for its duration. Without a TeX distribution the document build is skipped and the run ends with
@@ -81,11 +86,11 @@ machine, and it has to run in a session that stays alive for its duration. Witho
 ## Why the checks are part of the pipeline
 
 Every number in the manuscript is a generated macro, not a typed figure, and the run refuses to
-finish if any of them disagrees with the results it came from. The nine checks assert, among
+finish if any of them disagrees with the results it came from. The ten checks assert, among
 other things, that each number in the text traces to an analysis output, that the event flow
 reconciles event by event, that every macro the manuscript cites is defined, that each stage
-reads only files an earlier stage wrote, and that two runs from the same inputs produce
-byte-identical outputs. Several of these exist because a hand-typed number in an earlier draft
+reads only files an earlier stage wrote, that no literal number sits in the prose where a
+generated macro belongs, and that two runs from the same inputs produce byte-identical outputs. Several of these exist because a hand-typed number in an earlier draft
 went stale when the cohort changed, which is the failure mode they are there to prevent.
 
 ## Detector specification

@@ -1,0 +1,10 @@
+{
+ "descriptors": "\\b(ER|XR|SR|CR|DR|EXTENDED|DELAYED|SUSTAINED|CONTROLLED|MODIFIED)\\b",
+ "groups": [
+  "METFORMIN | ORAL TABLET",
+  "PHENYTOIN,SODIUM | ORAL CAPSULE"
+ ],
+ "groups_with_both_forms": 2,
+ "note": "A release token with no plain counterpart separates nothing, so the second count is the one the robustness claim rests on.",
+ "release_token_markets": 21
+}

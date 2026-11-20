@@ -1,6 +1,15 @@
 {
  "gappy_pct": 13.1,
  "note": "Each row changes one element of the specification. The last row is the specification reported in the paper.",
+ "persistence_window": {
+  "events": 433,
+  "full_twelve_quarters": 154,
+  "near_sole_events": 72,
+  "near_sole_full_twelve": 38,
+  "near_sole_truncated": 34,
+  "note": "Events whose t+12 falls beyond the panel are evaluated on a shorter persistence window. The rule is the same; the follow-up available to it is not.",
+  "truncated": 279
+ },
  "range_dense": {
   "events": 500,
   "near_sole": 79

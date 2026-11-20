@@ -16,7 +16,7 @@
  "normalised_keys": 2916,
  "keys_absorbed": 379,
  "near_sole_mq_raw": 58914,
- "near_sole_matched": 58033,
+ "near_sole_matched": 57976,
  "decomp_AB_pp": -0.02,
  "decomp_BC_pp": 2.87,
  "near_sole_vol_rel_reduction": 28.0,
@@ -81,5 +81,6 @@
  },
  "cohort_exactly_one_labeler": 17,
  "cohort_two_plus_labelers": 2,
- "generated_macro_count": 307
+ "generated_macro_count": 365,
+ "final_check_count": 9
 }

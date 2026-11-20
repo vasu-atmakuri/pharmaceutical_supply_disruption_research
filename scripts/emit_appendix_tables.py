@@ -56,6 +56,11 @@ for k,_ in LAB:
     n=k.title().replace("_","")
     m.append(r"\newcommand{\nDet%s}{%s\xspace}"%(n,f"{V[k]['events']:,}".replace(",","{,}")))
     m.append(r"\newcommand{\nDetSole%s}{%s\xspace}"%(n,V[k]["near_sole"]))
+_pw=V["persistence_window"]
+for k,nm in (("events","PwEvents"),("full_twelve_quarters","PwFull"),("truncated","PwTrunc"),
+             ("near_sole_events","PwNsEvents"),("near_sole_full_twelve","PwNsFull"),
+             ("near_sole_truncated","PwNsTrunc")):
+    m.append(r"\newcommand{\n%s}{%s\xspace}"%(nm,f"{_pw[k]:,}".replace(",","{,}")))
 m.append(r"\newcommand{\nGappyPct}{%s\xspace}"%("%.1f"%V["gappy_pct"]))
 m.append(r"\newcommand{\nVanishUndetected}{%s\xspace}"%V["vanished_undetected"])
 m.append(r"\newcommand{\nDetDipsRemoved}{%s\xspace}"%

@@ -1,0 +1,68 @@
+{
+ "by_class": {
+  "artefact": {
+   "collapsed": 1,
+   "n": 2,
+   "n_collapse_obs": 2,
+   "rate": 0.5
+  },
+  "continued": {
+   "collapsed": 0,
+   "n": 5,
+   "n_collapse_obs": 5,
+   "rate": 0.0
+  },
+  "coverage": {
+   "collapsed": 1,
+   "n": 1,
+   "n_collapse_obs": 1,
+   "rate": 1.0
+  },
+  "supply": {
+   "collapsed": 0,
+   "n": 2,
+   "n_collapse_obs": 2,
+   "rate": 0.0
+  },
+  "transfer": {
+   "collapsed": 0,
+   "n": 1,
+   "n_collapse_obs": 1,
+   "rate": 0.0
+  },
+  "transition": {
+   "collapsed": 3,
+   "n": 3,
+   "n_collapse_obs": 3,
+   "rate": 1.0
+  },
+  "undetermined": {
+   "collapsed": 2,
+   "n": 4,
+   "n_collapse_obs": 4,
+   "rate": 0.5
+  },
+  "withdrawal": {
+   "collapsed": 1,
+   "n": 1,
+   "n_collapse_obs": 1,
+   "rate": 1.0
+  }
+ },
+ "documented_supply": {
+  "collapsed": 0,
+  "n": 2,
+  "rate": 0.0
+ },
+ "excluding_explained": {
+  "collapsed": 2,
+  "n": 11,
+  "rate": 0.18181818181818182
+ },
+ "note": "Three populations, not three estimates of one thing. The pooled rate is every observed near-sole exit. The second excludes the classes an outside record explains as something other than a supply failure. The third is the documented supply disruptions alone, and it is two events from one episode.",
+ "pooled": {
+  "collapsed": 8,
+  "n": 19,
+  "rate": 0.42105263157894735
+ }
+}

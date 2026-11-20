@@ -23,6 +23,7 @@ RAW=shares('/tmp/lmq_nat.parquet')     # specification A: raw string, form bucke
 COR=shares('/tmp/lmq_v2.parquet')      # specification C: route-and-form, normalised key
 YMIN=(2016-1991)*4+1
 def cal(t): return f"{1991+(t-1)//4}Q{(t-1)%4+1}"
+TOT={}
 def summarise(S,tag):
     tot_rx=sum(v['rx'] for v in S.values())
     sole=[v for v in S.values() if v['top']>=.95]
@@ -30,6 +31,7 @@ def summarise(S,tag):
     one=[v for v in S.values() if v['n']==1]
     print(f"{tag}")
     print(f"  market-quarters {len(S):,}   total prescriptions {tot_rx:,.0f}")
+    TOT[tag]=float(tot_rx)
     print(f"  single-labeler market-quarters       {len(one):>7,} ({len(one)/len(S):6.1%})"
           f"   holding {sum(v['rx'] for v in one)/tot_rx:6.2%} of volume")
     print(f"  top share >= 95%                     {len(sole):>7,} ({len(sole)/len(S):6.1%})"
@@ -67,6 +69,6 @@ print(f"  NOT single-source after correction   : {moved:>7,} ({moved/tot:6.1%})"
       f"   carrying {moved_rx/(moved_rx+kept_rx):.1%} of the volume in that group")
 print("\n  ingredients most often reclassified out of single-source status:")
 for k,n in examples.most_common(12): print(f"      {n:>4}  {k}")
-json.dump(dict(spec_A=A,spec_C=C,reclassified=moved,retained=kept,unmatched=unmatched,
+json.dump(dict(spec_A=A,spec_C=C,total_rx=TOT,reclassified=moved,retained=kept,unmatched=unmatched,
                reclassified_volume_share=moved_rx/(moved_rx+kept_rx) if tot else None),
   open(_ROOT+"/results/national_impact.json","w"),indent=2)

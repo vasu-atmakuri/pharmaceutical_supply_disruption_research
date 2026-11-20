@@ -19,8 +19,12 @@
     "sole_vol": 0.10539464565062237,
     "mean_hhi": 0.7539701080328551
   },
-  "reclassified": 11656,
-  "retained": 46377,
-  "unmatched": 881,
-  "reclassified_volume_share": 0.3207422699247206
+  "total_rx": {
+    "SPECIFICATION A  raw ingredient string, dosage-form bucket": 5799308041.0,
+    "SPECIFICATION C  route-and-form bucket, normalised ingredient key": 5799308041.0
+  },
+  "reclassified": 11679,
+  "retained": 46297,
+  "unmatched": 938,
+  "reclassified_volume_share": 0.2900474975436457
 }

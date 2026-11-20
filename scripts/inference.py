@@ -41,6 +41,11 @@ def boot_med(v,n=20000):
 OUT={}
 print("REPLACEMENT RATIO by pre-exit concentration band (normalized panel)")
 print(f"{'band':<9}{'n':>4}{'median':>8}{'95% CI':>18}{'mean':>8}{'vol-wtd':>9}{'P(R>=.5)':>10}{'P(R<.02)':>10}")
+def collapse(m,t):
+    bl=basec(m,t)
+    post=[MQ[m].get(t+k) for k in range(1,7)]
+    if all(v is None for v in post): return None
+    return 1 if np.mean([0.0 if v is None else v for v in post])<0.02*bl else 0
 for b in ["<35%","35-65%","65-95%","sole"]:
     sel=sorted(m for m in OBS if band(inwin[m][1])==b)   # sorted: array order fixes the bootstrap
     v=np.array([R(m) for m in sel if R(m) is not None])
@@ -52,13 +57,17 @@ for b in ["<35%","35-65%","65-95%","sole"]:
     OUT[f"R_{b}"]=dict(n=int(len(v)),median=float(np.median(v)),ci=[lo,hi],mean=float(np.mean(v)),
                        volwtd=float(np.sum(v*w)/np.sum(w)),p_ge_half=float(np.mean(v>=.5)),
                        p_lt_2pct=float(np.mean(v<.02)))
+    # The collapse rate for this band, computed here rather than written into the
+    # table generator. It had been hard-coded there as 38.5 percent for the sole band
+    # and 0.0 percent for the rest; the sole figure was a superseded cohort's and the
+    # minority band's true rate is not zero.
+    _cl=[collapse(m,inwin[m][0]) for m in sel]
+    _cl=[x for x in _cl if x is not None]
+    OUT[f"R_{b}"]["n_collapse"]=int(len(_cl))
+    OUT[f"R_{b}"]["collapse"]=float(np.mean(_cl)) if _cl else None
+    OUT[f"R_{b}"]["n_collapsed"]=int(sum(_cl))
 # ---- matched risk-set controls, audited ----
 sole=sorted(m for m in OBS if inwin[m][1]>=.95)   # sorted: matched-set order fixes the bootstrap
-def collapse(m,t):
-    bl=basec(m,t)
-    post=[MQ[m].get(t+k) for k in range(1,7)]
-    if all(v is None for v in post): return None
-    return 1 if np.mean([0.0 if v is None else v for v in post])<0.02*bl else 0
 sets=[]; reuse=collections.Counter()
 for m in sole:
     t,s,dl=inwin[m]

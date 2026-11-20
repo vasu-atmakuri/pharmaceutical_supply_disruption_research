@@ -130,7 +130,8 @@ for lab,k in [("under 35 percent","<35%"),("35 to 65 percent","35-65%"),
               ("65 to 95 percent","65-95%"),("at least 95 percent","sole")]:
     d=INF["R_"+k]
     vw="see text" if k=="<35%" else f"{d['volwtd']:.2f}"
-    coll="38.5\\%" if k=="sole" else "0.0\\%"
+    coll=("---" if d.get("collapse") is None
+          else f"{d['collapse']*100:.1f}\\%")
     out.append(f"{lab:<19} & {d['n']} & {d['median']:.2f} & [{d['ci'][0]:.2f}, {d['ci'][1]:.2f}] "
                f"& {d['mean']:.2f} & {vw} & {d['p_lt_2pct']*100:.1f}\\% & {coll} \\\\")
 open(f"{G}/tab_replacement.tex","w").write(
@@ -194,6 +195,52 @@ M.update(
  RiskDiff=f"{INF['matched']['risk_diff']*100:.1f}", CILo=f"{INF['matched']['ci_sets'][0]*100:.1f}",
  CIHi=f"{INF['matched']['ci_sets'][1]*100:.1f}", CIHiB=f"{INF['matched']['ci_sets_and_controls'][1]*100:.1f}",
  ControlObs=c(INF["matched"]["control_obs"]), UniqueControls=c(INF["matched"]["unique_controls"]),
+ # the treated-event count for the matched and band analyses. This is the observed
+ # cohort's sole band, which is NOT RemainSole (raw sole minus reclassified): wiring
+ # RemainSole into these sentences printed seventeen where the analysis used nineteen.
+ Treated=c(INF["matched"]["sets"]), TreatedW=_w(INF["matched"]["sets"]),
+ Checks=_w(len(set(__import__("re").findall(r"((?:audit|check|verify)_\w+)\.py",
+   open(f"{_os.path.dirname(_os.path.abspath(__file__))}/run_all.sh").read()))-{"check_environment"})),
+ TreatedColl=_w(round(INF["matched"]["treated_rate"]*INF["matched"]["sets"])),
+ MaxReuse=c(INF["matched"]["max_reuse"]),
+ # quarters between the announced effective date of the Praluent transfer, 2020Q2,
+ # and the detected alirocumab exit. Stated so the gap is disclosed, not implied.
+ TypoVolBase=f"{100*L('typo_sensitivity.json')['as_published']['near_sole_volume_share']:.2f}",
+ TypoVolFixed=f"{100*L('typo_sensitivity.json')['typos_corrected']['near_sole_volume_share']:.2f}",
+ TypoExitsBase=c(L("typo_sensitivity.json")["as_published"]["near_sole_exits"]),
+ TypoExitsFixed=c(L("typo_sensitivity.json")["typos_corrected"]["near_sole_exits"]),
+ TypoMarketsBase=c(L("typo_sensitivity.json")["as_published"]["markets"]),
+ TypoMarketsFixed=c(L("typo_sensitivity.json")["typos_corrected"]["markets"]),
+# Deficit and entry figures. Every one of these was a typed literal and every one
+ # was stale: the deficit medians, the bootstrap interval, the leave-one-out range and
+ # all three entry rates moved with the corrected cohort and the prose did not.
+ # the panel's total reimbursed volume, and the relative reductions, which were typed
+ RelTokenMarkets=c(L("release_split.json")["release_token_markets"]),
+ RelBothGroups=_w(L("release_split.json")["groups_with_both_forms"]),
+ TotalRxB=f"{max(NI['total_rx'].values())/1e9:.2f}",
+ RouteSplitQuarters=c(L("route_split_effect.json")["ingredient_quarters"]),
+ RelRedNearSole=f"{100*(ABC['A']['sole_vol']-ABC['C']['sole_vol'])/ABC['A']['sole_vol']:.0f}",
+ RelRedSingle=f"{100*(ABC['A']['one_vol']-ABC['C']['one_vol'])/ABC['A']['one_vol']:.0f}",
+ DefTotLo=f"{DEF['under 35%']['total_median']:.2f}",
+ DefTotMid=f"{DEF['35-95%']['total_median']:.2f}",
+ DefTotSole=f"{DEF['at least 95%']['total_median']:.2f}",
+ DefPostLo=f"{DEF['under 35%']['post_median']:.2f}",
+ DefPostMid=f"{DEF['35-95%']['post_median']:.2f}",
+ DefPostSole=f"{DEF['at least 95%']['post_median']:.2f}",
+ DefSoleCiLo=f"{DEF['at least 95%']['total_ci'][0]:.2f}",
+ DefSoleCiHi=f"{DEF['at least 95%']['total_ci'][1]:.2f}",
+ DefSoleLooLo=f"{DEF['at least 95%']['loo_min']:.2f}",
+ DefSoleLooHi=f"{DEF['at least 95%']['loo_max']:.2f}",
+ EntryLo=f"{100*DEF['entry']['under 35%'][0]/DEF['entry']['under 35%'][1]:.1f}",
+ EntryMid=f"{100*DEF['entry']['35-95%'][0]/DEF['entry']['35-95%'][1]:.1f}",
+ EntrySole=f"{100*DEF['entry']['at least 95%'][0]/DEF['entry']['at least 95%'][1]:.1f}",
+ EntryLoN=c(DEF['entry']['under 35%'][1]), EntryMidN=c(DEF['entry']['35-95%'][1]),
+ EntrySoleN=c(DEF['entry']['at least 95%'][1]),
+ TransferGapQ=_w(((2021-1991)*4+2)-((2020-1991)*4+2)),
+ MaxReuseW=_w(INF["matched"]["max_reuse"]),
+ SoleLtTwoW=_w(round(INF["R_sole"]["p_lt_2pct"]*INF["R_sole"]["n"])),
+ MidBandN=c(INF["R_35-65%"]["n"]), MidBandNW=_w(INF["R_35-65%"]["n"]),
+ MidBandMedian=f"{INF['R_35-65%']['median']:.2f}",
  ControlsOnce=c(INF["matched"]["used_once"]), TreatedSets=c(INF["matched"]["sets"]),
  LogrankFifty=f"{RC['50%']['logrank_p']:.3f}", LogrankNinety=f"{RC['90%']['logrank_p']:.3f}",
  # how many markets in each band ever fall below half of baseline. The denominators
@@ -410,6 +457,40 @@ def emit_strata():
                    f"{d['volwtd']:.2f} \\\\")
     out+=["\\botrule","\\end{tabular}"]
     open(f"{G}/tab_strata.tex","w").write("\n".join(out)+"\n")
+
+    # ---- collapse by class ----
+    # Replacement and collapse are different outcomes and the classes separate them
+    # differently, so this is its own table rather than another column on the one above.
+    CC=L("cause_collapse.json"); _bc=CC["by_class"]
+    out=["\\begin{tabular}{@{}lrrr@{}}","\\toprule",
+         "Class & Events & Collapsed & Rate \\\\","\\midrule"]
+    for k in _CORD:
+        if k not in _bc: continue
+        d=_bc[k]
+        rate="---" if d["rate"] is None else f"{100*d['rate']:.1f}\\%"
+        out.append(f"{_clab(k)} & {d['n']} & {d['collapsed']} & {rate} \\\\")
+    out.append("\\midrule")
+    for tag,key in [("All observed exits","pooled"),
+                    ("Excluding the explained classes","excluding_explained"),
+                    ("Documented supply disruptions only","documented_supply")]:
+        d=CC[key]
+        rate="---" if d["rate"] is None else f"{100*d['rate']:.1f}\\%"
+        out.append(f"{tag} & {d['n']} & {d['collapsed']} & {rate} \\\\")
+    out+=["\\botrule","\\end{tabular}"]
+    open(f"{G}/tab_collapse.tex","w").write("\n".join(out)+"\n")
+    _n=lambda v: f"{v:,}".replace(",","{,}")
+    M["CollPooledColl"]=_n(CC["pooled"]["collapsed"]); M["CollPooledN"]=_n(CC["pooled"]["n"])
+    M["CollPooledRate"]=f"{100*CC['pooled']['rate']:.1f}"
+    M["CollRemColl"]=_n(CC["excluding_explained"]["collapsed"])
+    M["CollRemCollW"]=_w(CC["excluding_explained"]["collapsed"])
+    M["CollRemN"]=_n(CC["excluding_explained"]["n"])
+    M["CollRemNW"]=_w(CC["excluding_explained"]["n"])
+    M["CollRemRate"]=f"{100*CC['excluding_explained']['rate']:.1f}"
+    M["CollSupplyColl"]=_w(CC["documented_supply"]["collapsed"])
+    M["CollSupplyN"]=_n(CC["documented_supply"]["n"])
+    M["CollTransitionAll"]=_w(_bc["transition"]["collapsed"]) if "transition" in _bc else "zero"
+    M["CollContinued"]=_w(_bc["continued"]["collapsed"]) if "continued" in _bc else "zero"
+    M["CollUndet"]=_w(_bc["undetermined"]["collapsed"]) if "undetermined" in _bc else "zero"
     c=CS["counts"]
     for k in _CORD:
         M["Cause"+k.capitalize()]=c.get(k,0)
@@ -472,12 +553,17 @@ open(f"{G}/numbers.tex","w").write(
 import json as _j
 _nf=_ROOT+"/results/manuscript_numbers.json"
 import re as _re, os as _os
+# how many final checks run_all.sh runs, excluding the preflight. Three documents
+# quoted three different numbers for this.
+_sh=open(f"{_os.path.dirname(_os.path.abspath(__file__))}/run_all.sh").read()
+_nchk=len(set(_re.findall(r"((?:audit|check|verify)_\w+)\.py",_sh))-{"check_environment"})
 _nd=_j.load(open(_nf))
 # Macros reach the manuscript from two generated files. Counting only this script's
 # left the response letter understating the total by the detector macros.
 _dm=f"{G}/detector_macros.tex"
 _extra=len(_re.findall(r"^\\newcommand", open(_dm).read(), _re.M)) if _os.path.exists(_dm) else 0
 _nd["generated_macro_count"]=len(M)+_extra
+_nd["final_check_count"]=_nchk
 _j.dump(_nd,open(_nf,"w"),indent=1)
 print(f"wrote {len(M)} macros and 9 table bodies ({_ntrans} transition rows, {_ncause} exits, {_nrc} coverage years) to springer/generated/")
 for k in ["NormKeys","KeysAbsorbed","ReclassRate","ReclassVol","MinorityN","ReplEligible","Cohort","MinorityLtTwo"]:
