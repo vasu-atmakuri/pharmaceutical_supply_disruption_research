@@ -4,6 +4,7 @@ A raw market can split into several corrected markets. Assigning it to the large
 component is one choice among several, so all three are reported.
 """
 import duckdb, json, os, collections
+from _stable_json import stable   # see _stable_json.py: reproducible float precision
 import os as _os
 # Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
@@ -77,4 +78,4 @@ out=dict(components=dict(ncomp),
          largest_vol_rate=V['largest_rx_reclass']/V['flagged'])
 for k in ['largest','anyc','allc']:
     out[k+"_rate"]=R[k]['reclass']/(R[k]['still']+R[k]['reclass'])
-json.dump(out,open(_ROOT+"/results/reclassification_rules.json","w"),indent=2)
+json.dump(stable(out),open(_ROOT+"/results/reclassification_rules.json","w"),indent=2)

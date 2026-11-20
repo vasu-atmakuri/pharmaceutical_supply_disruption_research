@@ -1,6 +1,7 @@
 """How much does the corrected market definition change the national picture of
 supplier concentration? Computed for every market-quarter, raw versus corrected."""
 import duckdb, json, os, collections, numpy as np
+from _stable_json import stable   # see _stable_json.py: reproducible float precision
 import os as _os
 # Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
@@ -69,6 +70,7 @@ print(f"  NOT single-source after correction   : {moved:>7,} ({moved/tot:6.1%})"
       f"   carrying {moved_rx/(moved_rx+kept_rx):.1%} of the volume in that group")
 print("\n  ingredients most often reclassified out of single-source status:")
 for k,n in examples.most_common(12): print(f"      {n:>4}  {k}")
-json.dump(dict(spec_A=A,spec_C=C,total_rx=TOT,reclassified=moved,retained=kept,unmatched=unmatched,
-               reclassified_volume_share=moved_rx/(moved_rx+kept_rx) if tot else None),
+json.dump(stable(dict(spec_A=A,spec_C=C,total_rx=TOT,reclassified=moved,retained=kept,
+               unmatched=unmatched,
+               reclassified_volume_share=moved_rx/(moved_rx+kept_rx) if tot else None)),
   open(_ROOT+"/results/national_impact.json","w"),indent=2)

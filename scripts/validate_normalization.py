@@ -7,6 +7,7 @@ substance set; CONTRADICTED when they do not. A MISSED duplicate is a pair of
 distinct normalised keys with the same substance set and route bucket.
 """
 import duckdb, re, collections, json, os
+from _stable_json import stable   # see _stable_json.py: reproducible float precision
 import os as _os
 # Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
@@ -101,8 +102,8 @@ print(f"\nMISSED DUPLICATES: {len(missed)} substance-and-route groups still spli
 for (s,rt),v in list(missed.items())[:6]:
     print(f"    [{rt}] {sorted(s)}")
     for n in v[:3]: print(f"        {n[:66]}")
-json.dump({"merge_groups":len(merged),"raw_keys_merged":sum(len(v) for v in merged.values()),
+json.dump(stable({"merge_groups":len(merged),"raw_keys_merged":sum(len(v) for v in merged.values()),
            "confirmed":ok,"contradicted":bad,"untestable":unk,
            "precision":(ok/(ok+bad) if ok+bad else None),
-           "missed_duplicate_groups":len(missed),"missed_keys":sum(len(v) for v in missed.values())},
+           "missed_duplicate_groups":len(missed),"missed_keys":sum(len(v) for v in missed.values())}),
   open(_ROOT+"/results/normalization_validation.json","w"),indent=2)

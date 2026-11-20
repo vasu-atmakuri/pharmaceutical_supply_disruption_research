@@ -1,4 +1,5 @@
 import duckdb, numpy as np, collections, json, os
+from _stable_json import stable   # see _stable_json.py: reproducible float precision
 import os as _os
 # Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
@@ -82,4 +83,4 @@ for s in specs:
     for b in ["<35%","sole"]:
         d=s[b]; print(f"    {b:<6} n_R={d['n_R']:>3} medianR={d['median_R']:>5.2f}  R<0.02={d['R_lt_002']:>5.1%}"
                       f"   n_coll={d['n_coll']:>3} collapse={d['collapse']:>5.1%}")
-json.dump(specs,open(_ROOT+"/results/three_specifications.json","w"),indent=2)
+json.dump(stable(specs),open(_ROOT+"/results/three_specifications.json","w"),indent=2)

@@ -5,9 +5,9 @@
     "single": 55888,
     "sole": 58914,
     "near": 72157,
-    "single_vol": 0.11499876559152412,
-    "sole_vol": 0.14708552002575026,
-    "mean_hhi": 0.7832031481392643
+    "single_vol": 0.114998765592,
+    "sole_vol": 0.147085520026,
+    "mean_hhi": 0.783203148139
   },
   "spec_C": {
     "mq": 87728,
@@ -15,9 +15,9 @@
     "single": 46620,
     "sole": 48893,
     "near": 60429,
-    "single_vol": 0.08608948661983999,
-    "sole_vol": 0.10539464565062237,
-    "mean_hhi": 0.7539701080328551
+    "single_vol": 0.0860894866198,
+    "sole_vol": 0.105394645651,
+    "mean_hhi": 0.753970108033
   },
   "total_rx": {
     "SPECIFICATION A  raw ingredient string, dosage-form bucket": 5799308041.0,
@@ -26,5 +26,5 @@
   "reclassified": 11679,
   "retained": 46297,
   "unmatched": 938,
-  "reclassified_volume_share": 0.2900474975436457
+  "reclassified_volume_share": 0.290047497544
 }

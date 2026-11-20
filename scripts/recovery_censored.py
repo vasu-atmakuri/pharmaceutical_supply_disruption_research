@@ -6,6 +6,7 @@ little chance to recover). Anchoring on the first crossing and censoring the
 unrecovered fixes that.
 """
 import duckdb, numpy as np, json, os, collections
+from _stable_json import stable   # see _stable_json.py: reproducible float precision
 import os as _os
 # Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
@@ -93,13 +94,21 @@ for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
             if any((MQ[m].get(t+j) or 0)>=thr*bl for j in range(d+1,H+1)): k+=1
         lm[b]=(k,n)
         print(f"     {b:<9} {k}/{n}" + (f" = {k/n:.1%}" if n else ""))
+    # The stored statistics are rounded to twelve decimals. The panels are rebuilt by
+    # a parallel aggregation whose float summation order is not fixed, so a rebuild can
+    # move a sum by one unit in the last place; that propagated into the log-rank
+    # p-value's sixteenth digit and made this artifact differ from a fresh run while
+    # nothing meaningful had changed. Twelve decimals is nine orders of magnitude more
+    # precision than the three the paper reports, so this cannot hide a real change.
     RES[lbl]=dict(minority_rows=grp["minority"],sole_rows=grp["sole"],
-                  logrank_z=z,logrank_p=p,landmark=lm)
+                  logrank_z=None if z is None else round(z,12),
+                  logrank_p=None if p is None else round(p,12),
+                  landmark=lm)
 # Band sizes in THIS cohort. The recovery cohort requires twelve quarters of
 # follow-up where the main cohort requires six, so it is not the same set of
 # markets and its denominators are not the main cohort's. Writing them here stops
 # the manuscript pairing a crossing count with a denominator from elsewhere.
 RES["cohort"]={"n":len(COH),
                **{b:sum(1 for _,_,s in COH if band(s)==b) for b in ("minority","mid","sole")}}
-json.dump(RES,open(_ROOT+"/results/recovery_censored.json","w"),indent=2)
+json.dump(stable(RES),open(_ROOT+"/results/recovery_censored.json","w"),indent=2)
 print("\nwrote results/recovery_censored.json")

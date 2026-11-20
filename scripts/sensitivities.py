@@ -1,4 +1,5 @@
 import duckdb, json, os, collections, numpy as np, re, glob
+from _stable_json import stable   # see _stable_json.py: reproducible float precision
 import os as _os
 # Root of the repository. Set PSDR_ROOT to run outside the analysis VM.
 _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharmaceutical_supply_disruption_research")
@@ -151,5 +152,5 @@ for B0b,B1b,tag in [(-4,0,"alt")]:
     OUT["alt_baseline_minority_median"]=round(float(np.median(v2)),2)
     OUT["alt_baseline_minority_lt02"]=round(k2/len(v2)*100,1)
     print(f"\nalternative outcome baseline: n={len(v2)} median={np.median(v2):.2f} R<0.02={k2}/{len(v2)}")
-json.dump(OUT,open(_ROOT+"/results/sensitivities.json","w"),indent=2)
+json.dump(stable(OUT),open(_ROOT+"/results/sensitivities.json","w"),indent=2)
 print("\nwrote results/sensitivities.json")

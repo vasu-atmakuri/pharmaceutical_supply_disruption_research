@@ -26,7 +26,13 @@ _NREL=int(_sp.run([sys.executable,f"{_ROOT}/scripts/check_relationships.py"],
                   capture_output=True,text=True,
                   env={**os.environ,"PSDR_ROOT":_ROOT}).stdout.split(" relationship checks")[0].split()[-1])
 # (pattern, replacement) - the pattern must capture nothing and match exactly once
+_WORD={8:"eight",9:"nine",10:"ten",11:"eleven",12:"twelve"}
+# the number of final checks run_all.sh runs, excluding the preflight
+_NCHK=len(set(re.findall(r"((?:audit|check|verify)_\w+)\.py",
+            open(f"{_ROOT}/scripts/run_all.sh").read()))-{"check_environment"})
 SUBS=[
+ (r"(?:Nine|Ten|Eleven|Twelve|\d+) checks run after every build",
+  f"{_WORD.get(_NCHK,str(_NCHK)).capitalize()} checks run after every build"),
  (r"(?:\d+|nine|ten|eleven|twelve) of the tables and the abstract are emitted whole",
   "%d of the tables and the abstract are emitted whole" % _NTAB),
  (r"runs \d+ assertions on relationships",

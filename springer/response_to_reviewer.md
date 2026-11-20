@@ -14,7 +14,7 @@ report all of it.
 The manuscript is generated rather than transcribed. Every reported quantity in the text,
 including the spelled-out counts, is a LaTeX macro emitted from the analysis output files, and
 12 of the tables and the abstract are emitted whole, so a stale number is not representable.
-Nine checks run after every build and all pass on the attached version:
+Ten checks run after every build and all pass on the attached version:
 
 - `audit_numbers.py` fails if any number in the source appears in no analysis output.
 - `verify_manuscript.py` checks structure: that the abstract contains no hand-typed statistic,
@@ -26,6 +26,10 @@ Nine checks run after every build and all pass on the attached version:
   key-collapse distribution reconstructs both market counts, that the bound arithmetic closes,
   that every macro the manuscript cites is defined, and that each generated table reproduces
   its source file.
+- `check_literals.py` requires every digit in the body prose to be a generated macro or to
+  appear on a short allowlist with the reason it is fixed by the paper's design. This is the
+  check that would have caught two of the four defects you found, and it found eighteen more
+  that no other check could see.
 - `audit_letter.py` applies the same rule to this letter, which is not macro-driven.
 - `check_readme.py` asserts that the repository README describes this paper: its title, its
   headline counts, its stage and check counts, and every number in it.
