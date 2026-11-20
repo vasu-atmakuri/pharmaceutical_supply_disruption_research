@@ -70,3 +70,68 @@ def classify(market, quarter, labeler, new_labeler_appears=False):
 
 def declared_keys():
     return set(CAUSES)
+
+# For each declared event: a short record string for the appendix table, how closely
+# the record ties to the departing firm and formulation, and the issuing authority
+# and date of the document relied on. Link levels, strongest first:
+#
+#   product and firm   the record names this firm and this formulation
+#   molecule-wide      the action covers every labeler of the molecule at once, so
+#                      it is firm-independent by construction
+#   ingredient level   a regulatory action covers the molecule but does not name the
+#                      departing firm or state why it left
+#   key level          the finding is about the market key itself, not a regulatory
+#                      event: the key is a misspelling of a real multi-supplier market
+#   panel              the evidence is dispensing in this panel, not an outside
+#                      record: a labeler absent before the exit supplies the market
+#                      afterwards
+#
+# No URLs are stored. A URL ages faster than the record it points at, and several of
+# these documents have already moved; the issuer, document and date identify each one.
+RECORD={
+ ("RANITIDINE | ORAL TABLET","2020Q2","53746"): (
+  "Withdrawal of all ranitidine requested over NDMA; every labeler left at once",
+  "molecule-wide","FDA press announcement, 1 Apr 2020"),
+ ("TARTRATE,VARENICLINE | OTHER","2021Q3","00069"): (
+  "All lots recalled for nitrosamine content; FDA recorded a varenicline shortage",
+  "product and firm","FDA recall notice, Sep 2021; FDA drug shortage record"),
+ ("VARENICLINE | ORAL TABLET","2021Q4","00069"): (
+  "Second formulation in the same recall episode",
+  "product and firm","FDA recall notice, Sep 2021"),
+ ("HYDROCHLORIDE,OLOPATADINE | OPHTHALMIC","2021Q3","62332"): (
+  "Rx-to-OTC switch approved for the brand; no firm-level record for this labeler",
+  "ingredient level","FDA Rx-to-OTC switch approval, Feb 2020"),
+ ("ALCAFTADINE | OPHTHALMIC","2022Q2","00023"): (
+  "Rx-to-OTC switch approved for the brand; retail from Mar 2022",
+  "ingredient level","FDA Rx-to-OTC switch approval, Dec 2021"),
+ ("4,ELEMENTS,TRACE | INJECTABLE #94f1","2022Q1","00517"): (
+  "Unapproved multi-element line retired and replaced by approved products; the "
+  "successor dispenses in a sibling key",
+  "product and firm","FDA unapproved drugs initiative; FDA approval of the successor products, 2020"),
+ ("GOSERELIN | INJECTABLE","2021Q4","70720"): (
+  "Firm left the Medicaid Drug Rebate Program, so state programmes stopped covering "
+  "it; the product stayed on the market",
+  "product and firm","CMS Medicaid Drug Rebate Program termination, effective 1 Oct 2021"),
+ ("ALIROCUMAB | INJECTABLE","2021Q2","00024"): (
+  "Marketing rights moved to the originator, availability not expected to be "
+  "affected; the other firm dispenses afterwards",
+  "product and firm","Company announcement of the restructured collaboration, effective 1 Apr 2020"),
+ ("ESCITSLOPRAM | ORAL TABLET","2024Q2","68180"): (
+  "Ingredient string is a misspelling; the correctly spelled market has sixteen "
+  "labelers and 51.5 million prescriptions",
+  "key level","This panel; FDA structured ingredient data"),
+ ("GRISOFULVIN | ORAL LIQUID","2023Q3","69097"): (
+  "Ingredient string is a misspelling; the correctly spelled market has two labelers",
+  "key level","This panel; FDA structured ingredient data"),
+}
+
+CONTINUED_RECORD=("A labeler absent before the exit supplies the market afterwards",
+ "panel","This panel")
+UNDETERMINED_RECORD=("None found","---","")
+
+def record(market, quarter, labeler, new_labeler_appears=False):
+    k=(market,quarter,str(labeler).zfill(5))
+    if k in RECORD: return RECORD[k]
+    if k in CAUSES: raise KeyError(f"{k} is classified but has no appendix record")
+    if new_labeler_appears: return CONTINUED_RECORD
+    return UNDETERMINED_RECORD

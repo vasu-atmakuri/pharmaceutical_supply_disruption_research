@@ -107,6 +107,13 @@ def labeler(code):
     s=re.sub(r"\(\s*\)","",s)              # Advanz Pharma (US) Corp -> Advanz
     s=re.sub(r"\s{2,}"," ",s).strip(" .,-")
     s=re.sub(r"\bU\.?S\.?$","",s).strip(" .,-")   # Sanofi-Aventis U.S -> Sanofi-Aventis
+    # FDA labeler names repeat the parent firm around a stripped division word, so
+    # "Pfizer Laboratories Div Pfizer Inc" reduces to "Pfizer Pfizer". Collapse a
+    # token that now appears twice, keeping the first occurrence's position.
+    seen=[]; 
+    for w in s.split():
+        if w.lower() not in [x.lower() for x in seen]: seen.append(w)
+    s=" ".join(seen)
     return s if s else full.split(",")[0].strip()
 
 def labeler_full(code):

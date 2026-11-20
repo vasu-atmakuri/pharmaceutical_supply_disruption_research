@@ -21,21 +21,18 @@ inwin={m:v for m,v in first.items() if LO<=v[0]<HI}
 OBS=[m for m,v in inwin.items() if basec(m,v[0]) is not None
      and any(MQ[m].get(v[0]+k) is not None for k in range(1,7))]
 sole=sorted([m for m in OBS if inwin[m][1]>=.95],key=lambda m:inwin[m][0])
-# Classification from public records, graded by the strength of the evidence rather
-# than by whether the cause is a supply failure. Four levels:
-#   supply      - a shortage or recall record naming this product AND this firm
-#   withdrawal  - a documented market-wide regulatory action removing the product
-#   transition  - a documented regulatory action overlapping the exit, but the records
-#                 do not establish that THIS firm left because of it (ingredient-level
-#                 evidence only). An Rx-to-OTC switch does not by itself end Medicaid
-#                 coverage, so this is an alternative explanation, not a verified one.
-#   undetermined- no record found for this firm and period
+# Classification from public records, graded by how well the cause is established
+# rather than by whether the cause is a supply failure. The eight classes and what
+# each requires are documented in exit_causes.py, which is the single place they are
+# declared; display_names.py holds their table labels. An Rx-to-OTC switch does not
+# by itself end Medicaid coverage, so a switch that overlaps an exit is recorded as
+# an alternative explanation, not a verified one.
 # See results/event_cause_classification.csv for the per-event evidence.
 # Classification lives in exit_causes.py, keyed on the exact event, and the
 # successor-labeler signal comes from exit_evidence_audit.py. Matching on an
 # ingredient substring here once gave Assertio's diclofenac the evidence from Teva's,
 # and a growing cohort makes that failure mode certain rather than possible.
-from exit_causes import classify, declared_keys
+from exit_causes import classify, declared_keys, record
 import json as _json
 _aud={}
 _ap=_ROOT+"/results/exit_evidence_audit.json"
@@ -47,6 +44,11 @@ for m in sole:
     t,s_,lab=inwin[m]; k=(m,cal(t),lab)
     CLS[m]=classify(m,cal(t),lab,
                     new_labeler_appears=_aud.get(k,{}).get("new_labeler_appears",False))
+REC={}
+for m in sole:
+    t,s_,lab=inwin[m]; k=(m,cal(t),lab)
+    REC[m]=record(m,cal(t),lab,
+                  new_labeler_appears=_aud.get(k,{}).get("new_labeler_appears",False))
 _present={(m,cal(inwin[m][0]),inwin[m][2]) for m in sole}
 _drifted=declared_keys()-_present
 if _drifted:
@@ -65,7 +67,8 @@ for m in sole:
     t,s,lab=inwin[m]; bl=basec(m,t)
     rows.append(dict(market=m,event_quarter=cal(t),departing_labeler=lab,baseline_rx=round(bl,1),
                      post_over_base=round(np.mean([MQ[m].get(t+k) or 0.0 for k in range(1,7)])/bl,4),
-                     replacement_ratio=round(R(m),4),cause_class=CLS[m][0],cause_evidence=CLS[m][1]))
+                     replacement_ratio=round(R(m),4),cause_class=CLS[m][0],cause_evidence=CLS[m][1],
+                     record_short=REC[m][0],evidence_link=REC[m][1],record_source=REC[m][2]))
 out=_ROOT+"/results/event_cause_classification.csv"
 with open(out,"w",newline="") as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)

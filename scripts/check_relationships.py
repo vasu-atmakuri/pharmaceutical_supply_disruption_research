@@ -16,6 +16,10 @@ L=lambda f: json.load(open(f"{R}/results/{f}"))
 TEX=open(f"{R}/springer/manuscript.tex").read()
 GEN={f[:-4]: open(f"{R}/springer/generated/{f}").read()
      for f in os.listdir(f"{R}/springer/generated") if f.endswith(".tex")}
+# Macros live in two generated files: numbers.tex from emit_tex.py and
+# detector_macros.tex from emit_appendix_tables.py. Reading only the first let four
+# detector macros reach the manuscript undefined.
+_macsrc="".join(GEN.get(f,"") for f in ("numbers","detector_macros"))
 fails=[]; n=0
 def ck(label, cond, detail=""):
     global n; n+=1
@@ -49,7 +53,7 @@ m=("which is \\nReplEligible of the \\nCohort events in column C" in TEX)
 ck("methods eligibility sentence is macro-driven", m is not None,
    "the sentence should cite \\nReplEligible and \\nCohort")
 _gv={x.group(1):x.group(2) for x in re.finditer(
-     r"\\newcommand\{\\n([A-Za-z]+)\}\{([^}]*?)(?:\\xspace)?\}", GEN.get("numbers",""))}
+     r"\\newcommand\{\\n([A-Za-z]+)\}\{([^}]*?)(?:\\xspace)?\}", _macsrc)}
 if m:
     ck("ReplEligible macro equals the table sum", _gv.get("ReplEligible")==str(rn),
        f"macro {_gv.get('ReplEligible')} vs table {rn}")
@@ -91,7 +95,7 @@ for thr in ["50%","90%"]:
        f"figure lacks p = {RC[thr]['logrank_p']:.3f}")
 
 # 7. every macro referenced in the manuscript must be defined
-defined=set(re.findall(r"\\newcommand\{\\(n[A-Za-z]+)\}", GEN.get("numbers","")))
+defined=set(re.findall(r"\\newcommand\{\\(n[A-Za-z]+)\}", _macsrc))
 used=set(re.findall(r"\\(n[A-Z][A-Za-z]+)\b", TEX))
 ck("all macros used are defined", used<=defined, f"undefined: {sorted(used-defined)}")
 

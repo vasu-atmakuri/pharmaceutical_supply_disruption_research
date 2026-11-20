@@ -196,6 +196,16 @@ M.update(
  ControlObs=c(INF["matched"]["control_obs"]), UniqueControls=c(INF["matched"]["unique_controls"]),
  ControlsOnce=c(INF["matched"]["used_once"]), TreatedSets=c(INF["matched"]["sets"]),
  LogrankFifty=f"{RC['50%']['logrank_p']:.3f}", LogrankNinety=f"{RC['90%']['logrank_p']:.3f}",
+ # how many markets in each band ever fall below half of baseline. The denominators
+ # are the band sizes in the observed cohort, so the two halves of the comparison
+ # come from the same place as the bands themselves.
+ CrossSole=_w(len(RC["50%"]["sole_rows"])),
+ CrossSoleOf=c(RC["cohort"]["sole"]),
+ CrossMinor=_w(len(RC["50%"]["minority_rows"])),
+ CrossMinorOf=c(RC["cohort"]["minority"]),
+ CrossCohort=c(RC["cohort"]["n"]),
+ CrossMid=c(RC["cohort"]["mid"]),
+ CrossCohortW=_w(RC["cohort"]["n"]) if RC["cohort"]["n"]<=99 else c(RC["cohort"]["n"]),
  NormMQ=c(ABC["C"]["mq"]), NearSoleMQPctC=f"{100*ABC['C']['sole_sh']:.1f}",
  StrengthMQ=c(SEN["strength_market_quarters"]),
  StrengthNearSole=f"{SEN['strength_nearsole_share']:.1f}", StrengthNearSoleVol=f"{SEN['strength_nearsole_vol']:.2f}",
@@ -303,8 +313,8 @@ def emit_transition():
     M["TransStillSole"]=c(kept); M["TransSpecCSole"]=c(SPEC["C"]["bands"]["sole"])
     M["TransGap"]=c(abs(SPEC["C"]["bands"]["sole"]-kept))
     M["TransGapW"]=_w(abs(SPEC["C"]["bands"]["sole"]-kept))
-    out=["\\begin{tabular}{@{}lllrrr@{}}","\\toprule",
-         "Quarter & Market as recorded & Labeler & Raw share & Corrected share & Labelers \\\\","\\midrule"]
+    out=["\\begin{tabular}{@{}lp{3.6cm}p{1.9cm}rrr@{}}","\\toprule",
+         "Quarter & Market as recorded & Labeler & Raw & Corrected & Labelers \\\\","\\midrule"]
     for r in rows:
         key=r["corrected_market"]; lab=_dlab(r["departing_labeler"])
         out.append(f"{r['event_quarter']} & {_dname(key)} & {lab} & "
@@ -359,7 +369,7 @@ def emit_cause():
     import csv
     rows=list(csv.DictReader(open(f"{R}/event_cause_classification.csv")))
     rows.sort(key=lambda r:(r["event_quarter"],r["market"]))
-    out=["\\begin{tabular}{@{}llllr@{}}","\\toprule",
+    out=["\\begin{tabular}{@{}lp{3.4cm}p{1.9cm}p{3.5cm}r@{}}","\\toprule",
          "Quarter & Market & Departing labeler & Evidence level & $R$ \\\\","\\midrule"]
     for r in rows:
         Rv=float(r["replacement_ratio"])
@@ -413,6 +423,16 @@ def emit_strata():
     M["CauseExplainedUC"]=_w(_expl).capitalize()
     M["AllSoleLtTwo"]=f"{100*CS['all']['p_lt_002']:.1f}"
     M["SupplyMedian"]=f"{CS['supply']['median']:.2f}"
+    M["AllMedian"]=f"{CS['all']['median']:.2f}"
+    # how many of the documented supply disruptions collapse below two percent of
+    # baseline. Typing this count by hand is how it went stale when the cohort grew.
+    _sc=round(CS["supply"]["p_lt_002"]*CS["supply"]["n"])
+    M["CauseSupplyColl"]=_w(_sc); M["CauseSupplyCollNum"]=str(_sc)
+    M["SupplyMedianPct"]=f"{100*CS['supply']['median']:.0f}"
+    M["ExNotSupplyN"]=c_(CS["ex_not_supply"]["n"]) if False else str(CS["ex_not_supply"]["n"])
+    M["ExNotSupplyNW"]=_w(CS["ex_not_supply"]["n"])
+    M["ExNotSupplyMedian"]=f"{CS['ex_not_supply']['median']:.2f}"
+    M["ExNotSupplyLtTwo"]=f"{100*CS['ex_not_supply']['p_lt_002']:.1f}"
     M["TransferR"]=f"{CS['transfer']['median']:.2f}" if CS.get("transfer",{}).get("n") else "0.00"
     # the two misspelling artefacts, with the real markets they sit beside
     import csv as _c, duckdb as _d

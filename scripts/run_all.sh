@@ -30,8 +30,8 @@ echo "parts: $SDUD_PARTS"
 for f in build_sdud_parts rebuild_xw_route xwalk natpanel natpanel_route build_v2 validate_normalization national_impact \
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
-         route_unknown_sensitivity exit_evidence_audit collect_numbers build_figures emit_tex \
-         emit_letter_numbers; do
+         route_unknown_sensitivity exit_evidence_audit detector_variants collect_numbers \
+         build_figures emit_tex emit_appendix_tables emit_letter_numbers; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
 S="$PSDR_ROOT/springer"
@@ -58,11 +58,13 @@ echo "==13. event transition =="            ; "$PY" $W/transition.py            
 echo "==13b. near-sole flow manifest ==" ; "$PY" $W/sole_flow_manifest.py | tail -6
 echo "==13d. exit evidence audit ==" ; "$PY" $W/exit_evidence_audit.py | head -4
 echo "==13c. unknown-route sensitivity ==" ; "$PY" $W/route_unknown_sensitivity.py | tail -4
+echo "==13e. detector window variants ==" ; "$PY" $W/detector_variants.py | tail -5
 echo "==14. recall match level =="          ; "$PY" $W/recall_matchlevel.py      | tail -4
 echo "==15. sensitivities =="               ; "$PY" $W/sensitivities.py          >/dev/null
 echo "==16. collected numbers =="           ; "$PY" $W/collect_numbers.py        >/dev/null
 echo "==17. FIGURES (after the panel) =="   ; "$PY" $W/build_figures.py          | tail -4
 echo "==18. LaTeX macros and tables =="     ; "$PY" $W/emit_tex.py               | head -1
+echo "==18a. appendix tables ==" ; "$PY" $W/emit_appendix_tables.py | tail -1
 echo "==18b. response-letter numbers =="     ; "$PY" $W/emit_letter_numbers.py   | tail -1
 
 # The document build needs a TeX distribution and poppler. Both are large and the
@@ -102,6 +104,7 @@ else echo "check_relationships.py SKIPPED (needs poppler: it reads the figure PD
 "$PY" check_pipeline_closure.py
 "$PY" check_stage_portability.py
 "$PY" check_released_files.py
+"$PY" check_readme.py
 "$PY" check_determinism.py
 
 echo

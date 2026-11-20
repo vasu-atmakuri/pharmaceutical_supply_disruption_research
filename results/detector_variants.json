@@ -1,0 +1,21 @@
+{
+ "gappy_pct": 13.1,
+ "note": "Each row changes one element of the specification. The last row is the specification reported in the paper.",
+ "range_dense": {
+  "events": 500,
+  "near_sole": 79
+ },
+ "range_dense_persist": {
+  "events": 433,
+  "near_sole": 72
+ },
+ "range_sparse": {
+  "events": 292,
+  "near_sole": 43
+ },
+ "rows_sparse": {
+  "events": 282,
+  "near_sole": 42
+ },
+ "vanished_undetected": 66
+}

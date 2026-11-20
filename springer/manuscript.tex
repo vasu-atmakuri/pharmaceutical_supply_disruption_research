@@ -16,6 +16,7 @@
 % every number below comes from springer/generated/, emitted by the analysis
 \usepackage{xspace}
 \input{generated/numbers}
+\input{generated/detector_macros}
 
 \begin{document}
 
@@ -42,8 +43,10 @@ structured active-ingredient data, a field populated separately from the free-te
 key is built from, and the composition data was also used to adjudicate the merges it
 contradicted, so the agreement reported is not an independent test. Second, we audited every
 near-sole-labeler exit against FDA withdrawal notices, prescription-to-over-the-counter switch
-approvals, FDA and ASHP shortage records and recall filings, classifying each as a supply
-disruption, a regulatory transition, or undetermined. Replacement by remaining labelers was measured
+approvals, FDA and ASHP shortage records, recall filings, Medicaid Drug Rebate Program
+terminations and transfers of marketing rights, classifying each on a declared eight-class
+scheme ordered by how well the cause is established rather than by whether it is a supply
+failure. Replacement by remaining labelers was measured
 with a ratio that is not mechanically fixed by the event definition, and recovery was measured
 as time from a market's first threshold crossing to its first restoration, with censoring.
 
@@ -76,7 +79,7 @@ crossing with censoring, near-sole-labeler markets appear slower to regain 90 pe
 baseline, but the difference is not statistically established (log-rank $p=\nLogrankNinety$) and
 we report it as suggestive only. The zero-replacement result, however, is concentrated in events whose
 cause could not be established: among the \nCauseSupplyW documented supply disruptions the median
-replacement ratio is 0.24.
+replacement ratio is \nSupplyMedian, against \nAllMedian across all \nCauseTotal observed exits.
 
 \textbf{Conclusions.} The measured prevalence of highly concentrated markets in these data is
 inflated by an artefact that operates before any supplier is counted, and apparent sole-supplier exits are frequently
@@ -267,6 +270,35 @@ five percent of it. The volume floor keeps trace activity from generating events
 labeler's share is its own mean dispensing over the four pre-event quarters divided by the
 market's. Markets are counted once, at their first exit.
 
+Three features of this comparison are implementation choices that change which events exist, so
+we state them and report what each one admits. First, the windows are calendar quarters rather
+than observed records. A four-record window spans more than four quarters whenever a series has
+a gap, and \nGappyPct percent of labeler-market series have at least one. Second, the comparison
+is evaluated on a dense calendar grid running from each series' first appearance to the end of
+the panel, with a quarter absent from the grid read as zero dispensing. Absence in these data
+means no reported dispensing, either none at all or a count below the suppression threshold of
+eleven, so zero is the correct reading and is conservative against a baseline of 200 or more.
+Without the grid a labeler that stops dispensing altogether has no records after its exit at
+all, its post-event mean is undefined, and no event can fire: the detector would see only
+labelers that keep dispensing a little. We find \nVanishUndetected labeler-markets that
+disappear completely with four-quarter baselines of 200 or more, none of which the
+record-counted detector reports. Third, a fall that reverses is not an exit, so we additionally
+require that the labeler not return to half its own baseline or more at any quarter from $t+4$ to
+$t+12$. Table~\ref{tab:detvar} reports how many events each of these choices admits. The
+persistence requirement removes \nDetDipsRemoved of \nDetRangeDense, and inspection of the
+removed events shows them to be suppression gaps and short interruptions rather than departures.
+The dense grid is used only to locate events. The panels themselves stay sparse, so no baseline,
+outcome or share calculation anywhere in the paper treats a suppressed quarter as a zero.
+
+\begin{table}[htbp]
+\caption{Events admitted by each detector specification, on the specification C panel. Each row
+changes one element of the one above it. \textsuperscript{a}The specification used throughout
+the paper. The near-sole column counts markets whose first detected exit has a departing share
+of at least 95 percent, which is the quantity Table~\ref{tab:flow} then narrows to the observed
+cohort.}\label{tab:detvar}
+\input{generated/tab_detvar}
+\end{table}
+
 Eligibility requires a complete baseline, defined as four consecutive observed and positive
 market-level quarters from $t-6$ to $t-3$, and at least one observed quarter in $t+1$ to $t+6$. A
 market whose post-event quarters are entirely suppressed is dropped rather than set to zero,
@@ -275,6 +307,7 @@ also fall at least six quarters before the end of the panel. Table~\ref{tab:flow
 cohort.
 
 \begin{table}[htbp]
+\small
 \caption{Event flow under three market definitions. Each column is one specification applied
 end to end, so the band counts sum to that column's cohort. A is the convention as commonly
 applied; B corrects the route bucketing only; C additionally normalises the ingredient key and
@@ -506,6 +539,7 @@ choice matters. Table~\ref{tab:rules} reports three defensible rules and a volum
 measure that needs no rule at all.
 
 \begin{table}[htbp]
+\small
 \caption{Share of raw near-sole market-quarters whose alert is withdrawn, under three mapping
 rules. Each row states the condition under which a raw near-sole alert is withdrawn, which is
 what the count reports: the three rules differ only in how a raw market that splits into several
@@ -758,22 +792,22 @@ Removing only the documented withdrawal, which is the minimum correction any sup
 interpretation requires, leaves the median at \nCauseNotExplainedMed on \nCauseNotExplained events; removing the
 regulatory-transition-associated exits as well leaves it at zero on
 \nCauseNotExplainedW. We report both because the second removal rests on weaker evidence than the
-first. But the three events in which a supply
-disruption is documented have a median replacement ratio of 0.24, and only one of the three
-collapses. The zero-replacement result is carried by the exits that are not supply failures: the
+first. But the \nCauseSupplyW events in which a supply disruption is documented have a median
+replacement ratio of \nSupplyMedian, and \nCauseSupplyColl of them collapse. The zero-replacement result is carried by the exits that are not supply failures: the
 \nCauseExplainedW explained otherwise and the \nCauseUndeterminedW undetermined, where the median is
 \nSoleMedian, against \nSupplyMedian in the \nCauseSupplyW documented disruptions.
 
 \begin{table}[htbp]
 \caption{Replacement among near-sole-labeler exits, by what the exit is verified to be. The
-documented-disruption row covers three events arising from two episodes, since the two
+documented-disruption row covers \nCauseSupplyW events arising from one episode, since the two
 varenicline exits are one recall.}\label{tab:strata}
 \input{generated/tab_strata}
 \end{table}
 
-Three events from two episodes cannot settle anything, and we do not claim the difference
-between the strata is estimable. A median replacement ratio of 0.24 is not evidence of
-successful recovery either; it says that about a quarter of the departing volume was taken up.
+\nCauseSupplyUC events from one episode cannot settle anything, and we do not claim the
+difference between the strata is estimable. A median replacement ratio of \nSupplyMedian is not
+evidence of successful recovery either; it says that about \nSupplyMedianPct percent of the
+departing volume was taken up.
 What the table establishes is a negative: this panel does not support the statement that
 sole-supplier markets fail to replace lost volume after a supply disruption, because in the
 events where a supply disruption is documented, part of it was replaced. The pattern is
@@ -783,20 +817,21 @@ but this panel cannot test it.
 
 \subsection{Recovery, measured from the first decline}\label{subsec:recovery}
 
-Markets with twelve observed quarters after the exit form a longitudinal cohort of 76, of which
-58 are minority-loss, 6 middle and 12 near-sole-labeler. Recovery after a supply disruption is itself
+Markets with twelve observed quarters after the exit form a longitudinal cohort of
+\nCrossCohort, of which \nCrossMinorOf are minority-loss, \nCrossMid middle and \nCrossSoleOf
+near-sole-labeler. Recovery after a supply disruption is itself
 a studied outcome in this market \citep{lee2026}. We measure recovery from each market's first
 crossing below a threshold rather than from the exit, because the at-risk population otherwise
 changes with the horizon: a market first falling below 90 percent of baseline in quarter eleven
 would enter a twelve-quarter comparison with one quarter in which to recover.
 
 Of the minority-loss markets, \nRecMinCrossFiftyW ever fall below half of baseline and
-\nRecMinRecFiftyW of those recover; all \nRecSoleCrossFiftyW near-sole-labeler markets fall below half and
-\nRecSoleRecFiftyW recover. The log-rank comparison of time to restoration gives
+\nRecMinRecFiftyW of those recover; \nRecSoleCrossFiftyW of the \nCrossSoleOf near-sole-labeler
+markets fall below half and \nRecSoleRecFiftyW recover. The log-rank comparison of time to restoration gives
 $p=\nLogrankFifty$, and Figure~\ref{fig:recovery} plots both. At the 90 percent threshold,
 \nRecMinCrossNinety minority-loss markets cross and \nRecMinRecNinety recover, against
-\nRecSoleCrossNinety of \nRecSoleCrossNinety crossing and \nRecSoleRecNinety recovering among near-sole-labeler
-markets, with $p=\nLogrankNinety$. A landmark analysis restricted to markets crossing within four
+\nRecSoleCrossNinety of the \nCrossSoleOf crossing and \nRecSoleRecNinety recovering among
+near-sole-labeler markets, with $p=\nLogrankNinety$. A landmark analysis restricted to markets crossing within four
 quarters of the exit gives \nLmMinFifty of \nLmMinNFifty against \nLmSoleFifty of \nLmSoleNFifty at the 50
 percent threshold and \nLmMinNinety of \nLmMinNNinety against \nLmSoleNinety of \nLmSoleNNinety at the 90 percent
 threshold.
@@ -815,8 +850,12 @@ position and contribute to the entering count but not to the curve. The bands ar
 established by this sample.}\label{fig:recovery}
 \end{figure}
 
-Two things follow. The difference in whether a market falls at all is stark: every near-sole-labeler
-market in this cohort falls below half of baseline, against eight of 58 minority-loss markets.
+Two things follow. The difference in whether a market falls at all is stark: \nCrossSole of the
+\nCrossSoleOf near-sole-labeler markets in this cohort fall below half of baseline, against
+\nCrossMinor of \nCrossMinorOf minority-loss markets. This cohort is not the one the earlier
+sections use: recovery requires twelve quarters of follow-up where the replacement measurement
+requires six, so it contains \nCrossCohort markets rather than \nCohort, and its band sizes are
+its own.
 The difference in whether a fallen market comes back is suggestive at the 90 percent threshold
 and not established at the 50 percent threshold. We report $p=\nLogrankNinety$ as suggestive and
 specifically not as a demonstrated effect. The censored design was adopted on
@@ -951,8 +990,8 @@ This paper shows that in the most widely used public dispensing data the count i
 two defects that operate before any supplier is counted. The market is identified by a dosage
 form that does not record where the product acts, so eye drops, ear drops, topical solutions and
 oral syrups sharing an ingredient are pooled; and it is named by an unnormalised free-text
-string, so one product occupies several keys. Thirteen percent of keys are duplicates of
-another, and the duplicates concentrate in exactly the configuration that generates a false
+string, so one product occupies several keys. \nKeysAbsorbed of \nRawKeys keys are duplicates
+of another, and the duplicates concentrate in exactly the configuration that generates a false
 positive: a rarely used spelling that one labeler happens to favour becomes a market with one
 supplier in it. \nReclassSoleUC of \nRawSoleW apparent sole-supplier exits in this panel are not sole-supplier
 exits.
@@ -968,12 +1007,17 @@ market definition is used on these data. We emphasise that this is a defect in a
 procedure, not in that paper's argument, which our results support.
 
 The second contribution is less comfortable. Having repaired the market definition, we audited
-what the surviving events actually were, and \nCauseWithdrawal of \nRemainSoleW turned out to be
-regulatory rather than operational, with \nCauseTransition more overlapping a regulatory
-transition on ingredient-level evidence alone. The removal of ranitidine from the US market is
-the established case: a market in which no supplier replaced the departing one, because the
-agency had asked all of them to
-leave. An analysis that reads zero replacement as a failure of supply-chain resilience records
+what the surviving events actually were. Of the \nCauseTotal near-sole-labeler exits the
+corrected panel observes, \nCauseSupplyW are a documented supply disruption, and those two are
+one recall episode affecting two formulations. \nCauseExplainedUC are explained by something
+that is not a supply failure at all: a market-wide regulatory withdrawal, \nCauseTransitionW
+regulatory transitions, a firm's withdrawal from the Medicaid Drug Rebate Program with its
+product still marketed, a transfer of marketing rights, and \nCauseArtefactW markets whose sole
+supplier is a misspelling. In \nCauseContinuedW more, a labeler absent before the exit supplies
+the market afterwards, so the market was not left unsupplied even though no record says why the
+firm left. \nCauseUndeterminedUC remain undetermined. The removal of ranitidine from the US
+market is the established case: a market in which no supplier replaced the departing one,
+because the agency had asked all of them to leave. An analysis that reads zero replacement as a failure of supply-chain resilience records
 the regulatory system working as intended as evidence that it is broken. The two
 prescription-to-over-the-counter switches are subtler and, for Medicaid dispensing data
 specifically, more dangerous, because the product remains available and the dispensing merely
@@ -1002,8 +1046,10 @@ at the 50 percent threshold.
 
 The finding we did not expect is that the zero-replacement result is concentrated in the events
 we could not explain. Where a shortage is documented and the departing firm is named in it,
-replacement is partial: a median ratio of 0.24 across three events arising from two episodes. We
-are explicit that this supports no estimate. But the direction matters for how the literature should read results
+replacement is partial: a median ratio of \nSupplyMedian across \nCauseSupplyW events arising
+from one episode, against \nAllMedian across all \nCauseTotal observed exits and
+\nExNotSupplyMedian across the \nExNotSupplyNW that the records do not explain. Two events
+support no estimate and we make none. But the direction matters for how the literature should read results
 of this kind, because it is the opposite of what a supply-resilience interpretation predicts, and
 the events that do produce the predicted pattern are small, low-value products of the kind that
 leave quietly. A plausible reading is that a documented shortage is itself a signal that draws
@@ -1017,12 +1063,18 @@ panel; \nFlowOutsideW fall outside a window that a forty-one quarter panel with 
 history and six of follow-up necessarily imposes, and \nFlowSuppressedW have every post-event
 quarter suppressed, leaving \nFlowObserved. No choice of baseline rule recovers any of them: none
 of the \nFlowInWindow in-window exits fails the baseline requirement. Any analysis of sole-supplier exits in SDUD over this
-period is working with on the order of a dozen events, and conclusions drawn from strata of such
-a sample are descriptive.
+period is working with fewer than twenty events, and conclusions drawn from strata of such a
+sample are descriptive rather than estimates.
 
 Medicaid dispensing is not total US dispensing. A product that leaves the Medicaid benefit while
-remaining available elsewhere looks identical here to a product that leaves the market, which is
-exactly the failure mode the over-the-counter switches illustrate. Medicare Part D utilisation
+remaining available elsewhere looks identical here to a product that leaves the market. In the
+previous version of this analysis we could state that risk but not show it. We can now: one
+exit in the observed cohort is a firm's withdrawal from the Medicaid Drug Rebate Program
+effective 1 October 2021, after which state programmes stopped covering its products while the
+product itself remained FDA-approved and marketed. The dispensing leaves this data source on a
+date that the rebate-programme record names, and nothing in the panel distinguishes that date
+from a manufacturing failure. The mechanism is therefore demonstrated rather than hypothetical,
+and the two prescription-to-over-the-counter switches are a second instance of it. Medicare Part D utilisation
 and the national acquisition-cost files cover different populations and would partly resolve this
 ambiguity \citep{cms_partd,cms_nadac}, and linking them is a direct extension. Manufacturers are
 separately required to notify the FDA of permanent discontinuance or interrupted manufacturing
@@ -1061,8 +1113,11 @@ ingredient-by-dosage-form convention identifies markets by a form field that doe
 route, and names them with an unnormalised string of which \nKeysAbsorbed of \nRawKeys keys are duplicates of
 another. Repairing both dissolves \nReclassSoleW of \nRawSoleW apparent sole-supplier exits, in one
 case converting a firm with \nPregShare percent of a \nPregLabelers-supplier market back from being that
-market's only supplier. Of the \nRemainSoleW that survive the repair, three are regulatory actions rather than
-supply failures.
+market's only supplier. Of the \nCauseTotal near-sole exits the corrected panel observes,
+\nCauseSupplyW are a documented supply disruption and \nCauseExplainedW are something else: a
+market-wide regulatory withdrawal, \nCauseTransitionW regulatory transitions, a withdrawal from
+the Medicaid Drug Rebate Program, a transfer of marketing rights, and \nCauseArtefactW
+misspelled ingredient strings.
 
 Across the whole panel the correction moves the share of national Medicaid dispensing sitting in
 markets where one labeler holds at least 95 percent from \nNearSoleVolA to \nNearSoleVolC percent, and the share in
@@ -1078,9 +1133,9 @@ on the raw convention would flag markets that are not concentrated, and the ones
 are larger than the ones it gets right.
 
 What remains is a clear association between pre-exit concentration and the loss of a market's
-dispensing, robust to both corrections, together with a caution about what it means. In the \nCauseSupplyW events from two episodes where a supply
-disruption is documented, two show partial replacement and one shows net replacement below
-0.01, which is negligible rather than exactly zero. The strong form of the single-source resilience claim, that such markets do not
+dispensing, robust to both corrections, together with a caution about what it means. In the \nCauseSupplyW
+events from one episode where a supply disruption is documented, both show partial replacement,
+with a median ratio of \nSupplyMedian and neither falling below two percent of baseline. The strong form of the single-source resilience claim, that such markets do not
 recover after a supply disruption, is not what these data show once the events are verified.
 
 For researchers using these data, four practices follow: bucket markets by route of
@@ -1090,49 +1145,59 @@ records outside the dispensing series, and report events of undetermined cause a
 stratum rather than assuming them into the hypothesis under test. For policy, the count of single-source markets drawn from public
 dispensing data is upward biased under the correction tested here, by more than a quarter of the
 flagged market-quarters and a third of the flagged volume. We do not claim it is an upper bound
-in general, since the route correction pushes the other way for 849 market-quarters in this
-panel.
+in general, since the route correction pushes the other way for \nRouteSplitCreated
+market-quarters in this panel.
 
 \section*{Appendix: event-cause audit}\label{sec:appendix}
 
 Table~\ref{tab:audit} records the evidence behind each classification in
-Table~\ref{tab:cause}, with the labeler code as it appears in the NDC, the regulatory record
-relied on, and the strength of the link. We distinguish a \emph{product-and-firm} match, where
-the record names the departing firm and the formulation that left, from an \emph{ingredient-level}
-match, where a regulatory event covers the molecule but does not name the firm. The two kinds of
-match map onto the evidence levels in Table~\ref{tab:cause} as follows. A product-and-firm match
-with a shortage or recall record gives \emph{documented supply disruption}. A regulatory action
-that removes the product from the prescription market for every labeler at once gives
-\emph{market-wide regulatory withdrawal}, and is firm-independent by construction. An
-ingredient-level match with a regulatory action that does not name the departing firm gives
-\emph{regulatory-transition-associated}, which records that an alternative explanation overlaps
-the exit without asserting it. An ingredient-level match with no regulatory action, or no record
-at all, gives \emph{undetermined}. Only the first two are treated as established causes. The machine-readable version, with dates and source URLs, is released
-as \texttt{results/event\_cause\_classification.csv}.
+Table~\ref{tab:cause}: the quarter, the market, the departing firm, the record relied on, and
+how closely that record ties to the firm and the formulation that left. The link column is the
+part a reader should weigh, because the eight classes are not equally well established and the
+table says which is which rather than leaving the distinction in the prose. A
+\emph{product and firm} link means the record names this firm and this formulation. A
+\emph{molecule-wide} link means the action removed the product from the prescription market for
+every labeler at once, so it is firm-independent by construction and the departing firm's own
+reasons do not enter. An \emph{ingredient level} link means a regulatory action covers the
+molecule but the records do not name the departing firm or state why it left: an alternative
+explanation overlaps the exit, which we record without asserting it. A \emph{key level} link
+means the finding is about the market key itself rather than any outside event, which is the
+case for the two misspelled ingredient strings. A \emph{panel} link means the evidence is
+dispensing in these data and not an outside record: a labeler absent before the exit supplies
+the market afterwards, so the market was not left unsupplied, but nothing explains why this
+firm left.
+
+Only the product-and-firm and molecule-wide links support a claim about why the market changed.
+The ingredient-level and panel links are reported because they bear on whether the exit was a
+supply failure, which is the question the paper asks, and withholding them would leave a reader
+with a cohort of nineteen unexplained events when the records explain most of them in part. The
+machine-readable version is released as
+\texttt{results/event\_cause\_classification.csv}, with the classification, the evidence, the
+link level and the issuing authority and date of each document. We store no URLs: several of
+these documents have already moved, and the issuer, document type and date identify each one
+more durably than a link would.
 
 \begin{table}[htbp]
-\caption{Evidence behind each event classification. Labeler codes are the five-digit NDC labeler
-segment.}\label{tab:audit}
-\begin{tabular}{@{}lllp{4.4cm}l@{}}
-\toprule
-Quarter & Market & Code & Regulatory record & Link \\
-\midrule
-2019Q3 & Diclofenac potassium & 00093 & ASHP shortage opened Feb 2019; Teva named, no reason given & product and firm \\
-2020Q2 & Ranitidine & 53746 & FDA request to withdraw all ranitidine, 1 Apr 2020 & molecule-wide \\
-2021Q3 & Varenicline, other & 00069 & Pfizer recall of all lots, Sep 2021; FDA records a shortage & product and firm \\
-2021Q4 & Varenicline, tablet & 00069 & Same episode as above & product and firm \\
-2021Q3 & Olopatadine & 62332 & Rx-to-OTC switch approved Feb 2020; OTC at retail from 2020--21 & ingredient level \\
-2022Q2 & Alcaftadine & 00023 & Rx-to-OTC switch approved Dec 2021; OTC at retail Mar 2022 & ingredient level \\
-2018Q2 & Multivitamin with minerals & 52796 & none found & --- \\
-2018Q3 & Iron, folic acid, vitamin & 50967 & none found & --- \\
-2019Q3 & Hydrocortisone and acetic acid & 51672 & none found & --- \\
-2021Q2 & Brinzolamide and brimonidine & 00065 & none found & --- \\
-2021Q4 & Goserelin & 70720 & none found & --- \\
-2022Q1 & Trimethoprim & 43386 & none found & --- \\
-2023Q3 & Griseofulvin & 69097 & ASHP record closed 2020, before this exit & not contemporaneous \\
-\botrule
-\end{tabular}
+\small
+\caption{Evidence behind each event classification, generated from
+\texttt{results/event\_cause\_classification.csv}. Firms are the FDA labeler names for the
+five-digit NDC labeler segment. \emph{Link} is how closely the record ties to the departing firm
+and formulation, defined above.}\label{tab:audit}
+\input{generated/tab_audit}
 \end{table}
+
+Three entries deserve comment. The two Rx-to-OTC switches rest on an ingredient-level link: the
+switch was approved for the brand application and the generic prescription market contracted
+afterwards, but no record states that the departing generic labeler withdrew because of it. We
+therefore call them regulatory transitions rather than established non-supply events, flagging
+the weaker firm-level link rather than implying a record we do not have. The trace-elements exit
+is the one case where our own method produces the appearance of an exit: the firm retired an
+unapproved multi-element line under FDA's unapproved drugs initiative and brought approved
+replacements to market, and those replacements dispense in the panel, but their composition
+differs enough that the tie-break described in Section~\ref{subsec:market} holds them in a
+sibling key. A product-generation change therefore reads as an exit with no replacement. We
+report it against ourselves because the same mechanism will affect any study that keys markets
+on composition, and because it bounds how far a composition tie-break can be trusted.
 
 \begin{table}[htbp]
 \centering
@@ -1144,16 +1209,6 @@ each year carries an explicit route and is therefore unaffected by that fallback
 \input{generated/tab_routecov}
 \end{table}
 
-
-Two entries deserve comment. The olopatadine and alcaftadine switches rest on an
-ingredient-level match: FDA approved the switch for the brand application, and the generic
-prescription market contracted afterwards, but the records do not state that the departing
-generic labeler withdrew because of the switch. We therefore label them regulatory transitions
-rather than established non-supply events: a documented regulatory action overlaps the exit, the
-mechanism would be independent of supply either way, and we flag the weaker firm-level link
-rather than implying a record we do not have. The griseofulvin record exists but closed in 2020,
-three years before the exit, so it does not support a supply classification and the event is left
-undetermined.
 
 \backmatter
 
