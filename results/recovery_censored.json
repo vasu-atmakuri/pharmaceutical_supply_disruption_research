@@ -147,6 +147,12 @@
         7,
         18
       ]
+    },
+    "shared_cohort": {
+      "minority_n": 15,
+      "sole_n": 15,
+      "logrank_z": 1.10089480644,
+      "logrank_p": 0.270942442691
     }
   },
   "90%": {
@@ -397,12 +403,24 @@
         2,
         18
       ]
+    },
+    "shared_cohort": {
+      "minority_n": 40,
+      "sole_n": 15,
+      "logrank_z": 3.06927396905,
+      "logrank_p": 0.002145797116
     }
   },
   "cohort": {
     "n": 108,
     "minority": 77,
     "mid": 11,
-    "sole": 20
+    "sole": 20,
+    "in_main": 105,
+    "recovery_only": 3,
+    "recovery_only_sole": 3,
+    "main_sole": 19,
+    "shared_sole": 17,
+    "main_only_sole": 2
   }
 }

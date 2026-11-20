@@ -31,7 +31,8 @@ for f in build_sdud_parts rebuild_xw_route xwalk natpanel natpanel_route build_v
          concentration_abc reclass_multi inference cause_strata recovery_censored deficit_entry \
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
          route_unknown_sensitivity exit_evidence_audit detector_variants typo_sensitivity release_split collect_numbers \
-         build_figures emit_tex emit_appendix_tables emit_letter_numbers; do
+         build_figures emit_tex emit_appendix_tables emit_letter_numbers \
+         build_provenance; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
 S="$PSDR_ROOT/springer"
@@ -96,6 +97,7 @@ echo "   analysis result and every generated number above is still current; only
 echo "   compiled document is stale. See SETUP.md."
 fi
 
+echo "==19b. build provenance ==" ; "$PY" $W/build_provenance.py | tail -2
 echo "==20. CHECKS (last, always) =="
 "$PY" audit_numbers.py
 if [ "$HAVE_TEX" = 1 ] && [ "$HAVE_POPPLER" = 1 ]; then "$PY" verify_manuscript.py

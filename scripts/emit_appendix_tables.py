@@ -61,6 +61,19 @@ for k,nm in (("events","PwEvents"),("full_twelve_quarters","PwFull"),("truncated
              ("near_sole_events","PwNsEvents"),("near_sole_full_twelve","PwNsFull"),
              ("near_sole_truncated","PwNsTrunc")):
     m.append(r"\newcommand{\n%s}{%s\xspace}"%(nm,f"{_pw[k]:,}".replace(",","{,}")))
+# the suppression and persistence sensitivities
+SS=V["suppression_sensitivity"]; PW=V["persistence_window"]
+m.append(r"\newcommand{\nFillFiveEvents}{%s\xspace}"%f"{SS['events'][1]:,}".replace(",","{,}"))
+m.append(r"\newcommand{\nFillTenEvents}{%s\xspace}"%f"{SS['events'][2]:,}".replace(",","{,}"))
+m.append(r"\newcommand{\nFillTenSole}{%s\xspace}"%SS["near_sole"][2])
+m.append(r"\newcommand{\nFillFiveSole}{%s\xspace}"%SS["near_sole"][1])
+m.append(r"\newcommand{\nFillObserved}{%s\xspace}"%SS["observed"][2])
+m.append(r"\newcommand{\nFillCollapsed}{%s\xspace}"%SS["collapsed"][2])
+m.append(r"\newcommand{\nPersistFull}{%s\xspace}"%PW["full_twelve_quarters"])
+m.append(r"\newcommand{\nPersistTrunc}{%s\xspace}"%PW["truncated"])
+m.append(r"\newcommand{\nPersistSoleFull}{%s\xspace}"%PW["near_sole_full_twelve"])
+m.append(r"\newcommand{\nPersistSoleTrunc}{%s\xspace}"%PW["near_sole_truncated"])
+m.append(r"\newcommand{\nPersistFullOnly}{%s\xspace}"%PW["events_full_window_only"])
 m.append(r"\newcommand{\nGappyPct}{%s\xspace}"%("%.1f"%V["gappy_pct"]))
 m.append(r"\newcommand{\nVanishUndetected}{%s\xspace}"%V["vanished_undetected"])
 m.append(r"\newcommand{\nDetDipsRemoved}{%s\xspace}"%
@@ -69,3 +82,39 @@ m.append(r"\newcommand{\nDetDenseGain}{%s\xspace}"%
          (V["range_dense"]["events"]-V["range_sparse"]["events"]))
 open(f"{G}/detector_macros.tex","w").write("\n".join(m)+"\n")
 print(f"wrote tab_audit.tex ({len(rows)} events), tab_detvar.tex, detector_macros.tex")
+
+# ---- Table: the exclusion ladder, as named populations ----
+# Each row is a population the prose cites by name. The previous version described one
+# population's median as another's, which every check passed because the macro was
+# correct and only the sentence was wrong.
+CS=json.load(open(f"{R}/results/cause_strata.json"))
+LAD=CS["ladder"]
+ORDER=["all","ex_withdrawal","ex_withdrawal_transition","ex_strong_evidence",
+       "ex_all_explained","supply_only"]
+LABEL={"all":"Every observed near-sole exit",
+       "ex_withdrawal":"Excluding the market-wide withdrawal",
+       "ex_withdrawal_transition":"Excluding the withdrawal and the three transitions",
+       "ex_strong_evidence":"Excluding only market-wide or product-and-firm explanations",
+       "ex_all_explained":"Excluding every alternative-explanation class",
+       "supply_only":"Documented supply disruptions only"}
+l=[r"\begin{tabular}{@{}lrrrr@{}}",r"\toprule",
+   r"Population & Events & Median $R$ & Collapsed & Rate \\",r"\midrule"]
+for k in ORDER:
+    v=LAD[k]
+    l.append(f"{LABEL[k]} & {v['n']} & {v['median']:.2f} & "
+             f"{v['collapsed']} & {100*v['collapse_rate']:.1f}\\% "+r"\\")
+l+= [r"\botrule",r"\end{tabular}"]
+open(f"{G}/tab_ladder.tex","w").write("\n".join(l)+"\n")
+
+# Macros so no sentence can attach one population's statistic to another's name.
+lm=[]
+_W={2:"two",11:"eleven",15:"fifteen",18:"eighteen",19:"nineteen"}
+for k in ORDER:
+    v=LAD[k]; nm="".join(w.capitalize() for w in k.split("_"))
+    lm.append(r"\newcommand{\nLad%sN}{%d\xspace}"%(nm,v["n"]))
+    lm.append(r"\newcommand{\nLad%sNW}{%s\xspace}"%(nm,_W.get(v["n"],str(v["n"]))))
+    lm.append(r"\newcommand{\nLad%sMed}{%.2f\xspace}"%(nm,v["median"]))
+    lm.append(r"\newcommand{\nLad%sColl}{%d\xspace}"%(nm,v["collapsed"]))
+    lm.append(r"\newcommand{\nLad%sRate}{%.1f\xspace}"%(nm,100*v["collapse_rate"]))
+open(f"{G}/ladder_macros.tex","w").write("\n".join(lm)+"\n")
+print(f"wrote tab_ladder.tex and ladder_macros.tex ({len(ORDER)} populations)")

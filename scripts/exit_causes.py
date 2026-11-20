@@ -135,3 +135,76 @@ def record(market, quarter, labeler, new_labeler_appears=False):
     if k in CAUSES: raise KeyError(f"{k} is classified but has no appendix record")
     if new_labeler_appears: return CONTINUED_RECORD
     return UNDETERMINED_RECORD
+
+# Where each record can be found. The appendix previously gave the issuer and the date
+# and no link, on the grounds that links rot. The reviewer's answer is the right one
+# for a reproducibility paper: a document that has moved is still easier to find from a
+# stale link plus an exact title than from a description. So each entry carries the
+# document's exact title, its issuer, its date, and a URL where we have verified one.
+# A URL appears here only if it was retrieved and read; absent means not verified, not
+# nonexistent, and the title and date are then the stable identifier. Where the record
+# itself names the product codes, they are recorded, because an NDC labeler segment
+# alone does not identify a formulation.
+SOURCES={
+ ("RANITIDINE | ORAL TABLET","2020Q2","53746"): dict(
+  issuer="US Food and Drug Administration",
+  title="FDA Requests Removal of All Ranitidine Products (Zantac) from the Market",
+  date="2020-04-01", kind="press announcement",
+  url="https://www.fda.gov/news-events/press-announcements/"
+      "fda-requests-removal-all-ranitidine-products-zantac-market",
+  verified=True),
+ ("TARTRATE,VARENICLINE | OTHER","2021Q3","00069"): dict(
+  issuer="US Food and Drug Administration",
+  title="Pfizer Expands Voluntary Nationwide Recall to include All Lots of CHANTIX "
+        "(Varenicline) Tablets Due to N-Nitroso Varenicline Content",
+  date="2021-09-16", kind="company announcement posted by FDA",
+  ndc="0069-0468, 0069-0469",
+  url="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/"
+      "pfizer-expands-voluntary-nationwide-recall-include-all-lots-chantixr-"
+      "varenicline-tablets-due-n",
+  verified=True),
+ ("VARENICLINE | ORAL TABLET","2021Q4","00069"): dict(
+  issuer="US Food and Drug Administration",
+  title="Pfizer Expands Voluntary Nationwide Recall to include All Lots of CHANTIX "
+        "(Varenicline) Tablets Due to N-Nitroso Varenicline Content",
+  date="2021-09-16", kind="company announcement posted by FDA",
+  ndc="0069-0468, 0069-0469",
+  url="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/"
+      "pfizer-expands-voluntary-nationwide-recall-include-all-lots-chantixr-"
+      "varenicline-tablets-due-n",
+  verified=True),
+ ("HYDROCHLORIDE,OLOPATADINE | OPHTHALMIC","2021Q3","62332"): dict(
+  issuer="US Food and Drug Administration",
+  title="FDA Approves Three Drugs for Nonprescription Use Through Rx-to-OTC Switch Process",
+  date="2020-02-14", kind="press announcement", verified=False),
+ ("ALCAFTADINE | OPHTHALMIC","2022Q2","00023"): dict(
+  issuer="US Food and Drug Administration",
+  title="Rx-to-OTC switch approval, alcaftadine ophthalmic solution 0.25% (Lastacaft)",
+  date="2021-12", kind="approval", verified=False),
+ ("4,ELEMENTS,TRACE | INJECTABLE #94f1","2022Q1","00517"): dict(
+  issuer="US Food and Drug Administration",
+  title="Unapproved Drugs Initiative; approval of trace element injection products "
+        "(Tralement, Multrys)",
+  date="2020", kind="approval and compliance programme", verified=False),
+ ("GOSERELIN | INJECTABLE","2021Q4","70720"): dict(
+  issuer="Centers for Medicare and Medicaid Services, relayed in state Medicaid "
+         "pharmacy notices",
+  title="Termination of the Medicaid Drug Rebate Program agreement, TerSera "
+        "Therapeutics LLC, effective 1 October 2021",
+  date="2021-10-01", kind="rebate agreement termination", verified=False),
+ ("ALIROCUMAB | INJECTABLE","2021Q2","00024"): dict(
+  issuer="Regeneron Pharmaceuticals",
+  title="Restructured Praluent collaboration: Regeneron assumes sole responsibility "
+        "for Praluent in the United States, effective 1 April 2020",
+  date="2020-04-01", kind="company announcement", verified=False),
+ ("ESCITSLOPRAM | ORAL TABLET","2024Q2","68180"): dict(
+  issuer="This analysis", title="Market key comparison against FDA structured "
+  "active-ingredient data", date="", kind="internal", verified=True),
+ ("GRISOFULVIN | ORAL LIQUID","2023Q3","69097"): dict(
+  issuer="This analysis", title="Market key comparison against FDA structured "
+  "active-ingredient data", date="", kind="internal", verified=True),
+}
+
+def source_detail(market, quarter, labeler):
+    """The full citation for a declared event, or an empty dict."""
+    return SOURCES.get((market,quarter,str(labeler).zfill(5)), {})

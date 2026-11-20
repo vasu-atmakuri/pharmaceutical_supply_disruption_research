@@ -24,6 +24,7 @@ applied to reach a number.
 """
 import json,os,sys,tempfile,atexit,shutil
 import duckdb
+import numpy as np
 R=os.environ.get("PSDR_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LMQ=os.environ.get("LMQ_PARQUET","/tmp/lmq_v2.parquet")
 MOL=os.environ.get("MOLQ_PARQUET","/tmp/molq_v2.parquet")
@@ -69,6 +70,64 @@ SELECT (SELECT COUNT(*) FROM ev) n,
        (SELECT COUNT(DISTINCT e.mkt) FROM ev e JOIN firstev x
           ON x.mkt=e.mkt AND x.t=e.t WHERE e.shr>=0.95) sole"""
     return c.execute(q).fetchone()
+
+
+def observed_and_collapses(frame, source, persist):
+    """The observed cohort and its collapses under one detector specification.
+
+    Only the detector changes here. Eligibility (a complete market baseline and at
+    least one observed quarter in t+1..t+6) and the collapse rule (mean post-event
+    dispensing below two percent of baseline) are the analysis's own, applied to the
+    sparse panel. So this answers what the paper would print if it had used that
+    detector, rather than how many rows the detector emits.
+    """
+    q=count_rows_sql(frame, source, persist)
+    c.execute(f"CREATE OR REPLACE TABLE ev_v AS {q}")
+    MQd={}
+    for m,t,rx in c.execute("SELECT mol,tq,rx FROM molq").fetchall():
+        MQd.setdefault(m,{})[t]=rx
+    rows=c.execute("SELECT mkt,lab,t,shr FROM ev_v").fetchall()
+    TM=max(t for d in MQd.values() for t in d)
+    YMIN=(2016-1991)*4+1; B0,B1=-6,-2; LO,HI=YMIN-B0+2,TM-6
+    fe={}
+    for m,l,t,sh in sorted(rows,key=lambda x:(x[2],x[0],x[1])):
+        if m not in fe: fe[m]=(t,sh,l)
+    def bc(m,t):
+        pp=[MQd[m].get(t+k) for k in range(B0,B1)]
+        return None if any(v is None or v<=0 for v in pp) else float(np.mean(pp))
+    obs=[m for m,(t,sh,l) in fe.items() if sh>=0.95 and LO<=t<HI
+         and bc(m,t) is not None
+         and any(MQd[m].get(t+k) is not None for k in range(1,7))]
+    cl=0
+    for m in obs:
+        t=fe[m][0]; bl=bc(m,t)
+        post=[MQd[m].get(t+k) for k in range(1,7)]
+        if np.mean([0.0 if v is None else v for v in post])<0.02*bl: cl+=1
+    return len(obs), cl
+
+def count_rows_sql(frame, source, persist):
+    """The detector's event rows, as a SELECT, for the two callers above."""
+    pre=("RANGE" if frame=="RANGE" else "ROWS")+" BETWEEN 4 PRECEDING AND 1 PRECEDING"
+    post=("RANGE" if frame=="RANGE" else "ROWS")+" BETWEEN 0 FOLLOWING AND 3 FOLLOWING"
+    keep="later_max IS NULL OR later_max < 0.5*pre" if persist else "TRUE"
+    return f"""WITH {source},
+ s AS (SELECT lab,mkt,tq,
+   AVG(rx) OVER (PARTITION BY lab,mkt ORDER BY tq {pre}) pre4,
+   AVG(rx) OVER (PARTITION BY lab,mkt ORDER BY tq {post}) post4 FROM dense),
+ e AS (SELECT lab,mkt,tq FROM s WHERE pre4>=200 AND post4<0.05*pre4),
+ f0 AS (SELECT lab,mkt,MIN(tq) t FROM e GROUP BY 1,2),
+ base AS (SELECT f0.lab,f0.mkt,f0.t,
+   (SELECT AVG(x.rx) FROM lmq x WHERE x.lab=f0.lab AND x.mkt=f0.mkt
+      AND x.tq BETWEEN f0.t-4 AND f0.t-1) pre,
+   (SELECT MAX(x.rx) FROM lmq x WHERE x.lab=f0.lab AND x.mkt=f0.mkt
+      AND x.tq BETWEEN f0.t+4 AND f0.t+12) later_max FROM f0),
+ f AS (SELECT lab,mkt,t FROM base WHERE {keep}),
+ fr AS (SELECT f.lab,f.mkt,f.t,SUM(l.rx) firm_rx FROM f JOIN lmq l
+        ON l.lab=f.lab AND l.mkt=f.mkt AND l.tq BETWEEN f.t-4 AND f.t-1 GROUP BY 1,2,3),
+ tt AS (SELECT f.mkt,f.t,SUM(m.rx) mol_rx FROM f JOIN molq m
+        ON m.mol=f.mkt AND m.tq BETWEEN f.t-4 AND f.t-1 GROUP BY 1,2)
+SELECT fr.lab,fr.mkt,fr.t,fr.firm_rx/NULLIF(tt.mol_rx,0) shr
+FROM fr JOIN tt ON tt.mkt=fr.mkt AND tt.t=fr.t WHERE tt.mol_rx>0"""
 
 # Two figures the Methods cites alongside the table.
 # gappy_pct: the share of labeler-market series with at least one quarter missing
@@ -150,6 +209,50 @@ out["persistence_window"]={"events":int(_tot),"full_twelve_quarters":int(_full),
          "is not.")}
 print(f"persistence window: {_full} of {_tot} events have the full twelve quarters, "
       f"{_tot-_full} are evaluated on a shorter window")
+
+
+# ---- the suppression assumption, tested rather than asserted ----
+# The dense grid reads an absent quarter as zero. Absence means CMS reported nothing,
+# which is either no dispensing or a count below eleven, plus secondary suppression of
+# records that would let a withheld value be recovered. Zero is the conservative reading
+# against a baseline of 200 or more, but conservative is an argument, not a measurement.
+# These rows replace an absent quarter with a positive value and report what survives,
+# including what the published cohort and collapse count would become. Ten is the largest
+# value the suppression rule allows a withheld quarter to hold, so it is the widest the
+# assumption can be wrong in the direction that removes events.
+_z=out["range_dense_persist"]
+_zo,_zc=observed_and_collapses("RANGE",DENSE,True)
+out["range_dense_persist"]["observed"]=int(_zo)
+out["range_dense_persist"]["collapsed"]=int(_zc)
+for fill in (5,10):
+    df=DENSE.replace("COALESCE(l.rx,0.0) rx", f"COALESCE(l.rx,{float(fill)}) rx")
+    n,sole=count("RANGE",df,True)
+    o,cl=observed_and_collapses("RANGE",df,True)
+    out[f"fill_{fill}"]={"events":int(n),"near_sole":int(sole),"observed":int(o),
+      "collapsed":int(cl),
+      "note":f"absent quarter read as {fill} prescriptions instead of zero"}
+    print(f"{'fill_'+str(fill):22s} events {n:5d}   near-sole {sole:4d}   "
+          f"observed {o:3d}   collapsed {cl:2d}")
+out["suppression_sensitivity"]={
+  "events":[ _z["events"], out["fill_5"]["events"], out["fill_10"]["events"] ],
+  "near_sole":[ _z["near_sole"], out["fill_5"]["near_sole"], out["fill_10"]["near_sole"] ],
+  "observed":[ int(_zo), out["fill_5"]["observed"], out["fill_10"]["observed"] ],
+  "collapsed":[ int(_zc), out["fill_5"]["collapsed"], out["fill_10"]["collapsed"] ],
+  "fills":[0,5,10],
+  "note":("Three readings of an absent quarter: none dispensed, five prescriptions, and "
+          "ten, which is the most the suppression threshold allows. The published "
+          "specification is the first.")}
+
+# ---- the persistence rule restricted to events it can fully evaluate ----
+# An event whose t+12 falls beyond the panel is judged on a shorter window. The rule is
+# identical; the follow-up is not. This is the comparison the review asked for in place
+# of a statement about the direction of the bias.
+_fw=c.execute(f"""WITH ev AS ({count_rows_sql("RANGE",DENSE,True)}),
+ p AS (SELECT MAX(tq) last_q FROM lmq),
+ fe AS (SELECT mkt,MIN(t) t FROM ev GROUP BY 1)
+SELECT COUNT(*) FROM ev e, p WHERE e.t+12 <= p.last_q""").fetchone()[0]
+out["persistence_window"]["events_full_window_only"]=int(_fw)
+print(f"{'full window only':22s} events {_fw:5d}")
 
 # The last row is what the paper reports, so it is checked against the panel's own
 # recorded totals rather than trusted. If the detector changes and this file is not

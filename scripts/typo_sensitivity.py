@@ -54,11 +54,43 @@ def measure(table_l, table_m, tag):
       (SELECT mol,MIN(t) t FROM ev GROUP BY 1) f ON f.mol=e.mol AND f.t=e.t
       WHERE e.shr>=0.95""").fetchone()[0]
     nk=c.execute("SELECT COUNT(DISTINCT mkt) FROM lmq").fetchone()[0]
+    # The observed cohort and its collapses, on this panel, under the same eligibility
+    # and collapse rules as the main analysis. The previous version of this sensitivity
+    # stopped at the national share and the detected count, which left the reader to
+    # infer what happened to the nineteen observed exits. Two of them are the artefacts
+    # this correction removes, so the inference is exactly what should not be left to a
+    # reader.
+    MQd={}
+    for m,t,rx in c.execute("SELECT mol,tq,rx FROM molq").fetchall():
+        MQd.setdefault(m,{})[t]=rx
+    SLr=c.execute("SELECT mol,lab,t,shr FROM ev").fetchall()
+    TMAX=max(t for d in MQd.values() for t in d)
+    YMIN=(2016-1991)*4+1; B0,B1=-6,-2; LO,HI=YMIN-B0+2,TMAX-6
+    firstev={}
+    for m,l,t,sh in sorted(SLr,key=lambda x:(x[2],x[0],x[1])):
+        if m not in firstev: firstev[m]=(t,sh,l)
+    def basec(m,t):
+        pp=[MQd[m].get(t+k) for k in range(B0,B1)]
+        return None if any(v is None or v<=0 for v in pp) else float(np.mean(pp))
+    obs=[]
+    for m,(t,sh,l) in firstev.items():
+        if sh<0.95 or not (LO<=t<HI): continue
+        if basec(m,t) is None: continue
+        if not any(MQd[m].get(t+k) is not None for k in range(1,7)): continue
+        obs.append(m)
+    coll=0
+    for m in obs:
+        t=firstev[m][0]; bl=basec(m,t)
+        post=[MQd[m].get(t+k) for k in range(1,7)]
+        if np.mean([0.0 if v is None else v for v in post])<0.02*bl: coll+=1
     out=dict(markets=int(nk),near_sole_volume_share=float(vol),
              near_sole_market_quarters=int(nsm),market_quarters=int(mq),
-             events=int(ev),near_sole_exits=int(sole))
+             events=int(ev),near_sole_exits=int(sole),
+             observed_cohort=len(obs),collapsed=int(coll),
+             collapse_rate=(float(coll)/len(obs) if obs else None))
     print(f"{tag:<22} markets {nk:>5}  near-sole volume {100*vol:>6.2f}%  "
-          f"near-sole MQ {nsm:>6}  events {ev:>4}  near-sole exits {sole:>3}")
+          f"events {ev:>4}  near-sole exits {sole:>3}  observed {len(obs):>3}  "
+          f"collapsed {coll:>2} ({100*coll/len(obs):.1f}%)")
     return out
 
 base=measure("lmq0","molq0","as published")

@@ -29,6 +29,21 @@ LOr=YMIN-B0+2; H=12
 COH=[(m,v[0],v[1]) for m,v in first.items() if v[0]>=LOr and v[0]+H-1<=TMAX
      and basec(m,v[0]) is not None and any(MQ[m].get(v[0]+k) is not None for k in range(1,H+1))]
 band=lambda s:"minority" if s<.35 else ("mid" if s<.95 else "sole")
+# The main analysis cohort's eligibility rule, recomputed here so the difference
+# between the two cohorts is measured rather than described. The main cohort requires
+# an observed market quarter within t+1..t+6, because its outcome is the mean over
+# those six quarters. Recovery needs no such quarter: its outcome is the time from a
+# market's first crossing to its first restoration, which can both fall later. So the
+# recovery cohort is not a subset of the main one, and the released manifest says
+# which markets differ and why.
+HI_MAIN=TMAX-6
+MAIN=set()
+for m,v in first.items():
+    t=v[0]
+    if not (LOr<=t<HI_MAIN): continue
+    if basec(m,t) is None: continue
+    if not any(MQ[m].get(t+k) is not None for k in range(1,7)): continue
+    MAIN.add(m)
 print(f"12-quarter cohort n={len(COH)}  {dict(collections.Counter(band(s) for _,_,s in COH))}")
 def km(rows):
     """rows: (time, event) with event=1 recovered, 0 censored. Returns S(t) steps."""
@@ -110,5 +125,69 @@ for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
 # the manuscript pairing a crossing count with a denominator from elsewhere.
 RES["cohort"]={"n":len(COH),
                **{b:sum(1 for _,_,s in COH if band(s)==b) for b in ("minority","mid","sole")}}
+# One row per market in the recovery cohort, at both thresholds: the quarter of the
+# exit, the quarter of first crossing, the quarter of restoration if there is one, the
+# censoring indicator and the time at risk. This is the file needed to reproduce the
+# log-rank tests and the Kaplan-Meier curves without rerunning the panel build, and it
+# also serves as the crosswalk between this cohort and the main analysis cohort.
+import csv as _csv
+_rows=[]
+for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
+    for m,t,s_ in COH:
+        bl=basec(m,t)
+        d=next((k for k in range(1,H+1) if (MQ[m].get(t+k) or 0)<thr*bl),None)
+        r=None if d is None else next((k for k in range(d+1,H+1)
+                                       if (MQ[m].get(t+k) or 0)>=thr*bl),None)
+        _rows.append(dict(threshold=lbl, market=m, event_quarter=cal(t), event_tq=t,
+            departing_share=round(s_,4), band=band(s_),
+            baseline_rx=round(bl,1),
+            in_main_cohort=int(m in MAIN),
+            crossed=int(d is not None),
+            first_crossing_q=("" if d is None else d),
+            restored_q=("" if r is None else r),
+            event_observed=("" if d is None else int(r is not None)),
+            time_at_risk=("" if d is None else (r-d if r is not None else H-d))))
+_mf=_ROOT+"/results/recovery_event_manifest.csv"
+with open(_mf,"w",newline="") as _fh:
+    _w=_csv.DictWriter(_fh,fieldnames=list(_rows[0].keys())); _w.writeheader(); _w.writerows(_rows)
+print(f"wrote results/recovery_event_manifest.csv ({len(_rows)} rows, "
+      f"{len(COH)} markets at two thresholds)")
+
+# 3. the comparability sensitivity: the same test on the markets this cohort shares
+# with the main analysis cohort, so a reader can see whether the extra markets carry
+# the result.
+RES["cohort"]["in_main"]=sum(1 for m,_,_ in COH if m in MAIN)
+RES["cohort"]["recovery_only"]=sum(1 for m,_,_ in COH if m not in MAIN)
+RES["cohort"]["recovery_only_sole"]=sum(1 for m,_,s_ in COH if m not in MAIN and band(s_)=="sole")
+# The other direction: markets in the main cohort that this one excludes, because the
+# panel ends before their twelfth post-event quarter. Reporting both directions is what
+# makes the two cohort sizes reconcilable instead of merely different.
+_inrec={m for m,_,_ in COH}
+_main_sole=[m for m in MAIN if first[m][1]>=0.95]
+RES["cohort"]["main_sole"]=len(_main_sole)
+RES["cohort"]["shared_sole"]=sum(1 for m in _main_sole if m in _inrec)
+RES["cohort"]["main_only_sole"]=sum(1 for m in _main_sole if m not in _inrec)
+print(f"  near-sole: main {len(_main_sole)}, recovery {RES['cohort']['sole']}, "
+      f"shared {RES['cohort']['shared_sole']}, main only {RES['cohort']['main_only_sole']}, "
+      f"recovery only {RES['cohort']['recovery_only_sole']}")
+for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
+    g={}
+    for b in ("minority","sole"):
+        rr=[]
+        for m,t,s_ in COH:
+            if band(s_)!=b or m not in MAIN: continue
+            bl=basec(m,t)
+            d=next((k for k in range(1,H+1) if (MQ[m].get(t+k) or 0)<thr*bl),None)
+            if d is None: continue
+            r=next((k for k in range(d+1,H+1) if (MQ[m].get(t+k) or 0)>=thr*bl),None)
+            rr.append((H-d,0) if r is None else (r-d,1))
+        g[b]=rr
+    z2,p2=logrank(g["minority"],g["sole"])
+    RES[lbl]["shared_cohort"]={"minority_n":len(g["minority"]),"sole_n":len(g["sole"]),
+        "logrank_z":None if z2 is None else round(z2,12),
+        "logrank_p":None if p2 is None else round(p2,12)}
+    print(f"  {lbl} restricted to the markets shared with the main cohort: "
+          f"minority {len(g['minority'])}, near-sole {len(g['sole'])}, "
+          f"p={'n/a' if p2 is None else f'{p2:.3f}'}")
 json.dump(stable(RES),open(_ROOT+"/results/recovery_censored.json","w"),indent=2)
 print("\nwrote results/recovery_censored.json")

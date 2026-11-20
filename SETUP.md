@@ -55,3 +55,20 @@ then eight check results, ending with:
     ALL STAGES AND CHECKS COMPLETE
 
 If any stage fails, the run stops at that stage and names it.
+
+## Pinning a submission to a commit
+
+The paper's code-availability statement cites `results/build_provenance.json` as the version a
+reader should clone. That file records the commit the build ran from and whether the working
+tree was clean at the time, and `check_released_files.py` fails if it does not match `HEAD`.
+Because writing it changes the tree, a submission build is three steps:
+
+```
+git add -A && git commit -m "<message>"
+PSDR_ROOT=$(pwd) RESEARCH_ROOT=$(dirname $(pwd)) bash scripts/run_all.sh
+git add -A && git commit --amend --no-edit
+```
+
+The third step folds the regenerated provenance and outputs into the same commit, so the commit
+the file names is the commit that contains it. Push that commit before submitting: the
+repository a reviewer clones has to be the one the paper describes.

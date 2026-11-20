@@ -31,6 +31,9 @@ for f in glob.glob(f"{R}/results/*.json"):
 body=re.sub(r"`[^`]*`","",L)                 # script names and code spans
 body=re.sub(r"\[[^\]]*\]\([^)]*\)","",body)  # links
 body=re.sub(r"[0-9]{4}Q[1-4]","",body)
+# cross-references to the manuscript: a section, table or figure number is a pointer,
+# not a quantity, and asking it to trace to an analysis output is a category error
+body=re.sub(r"\b(?:Section|Sections|Table|Tables|Figure|Figures)\s+[\d.]+(?:\s*(?:and|to|,)\s*[\d.]+)*","",body)
 # calendar dates: a regulatory record is identified by its date, which is not an
 # analysis output and should not be asked to trace to one
 body=re.sub(r"\b\d{1,2} (?:January|February|March|April|May|June|July|August|September|"

@@ -66,7 +66,8 @@ Raw data is not committed. It is public and rebuilt from source by the pipeline.
 - `scripts/` the full pipeline, one stage per file, driven by `run_all.sh`
 - `results/` every analysis output, as JSON and CSV, including the per-event manifests
 - `figures/` figures, as PDF for the manuscript and PNG for inspection
-- `decisions/` research decision record, including candidates that were tested and rejected
+- `decisions/` research decision record, including candidates that were tested and rejected,
+  and `review_history.md`, the round-by-round log of what internal review found and what changed
 - `paper/` earlier drafts, kept for provenance
 
 ## Reproducing
@@ -77,7 +78,7 @@ See `SETUP.md` for the interpreter and package requirements and the expected dat
 PSDR_ROOT=$(pwd) RESEARCH_ROOT=$(dirname $(pwd)) bash scripts/run_all.sh
 ```
 
-The run executes 29 analysis stages and then 10 checks, and ends with
+The run executes 30 analysis stages and then 10 checks, and ends with
 `ALL STAGES AND CHECKS COMPLETE`. Stages 0 to 6 rebuild the panels from the raw SDUD and FDA
 listings and take the bulk of the runtime; the whole run takes roughly 6 to 8 minutes on a warm
 machine, and it has to run in a session that stays alive for its duration. Without a TeX distribution the document build is skipped and the run ends with

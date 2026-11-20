@@ -19,7 +19,7 @@ GEN={f[:-4]: open(f"{R}/springer/generated/{f}").read()
 # Macros live in two generated files: numbers.tex from emit_tex.py and
 # detector_macros.tex from emit_appendix_tables.py. Reading only the first let four
 # detector macros reach the manuscript undefined.
-_macsrc="".join(GEN.get(f,"") for f in ("numbers","detector_macros"))
+_macsrc="".join(GEN.get(f,"") for f in ("numbers","detector_macros","ladder_macros"))
 fails=[]; n=0
 def ck(label, cond, detail=""):
     global n; n+=1

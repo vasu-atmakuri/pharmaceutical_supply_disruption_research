@@ -32,7 +32,7 @@ sole=sorted([m for m in OBS if inwin[m][1]>=.95],key=lambda m:inwin[m][0])
 # successor-labeler signal comes from exit_evidence_audit.py. Matching on an
 # ingredient substring here once gave Assertio's diclofenac the evidence from Teva's,
 # and a growing cohort makes that failure mode certain rather than possible.
-from exit_causes import classify, declared_keys, record
+from exit_causes import classify, declared_keys, record, source_detail
 import json as _json
 _aud={}
 _ap=_ROOT+"/results/exit_evidence_audit.json"
@@ -44,6 +44,15 @@ for m in sole:
     t,s_,lab=inwin[m]; k=(m,cal(t),lab)
     CLS[m]=classify(m,cal(t),lab,
                     new_labeler_appears=_aud.get(k,{}).get("new_labeler_appears",False))
+SRC={}
+for m in sole:
+    t,s_,lab=inwin[m]
+    _d=source_detail(m,cal(t),lab)
+    SRC[m]=dict(source_issuer=_d.get("issuer",""), source_title=_d.get("title",""),
+                source_date=_d.get("date",""), source_kind=_d.get("kind",""),
+                source_url=_d.get("url",""), source_ndc=_d.get("ndc",""),
+                source_verified=("yes" if _d.get("verified") else
+                                 ("no" if _d else "")))
 REC={}
 for m in sole:
     t,s_,lab=inwin[m]; k=(m,cal(t),lab)
@@ -68,7 +77,8 @@ for m in sole:
     rows.append(dict(market=m,event_quarter=cal(t),departing_labeler=lab,baseline_rx=round(bl,1),
                      post_over_base=round(np.mean([MQ[m].get(t+k) or 0.0 for k in range(1,7)])/bl,4),
                      replacement_ratio=round(R(m),4),cause_class=CLS[m][0],cause_evidence=CLS[m][1],
-                     record_short=REC[m][0],evidence_link=REC[m][1],record_source=REC[m][2]))
+                     record_short=REC[m][0],evidence_link=REC[m][1],record_source=REC[m][2],
+                     **SRC[m]))
 out=_ROOT+"/results/event_cause_classification.csv"
 with open(out,"w",newline="") as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
@@ -98,6 +108,11 @@ for m in sole:
     print(f"  {CLS[m][0]:<13} R={R(m):>5.2f}  {cal(inwin[m][0])}  {m.split(' | ')[0][:44]}")
 import json as _j, collections as _c
 _cnt=_c.Counter(CLS[m][0] for m in sole)
+def _collapse_flag(m):
+    t=inwin[m][0]; bl=basec(m,t)
+    post=[MQ[m].get(t+k) for k in range(1,7)]
+    if all(v is None for v in post): return None
+    return 1 if np.mean([0.0 if v is None else v for v in post])<0.02*bl else 0
 def _st(sel):
     if not sel: return None
     v=np.array([R(m) for m in sel]); bw=np.array([basec(m,inwin[m][0]) for m in sel])
@@ -116,6 +131,44 @@ _out=dict(counts=dict(_cnt), total=len(sole),
   continued=_st([m for m in sole if CLS[m][0]=="continued"]),
   undetermined=_st([m for m in sole if CLS[m][0]=="undetermined"]),
   )
+# The exclusion ladder, as five explicitly defined populations. The previous version
+# of the manuscript described the eleven-event result as what remains after removing
+# only the withdrawal, and then again as what remains after also removing the
+# transitions. Both were wrong, and no check could see it because the macro was right
+# and the sentence attached it to the wrong population. Each population is now named,
+# counted and measured here, and the prose cites them by name.
+_EXPL=("withdrawal","transition","coverage","transfer","artefact")
+_strong={"molecule-wide","product and firm"}
+def _link(m):
+    t,_s,lab=inwin[m]
+    return record(m,cal(t),lab)[1]
+_LADDER=[
+ ("all", "every observed near-sole exit", sole),
+ ("ex_withdrawal", "excluding the market-wide regulatory withdrawal",
+  [m for m in sole if CLS[m][0]!="withdrawal"]),
+ ("ex_withdrawal_transition", "excluding the withdrawal and the regulatory transitions",
+  [m for m in sole if CLS[m][0] not in ("withdrawal","transition")]),
+ ("ex_strong_evidence",
+  "excluding only alternative explanations with a market-wide or product-and-firm record",
+  [m for m in sole if not (CLS[m][0] in _EXPL and _link(m) in _strong)]),
+ ("ex_all_explained", "excluding every alternative-explanation class",
+  [m for m in sole if CLS[m][0] not in _EXPL]),
+ ("supply_only", "the documented supply disruptions alone",
+  [m for m in sole if CLS[m][0]=="supply"]),
+]
+_lad={}
+for _k,_d,_sel in _LADDER:
+    _cv=[_c2 for _c2 in (_collapse_flag(m) for m in _sel) if _c2 is not None]
+    _lad[_k]=dict(description=_d, **(_st(_sel) or {}),
+                  collapsed=int(sum(_cv)), n_collapse_obs=len(_cv),
+                  collapse_rate=(float(np.mean(_cv)) if _cv else None))
+print()
+for _k,_d,_sel in _LADDER:
+    _x=_lad[_k]
+    print(f"  {_k:<26}n={_x['n']:>3}  median R={_x['median']:>5.2f}  "
+          f"collapsed {_x['collapsed']:>2} of {_x['n_collapse_obs']:<3}"
+          f"{100*_x['collapse_rate']:>6.1f}%")
+_out["ladder"]=_lad
 if sum(_cnt.values())!=len(sole):
     raise SystemExit("cause classification does not cover every event")
 _j.dump(_out,open(_ROOT+"/results/cause_strata.json","w"),indent=1)
@@ -127,11 +180,7 @@ print("\nwrote results/event_cause_classification.csv")
 # different question from the per-class one. A collapse in a market the regulator
 # emptied, or in a market whose key is a misspelling, is not evidence about supply
 # resilience. This records which classes the collapses actually fall in.
-def _coll(m):
-    t=inwin[m][0]; bl=basec(m,t)
-    post=[MQ[m].get(t+k) for k in range(1,7)]
-    if all(v is None for v in post): return None
-    return 1 if np.mean([0.0 if v is None else v for v in post])<0.02*bl else 0
+_coll=_collapse_flag   # one definition of collapse, used by both tables
 CL={}
 for cls in sorted({CLS[m][0] for m in sole}):
     sel=[m for m in sole if CLS[m][0]==cls]

@@ -1,19 +1,25 @@
 {
  "as_published": {
+  "collapse_rate": 0.42105263157894735,
+  "collapsed": 8,
   "events": 433,
   "market_quarters": 87728,
   "markets": 2916,
   "near_sole_exits": 72,
   "near_sole_market_quarters": 48893,
-  "near_sole_volume_share": 0.10539464565062237
+  "near_sole_volume_share": 0.10539464565062237,
+  "observed_cohort": 19
  },
  "delta": {
+  "collapse_rate": -0.009287925696594423,
+  "collapsed": -1,
   "events": 0,
   "market_quarters": -71,
   "markets": -2,
   "near_sole_exits": -2,
   "near_sole_market_quarters": -93,
-  "near_sole_volume_share": -0.00017325291101914775
+  "near_sole_volume_share": -0.00017325291101914775,
+  "observed_cohort": -2
  },
  "fixes": [
   {
@@ -27,11 +33,14 @@
  ],
  "note": "A sensitivity, not the main specification. The two corrections are made by hand because no rule available to the normalisation identifies a typing error in an ingredient name; a rule that merged near-identical strings would also merge genuinely different drugs with similar names.",
  "typos_corrected": {
+  "collapse_rate": 0.4117647058823529,
+  "collapsed": 7,
   "events": 433,
   "market_quarters": 87657,
   "markets": 2914,
   "near_sole_exits": 70,
   "near_sole_market_quarters": 48800,
-  "near_sole_volume_share": 0.10522139273960322
+  "near_sole_volume_share": 0.10522139273960322,
+  "observed_cohort": 17
  }
 }

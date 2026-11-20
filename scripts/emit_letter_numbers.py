@@ -30,72 +30,122 @@ _WORD={8:"eight",9:"nine",10:"ten",11:"eleven",12:"twelve"}
 # the number of final checks run_all.sh runs, excluding the preflight
 _NCHK=len(set(re.findall(r"((?:audit|check|verify)_\w+)\.py",
             open(f"{_ROOT}/scripts/run_all.sh").read()))-{"check_environment"})
+
+# number words, so a count the letter spells out agrees with the count in the results
+_ONES=["zero","one","two","three","four","five","six","seven","eight","nine","ten",
+ "eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen",
+ "nineteen"]
+_TENS={2:"twenty",3:"thirty",4:"forty",5:"fifty",6:"sixty",7:"seventy",8:"eighty",9:"ninety"}
+def _w(n):
+    n=int(n)
+    if n<20: return _ONES[n]
+    if n<100:
+        t,o=divmod(n,10)
+        return _TENS[t]+("" if o==0 else "-"+_ONES[o])
+    return f"{n:,}"
+
+import sys as _sys
+_sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from exit_causes import SOURCES as _SRC
+
+# Two tables in the letter are regenerated whole, between markers, because a table of
+# six populations is not worth maintaining as a dozen regular expressions.
+CS=L("cause_strata.json"); RC=L("recovery_censored.json")
+TY=L("typo_sensitivity.json"); DV=L("detector_variants.json")
+_SS=DV["suppression_sensitivity"]; _PW=DV["persistence_window"]
+_LAD=[("all","Every observed near-sole exit"),
+      ("ex_withdrawal","Excluding the market-wide withdrawal"),
+      ("ex_withdrawal_transition","Excluding the withdrawal and the three transitions"),
+      ("ex_strong_evidence","Excluding only market-wide or product-and-firm explanations"),
+      ("ex_all_explained","Excluding every alternative-explanation class"),
+      ("supply_only","Documented supply disruptions only")]
+def _ladder_table():
+    out=["| Population | Events | Median R | Collapsed |","|---|---|---|---|"]
+    for k,lab in _LAD:
+        v=CS["ladder"][k]
+        out.append(f"| {lab} | {v['n']} | {v['median']:.2f} | {v['collapsed']} |")
+    return "\n".join(out)
+def _crosswalk_table():
+    ch=RC["cohort"]
+    rows=[("In both cohorts",f"{ch['in_main']} of {ch['n']}"),
+          ("In the recovery cohort only",str(ch["recovery_only"])),
+          ("Near-sole in both",str(ch["shared_sole"])),
+          ("Near-sole in the analysis cohort only, panel too short here",
+           str(ch["main_only_sole"])),
+          ("Near-sole in the recovery cohort only, no observed quarter in the first six",
+           str(ch["recovery_only_sole"]))]
+    return "\n".join(["| | Markets |","|---|---|"]+[f"| {a} | {b} |" for a,b in rows])
+BLOCKS={"ladder":_ladder_table,"crosswalk":_crosswalk_table}
+
+# How many near-sole and minority markets ever cross each threshold, from the rows the
+# recovery stage releases, so the letter's crossing counts come from the same place as
+# the curves.
+_cross90_sole=len(RC["90%"]["sole_rows"]); _cross90_min=len(RC["90%"]["minority_rows"])
+
+# Inline figures the letter states in prose. Each pattern must match exactly once.
 SUBS=[
- (r"(?:Nine|Ten|Eleven|Twelve|\d+) checks run after every build",
-  f"{_WORD.get(_NCHK,str(_NCHK)).capitalize()} checks run after every build"),
- (r"(?:\d+|nine|ten|eleven|twelve) of the tables and the abstract are emitted whole",
-  "%d of the tables and the abstract are emitted whole" % _NTAB),
- (r"runs \d+ assertions on relationships",
-  "runs %d assertions on relationships" % _NREL),
- (r"trimming \([\d.]+ → [\d.]+ → [\d.]+ → [\d.]+ removing",
-  f"trimming ({INF['R_<35%']['median']:.2f} \u2192 "
-  f"{SEN['minority_excl1_median']:.2f} \u2192 {SEN['minority_excl3_median']:.2f} \u2192 "
-  f"{SEN['minority_excl5_median']:.2f} removing"),
- (r"mean falls from [-\d.]+ to [-\d.]+, [-\d.]+ and [-\d.]+, and the\nvolume-weighted ratio from [-\d.]+ to [-\d.]+, [-\d.]+ and [-\d.]+, changing sign\.",
-  f"mean falls from {INF['R_<35%']['mean']:.2f} to {SEN['minority_excl1_mean']:.2f}, "
-  f"{SEN['minority_excl3_mean']:.2f} and {SEN['minority_excl5_mean']:.2f}, and the\n"
-  f"volume-weighted ratio from {INF['R_<35%']['volwtd']:.2f} to {SEN['minority_excl1_volwtd']:.2f}, "
-  f"{SEN['minority_excl3_volwtd']:.2f} and {SEN['minority_excl5_volwtd']:.2f}, changing sign."),
- (r"The five largest ratios are [\d, ]+and [\d.]+\.",
-  "The five largest ratios are "
-  + ", ".join(f"{x:.0f}" for x in SEN["minority_top_ratios"][:-1])
-  + f" and {SEN['minority_top_ratios'][-1]:.0f}."),
- (r"matched-set interval is [\d.]+ to [\d.]+ points",
-  f"matched-set interval is {100*INF['matched']['ci_sets'][0]:.1f} to "
-  f"{100*INF['matched']['ci_sets'][1]:.1f} points"),
- (r"\d+ of the \d+ observed events had exactly",
-  f"{NUM['cohort_exactly_one_labeler']} of the {FL['observed']} observed events had exactly"),
- (r"\d+ had a second labeler whose dispensing was small enough",
-  f"{NUM['cohort_two_plus_labelers']} had a second labeler whose dispensing was small enough"),
- (r"takes \d+ of \d+ to \d+ of \d+, or [\d.]+% to [\d.]+%\.",
-  f"takes {SEN['suppression_primary_n']} of {SEN['suppression_n']} to "
-  f"{SEN['suppression_scenario_n']} of {SEN['suppression_n']}, or "
-  f"{SEN['suppression_primary_rate']}% to {SEN['suppression_scenario_rate']}%."),
- (r"Of the [\d,]+ raw near-sole market-quarters",
-  f"Of the {RUL['largest_n']:,} raw near-sole market-quarters"),
- (r"Adding strength gives [\d,]+ market-quarters, with [\d.]+% near-sole",
-  f"Adding strength gives {SEN['strength_market_quarters']:,} market-quarters, "
-  f"with {SEN['strength_nearsole_share']:.1f}% near-sole"),
- (r"\| Largest corrected component no longer near-sole \| [\d,]+ \| [\d.]+% \|",
-  f"| Largest corrected component no longer near-sole | {RUL['largest_reclass']:,} | "
-  f"{RUL['largest_rate']*100:.1f}% |"),
- (r"\| No component still near-sole \| [\d,]+ \| [\d.]+% \|",
-  f"| No component still near-sole | {RUL['any_reclass']:,} | "
-  f"{RUL['any_reclass']/RUL['largest_n']*100:.1f}% |"),
- (r"\| At least one component no longer near-sole \| [\d,]+ \| [\d.]+% \|",
-  f"| At least one component no longer near-sole | {RUL['all_reclass']:,} | "
-  f"{RUL['all_reclass']/RUL['largest_n']*100:.1f}% |"),
- (r"All \d+ macros now carry", f"All {NUM['generated_macro_count']} macros now carry"),
- (r"with the substance data to \*\*all \d+ testable groups",
-  f"with the substance data to **all {VAL['confirmed']} testable groups"),
- (r"agreement is \d+ of \d+ testable groups",
-  f"agreement is {VAL['confirmed']} of {VAL['confirmed']} testable groups"),
- (r"\d+ groups remain untestable", f"{VAL['untestable']} groups remain untestable"),
- (r"The bound is [\d.]+ to [\d.]+ percent",
-  f"The bound is {NUM['bound_low']} to {NUM['bound_high']} percent"),
- (r"missing-follow-up bounds of [\d.]+% to [\d.]+%",
-  f"missing-follow-up bounds of {NUM['bound_low']}% to {NUM['bound_high']}%"),
+ (r"removes \w+ of the \w+-\w+", 
+  f"removes {_w(FL['failed_baseline'])} of the {_w(FL['in_window'])}"),
+ (r"p = [\d.]+ on \w+ near-sole and \w+ minority-loss markets that cross, against p = [\d.]+ on\nthe full cohort",
+  f"p = {RC['90%']['shared_cohort']['logrank_p']:.3f} on "
+  f"{_w(RC['90%']['shared_cohort']['sole_n'])} near-sole and "
+  f"{_w(RC['90%']['shared_cohort']['minority_n'])} minority-loss markets that cross, against "
+  f"p = {RC['90%']['logrank_p']:.3f} on\nthe full cohort"),
+ (r"repeat the test on the [\d,]+ markets the two cohorts share",
+  f"repeat the test on the {RC['cohort']['in_main']:,} markets the two cohorts share"),
+ (r"At 50 percent it gives p = [\d.]+ against p = [\d.]+\.",
+  f"At 50 percent it gives p = {RC['50%']['shared_cohort']['logrank_p']:.3f} against "
+  f"p = {RC['50%']['logrank_p']:.3f}."),
+ (r"five prescriptions leaves [\d,]+ events and \d+\nnear-sole exits",
+  f"five prescriptions leaves {_SS['events'][1]:,} events and {_SS['near_sole'][1]}\n"
+  f"near-sole exits"),
+ (r"leaves [\d,]+ and \d+\. The published",
+  f"leaves {_SS['events'][2]:,} and {_SS['near_sole'][2]}. The published"),
+ (r"observed near-sole cohort is \d+ events with \d+ collapses whether",
+  f"observed near-sole cohort is {_SS['observed'][2]} events with {_SS['collapsed'][2]} "
+  f"collapses whether"),
+ (r"of the [\d,]+ events, [\d,]+ have the full twelve quarters and [\d,]+ are",
+  f"of the {_PW['events']:,} events, {_PW['full_twelve_quarters']:,} have the full twelve "
+  f"quarters and {_PW['truncated']:,} are"),
+ (r"\d+ of \d+ have the full window",
+  f"{_PW['near_sole_full_twelve']} of {_PW['near_sole_events']} have the full window"),
+ (r"fully evaluate leaves [\d,]+ events",
+  f"fully evaluate leaves {_PW['events_full_window_only']:,} events"),
+ (r"becomes \w+ events and the collapse\ncount \w+, a rate of [\d.]+ percent against [\d.]+\.",
+  f"becomes {_w(TY['typos_corrected']['observed_cohort'])} events and the collapse\n"
+  f"count {_w(TY['typos_corrected']['collapsed'])}, a rate of "
+  f"{100*TY['typos_corrected']['collapse_rate']:.1f} percent against "
+  f"{100*TY['as_published']['collapse_rate']:.1f}."),
+ (r"\w+ merge groups have no structured substance set",
+  f"{_w(VAL['untestable'])} merge groups have no structured substance set"),
+ (r"\w+ of \w+ near-sole markets cross below 90 percent against\n\w+ of \w+-\w+ minority-loss markets",
+  f"{_w(_cross90_sole)} of {_w(RC['cohort']['sole'])} near-sole markets cross below 90 "
+  f"percent against\n{_w(_cross90_min)} of {_w(RC['cohort']['minority'])} minority-loss markets"),
+ (r"Three citations carry verified URLs",
+  f"{_w(sum(1 for v in _SRC.values() if v.get('url'))).capitalize()} citations carry verified URLs"),
 ]
-p=f"{_ROOT}/springer/response_to_reviewer.md"; s=open(p).read()
+
+
+BLOCK_RE=r"<!-- GENERATED:%s -->\n.*?\n<!-- END:%s -->"
+p=f"{_ROOT}/springer/response_to_reviewer.md"; L=open(p).read()
 fails=[]; n=0
+for name,fn in BLOCKS.items():
+    pat=BLOCK_RE % (name,name)
+    if len(re.findall(pat,L,re.S))!=1:
+        fails.append(f"table block {name!r} not found exactly once in the letter")
+    else:
+        L=re.sub(pat, lambda _m,_f=fn,_n=name:
+                 f"<!-- GENERATED:{_n} -->\n{_f()}\n<!-- END:{_n} -->", L, flags=re.S)
+        n+=1
 for pat,rep in SUBS:
-    hits=len(re.findall(pat,s))
+    hits=len(re.findall(pat,L))
     if hits!=1: fails.append(f"pattern matched {hits} times, expected 1: {pat[:62]}")
-    else: s=re.sub(pat,rep.replace("\\","\\\\"),s); n+=1
+    else:
+        L=re.sub(pat, rep.replace("\\","\\\\"), L); n+=1
 if fails:
-    print(f"{len(fails)} LETTER PATTERNS DID NOT MATCH EXACTLY ONCE:")
+    print(f"{len(fails)} LETTER SUBSTITUTIONS DID NOT APPLY:")
     for f in fails: print("   "+f)
-    print("\nEdit emit_letter_numbers.py to match the letter's current wording, or fix the letter.")
+    print("\nEdit emit_letter_numbers.py to match the letter's wording, or fix the letter.")
     sys.exit(1)
-open(p,"w").write(s)
-print(f"{n} volatile figures in the response letter refreshed from results")
+open(p,"w").write(L)
+print(f"{n} figures and table blocks in the response letter refreshed from results")

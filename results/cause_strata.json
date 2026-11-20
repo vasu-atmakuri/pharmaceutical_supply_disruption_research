@@ -69,5 +69,67 @@
   "median": 0.0,
   "p_lt_002": 1.0,
   "volwtd": 0.0
+ },
+ "ladder": {
+  "all": {
+   "description": "every observed near-sole exit",
+   "n": 19,
+   "median": 0.0,
+   "p_lt_002": 0.5789473684210527,
+   "volwtd": 0.36495450471093127,
+   "collapsed": 8,
+   "n_collapse_obs": 19,
+   "collapse_rate": 0.42105263157894735
+  },
+  "ex_withdrawal": {
+   "description": "excluding the market-wide regulatory withdrawal",
+   "n": 18,
+   "median": 0.0,
+   "p_lt_002": 0.5555555555555556,
+   "volwtd": 0.4411812229023625,
+   "collapsed": 7,
+   "n_collapse_obs": 18,
+   "collapse_rate": 0.3888888888888889
+  },
+  "ex_withdrawal_transition": {
+   "description": "excluding the withdrawal and the regulatory transitions",
+   "n": 15,
+   "median": 0.0817717206132879,
+   "p_lt_002": 0.4666666666666667,
+   "volwtd": 0.4515102729224164,
+   "collapsed": 4,
+   "n_collapse_obs": 15,
+   "collapse_rate": 0.26666666666666666
+  },
+  "ex_strong_evidence": {
+   "description": "excluding only alternative explanations with a market-wide or product-and-firm record",
+   "n": 15,
+   "median": 0.0,
+   "p_lt_002": 0.5333333333333333,
+   "volwtd": 0.4259454409014696,
+   "collapsed": 5,
+   "n_collapse_obs": 15,
+   "collapse_rate": 0.3333333333333333
+  },
+  "ex_all_explained": {
+   "description": "excluding every alternative-explanation class",
+   "n": 11,
+   "median": 0.08233678357284026,
+   "p_lt_002": 0.36363636363636365,
+   "volwtd": 0.48926540953044745,
+   "collapsed": 2,
+   "n_collapse_obs": 11,
+   "collapse_rate": 0.18181818181818182
+  },
+  "supply_only": {
+   "description": "the documented supply disruptions alone",
+   "n": 2,
+   "median": 0.4690186037257274,
+   "p_lt_002": 0.0,
+   "volwtd": 0.5245408719086199,
+   "collapsed": 0,
+   "n_collapse_obs": 2,
+   "collapse_rate": 0.0
+  }
  }
 }

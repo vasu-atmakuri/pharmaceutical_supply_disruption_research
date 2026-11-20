@@ -1,8 +1,23 @@
 {
+ "fill_10": {
+  "collapsed": 8,
+  "events": 408,
+  "near_sole": 68,
+  "note": "absent quarter read as 10 prescriptions instead of zero",
+  "observed": 19
+ },
+ "fill_5": {
+  "collapsed": 8,
+  "events": 423,
+  "near_sole": 72,
+  "note": "absent quarter read as 5 prescriptions instead of zero",
+  "observed": 19
+ },
  "gappy_pct": 13.1,
  "note": "Each row changes one element of the specification. The last row is the specification reported in the paper.",
  "persistence_window": {
   "events": 433,
+  "events_full_window_only": 154,
   "full_twelve_quarters": 154,
   "near_sole_events": 72,
   "near_sole_full_twelve": 38,
@@ -15,8 +30,10 @@
   "near_sole": 79
  },
  "range_dense_persist": {
+  "collapsed": 8,
   "events": 433,
-  "near_sole": 72
+  "near_sole": 72,
+  "observed": 19
  },
  "range_sparse": {
   "events": 292,
@@ -25,6 +42,34 @@
  "rows_sparse": {
   "events": 282,
   "near_sole": 42
+ },
+ "suppression_sensitivity": {
+  "collapsed": [
+   8,
+   8,
+   8
+  ],
+  "events": [
+   433,
+   423,
+   408
+  ],
+  "fills": [
+   0,
+   5,
+   10
+  ],
+  "near_sole": [
+   72,
+   72,
+   68
+  ],
+  "note": "Three readings of an absent quarter: none dispensed, five prescriptions, and ten, which is the most the suppression threshold allows. The published specification is the first.",
+  "observed": [
+   19,
+   19,
+   19
+  ]
  },
  "vanished_undetected": 66
 }

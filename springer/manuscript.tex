@@ -17,6 +17,7 @@
 \usepackage{xspace}
 \input{generated/numbers}
 \input{generated/detector_macros}
+\input{generated/ladder_macros}
 
 \begin{document}
 
@@ -245,8 +246,12 @@ sharing an active ingredient and a route of administration that a pharmacy could
 dispense against one another. It is not a market for a chemical ingredient, since route
 separates products that share one; and it is not a market for independent supply capacity, since
 labelers are not plants. Strength is deliberately not part of the key, following the
-molecule-form convention, on the grounds that a 10 mg and a 20 mg tablet of the same drug are
-supplied by the same production line and substitute for one another in dispensing. Modified
+molecule-form convention. We do not claim that strengths are clinically interchangeable or that
+they share a production line; FDA's own framework treats strength as a product characteristic
+alongside ingredient, form and route, and bioequivalence is established per strength. The key is
+therefore a specified administrative market definition, chosen to match the convention this
+paper is testing, and the strength-level specification in Section~\ref{subsec:robust} measures
+what the choice costs. Modified
 release is the case where that reasoning is weakest, since extended-release and immediate-release
 products are clinically distinct and separately approved, and we report a sensitivity splitting
 them in Section~\ref{subsec:robust}.
@@ -405,7 +410,9 @@ outcome baseline is $t-6$ to $t-3$, with the post-event window $t+1$ to $t+6$.
 where $\bar{V}^{\text{others}}$ is mean quarterly dispensing by all labelers other than the
 departing one, taken over $t-6$ to $t-3$ for the baseline and $t+1$ to $t+6$ after, and
 $\bar{V}^{\text{departing}}_{\text{base}}$ is the departing labeler's own baseline. $R=1$ means
-that other-labeler dispensing grew in aggregate by exactly the volume that left; $R=0$ means
+that other-labeler dispensing grew, net and in aggregate, by a volume equal to the departing
+labeler's baseline. It does not mean the departing volume was replaced product for product, nor
+that any one remaining labeler expanded; $R=0$ means
 there was no net increase in other-labeler dispensing. Neither statement is about particular
 prescriptions moving between labelers, and $R=0$ does not establish that no individual labeler
 expanded, only that expansions and contractions among them cancelled. Nothing in the event definition constrains $R$. We also report the share of markets whose
@@ -610,8 +617,14 @@ discarded as bare numerals, which is what keeps Trace Elements 4 and Trace Eleme
 
 The opposite error also exists. Searching for distinct normalised keys that share a substance
 set and a route bucket finds groups the algorithm did not merge, which means the normalisation
-is conservative and the \nKeysAbsorbed figure is a lower bound on the number of duplicate keys in these
-data.
+is conservative. Subject to the two qualifications below, the \nKeysAbsorbed figure is
+therefore better read as a lower bound on the number of duplicate keys in these data than as a
+complete count. The first qualification is coverage: \nUntestable merge groups have no
+structured substance set for any member, so neither direction of the check reaches them. The
+second is construct: products that share a substance set and a route can still differ in
+strength, release characteristics or formulation, and this check cannot see that. What it
+establishes is that the keys it merged name the same active substances, not that every merged
+group is one market in a clinical sense.
 
 We report this check as supportive rather than decisive. Both fields come from FDA product
 listings and share an upstream source, so agreement between them is weaker evidence than
@@ -844,21 +857,50 @@ into one number.
 
 \subsection{The result does not hold in the events we can verify}\label{subsec:strata}
 
-Table~\ref{tab:strata} stratifies replacement by the classification in Table~\ref{tab:cause}.
-Removing only the documented withdrawal, which is the minimum correction any supply-chain
-interpretation requires, leaves the median at \nCauseNotExplainedMed on \nCauseNotExplained events; removing the
-regulatory-transition-associated exits as well leaves it at zero on
-\nCauseNotExplainedW. We report both because the second removal rests on weaker evidence than the
-first. But the \nCauseSupplyW events in which a supply disruption is documented have a median
-replacement ratio of \nSupplyMedian, and \nCauseSupplyColl of them collapse. The zero-replacement result is carried by the exits that are not supply failures: the
-\nCauseExplainedW explained otherwise and the \nCauseUndeterminedW undetermined, where the median is
-\nSoleMedian, against \nSupplyMedian in the \nCauseSupplyW documented disruptions.
+Table~\ref{tab:strata} stratifies replacement by the classification in
+Table~\ref{tab:cause}, and Table~\ref{tab:ladder} removes the alternative-explanation classes
+one group at a time. Each row of Table~\ref{tab:ladder} is a named population, and the counts
+below are read from it rather than from the prose, because an earlier version of this paragraph
+attached one population's median to another population's name.
+
+Removing only the market-wide regulatory withdrawal, which is the minimum correction any
+supply-chain reading requires, leaves \nLadExWithdrawalNW events with a median of
+\nLadExWithdrawalMed and \nLadExWithdrawalColl collapses. Removing the
+\nCauseTransitionW regulatory transitions as well leaves \nLadExWithdrawalTransitionNW events,
+and the median moves off zero to \nLadExWithdrawalTransitionMed. Removing every
+alternative-explanation class leaves \nLadExAllExplainedNW events with a median of
+\nLadExAllExplainedMed. The order matters less than the direction, which is the same at every
+step: the more of the explained exits we remove, the less the remaining events look like
+markets that failed to replace.
+
+Because those classes do not rest on equally strong records, we also report the conservative
+removal: taking out only the alternative explanations whose record is market-wide or names both
+the firm and the formulation, and leaving the ingredient-level transitions and the misspelled
+keys in, leaves \nLadExStrongEvidenceNW events with a median of \nLadExStrongEvidenceMed. That
+is the version a reader who trusts only the strongest attributions should use, and it still
+sits below the pooled rate.
+
+The \nCauseSupplyW events in which a supply disruption is documented have a median replacement
+ratio of \nSupplyMedian, and \nCauseSupplyColl of them collapse. The zero-replacement result is
+carried by the exits that are not supply failures.
 
 \begin{table}[htbp]
 \caption{Replacement among near-sole-labeler exits, by what the exit is verified to be. The
 documented-disruption row covers \nCauseSupplyW events arising from one episode, since the two
 varenicline exits are one recall.}\label{tab:strata}
 \input{generated/tab_strata}
+\end{table}
+
+\begin{table}[htbp]
+\small
+\caption{The exclusion ladder. Each row is a population defined by which
+alternative-explanation classes are removed, with the replacement median and the collapse count
+computed on that population alone. These are six descriptions of six samples and not six
+estimates of one quantity: the rows differ in which events they contain, not in how an estimand
+is computed, and the differences between them are the sensitivity of the pooled figures to the
+audit rather than a causal measure of anything. The fourth row removes only the explanations
+whose record is market-wide or names the firm and the formulation.}\label{tab:ladder}
+\input{generated/tab_ladder}
 \end{table}
 
 \nCauseSupplyUC events from one episode cannot settle anything, and we do not claim the
@@ -876,7 +918,27 @@ but this panel cannot test it.
 
 Markets with twelve observed quarters after the exit form a longitudinal cohort of
 \nCrossCohort, of which \nCrossMinorOf are minority-loss, \nCrossMid middle and \nCrossSoleOf
-near-sole-labeler. Recovery after a supply disruption is itself
+near-sole-labeler. This cohort is not the analysis cohort of
+Section~\ref{subsec:replace}, and the two differ in both directions, so we state the crosswalk
+rather than the sizes alone. The analysis cohort requires an observed market quarter within
+$t+1$ to $t+6$, because its outcome is the mean over those six quarters. Recovery requires no
+such quarter, because its outcome is the time from a market's own first crossing to its first
+restoration and both can fall later; it requires instead that the panel extend twelve quarters
+past the exit. Of the \nCrossCohort markets here, \nRecSharedAll are also in the analysis
+cohort and \nRecOnlyAll are not. Among near-sole-labeler markets specifically, \nRecSharedSole
+are in both, \nRecMainOnlySole are in the analysis cohort but not here because the panel ends
+before their twelfth quarter, and \nRecOnlySole are here but not there because they have no
+observed quarter in the first six. That is the whole of the difference between
+\nCrossSoleOf and \nCohortSole. Because the extra markets are all near-sole, and so could
+flatter this comparison, we repeat the test on the \nRecSharedAll markets the two cohorts
+share: at the 90 percent threshold it gives $p=\nLogrankNinetyShared$ on \nSharedSoleCross
+near-sole and \nSharedMinorCross minority-loss markets that cross, and at 50 percent
+$p=\nLogrankFiftyShared$. The result does not depend on the markets the analysis cohort
+excludes. \texttt{results/recovery\_event\_manifest.csv} carries one row per market per
+threshold with the event quarter, the quarter of first crossing, the quarter of restoration
+where there is one, the censoring indicator, the time at risk and a flag for membership of the
+analysis cohort, which is what is needed to reproduce the tests and the curves without
+rebuilding the panel. Recovery after a supply disruption is itself
 a studied outcome in this market \citep{lee2026}. We measure recovery from each market's first
 crossing below a threshold rather than from the exit, because the at-risk population otherwise
 changes with the horizon: a market first falling below 90 percent of baseline in quarter eleven
@@ -969,10 +1031,33 @@ worse error than the one it fixes. Correcting both by hand and rerunning the det
 concentration measure moves the near-sole dispensing share from \nTypoVolBase to \nTypoVolFixed
 percent, the market count from \nTypoMarketsBase to \nTypoMarketsFixed, and the detected
 near-sole exits from \nTypoExitsBase to \nTypoExitsFixed, which are the two artefact events and
-nothing else. The main specification is left unchanged, because a hand correction is not a
-method; the point of reporting it is that the disclosed artefacts do not carry the headline
-result. \texttt{scripts/typo\_sensitivity.py} computes this, and fails rather than running if
+nothing else. Because those two events are also in the observed cohort, and one of them
+collapses, we report what the correction does to the published outcome rather than leaving it to
+be inferred: the observed cohort becomes \nTypoObsFixedW events and the collapse count
+\nTypoCollFixedW, a rate of \nTypoRateFixed percent against \nTypoRateBase. The main
+specification is left unchanged, because a hand correction is not a method; the point of
+reporting it is that the disclosed artefacts move the headline by about a point.
+\texttt{scripts/typo\_sensitivity.py} computes all of this, and fails rather than running if
 either key is absent from the panel.
+
+The detector's dense grid reads a quarter absent from the data as zero dispensing. That is a
+reading of the suppression rule, not an observation, so we test it instead of defending it.
+Replacing every absent quarter with five prescriptions leaves \nFillFiveEvents events and
+\nFillFiveSole near-sole exits; replacing it with ten, which is the most a withheld quarter can
+hold under a threshold of eleven, leaves \nFillTenEvents and \nFillTenSole. Neither changes the
+cohort the paper reports: the observed near-sole cohort is \nFillObserved events with
+\nFillCollapsed collapses under all three readings. The assumption moves the detected count by
+about six percent at its most extreme and the published cohort not at all.
+
+The persistence requirement looks twelve quarters past an event, which the panel cannot supply
+for a recent one. Of the \nDetRangeDensePersist events, \nPersistFull have the full twelve
+quarters and \nPersistTrunc are judged on a shorter window; within the near-sole candidates,
+\nPersistSoleFull of \nDetSoleRangeDensePersist have the full window. Restricting the detector to
+events that can be fully evaluated leaves \nPersistFullOnly events, which is the count a reader
+who will accept only complete follow-up should use. We keep the truncated events in the main
+specification because the bias is one-sided, a short window can only fail to see a return and so
+can only admit an event that a longer window would remove, and because dropping two thirds of
+the events to avoid a one-sided bias costs more than it buys.
 
 Table~\ref{tab:flow} already reports the three specifications end to end. On the headline
 quantities, the raw convention gives a near-sole-labeler median replacement ratio of \nSpecASoleMed with
@@ -990,7 +1075,7 @@ complete baseline, so the two effects have to be separated. On the \nBaseCommonN
 under both windows, moving from $t-6$ to $t-3$ to the detector's own window $t-4$ to $t-1$ takes
 the minority band's median from \nBaseCommonPriMed to \nBaseCommonAltMed and the share below
 $R=0.02$ from \nBaseCommonPriPct to \nBaseCommonAltPct percent. That is the window effect alone.
-\nBaseOnlyAltW further events become eligible under the later window; including them gives
+\nBaseOnlyAltPhrase becomes eligible under the later window; including it gives
 \nAltN events with a median of \nAltMedian and \nAltPct percent below $R=0.02$, which is an
 eligibility sensitivity rather than a property of the window. The denominator changes because the
 earlier baseline requires four clean quarters further back, which two markets lack. The
@@ -1028,8 +1113,8 @@ not bind here, and we report the test rather than the reassurance alone.
 
 \emph{Market granularity.} Adding strength to the key gives \nStrengthMQ market-quarters instead of
 \nNormMQ, with \nStrengthNearSole percent near-sole holding
-\nStrengthNearSoleVol percent of volume, against \nNearSoleVolC-level concentration, namely
-\nNearSoleMQPctC percent of market-quarters and \nNearSoleVolC percent of volume, at ingredient-and-route granularity. Finer markets are mechanically more
+\nStrengthNearSoleVol percent of volume. At ingredient-and-route granularity the same two
+measures are \nNearSoleMQPctC percent of market-quarters and \nNearSoleVolC percent of volume. Finer markets are mechanically more
 concentrated, so this is not a competing estimate of the same quantity. It is worth stating
 plainly for that reason: the corrected figure is the concentration of ingredient-and-route
 markets, not an estimate of true concentration at every granularity, and a reader who wants
@@ -1102,7 +1187,10 @@ because the agency had asked all of them to leave. An analysis that reads zero r
 the regulatory system working as intended as evidence that it is broken. The two
 prescription-to-over-the-counter switches are subtler and, for Medicaid dispensing data
 specifically, more dangerous, because the product remains available and the dispensing merely
-moves off the benefit; nothing in the panel distinguishes that from a product vanishing.
+can move off the benefit. A prescribed over-the-counter product can remain covered, so what
+the switch changes is the ordinary route by which the product reaches a patient and is
+reimbursed rather than eligibility as such. Nothing in the panel distinguishes either from a
+product vanishing.
 
 The implication is methodological and it generalises beyond this paper. Where an event study is
 built on administrative dispensing data, the event must be validated against records outside the
@@ -1147,8 +1235,8 @@ none. That is a hypothesis this panel raises and cannot test.
 The sample of near-sole exits cannot be enlarged within these data. \nFlowDetectedUC exist in the
 panel; \nFlowOutsideW fall outside a window that a forty-one quarter panel with six quarters of
 history and six of follow-up necessarily imposes, and \nFlowSuppressedW have every post-event
-quarter suppressed, leaving \nFlowObserved. No choice of baseline rule recovers any of them: none
-of the \nFlowInWindow in-window exits fails the baseline requirement. Any analysis of sole-supplier exits in SDUD over this
+quarter suppressed, leaving \nFlowObserved. The baseline rule removes almost none of them: \nFlowFailedBaseW of the \nFlowInWindow
+in-window exits fails it, so relaxing that rule would not materially enlarge the cohort. Any analysis of sole-supplier exits in SDUD over this
 period is working with fewer than twenty events, and conclusions drawn from strata of such a
 sample are descriptive rather than estimates.
 
@@ -1156,8 +1244,11 @@ Medicaid dispensing is not total US dispensing. A product that leaves the Medica
 remaining available elsewhere looks identical here to a product that leaves the market. In the
 previous version of this analysis we could state that risk but not show it. We can now: one
 exit in the observed cohort is a firm's withdrawal from the Medicaid Drug Rebate Program
-effective 1 October 2021, after which state programmes stopped covering its products while the
-product itself remained FDA-approved and marketed. The dispensing leaves this data source on a
+effective 1 October 2021, which removes the basis for ordinary federal matching and so for
+ordinary coverage of its products, while the product itself remained FDA-approved and marketed.
+States retain discretion and at least one continued to cover the product in specified
+circumstances, so the mechanism is a change in the ordinary coverage and reimbursement route
+rather than a prohibition. The dispensing leaves this data source on a
 date that the rebate-programme record names, and nothing in the panel distinguishes that date
 from a manufacturing failure. The mechanism is therefore demonstrated rather than hypothetical,
 and the two prescription-to-over-the-counter switches are a second instance of it. Medicare Part D utilisation
@@ -1258,15 +1349,21 @@ The ingredient-level and panel links are reported because they bear on whether t
 supply failure, which is the question the paper asks, and withholding them would leave a reader
 with a cohort of nineteen unexplained events when the records explain most of them in part. The
 machine-readable version is released as
-\texttt{results/event\_cause\_classification.csv}, with the classification, the evidence, the
-link level and the issuing authority and date of each document. We store no URLs: several of
-these documents have already moved, and the issuer, document type and date identify each one
-more durably than a link would.
+\texttt{results/event\_cause\_classification.csv}, which carries, for every event, the
+classification, the evidence, the link level, and for the declared events the issuing authority,
+the document's exact title, its date, its kind, a URL where we have retrieved and read one, the
+product codes where the record names them, and a flag saying whether the citation was verified
+that way. An earlier version gave the issuer and the date and no links, on the ground that
+links rot. That was the wrong trade for a paper about reproducibility: a document that has moved
+is still easier to find from a stale link and an exact title than from a description, so both
+are now recorded, and the flag distinguishes a citation we followed from one we did not.
 
 \begin{table}[htbp]
 \small
 \caption{Evidence behind each event classification, generated from
-\texttt{results/event\_cause\_classification.csv}. Firms are the FDA labeler names for the
+\texttt{results/event\_cause\_classification.csv}, which carries the full citation for each
+record: issuer, exact title, date, product codes where the record names them, and a URL where we
+retrieved one. Firms are the FDA labeler names for the
 five-digit NDC labeler segment. \emph{Link} is how closely the record ties to the departing firm
 and formulation, defined above.}\label{tab:audit}
 \input{generated/tab_audit}
@@ -1324,9 +1421,21 @@ PDF are sound, that the quantities agree with one another and with the figures, 
 response letter and the repository README agree with the same outputs, that each stage reads
 only files an earlier stage wrote, that no stage hard-codes a local path, that every promised
 artifact is tracked, and that each stochastic stage reproduces byte for byte. All \nChecks must
-pass for a build to be considered complete. The near-sole event-flow manifest, \texttt{results/near\_sole\_event\_flow.csv},
-carries one row per detected exit with the stage at which it leaves the cohort, so the event flow
-in Section~\ref{subsec:treat} can be reconciled independently.
+pass for a build to be considered complete. Three event-level files make the main results
+reconcilable without rerunning the pipeline.
+\texttt{results/near\_sole\_event\_flow.csv} carries one row per detected exit with the stage at
+which it leaves the cohort, so the event flow in Section~\ref{subsec:treat} can be reconciled
+independently. \texttt{results/event\_cause\_classification.csv} carries one row per observed
+exit with its class, the evidence, the strength of the link and the issuing authority and date
+of the record relied on. \texttt{results/recovery\_event\_manifest.csv} carries one row per
+market per threshold for Figure~\ref{fig:recovery}, with the event quarter, the quarter of first
+crossing, the quarter of restoration where there is one, the censoring indicator, the time at
+risk and a flag for membership of the analysis cohort, which is what is needed to reproduce the
+log-rank tests and the survival curves directly. The version of the repository that corresponds
+to this manuscript is the commit recorded in \texttt{results/build\_provenance.json}, which the
+build writes and the checks require to match the working tree.
+\texttt{decisions/review\_history.md} records what each round of internal review found and what
+changed in response, including the defects that the checks in this pipeline exist to prevent.
 
 \textbf{Author contributions.} V.A. designed the study, built the data pipeline, performed the
 analysis and wrote the manuscript. S.K. contributed to the clinical interpretation of the

@@ -211,6 +211,15 @@ M.update(
  TypoExitsFixed=c(L("typo_sensitivity.json")["typos_corrected"]["near_sole_exits"]),
  TypoMarketsBase=c(L("typo_sensitivity.json")["as_published"]["markets"]),
  TypoMarketsFixed=c(L("typo_sensitivity.json")["typos_corrected"]["markets"]),
+ # what the correction does to the published cohort, not only to the national share
+ TypoObsBase=c(L("typo_sensitivity.json")["as_published"]["observed_cohort"]),
+ TypoObsFixed=c(L("typo_sensitivity.json")["typos_corrected"]["observed_cohort"]),
+ TypoObsFixedW=_w(L("typo_sensitivity.json")["typos_corrected"]["observed_cohort"]),
+ TypoCollBase=c(L("typo_sensitivity.json")["as_published"]["collapsed"]),
+ TypoCollFixed=c(L("typo_sensitivity.json")["typos_corrected"]["collapsed"]),
+ TypoCollFixedW=_w(L("typo_sensitivity.json")["typos_corrected"]["collapsed"]),
+ TypoRateBase=f"{100*L('typo_sensitivity.json')['as_published']['collapse_rate']:.1f}",
+ TypoRateFixed=f"{100*L('typo_sensitivity.json')['typos_corrected']['collapse_rate']:.1f}",
 # Deficit and entry figures. Every one of these was a typed literal and every one
  # was stale: the deficit medians, the bootstrap interval, the leave-one-out range and
  # all three entry rates moved with the corrected cohort and the prose did not.
@@ -252,6 +261,17 @@ M.update(
  CrossMinorOf=c(RC["cohort"]["minority"]),
  CrossCohort=c(RC["cohort"]["n"]),
  CrossMid=c(RC["cohort"]["mid"]),
+ # the crosswalk between the recovery cohort and the main analysis cohort
+ CohortSole=c(RC["cohort"]["main_sole"]),
+ RecSharedSole=_w(RC["cohort"]["shared_sole"]),
+ RecMainOnlySole=_w(RC["cohort"]["main_only_sole"]),
+ RecOnlySole=_w(RC["cohort"]["recovery_only_sole"]),
+ RecSharedAll=c(RC["cohort"]["in_main"]),
+ RecOnlyAll=_w(RC["cohort"]["recovery_only"]),
+ LogrankNinetyShared=f"{RC['90%']['shared_cohort']['logrank_p']:.3f}",
+ LogrankFiftyShared=f"{RC['50%']['shared_cohort']['logrank_p']:.3f}",
+ SharedSoleCross=c(RC["90%"]["shared_cohort"]["sole_n"]),
+ SharedMinorCross=c(RC["90%"]["shared_cohort"]["minority_n"]),
  CrossCohortW=_w(RC["cohort"]["n"]) if RC["cohort"]["n"]<=99 else c(RC["cohort"]["n"]),
  NormMQ=c(ABC["C"]["mq"]), NearSoleMQPctC=f"{100*ABC['C']['sole_sh']:.1f}",
  StrengthMQ=c(SEN["strength_market_quarters"]),
@@ -299,6 +319,9 @@ M.update(
  BaseCommonPriPct=f"{SEN['baseline_common_cohort']['primary']['lt02_pct']:.1f}",
  BaseCommonAltPct=f"{SEN['baseline_common_cohort']['alternative']['lt02_pct']:.1f}",
  BaseOnlyAlt=c(len(SEN["baseline_common_cohort"]["only_in_alternative"])),
+ # the noun agrees with the count, which "one further events" did not
+ BaseOnlyAltPhrase=(_w(len(SEN["baseline_common_cohort"]["only_in_alternative"])).capitalize()
+   +" further event"+("" if len(SEN["baseline_common_cohort"]["only_in_alternative"])==1 else "s")),
  BaseOnlyAltW=_w(len(SEN["baseline_common_cohort"]["only_in_alternative"])),
  RUIngredients=c(RU["other_bucket_composition"]["other_bucket_ingredients"]),
  RUMixed=c(RU["other_bucket_composition"]["ingredients_mixing_known_and_unknown"]),
@@ -560,8 +583,11 @@ _nchk=len(set(_re.findall(r"((?:audit|check|verify)_\w+)\.py",_sh))-{"check_envi
 _nd=_j.load(open(_nf))
 # Macros reach the manuscript from two generated files. Counting only this script's
 # left the response letter understating the total by the detector macros.
-_dm=f"{G}/detector_macros.tex"
-_extra=len(_re.findall(r"^\\newcommand", open(_dm).read(), _re.M)) if _os.path.exists(_dm) else 0
+# Every generated file that defines macros, not a named list of two: adding a third
+# file silently understated the count and the response letter carried the wrong total.
+import glob as _glob
+_extra=sum(len(_re.findall(r"^\\newcommand", open(_f).read(), _re.M))
+           for _f in sorted(_glob.glob(f"{G}/*_macros.tex")))
 _nd["generated_macro_count"]=len(M)+_extra
 _nd["final_check_count"]=_nchk
 _j.dump(_nd,open(_nf,"w"),indent=1)
