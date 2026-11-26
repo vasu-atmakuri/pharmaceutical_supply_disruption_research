@@ -73,3 +73,12 @@ Writing the file changes the tree, so the commit that contains it cannot be the 
 The check allows exactly one commit of lag, and only when the sole difference between the two
 commits is `results/build_provenance.json`. Cite the second commit: it contains the first. Push that commit before submitting: the
 repository a reviewer clones has to be the one the paper describes.
+
+## Inputs, after the November 2026 disk cleanup
+
+The raw bulk downloads are no longer on the working machine. What the pipeline needs is the
+committed `data/sdud_parts` and the two NDC archives in `RESEARCH_ROOT/crosswalk`;
+`scripts/ensure_inputs.py` runs first and extracts the rest from those archives. `DATA.md` has
+the full table of what was removed and how to restore each group, and
+`results/data_inventory.json` has a SHA-256 for every raw file as it stood when the published
+results were computed.

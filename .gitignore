@@ -4,6 +4,10 @@
 # cites them and a reviewer cannot reconcile the event flow without them
 !results/*.csv
 *.parquet
+# the per-year panel parts are the exception: 12 MB of aggregated public data that
+# replaces 5 GB of raw CSVs for every purpose except rebuilding them, so a clone of
+# this repository can reproduce every number in the paper
+!data/sdud_parts/*.parquet
 *.zip
 *.txt
 drug-ndc-*.json

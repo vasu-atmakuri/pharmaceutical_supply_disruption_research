@@ -57,7 +57,11 @@ events where a supply disruption is actually documented, part of the volume was 
 | openFDA bulk NDC | current and discontinued | needed for products that have left the market |
 | FDA structured active-ingredient data | current | `SUBSTANCENAME`, used to validate the key merges |
 
-Raw data is not committed. It is public and rebuilt from source by the pipeline.
+The per-year panel parts the pipeline reads are committed, under `data/sdud_parts`: 12 MB of
+aggregated public data that stands in for 5 GB of raw CSVs for every purpose except rebuilding
+them. The raw bulk files are not committed. `DATA.md` records what each input is, whether the
+pipeline needs it, and how to restore it; `results/data_inventory.json` carries the size and
+SHA-256 of every raw file as it stood when these results were computed.
 
 ## Repository layout
 
