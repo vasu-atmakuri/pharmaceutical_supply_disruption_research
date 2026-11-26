@@ -19,7 +19,7 @@ measure, and finds two errors that operate before any supplier is counted.
    string "solution" covers oral, topical, ophthalmic and otic products at once. The ingredient
    half is a free-text string that is not normalised, so one product occupies several keys.
    Correcting both, 379 of 3,295 route-aware keys turn out to be duplicates of another key,
-   leaving 2,916 markets. The share of national Medicaid dispensing in markets where one
+   leaving 2,915 markets. The share of national Medicaid dispensing in markets where one
    labeler holds at least 95 percent falls from 14.71 to 10.54 percent, and 26.7 percent of
    apparent near-sole market-quarters are not near-sole once the market is defined properly.
 
@@ -82,7 +82,7 @@ See `SETUP.md` for the interpreter and package requirements and the expected dat
 PSDR_ROOT=$(pwd) RESEARCH_ROOT=$(dirname $(pwd)) bash scripts/run_all.sh
 ```
 
-The run executes 30 analysis stages and then 10 checks, and ends with
+The run executes 32 analysis stages and then 10 checks, and ends with
 `ALL STAGES AND CHECKS COMPLETE`. Stages 0 to 6 rebuild the panels from the raw SDUD and FDA
 listings and take the bulk of the runtime; the whole run takes roughly 6 to 8 minutes on a warm
 machine, and it has to run in a session that stays alive for its duration. Without a TeX distribution the document build is skipped and the run ends with

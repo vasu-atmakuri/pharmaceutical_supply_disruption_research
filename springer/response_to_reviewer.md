@@ -19,6 +19,37 @@ ran from in `results/build_provenance.json`, which `check_released_files.py` req
 `HEAD`. The paper's code-availability statement cites that file, so the version a reader clones
 is the version the paper describes.
 
+## 0. One correction we made after this revision was drafted
+
+While clearing disk space we found that the product-to-market crosswalk was not
+reproducible, and fixing it moved some descriptive counts. We report it here rather than let
+the reviewer find that a rerun does not reproduce the previous PDF.
+
+A product code listed twice in the source data, once in FDA's NDC directory and once in the
+openFDA listing, was resolved with SQL's `any_value`, which picks an arbitrary row. With
+parallel aggregation the choice varied between runs, so a product code with two different
+recorded routes could land in either market from one build to the next. The crosswalk now picks
+one listing per product code by a total order that prefers FDA's own directory, so the result is
+fixed and every field of a product comes from the same listing instead of being mixed across
+listings. Two consecutive builds now produce identical crosswalk content.
+
+Preferring FDA's directory also recovers routes that the openFDA listing leaves blank, which is
+an improvement rather than a side effect. What moved:
+
+| | Before | After |
+|---|---|---|
+| Raw ingredient-and-route keys | 3,295 | 3,294 |
+| Markets after normalisation | 2,916 | 2,915 |
+| Dispensing volume with an explicit route, by year | 94.4 to 95.8% | 98.4 to 99.0% |
+| Market-quarters at strength granularity | 200,534 | 193,885 |
+| Near-sole volume at strength granularity | 19.96% | 1657.00% |
+
+Nothing in the paper's findings moves. The number of absorbed duplicate keys is still 379 the
+national near-sole dispensing share still falls from 14.71 to 10.54 percent, the observed cohort
+is still 19 events with 8 collapses, and every event-level result, stratum and detector count is
+unchanged. The affected quantities are descriptive counts and one sensitivity, and the
+sensitivity moves in the direction that makes the strength-level contrast smaller.
+
 ---
 
 ## 1. The replacement subgroups in Section 3.8 were wrong
@@ -220,7 +251,7 @@ monitoring-priority benchmark, for the same reason.
 **Establishes.** That the standard ingredient-by-dosage-form market definition, applied to
 public Medicaid dispensing data, contains two measurement defects; that correcting them moves
 dispensing in near-sole markets from 14.71 to 10.54 percent and reclassifies between 16.2 and
-28.9 percent of apparent near-sole market-quarters carrying 34.3 percent of flagged volume; that
+28.8 percent of apparent near-sole market-quarters carrying 34.3 percent of flagged volume; that
 9 of 26 apparent sole-labeler exits are not sole-labeler exits; and that of the 19 the corrected
 panel observes, 2 are a documented supply disruption, 8 are explained by something that is not a
 supply failure, 5 have supply continued by another labeler, and 4 are undetermined.

@@ -84,6 +84,20 @@ _cross90_sole=len(RC["90%"]["sole_rows"]); _cross90_min=len(RC["90%"]["minority_
 
 # Inline figures the letter states in prose. Each pattern must match exactly once.
 SUBS=[
+ (r"\| Raw ingredient-and-route keys \| [\d,]+ \| [\d,]+ \|",
+  f"| Raw ingredient-and-route keys | 3,295 | {NUM['raw_route_keys']:,} |"),
+ (r"\| Markets after normalisation \| [\d,]+ \| [\d,]+ \|",
+  f"| Markets after normalisation | 2,916 | {SPEC['C']['markets']:,} |"),
+ (r"\| Dispensing volume with an explicit route, by year \| [\d.]+ to [\d.]+% \| [\d.]+ to [\d.]+% \|",
+  f"| Dispensing volume with an explicit route, by year | 94.4 to 95.8% | "
+  f"{SEN['route_coverage_volume_min']} to {SEN['route_coverage_volume_max']}% |"),
+ (r"\| Market-quarters at strength granularity \| [\d,]+ \| [\d,]+ \|",
+  f"| Market-quarters at strength granularity | 200,534 | {SEN['strength_market_quarters']:,} |"),
+ (r"\| Near-sole volume at strength granularity \| [\d.]+% \| [\d.]+% \|",
+  f"| Near-sole volume at strength granularity | 19.96% | "
+  f"{100*SEN['strength_nearsole_vol']:.2f}% |"),
+ (r"absorbed duplicate keys is still [\d,]+",
+  f"absorbed duplicate keys is still {NUM['keys_absorbed']:,}"),
  (r"removes \w+ of the \w+-\w+", 
   f"removes {_w(FL['failed_baseline'])} of the {_w(FL['in_window'])}"),
  (r"p = [\d.]+ on \w+ near-sole and \w+ minority-loss markets that cross, against p = [\d.]+ on\nthe full cohort",

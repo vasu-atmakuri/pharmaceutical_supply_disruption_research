@@ -18,12 +18,28 @@ W=os.environ.get("SDUD_PARTS_DIR") or (
 if os.environ.get("SDUD_PARTS"):                 # a glob was given; use its folder
     W=os.path.dirname(os.environ["SDUD_PARTS"])
 os.makedirs(W, exist_ok=True)
-if not os.path.isdir(D):
-    sys.exit(f"SDUD source folder not found: {D}\n"
-             f"Set RESEARCH_ROOT to the folder containing sdud/, or SDUD_DIR directly.")
-files=[f for f in sorted(glob.glob(D+"/StateDrugUtilizationData-*.csv")+glob.glob(D+"/sdud2*.csv"))
-       if any(str(y) in os.path.basename(f) for y in range(2016,2027))]
-if not files: sys.exit(f"no SDUD year files for 2016-2026 in {D}")
+# The raw year files are 5 GB of public bulk data and were deleted from the working
+# machine once the parts existed; see DATA.md. Their absence is only an error if there
+# are no parts to read either, so that case is checked first. The parts are the data as
+# far as every later stage is concerned.
+have=sorted(glob.glob(W+"/*.x.parquet"))
+if not have:
+    have=sorted(glob.glob(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                          +"/data/sdud_parts/*.parquet"))
+files=[]
+if os.path.isdir(D):
+    files=[f for f in sorted(glob.glob(D+"/StateDrugUtilizationData-*.csv")
+                             +glob.glob(D+"/sdud2*.csv"))
+           if any(str(y) in os.path.basename(f) for y in range(2016,2027))]
+if not files:
+    if have:
+        print(f"parts folder: {W}\nno raw year files in {D}; "
+              f"{len(have)} parts already present, nothing to build")
+        raise SystemExit(0)
+    sys.exit(f"no SDUD year files for 2016-2026 in {D} and no parts in {W}.\n"
+             f"See DATA.md: the parts committed under data/sdud_parts are what the "
+             f"panel stages read, or re-download the year files with "
+             f"wget -i sdud/dl.txt -P sdud/")
 todo=[f for f in files if not os.path.exists(W+"/"+os.path.basename(f)+".x.parquet")]
 print(f"SDUD source: {D}\nparts folder: {W}\n{len(files)} year files, {len(todo)} to build")
 for f in todo:

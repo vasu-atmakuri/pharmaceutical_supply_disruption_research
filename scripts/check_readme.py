@@ -85,6 +85,7 @@ body=re.sub(r"`[^`]*`","",RM)                  # code spans and file names
 body=re.sub(r"\[[^\]]*\]\([^)]*\)","",body)    # links
 body=re.sub(r"[0-9]{4}Q[1-4]","",body)
 body=re.sub(r"^\s*\d+\.\s","",body,flags=re.M) # ordered-list markers
+body=body.replace("SHA-256","")   # the name of a hash algorithm, not a quantity
 # Counts the README states in words rather than from a results file, plus the ORCID,
 # the stage and check counts checked above, and the runtime estimate.
 OK={"0","1","2","3","4","5","6","7","8","9","10","11","12","19","27","95",

@@ -23,7 +23,17 @@ echo "python: $PY"
 export PSDR_ROOT="${PSDR_ROOT:-$(cd .. && pwd)}"
 export RESEARCH_ROOT="${RESEARCH_ROOT:-$(cd ../.. && pwd)}"
 # Where the per-year SDUD parquet parts live. Stage 0 builds them if absent.
-export SDUD_PARTS="${SDUD_PARTS:-$RESEARCH_ROOT/sdud_parts/*.parquet}"
+# The panel parts: a fresh build in RESEARCH_ROOT if there is one, otherwise the parts
+# committed under data/sdud_parts, which is what a clone has and what the published
+# numbers were computed from.
+if [ -z "$SDUD_PARTS" ]; then
+  if ls "$RESEARCH_ROOT"/sdud_parts/*.parquet >/dev/null 2>&1; then
+    SDUD_PARTS="$RESEARCH_ROOT/sdud_parts/*.parquet"
+  else
+    SDUD_PARTS="$PSDR_ROOT/data/sdud_parts/*.parquet"
+  fi
+fi
+export SDUD_PARTS
 echo "repo:  $PSDR_ROOT"
 echo "data:  $RESEARCH_ROOT"
 echo "parts: $SDUD_PARTS"

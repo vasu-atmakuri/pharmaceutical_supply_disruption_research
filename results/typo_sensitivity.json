@@ -3,11 +3,11 @@
   "collapse_rate": 0.42105263157894735,
   "collapsed": 8,
   "events": 433,
-  "market_quarters": 87728,
-  "markets": 2916,
+  "market_quarters": 87687,
+  "markets": 2915,
   "near_sole_exits": 72,
-  "near_sole_market_quarters": 48893,
-  "near_sole_volume_share": 0.10539464565062237,
+  "near_sole_market_quarters": 48860,
+  "near_sole_volume_share": 0.1053928738875211,
   "observed_cohort": 19
  },
  "delta": {
@@ -36,11 +36,11 @@
   "collapse_rate": 0.4117647058823529,
   "collapsed": 7,
   "events": 433,
-  "market_quarters": 87657,
-  "markets": 2914,
+  "market_quarters": 87616,
+  "markets": 2913,
   "near_sole_exits": 70,
-  "near_sole_market_quarters": 48800,
-  "near_sole_volume_share": 0.10522139273960322,
+  "near_sole_market_quarters": 48767,
+  "near_sole_volume_share": 0.10521962097650195,
   "observed_cohort": 17
  }
 }

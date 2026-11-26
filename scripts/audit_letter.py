@@ -43,7 +43,12 @@ body=re.sub(r"\b(?:January|February|March|April|May|June|July|August|September|O
 # Section 0 of the letter deliberately quotes the superseded bound so the reviewer
 # can see what changed; those two values are expected not to match current output.
 # Values the letter quotes as superseded, so the reviewer can see what changed.
-SUPERSEDED={"26.3","57.9","15,744","39"}
+# Values the letter quotes as superseded so the reviewer can see what changed. The
+# second group is the "Before" column of the crosswalk-determinism table in Section 0:
+# those numbers are what the previous PDF reported and no longer appear in any output,
+# which is the point of showing them.
+SUPERSEDED={"26.3","57.9","15,744","39",
+            "3,295","2,916","94.4","95.8","200,534","19.96"}
 OK=SUPERSEDED|{"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16",
     "19","20","25","35","41","50","53","60","65","90","95","100","2016","2026","0.02","0.05"}
 found=sorted({t for t in re.findall(r"(?<![\w.])\d[\d,]*(?:\.\d+)?(?![\w.])",body)} - OK)

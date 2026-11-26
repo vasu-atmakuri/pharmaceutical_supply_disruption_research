@@ -42,8 +42,8 @@
   },
   {
     "tag": "B route-and-form bucket, raw ingredient string",
-    "markets": 3295,
-    "lmq": 244835,
+    "markets": 3294,
+    "lmq": 244794,
     "events": 440,
     "ev_markets": 344,
     "inwin": 182,
@@ -83,8 +83,8 @@
   },
   {
     "tag": "C route-and-form bucket, normalized key",
-    "markets": 2916,
-    "lmq": 242508,
+    "markets": 2915,
+    "lmq": 242467,
     "events": 433,
     "ev_markets": 329,
     "inwin": 173,

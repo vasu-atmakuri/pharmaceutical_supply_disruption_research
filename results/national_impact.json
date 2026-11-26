@@ -10,21 +10,21 @@
     "mean_hhi": 0.783203148139
   },
   "spec_C": {
-    "mq": 87728,
+    "mq": 87687,
     "rx": 5799308041.0,
-    "single": 46620,
-    "sole": 48893,
-    "near": 60429,
-    "single_vol": 0.0860894866198,
-    "sole_vol": 0.105394645651,
-    "mean_hhi": 0.753970108033
+    "single": 46579,
+    "sole": 48860,
+    "near": 60397,
+    "single_vol": 0.086083188972,
+    "sole_vol": 0.105392873888,
+    "mean_hhi": 0.75390114756
   },
   "total_rx": {
     "SPECIFICATION A  raw ingredient string, dosage-form bucket": 5799308041.0,
     "SPECIFICATION C  route-and-form bucket, normalised ingredient key": 5799308041.0
   },
-  "reclassified": 11679,
-  "retained": 46297,
-  "unmatched": 938,
-  "reclassified_volume_share": 0.290047497544
+  "reclassified": 11654,
+  "retained": 46399,
+  "unmatched": 861,
+  "reclassified_volume_share": 0.322712063701
 }

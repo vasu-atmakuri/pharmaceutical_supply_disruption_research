@@ -16,7 +16,7 @@ with open(C+"/product.txt", encoding='latin-1') as f:
             (r.get('SUBSTANCENAME') or '').strip().upper(),
             (r.get('PHARM_CLASSES') or '').strip(),
             (r.get('DOSAGEFORMNAME') or '').strip().upper(),
-            (r.get('ROUTENAME') or '').strip().upper()))
+            (r.get('ROUTENAME') or '').strip().upper(), 0))
 print("product.txt rows:",len(rows))
 n0=len(rows)
 with open(C+"/drug-ndc-0001-of-0001.json", encoding='utf-8', errors='replace') as f: d=json.load(f)
@@ -30,14 +30,25 @@ for r in d.get('results',[]):
         "; ".join(x.get('name','') for x in (r.get('active_ingredients') or [])).upper(),
         "; ".join(r.get('pharm_class') or []),
         (r.get('dosage_form') or '').strip().upper(),
-        "; ".join(rt).strip().upper()))
+        "; ".join(rt).strip().upper(), 1))
 print("openFDA added:",len(rows)-n0)
 con=duckdb.connect(); con.execute("SET memory_limit='1500MB'")
-con.execute("CREATE TABLE t(lab VARCHAR,pcode VARCHAR,generic VARCHAR,substance VARCHAR,pclass VARCHAR,form VARCHAR,route VARCHAR)")
-con.executemany("INSERT INTO t VALUES (?,?,?,?,?,?,?)",rows)
-con.execute("""COPY (SELECT lab,pcode,any_value(generic) generic,any_value(substance) substance,
-  any_value(pclass) pclass, any_value(form) form, any_value(route) route
-  FROM t WHERE generic<>'' GROUP BY 1,2) TO '/tmp/xw_route.parquet' (FORMAT PARQUET)""")
+con.execute("CREATE TABLE t(lab VARCHAR,pcode VARCHAR,generic VARCHAR,substance VARCHAR,pclass VARCHAR,form VARCHAR,route VARCHAR,src INT)")
+con.executemany("INSERT INTO t VALUES (?,?,?,?,?,?,?,?)",rows)
+# One listing per product code, chosen by a total order rather than by any_value.
+# any_value picks an arbitrary row, and with parallel aggregation the choice varied
+# between runs: a product code listed twice with different routes could land in
+# either market, which moved the raw-to-corrected match counts by tens of
+# market-quarters from one build to the next. It never moved a published number, but
+# it could have. The order prefers FDA's own NDC directory (src 0) over the openFDA
+# listing, then breaks ties on every field, so the winner is fixed and all of its
+# fields come from the same listing rather than being mixed across listings.
+con.execute("""COPY (
+  SELECT lab,pcode,generic,substance,pclass,form,route FROM (
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY lab,pcode
+      ORDER BY src, generic, substance, pclass, form, route) rn
+    FROM t WHERE generic<>'')
+  WHERE rn=1) TO '/tmp/xw_route.parquet' (FORMAT PARQUET)""")
 n=con.execute("SELECT COUNT(*),COUNT(route) FILTER (WHERE route<>'') FROM read_parquet('/tmp/xw_route.parquet')").fetchone()
 print(f"crosswalk rows {n[0]:,}  with a route {n[1]:,} ({n[1]/n[0]:.1%})")
 print("\n=== routes attached to the forms that were mis-bucketed ===")
