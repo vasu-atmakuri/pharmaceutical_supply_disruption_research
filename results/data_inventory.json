@@ -106,9 +106,64 @@
    "source": "https://data.medicaid.gov/dataset/dfa2ab14-06c2-457a-9e36-5cb1e4d906c6"
   },
   "parts": {
-   "bytes": 12299663,
-   "file_count": 11,
+   "bytes": 24599326,
+   "file_count": 22,
    "files": [
+    {
+     "bytes": 1060857,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/StateDrugUtilizationData-2016.csv.x.parquet",
+     "sha256": "30d2f2c58474a0770e6346f3ee426754b1e496b279b872bd05aa14e84b759553"
+    },
+    {
+     "bytes": 1094706,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/StateDrugUtilizationData-2017.csv.x.parquet",
+     "sha256": "95e3e0c2103fb3d82ccdc93a4b3fd9c7ee5c0001194cddffe06e211de898911d"
+    },
+    {
+     "bytes": 1157614,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/StateDrugUtilizationData-2018.csv.x.parquet",
+     "sha256": "bbb2d3da5e26f09302bfffc0e6f5a8f0331e07fdae3a5a1020f9e69119738683"
+    },
+    {
+     "bytes": 1178934,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/StateDrugUtilizationData-2019.csv.x.parquet",
+     "sha256": "a07eab0f83a983771d259308d00969226785b27fe348294ea98b6513b0e024aa"
+    },
+    {
+     "bytes": 1203247,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/sdud2020_updatedJuly2026.csv.x.parquet",
+     "sha256": "a7a0f47e03a10c4673da75e656d2c685c32a401250de8d2890dbd194f5f4776e"
+    },
+    {
+     "bytes": 1219330,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/sdud2021_updatedJuly2026.csv.x.parquet",
+     "sha256": "f2df8d3bb124af629c57cac86b697a586c96801faedd4bf4262021379fc5baa5"
+    },
+    {
+     "bytes": 1246322,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/sdud2022_updatedJuly2026.csv.x.parquet",
+     "sha256": "34ebbc8da2871c909f590be6a7710206e22be27ee8178b23a78be500ee6ea174"
+    },
+    {
+     "bytes": 1276577,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/sdud2023_updatedJuly2026.csv.x.parquet",
+     "sha256": "290ae3c155f5108b95f683345d7c0782203d32f103d9495fce3060cc745832e2"
+    },
+    {
+     "bytes": 1256578,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/sdud2024_updatedJuly2026.csv.x.parquet",
+     "sha256": "9dd0e48c762539febe908949b0fbfa44ee9aa4faeb77403b629cbc043ee1da52"
+    },
+    {
+     "bytes": 1252399,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/sdud2025_updatedjuly2026.csv.x.parquet",
+     "sha256": "9430aac558dbcad10f5c030175123a47c3ed364708d39b81342ba0109426c928"
+    },
+    {
+     "bytes": 353099,
+     "name": "pharmaceutical_supply_disruption_research/data/sdud_parts/sdud2026_updated072026.csv.x.parquet",
+     "sha256": "c1a7e60741a2ff05cf5b9df13132825900868c727748a99f8e3d6baf5207fa42"
+    },
     {
      "bytes": 1060857,
      "name": "sdud_parts/StateDrugUtilizationData-2016.csv.x.parquet",
@@ -65921,7 +65976,7 @@
    "source": "https://dailymed.nlm.nih.gov/dailymed/spl-resources-all-drug-labels.cfm"
   }
  },
- "recorded_at": "2026-11-26T20:02:06+00:00",
+ "recorded_at": "2026-11-26T20:35:05+00:00",
  "research_root_note": "Paths are relative to the folder that holds this repository and the raw-data folders (sdud, aux, crosswalk, enforcement), which the pipeline calls RESEARCH_ROOT.",
  "revision_caveat": "CMS revises published SDUD files in place; the 2020 and later filenames carry an updatedJuly2026 suffix for that reason. A re-downloaded file may not match these hashes. The committed data/sdud_parts, not the raw CSVs, is what makes the published numbers reproducible."
 }

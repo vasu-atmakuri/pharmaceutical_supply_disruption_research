@@ -104,7 +104,7 @@ if os.path.exists(OUT):
     except Exception: inv={}
 inv.setdefault("groups",{})
 
-want=sys.argv[1:] or list(GROUPS)
+want=[a for a in sys.argv[1:] if not a.startswith("--")] or list(GROUPS)
 for g in want:
     if g not in GROUPS: sys.exit(f"unknown group {g!r}; choose from {', '.join(GROUPS)}")
     spec=GROUPS[g]; files=[]
@@ -115,9 +115,19 @@ for g in want:
     for f in files:
         recs.append(dict(name=os.path.relpath(f,D), bytes=os.path.getsize(f),
                          sha256=sha(f)))
+    prev=inv["groups"].get(g,{})
+    if len(recs) < len(prev.get("files") or []):
+        # The group has been deleted from disk, which is what this inventory is for.
+        # Rescanning it must not replace the hashes with an empty list: that would
+        # destroy the only record of what the published results were computed from.
+        print(f"{g:22s} fewer files on disk than recorded; keeping the recorded "
+              f"{prev['file_count']} files ({prev['bytes']/2**30:.2f} GiB). "
+              f"Pass --force to overwrite.")
+        if "--force" not in sys.argv: continue
     inv["groups"][g]={k:v for k,v in spec.items() if k!="paths"}
     inv["groups"][g].update(files=recs, file_count=len(recs),
                             bytes=sum(r["bytes"] for r in recs))
+    if not recs: inv["groups"][g]["deleted_from_disk"]=True
     print(f"{g:22s} {len(recs):5d} files  {sum(r['bytes'] for r in recs)/2**30:7.2f} GiB")
 
 inv["recorded_at"]=datetime.datetime.now(datetime.timezone.utc).replace(
