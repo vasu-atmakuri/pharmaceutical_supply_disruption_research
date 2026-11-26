@@ -33,6 +33,7 @@ the two NDC zips reproduces every number in the paper without downloading anythi
 | NADAC yearly CSVs | 1.0 GB | No. The spending check is not a pipeline stage; its output is in `results/RESULTS_nadac.json` | yearly files from the NADAC dataset page into `aux/` as `nadac_<year>.csv` |
 | DailyMed SPL documents | 2.1 GB | No. The establishment analysis is not a pipeline stage; its output is in `results/RESULTS_establishments.json` | set ids are kept in `RESEARCH_ROOT/aux_spl_setids_full.txt`; fetch each as `https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/<setid>.xml` |
 | Extracted crosswalk files | 0.3 GB | Yes, and they are rebuilt automatically | `scripts/ensure_inputs.py`, which runs as part of `run_all.sh` |
+| Panel and crosswalk parquet in `/tmp` | 20 MB | Yes, and they are rebuilt by the panel stages | run the pipeline |
 | Virtualenvs (three projects) | 1.6 GB | No | `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt` |
 
 Source pages, in case a URL list is lost:
@@ -70,3 +71,10 @@ PSDR_ROOT=$(pwd) RESEARCH_ROOT=$(dirname $(pwd)) bash scripts/run_all.sh
 Only four kinds of request need a download first: rebuilding the panel from raw files,
 extending it to a newer SDUD release, anything about pre-2016 history, and anything
 about NADAC prices or SPL establishments. The table above says what to fetch for each.
+
+## Reclaiming the space a run uses
+
+A run extracts 300 MB of crosswalk files and writes about 20 MB of parquet to the system
+temporary folder. `scripts/free_space.py` removes exactly those and nothing else, and reports
+what it recovered; the next run puts all of it back. It never touches the archives, the
+committed parts, `results/`, or any raw download.

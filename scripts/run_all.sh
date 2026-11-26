@@ -42,7 +42,7 @@ for f in build_sdud_parts rebuild_xw_route xwalk natpanel natpanel_route build_v
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
          route_unknown_sensitivity exit_evidence_audit detector_variants typo_sensitivity release_split collect_numbers \
          build_figures emit_tex emit_appendix_tables emit_letter_numbers \
-         build_provenance ensure_inputs data_inventory; do
+         build_provenance ensure_inputs data_inventory free_space; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
 S="$PSDR_ROOT/springer"
