@@ -1,26 +1,12 @@
 {
  "branch": "main",
- "built_at": "2026-11-27T03:32:09+00:00",
- "commit": "ebb82dfded21a6efe191da2046e19de44955d2c9",
- "commit_date": "2026-11-27T02:54:51+00:00",
- "commit_short": "ebb82dfded21",
+ "built_at": "2026-11-27T18:51:58+00:00",
+ "commit": "915df936a8f8ac2472acb4df19dbff36ac696dfd",
+ "commit_date": "2026-11-27T18:51:58+00:00",
+ "commit_short": "915df936a8f8",
  "note": "The commit this build ran from. working_tree_clean is false when the build included changes that are not in any commit, in which case the build is not reproducible from this commit and the paper should not cite it. Re-run this stage after committing and commit the result.",
  "remote": "https://github.com/vasu-atmakuri/pharmaceutical_supply_disruption_research.git",
- "uncommitted_count": 13,
- "uncommitted_paths": [
-  "EADME.md",
-  "results/manuscript_numbers.json",
-  "results/ndc_suppression_audit.csv",
-  "results/ndc_suppression_audit.json",
-  "scripts/check_readme.py",
-  "scripts/emit_tex.py",
-  "scripts/ndc_suppression_audit.py",
-  "springer/generated/numbers.tex",
-  "springer/manuscript.aux",
-  "springer/manuscript.log",
-  "springer/manuscript.pdf",
-  "springer/manuscript.tex",
-  "springer/response_to_reviewer.md"
- ],
- "working_tree_clean": false
+ "uncommitted_count": 0,
+ "uncommitted_paths": [],
+ "working_tree_clean": true
 }
