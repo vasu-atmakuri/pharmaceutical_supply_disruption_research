@@ -23,8 +23,8 @@
     "SPECIFICATION A  raw ingredient string, dosage-form bucket": 5799308041.0,
     "SPECIFICATION C  route-and-form bucket, normalised ingredient key": 5799308041.0
   },
-  "reclassified": 11654,
-  "retained": 46399,
-  "unmatched": 861,
-  "reclassified_volume_share": 0.322712063701
+  "reclassified": 11618,
+  "retained": 46300,
+  "unmatched": 996,
+  "reclassified_volume_share": 0.315100222282
 }

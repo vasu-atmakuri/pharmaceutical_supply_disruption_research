@@ -18,13 +18,12 @@ FL=SPEC["C"]["sole_flow"]
 def g(d,*k):
     for x in k: d=d[x]
     return d
-import glob as _g, subprocess as _sp
-# How many generated tables and relationship assertions there actually are. Both were
-# typed in the letter and both changed this round.
-_NTAB=len(_g.glob(f"{_ROOT}/springer/generated/tab_*.tex"))
-_NREL=int(_sp.run([sys.executable,f"{_ROOT}/scripts/check_relationships.py"],
-                  capture_output=True,text=True,
-                  env={**os.environ,"PSDR_ROOT":_ROOT}).stdout.split(" relationship checks")[0].split()[-1])
+# These two counts were derived here for phrases the letter no longer contains, and one
+# of them shelled out to check_relationships.py to read its assertion count. That check
+# needs poppler to read the figure PDFs, so on a machine without poppler it printed
+# nothing and this stage died with an IndexError before the substitutions ran. A stage
+# that refreshes a document should not depend on a check being runnable, so both are
+# gone rather than guarded.
 # (pattern, replacement) - the pattern must capture nothing and match exactly once
 _WORD={8:"eight",9:"nine",10:"ten",11:"eleven",12:"twelve"}
 # the number of final checks run_all.sh runs, excluding the preflight
