@@ -143,6 +143,54 @@ def ingredient_set(name):
     return base_ingredients(rx)
 
 
+NUM = re.compile(r"\d+(?:\.\d+)?")
+
+
+def strength(raw_key):
+    """The numeric content of the ingredient string, as a sorted tuple.
+
+    An RxNorm ingredient set says nothing about strength, so two keys can share a
+    signature and still be different markets: TIMOLOL 0.25% and TIMOLOL 0.5% do. The
+    recall arm therefore only treats a same-signature pair as a candidate merge when
+    the numbers in the two ingredient strings agree, and reports how many pairs this
+    excludes rather than scoring the rule against them.
+    """
+    return tuple(sorted(NUM.findall(raw_key.split("|")[0])))
+
+
+def components(sub):
+    out = []
+    for c in re.split(r";", (sub or "").upper()):
+        c = " ".join(c.split())
+        if len(c) > 2:
+            out.append(c)
+    return out
+
+
+def signature(sub_string):
+    """RxNorm signature of one FDA substance string: the union of its components' IN sets.
+
+    None when any component could not be queried, empty when any component matched
+    nothing. Both main and the self-test go through here, so the test cannot pass a
+    string the stage would never send. A free-text combination name written as prose,
+    "amoxicillin and clavulanate potassium", is one such string: RxNorm does not match it
+    as a single concept, and FDA's structured field never writes it that way, giving
+    "AMOXICILLIN; CLAVULANATE POTASSIUM" instead.
+    """
+    cs = components(sub_string)
+    if not cs:
+        return set()
+    acc = set()
+    for c in cs:
+        one = ingredient_set(c)
+        if one is None:
+            return None
+        if not one:
+            return set()
+        acc |= one
+    return acc
+
+
 def selftest():
     """Known cases, including the salt case the whole benchmark rests on."""
     print("self-test against the RxNorm API")
@@ -151,18 +199,22 @@ def selftest():
     if not v:
         return False
     sets, ok = {}, True
-    for name, want in [("ibuprofen", 1), ("timolol", 1), ("timolol maleate", 1),
-                       ("amoxicillin and clavulanate potassium", 2)]:
-        s = ingredient_set(name)
-        n = None if s is None else len(s)
-        sets[name] = s
+    cases = [("IBUPROFEN", 1),
+             ("TIMOLOL", 1),
+             ("TIMOLOL MALEATE", 1),
+             ("AMOXICILLIN; CLAVULANATE POTASSIUM", 2),
+             ("ACETAMINOPHEN; CODEINE PHOSPHATE", 2)]
+    for name, want in cases:
+        got = signature(name)
+        n = None if got is None else len(got)
+        sets[name] = got
         flag = "ok" if n == want else "UNEXPECTED"
         print(f"  {name:38} {n} ingredient concept(s), expected {want}   {flag}")
         if n != want:
             ok = False
-    if sets.get("timolol") and sets.get("timolol maleate"):
-        same = sets["timolol"] == sets["timolol maleate"]
-        print(f"  timolol == timolol maleate             {same}   "
+    if sets.get("TIMOLOL") and sets.get("TIMOLOL MALEATE"):
+        same = sets["TIMOLOL"] == sets["TIMOLOL MALEATE"]
+        print(f"  TIMOLOL == TIMOLOL MALEATE             {same}   "
               f"{'ok' if same else 'UNEXPECTED: the salt does not collapse to its base'}")
         ok = ok and same
     return ok
@@ -206,30 +258,6 @@ def raw_key_substances(nmap):
     out = {}
     for k, v in acc.items():
         out[k] = (max(v)[1], len({s for _, s in v if s}) > 1)
-    return out
-
-
-NUM = re.compile(r"\d+(?:\.\d+)?")
-
-
-def strength(raw_key):
-    """The numeric content of the ingredient string, as a sorted tuple.
-
-    An RxNorm ingredient set says nothing about strength, so two keys can share a
-    signature and still be different markets: TIMOLOL 0.25% and TIMOLOL 0.5% do. The
-    recall arm therefore only treats a same-signature pair as a candidate merge when
-    the numbers in the two ingredient strings agree, and reports how many pairs this
-    excludes rather than scoring the rule against them.
-    """
-    return tuple(sorted(NUM.findall(raw_key.split("|")[0])))
-
-
-def components(sub):
-    out = []
-    for c in re.split(r";", (sub or "").upper()):
-        c = " ".join(c.split())
-        if len(c) > 2:
-            out.append(c)
     return out
 
 
