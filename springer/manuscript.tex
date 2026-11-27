@@ -270,9 +270,10 @@ adjudicate the merges it contradicted, which we state wherever the agreement is 
 substance set, after stripping counterion words from the substance names, and as contradicted
 otherwise. We also search in the opposite direction, for pairs of distinct normalised keys that
 share a substance set and a route bucket, which are duplicates the algorithm failed to merge.
-Results are in Section~\ref{subsec:validres}. We attempted the same check against RxNorm, which
-would be the stronger reference; the RxNav service was not reachable from the analysis
-environment, and we report the FDA-internal check instead and flag this as a limitation.
+Results are in Section~\ref{subsec:validres}. We then run the same check against RxNorm, which
+is the stronger reference because its ingredient hierarchy adjudicates the counterion question
+our stripping list answers by assertion; Section~\ref{subsec:rxnorm} reports it, in both
+directions, and the sensitivity it implies for the national figures.
 
 \subsection{Event detection and eligibility}\label{subsec:treat}
 
@@ -693,8 +694,59 @@ group is one market in a clinical sense.
 
 We report this check as supportive rather than decisive. Both fields come from FDA product
 listings and share an upstream source, so agreement between them is weaker evidence than
-agreement with an external terminology would be. RxNorm would supply that, and we could not
-reach it from the analysis environment.
+agreement with an external terminology. The next subsection supplies that.
+
+\subsection{External adjudication against RxNorm}\label{subsec:rxnorm}
+
+The normalisation rule is ours: it merges keys whose substance token sets agree once a list of
+counterion words we wrote has been stripped. Nothing internal to the paper can establish that
+the list is the right one. RxNorm, the National Library of Medicine's drug vocabulary, settles
+the same question independently, because it places a salt as a precise ingredient beneath a
+base ingredient, and so decides without reference to our list whether timolol maleate and
+timolol are one ingredient.
+
+We resolved every FDA structured substance name in the panel, \nRxSub of them, through the
+RxNorm API and collapsed each to its base ingredient concepts. \nRxSubResolved resolved, which
+gives \nRxKeysResolved of the \nRxKeys raw market keys, \nRxKeysResolvedPct percent, a complete
+RxNorm ingredient signature. A key without a complete signature is reported but never scored,
+since a name RxNorm cannot resolve is missing evidence rather than evidence against the rule.
+
+Of the \nRxGroups merge groups the rule forms, \nRxScored have at least two members carrying a
+signature. RxNorm confirms \nRxConfirmed of those and contradicts \nRxContradictedW, a precision
+of \nRxPrec percent with a 95 percent Wilson interval of \nRxPrecLo to \nRxPrecHi. The merges
+this paper performs are, on an outside authority's reading, almost all correct.
+
+Recall is the weaker half and we report it in full. Taking every pair of raw keys to which
+RxNorm gives one ingredient signature, inside a single route-and-form bucket and at equal
+stated strength, \nRxPairsEligible pairs qualify and the rule merges \nRxPairsMerged of them,
+a recall of \nRxRecall percent with an interval of \nRxRecallLo to \nRxRecallHi. The
+\nRxPairsMissed pairs it leaves apart are not random: in almost all of them one free-text name
+carries a route or form word that the other lacks, so that budesonide and budesonide inhalation
+sit in the same inhalation bucket under different keys. The bucket already encodes route and
+form, which makes the word redundant and the separation an artifact of comparing raw strings.
+An RxNorm ingredient set carries no strength and no release characteristic, so pairs differing
+numerically are excluded from the denominator above, \nRxPairsStrength of them, and a further
+\nRxPairsRelease are excluded below as release or presentation variants, where RxNorm's
+ingredient identity would merge an extended-release product with an immediate-release one.
+
+The direction of this matters more than the rate. Under-merging leaves markets looking more
+concentrated than they are, which is the same direction as the defect the paper documents.
+Closing the \nRxPairsClosed adjudicated equivalences transitively collapses \nSpecDIn
+specification C markets into \nSpecDOut and gives a fourth specification, D, under which
+dispensing in near-sole market-quarters is \nSpecDSoleVol percent rather than specification C's
+\nNearSoleVolC percent, a further fall of \nSpecDDelta points. Against specification A's
+\nNearSoleVolA percent, the total measured defect is \nSpecDTotal points, of which the correction
+this paper reports captures \nSpecDShareOfTotal percent. The figures we publish are therefore a
+floor on the overstatement, not an estimate of it, and no part of the correction reverses under
+external adjudication. Specification D is reported as a sensitivity and not adopted: its merges
+rest on a terminology that adjudicates ingredient identity rather than market substitutability,
+and the released
+\texttt{results/rxnorm\_unmerged\_equivalent\_pairs.csv} lets a reader judge each one.
+
+Of the \nCohortMarkets markets in the analysed event cohort, \nRxCohortTouchedW is touched by an adjudicated
+under-merge: meropenem, where RxNorm reads a premixed sodium chloride infusion and a dry vial
+as one ingredient. That market's exit sits in the minority band and in no near-sole result, so
+no reported near-sole event changes under specification D.
 
 \subsection{What actually caused each near-sole-labeler exit}\label{subsec:causeres}
 
@@ -1335,6 +1387,20 @@ expansion from remaining suppliers, while an unannounced commercial exit from a 
 none. That is a hypothesis this panel raises and cannot test.
 
 \subsection{Limitations}\label{subsec:limits}
+
+A rule we wrote cannot be validated by a field we also used to write it, and
+Section~\ref{subsec:rxnorm} therefore tests the normalisation against RxNorm. That test
+returns a high precision and a recall under half, and the asymmetry is the honest limitation
+here. Nearly every merge we perform is confirmed, so the corrected figures are not inflated by
+merges that should not have happened. But RxNorm identifies \nRxPairsMissed further key pairs
+we leave apart, almost all because a route or form word sits inside one free-text name and not
+the other, and closing them moves dispensing in near-sole market-quarters a further
+\nSpecDDelta points down. Our correction recovers \nSpecDShareOfTotal percent of the defect an
+external adjudicator can see, which makes every concentration figure in this paper a floor on
+the overstatement rather than a measurement of it. We did not adopt the stricter normalisation
+because RxNorm adjudicates ingredient identity and not market substitutability, and a rule
+tuned to it would merge extended-release and immediate-release products that no clinician
+treats as interchangeable. Where the two readings differ is released product by product.
 
 The sample of near-sole exits cannot be enlarged within these data. \nFlowDetectedUC exist in the
 panel; \nFlowOutsideW fall outside a window that a forty-one quarter panel with six quarters of

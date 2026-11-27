@@ -1,0 +1,36 @@
+{
+ "C": {
+  "mean_hhi": 0.75390114756,
+  "mq": 87687,
+  "one_sh": 0.531196186436,
+  "one_vol": 0.086083188972,
+  "sole_sh": 0.557209164414,
+  "sole_vol": 0.105392873888,
+  "vw_hhi": 0.398369727152
+ },
+ "D": {
+  "mean_hhi": 0.73524518628,
+  "mq": 81048,
+  "one_sh": 0.500974731024,
+  "one_vol": 0.0758743824072,
+  "sole_sh": 0.527292468661,
+  "sole_vol": 0.0944413616466,
+  "vw_hhi": 0.388460770296
+ },
+ "closure_groups": 212,
+ "cohort_markets": 79,
+ "cohort_markets_touched": 1,
+ "cohort_markets_touched_names": [
+  "MEROPENEM | INJECTABLE"
+ ],
+ "delta_one_vol_pp": -1.02088065648,
+ "delta_sole_vol_pp": -1.09515122409,
+ "markets_eliminated": 282,
+ "markets_in_closure": 494,
+ "note": "Specification D is specification C with every RxNorm-adjudicated equivalence closed transitively, excluding pairs whose names differ in a release or presentation modifier. It is reported as a sensitivity on the normalisation step. The published figures remain specification C, whose merges RxNorm confirms; D says how much further an externally adjudicated normalisation would move the concentration measures.",
+ "pairs_closed": 478,
+ "pairs_dropped_release_variant": 29,
+ "pairs_total": 507,
+ "share_of_defect_captured_pct": 79.1970988272,
+ "total_defect_pp": 5.26441583794
+}

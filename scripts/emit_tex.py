@@ -28,6 +28,10 @@ INF=L("inference_normalized.json"); ABC=L("concentration_abc.json"); NI=L("natio
 RUL=L("reclassification_rules.json"); RML=L("recall_match_level.json"); RUS=L("route_unknown_sensitivity.json"); VAL=L("normalization_validation.json"); SEN=L("sensitivities.json")
 DEF=L("deficit_entry_normalized.json"); RU=L("route_unknown_sensitivity.json"); RC=L("recovery_censored.json"); NUM=L("manuscript_numbers.json")
 SPEC={s["tag"][0]:s for s in L("three_specifications.json")}
+# The external benchmark and its sensitivity are optional inputs: both need a one-off
+# network run, and both cache their results, so a clone without them still builds.
+RX=L("rxnorm_market_equivalence.json") if os.path.exists(f"{R}/rxnorm_market_equivalence.json") else None
+RXD=L("rxnorm_closure_sensitivity.json") if os.path.exists(f"{R}/rxnorm_closure_sensitivity.json") else None
 _W={14:"fourteen",13:"thirteen",15:"fifteen",12:"twelve",16:"sixteen"}
 _FL=SPEC["C"]["sole_flow"]
 # Number to words, for counts the text spells out. A fixed dictionary broke the
@@ -420,6 +424,36 @@ FormBucketsW=_formbw(), DorzLabelersW=_dorzw(),
  TopThree=f"{SEN['minority_top_ratios'][2]:.0f}", TopFour=f"{SEN['minority_top_ratios'][3]:.0f}",
  TopFive=f"{SEN['minority_top_ratios'][4]:.0f}",
 )
+
+if RX and RXD:
+    M.update(
+     RxKeys=c(RX["raw_keys"]), RxKeysResolved=c(RX["keys_with_signature"]),
+     RxKeysResolvedPct=f"{100*RX['keys_with_signature']/RX['raw_keys']:.1f}",
+     RxSub=c(RX["substance_names_queried"]), RxSubResolved=c(RX["substance_names_resolved"]),
+     RxGroups=c(RX["merge_groups"]), RxScored=c(RX["groups_scored"]),
+     RxConfirmed=c(RX["groups_confirmed"]), RxContradicted=c(RX["groups_contradicted"]),
+     RxContradictedW=_w(RX["groups_contradicted"]),
+     RxUnresolvedGroups=c(RX["groups_unresolved"]),
+     RxPrec=f"{100*RX['precision']:.1f}",
+     RxPrecLo=f"{100*RX['precision_lo']:.1f}", RxPrecHi=f"{100*RX['precision_hi']:.1f}",
+     RxRecall=f"{100*RX['recall']:.1f}",
+     RxRecallLo=f"{100*RX['recall_lo']:.1f}", RxRecallHi=f"{100*RX['recall_hi']:.1f}",
+     RxPairsMerged=c(RX["equivalent_pairs_merged"]),
+     RxPairsEligible=c(RX["equivalent_pairs_merged"]+RX["equivalent_pairs_not_merged"]),
+     RxPairsMissed=c(RX["equivalent_pairs_not_merged"]),
+     RxPairsStrength=c(RX["equivalent_pairs_excluded_differing_strength"]),
+     RxPairsRelease=c(RXD["pairs_dropped_release_variant"]),
+     RxPairsClosed=c(RXD["pairs_closed"]),
+     SpecDIn=c(RXD["markets_in_closure"]), SpecDOut=c(RXD["closure_groups"]),
+     SpecDSoleVol=f"{100*RXD['D']['sole_vol']:.2f}",
+     SpecDOneVol=f"{100*RXD['D']['one_vol']:.2f}",
+     SpecDDelta=f"{abs(RXD['delta_sole_vol_pp']):.2f}",
+     SpecDTotal=f"{100*ABC['A']['sole_vol']-100*RXD['D']['sole_vol']:.2f}",
+     CohortMarkets=c(RXD["cohort_markets"]),
+     RxCohortTouched=c(RXD["cohort_markets_touched"]),
+     RxCohortTouchedW=_w(RXD["cohort_markets_touched"]),
+     SpecDShareOfTotal=f"{100*(ABC['A']['sole_vol']-ABC['C']['sole_vol'])/(ABC['A']['sole_vol']-RXD['D']['sole_vol']):.0f}",
+    )
 
 # ---- Table: raw-to-corrected transition for the seven reclassified exits ----
 from display_names import (name as _dname, labeler as _dlab,

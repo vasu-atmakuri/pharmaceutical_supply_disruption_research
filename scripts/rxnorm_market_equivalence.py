@@ -353,6 +353,7 @@ def main():
         "groups_confirmed": conf, "groups_contradicted": contra,
         "groups_unresolved": unres, "groups_scored": scored,
         "precision": p, "precision_lo": plo, "precision_hi": phi,
+        "equivalent_pairs_eligible": caught + missed,
         "equivalent_pairs_merged": caught, "equivalent_pairs_not_merged": missed,
         "equivalent_pairs_excluded_differing_strength": diff_strength,
         "recall": r, "recall_lo": rlo, "recall_hi": rhi,

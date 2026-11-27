@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.11.16)  27 NOV 2026 03:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.11.16)  27 NOV 2026 18:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -981,10 +981,10 @@ Underfull \hbox (badness 2334) in paragraph at lines 11--11
  []
 
 )
-<fig1.pdf, id=244, 737.15402pt x 245.718pt>
+<fig1.pdf, id=249, 737.15402pt x 245.718pt>
 File: fig1.pdf Graphic file (type pdf)
 <use fig1.pdf>
-Package pdftex.def Info: fig1.pdf  used on input line 534.
+Package pdftex.def Info: fig1.pdf  used on input line 535.
 (pdftex.def)             Requested size: 372.0pt x 124.00224pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -994,7 +994,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [13 <./fig1.pdf>] (./generated/tab_rules.tex)
-Overfull \hbox (7.14479pt too wide) in paragraph at lines 603--612
+Overfull \hbox (7.14479pt too wide) in paragraph at lines 604--613
  [] 
  []
 
@@ -1011,6 +1011,9 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [17]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [18]
 (./generated/tab_cause.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--3
 []|\OT1/cmr/m/n/8 Departing
@@ -1094,50 +1097,47 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--21
 ) (./generated/tab_collapse.tex)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [18]
+ [19]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [19]
+ [20]
 (./generated/tab_replacement.tex)
-<fig2.pdf, id=353, 737.15402pt x 274.626pt>
+<fig2.pdf, id=363, 737.15402pt x 274.626pt>
 File: fig2.pdf Graphic file (type pdf)
 <use fig2.pdf>
-Package pdftex.def Info: fig2.pdf  used on input line 875.
+Package pdftex.def Info: fig2.pdf  used on input line 927.
 (pdftex.def)             Requested size: 372.0pt x 138.59074pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [20]
+ [21]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [21 <./fig2.pdf>]
+ [22 <./fig2.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [22]
+ [23]
 (./generated/tab_strata.tex) (./generated/tab_ladder.tex)
-Overfull \hbox (57.68321pt too wide) in paragraph at lines 961--971
+Overfull \hbox (57.68321pt too wide) in paragraph at lines 1013--1023
  [] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [23]
-<fig3.pdf, id=438, 737.15402pt x 354.12299pt>
+ [24]
+<fig3.pdf, id=447, 737.15402pt x 354.12299pt>
 File: fig3.pdf Graphic file (type pdf)
 <use fig3.pdf>
-Package pdftex.def Info: fig3.pdf  used on input line 1031.
+Package pdftex.def Info: fig3.pdf  used on input line 1083.
 (pdftex.def)             Requested size: 372.0pt x 178.7091pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [24]
+ [25]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [25 <./fig3.pdf>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [26]
+ [26 <./fig3.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [27]
@@ -1159,6 +1159,12 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [33]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [34]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [35]
 (./generated/tab_audit_rows.tex
 Underfull \hbox (badness 10000) in paragraph at lines 1--1
 []|\OT1/cmr/m/n/9 Multivitamin with
@@ -1412,10 +1418,10 @@ Underfull \hbox (badness 1728) in paragraph at lines 19--19
 )
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [34]
+ [36]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [35]
+ [37]
 (./generated/tab_ndc.tex
 Underfull \hbox (badness 10000) in paragraph at lines 7--7
 []|\OT1/cmr/m/n/8 Cupric, Man-ganese,
@@ -1426,18 +1432,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 8--8
 []|\OT1/cmr/m/n/8 Cupric, Man-ganese,
  []
 
-)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [36]
-(./generated/tab_routecov.tex)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [37]
-(./manuscript.bbl
+) (./generated/tab_routecov.tex)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [38]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [39]
+(./manuscript.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 81--87
 \OT1/cmr/m/n/10 https://www.fda.gov/drugs/drug-approvals-and-databases/national
 -drug-code-
@@ -1446,23 +1448,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 81--87
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [39])
+ [40])
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [40]
+ [41]
 (./manuscript.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.985pt have occurred.
 
 Package rerunfilecheck Info: File `manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: A29515E000AEF07BFA778793C3C88089;5576.
+(rerunfilecheck)             Checksum: 48094B14D881FE0313A6D641DDCB4776;5823.
  ) 
 Here is how much of TeX's memory you used:
- 22652 strings out of 480247
- 420935 string characters out of 5896150
- 706537 words of memory out of 5000000
- 40031 multiletter control sequences out of 15000+600000
+ 22689 strings out of 480247
+ 421403 string characters out of 5896150
+ 702599 words of memory out of 5000000
+ 40066 multiletter control sequences out of 15000+600000
  484222 words of font info for 82 fonts, out of 8000000 for 9000
  24 hyphenation exceptions out of 8191
  99i,16n,103p,1384b,720s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1488,10 +1490,10 @@ public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
 ts/cm/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mtt9.pfb>
-Output written on manuscript.pdf (40 pages, 478873 bytes).
+Output written on manuscript.pdf (41 pages, 484069 bytes).
 PDF statistics:
- 734 PDF objects out of 1000 (max. 8388607)
- 501 compressed objects within 6 object streams
- 107 named destinations out of 1000 (max. 500000)
- 244 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 746 PDF objects out of 1000 (max. 8388607)
+ 512 compressed objects within 6 object streams
+ 109 named destinations out of 1000 (max. 500000)
+ 252 words of extra memory for PDF output out of 10000 (max. 10000000)
 

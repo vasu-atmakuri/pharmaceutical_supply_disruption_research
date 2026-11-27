@@ -19,7 +19,55 @@ ran from in `results/build_provenance.json`, which `check_released_files.py` req
 `HEAD`. The paper's code-availability statement cites that file, so the version a reader clones
 is the version the paper describes.
 
-## 0. The suppression bound, counted at the unit CMS actually suppresses
+## 0. The RxNorm benchmark you asked for four times, and what it found
+
+We were wrong that this needed a UMLS account. The RxNorm API serves non-proprietary NLM content
+and needs no licence; the single endpoint that does require one is not used here. The benchmark
+is now in the paper, in Section 3 under external adjudication, and the stage that produces it is
+scripts/rxnorm_market_equivalence.py with its responses cached in the repository so the result
+reruns offline.
+
+What it does. Every FDA structured substance name in the panel, 1,872 of them, is resolved
+through RxNorm and collapsed to its base ingredient concepts, which makes RxNorm decide the
+counterion question our stripping list answers by assertion: it places a salt as a precise
+ingredient beneath a base ingredient, so timolol maleate and timolol collapse together without
+reference to anything we wrote. 1,867 names resolved, giving 3,143 of 3,294 raw keys a complete
+signature. Keys without one are reported and never scored.
+
+Precision. Of the 307 merge groups, 295 have two members carrying a signature. RxNorm confirms
+294 and contradicts one: 99.7 percent, Wilson interval 98.1 to 99.9. The merges we perform are
+almost all correct on an outside reading.
+
+Recall, which is the finding. Of the 949 key pairs RxNorm gives one signature inside a single
+route-and-form bucket at equal stated strength, we merge 442, a recall of 46.6 percent. The 507
+we leave apart are not random. In almost all of them a route or form word sits inside one
+free-text name and not the other, so budesonide and budesonide inhalation sit in the same
+inhalation bucket under different keys. The bucket already encodes route and form, which makes
+the word redundant and our separation an artifact of comparing raw strings.
+
+We would rather report the consequence than argue about the rate. Closing the 478 adjudicated
+equivalences transitively, after dropping 29 release and presentation variants where RxNorm's
+ingredient identity would merge an extended-release product with an immediate-release one,
+collapses 494 of our markets into 212 and gives a fourth specification. Under it, dispensing in
+near-sole market-quarters is 9.44 percent against our published 10.54. Against the raw
+specification's 14.71, the total measured defect is 5.26 points and our correction captures 79
+percent of it.
+
+Three things follow, and we have written all three into the paper rather than only the
+favourable one. Our figures are a floor on the overstatement and not an estimate of it, which is
+a weaker claim than we made before and the correct one. The direction never reverses: external
+adjudication moves the correction further the same way, so the paper's central finding is not at
+risk from it. And of the 79 markets in the analysed event cohort exactly one is touched, where
+RxNorm reads a premixed sodium chloride infusion and a dry vial of meropenem as one ingredient;
+that exit is in the minority band and in no near-sole result, so no reported near-sole event
+moves.
+
+We did not adopt the stricter normalisation. RxNorm adjudicates ingredient identity, not market
+substitutability, and a rule tuned to it merges products no clinician treats as interchangeable.
+It is reported as a sensitivity, and results/rxnorm_unmerged_equivalent_pairs.csv releases every
+disputed pair so you can judge them individually rather than take our word for the split.
+
+## 0b. The suppression bound, counted at the unit CMS actually suppresses
 
 You were right and our bound was wrong. We had written that a suppressed market-quarter holds at
 most ten prescriptions, and that either end of the interval constitutes collapse. Both parts fail.
@@ -47,7 +95,7 @@ The caveat we cannot remove: secondary suppression can withhold a cell in order 
 cell, so even the NDC-aware ceiling is not a guaranteed bound. We say this rather than imply the
 ceiling is exact.
 
-## 0b. One correction we made after this revision was drafted
+## 0c. One correction we made after this revision was drafted
 
 While clearing disk space we found that the product-to-market crosswalk was not
 reproducible, and fixing it moved some descriptive counts. We report it here rather than let
@@ -385,10 +433,11 @@ presented as checked.
 
 ## 17. What we have not done
 
-Three of the reviewer's suggestions are not in this revision, and we would rather say so than
-imply otherwise.
+Two of the reviewer's suggestions are not in this revision, and we would rather say so than
+imply otherwise. The independently adjudicated normalisation benchmark, which was the third, is
+now Section 0 of this letter.
 
-The independently adjudicated normalisation sample, for the reason in comment 6. The
+The
 controlled-missingness experiment that would deliberately suppress observations from known
 continuous series and measure detector precision and recall: we agree it would turn the
 detector work into a standalone methodological contribution, and it is the first thing we would
