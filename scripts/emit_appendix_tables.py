@@ -142,12 +142,26 @@ m.append(r"\newcommand{\nNdcCodes}{%s\xspace}"%f"{_na['product_codes']:,}".repla
 m.append(r"\newcommand{\nNdcCombos}{%s\xspace}"%_na["name_bucket_combinations"])
 m.append(r"\newcommand{\nNdcMulti}{%s\xspace}"%
          _na["combinations_with_conflicting_populated_sets"])
-m.append(r"\newcommand{\nNdcMissing}{%s\xspace}"%
-         _na["combinations_with_missing_sets_only"])
+m.append(r"\newcommand{\nNdcMixed}{%s\xspace}"%
+         _na["combinations_mixed_populated_and_missing"])
+m.append(r"\newcommand{\nNdcAllMissing}{%s\xspace}"%
+         _na["combinations_with_no_usable_substance_set"])
+_pl=_na["panel_linked"]; _nl=_na["not_panel_linked"]
+m.append(r"\newcommand{\nNdcAssigned}{%s\xspace}"%
+         f"{_pl['product_codes']:,}".replace(",","{,}"))
+m.append(r"\newcommand{\nNdcAssignedGroups}{%s\xspace}"%_pl["groups"])
+m.append(r"\newcommand{\nNdcKeys}{%s\xspace}"%_pl["market_keys"])
+m.append(r"\newcommand{\nNdcKeysNoSub}{%s\xspace}"%
+         _pl["market_keys_with_no_usable_substance_set"])
+m.append(r"\newcommand{\nNdcAssignedWithSub}{%s\xspace}"%
+         f"{_pl['products_with_a_usable_substance_set']:,}".replace(",","{,}"))
+m.append(r"\newcommand{\nNdcPanelConflicts}{%s\xspace}"%_pl["conflicting_groups"])
+m.append(r"\newcommand{\nNdcUnassigned}{%s\xspace}"%
+         f"{_nl['product_codes']:,}".replace(",","{,}"))
+m.append(r"\newcommand{\nNdcUnassignedGroups}{%s\xspace}"%_nl["groups"])
+m.append(r"\newcommand{\nNdcOutConflicts}{%s\xspace}"%_nl["conflicting_groups"])
 m.append(r"\newcommand{\nNdcClean}{%s\xspace}"%
          _na["combinations_fully_populated_and_consistent"])
-m.append(r"\newcommand{\nNdcNoMarket}{%s\xspace}"%
-         f"{_na['product_codes_without_a_market_in_the_panel']:,}".replace(",","{,}"))
 m.append(r"\newcommand{\nNdcMultiKey}{%s\xspace}"%
          _na["product_codes_resolving_to_more_than_one_market"])
 open(f"{G}/detector_macros.tex","w").write("\n".join(m)+"\n")

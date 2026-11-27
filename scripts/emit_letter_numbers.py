@@ -92,8 +92,28 @@ def _outcome_table():
       f"{100*OMS['ten']['rate']:.1f}% |",
       f"| Averaged over observed quarters only | {OMS['observed']['collapsed']} | "
       f"{100*OMS['observed']['rate']:.1f}% |"])
+NA=L("ndc_composition_audit.json")
+def _ndccat_table():
+    return "\n".join(["| Category | Groups |","|---|---|",
+      f"| Two or more different populated substance sets | "
+      f"{NA['combinations_with_conflicting_populated_sets']} |",
+      f"| One populated set plus records with none | "
+      f"{NA['combinations_mixed_populated_and_missing']} |",
+      f"| No usable substance set for any member | "
+      f"{NA['combinations_with_no_usable_substance_set']} |",
+      f"| Fully populated and consistent | "
+      f"{NA['combinations_fully_populated_and_consistent']} |"])
+def _ndcsplit_table():
+    a=NA["panel_linked"]; u=NA["not_panel_linked"]
+    return "\n".join(["| Population | Product codes | Groups | Conflicting groups |",
+      "|---|---|---|---|",
+      f"| Assigned a panel market | {a['product_codes']:,} | {a['groups']} | "
+      f"{a['conflicting_groups']} |",
+      f"| Not assigned a panel market | {u['product_codes']:,} | {u['groups']} | "
+      f"{u['conflicting_groups']} |"])
 BLOCKS={"ladder":_ladder_table,"crosswalk":_crosswalk_table,
-        "recovery":_recovery_table,"outcome":_outcome_table}
+        "recovery":_recovery_table,"outcome":_outcome_table,
+        "ndccat":_ndccat_table,"ndcsplit":_ndcsplit_table}
 
 # How many near-sole and minority markets ever cross each threshold, from the rows the
 # recovery stage releases, so the letter's crossing counts come from the same place as
@@ -102,6 +122,14 @@ _cross90_sole=len(RC["90%"]["sole_rows"]); _cross90_min=len(RC["90%"]["minority_
 
 # Inline figures the letter states in prose. Each pattern must match exactly once.
 SUBS=[
+ (r"[\d,]+ of [\d,]+ have a usable normalised substance set, and \d+\nof the \d+ represented market keys",
+  f"{NA['panel_linked']['products_with_a_usable_substance_set']:,} of "
+  f"{NA['panel_linked']['product_codes']:,} have a usable normalised substance set, and "
+  f"{NA['panel_linked']['market_keys_with_no_usable_substance_set']}\nof the "
+  f"{NA['panel_linked']['market_keys']} represented market keys"),
+ (r"among those \d+, and the cause is our own cleaning rule",
+  f"among those {NA['panel_linked']['market_keys_with_no_usable_substance_set']}, and the "
+  f"cause is our own cleaning rule"),
  (r"[\w-]+ of the nineteen observed events have at least one suppressed",
   _w(OMS["events_affected"]).capitalize()+" of the nineteen observed events have at "
   "least one suppressed"),

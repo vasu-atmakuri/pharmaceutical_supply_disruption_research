@@ -109,8 +109,9 @@ RECORD={
   "successor dispenses in a sibling key",
   "product and firm","FDA unapproved drugs initiative; FDA approval of the successor products, 2020"),
  ("GOSERELIN | INJECTABLE","2021Q4","70720"): (
-  "Firm left the Medicaid Drug Rebate Program, so state programmes stopped covering "
-  "it; the product stayed on the market",
+  "Firm left the Medicaid Drug Rebate Program, removing the basis for ordinary federal "
+  "matching and so for ordinary coverage; states kept discretion and at least one "
+  "continued to cover it in specified circumstances; the product stayed on the market",
   "product and firm","CMS Medicaid Drug Rebate Program termination, effective 1 Oct 2021"),
  ("ALIROCUMAB | INJECTABLE","2021Q2","00024"): (
   "Marketing rights moved to the originator, availability not expected to be "

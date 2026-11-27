@@ -298,21 +298,30 @@ require that the labeler not return to half its own baseline or more at any quar
 $t+12$. Table~\ref{tab:detvar} reports how many events each of these choices admits. The
 persistence requirement removes \nDetDipsRemoved of \nDetRangeDense, and inspection of the
 removed events shows them to be suppression gaps and short interruptions rather than departures.
-The dense grid is used only to locate events, and the panels themselves stay sparse. A previous
-version of this paper said that no baseline, outcome or share calculation anywhere in it treats a
-suppressed quarter as a zero. That was not true of the outcome, and a reviewer reading the
-released code found it, so we state exactly where a zero enters and measure what it does.
+The dense grid is used only to locate events, and the panels themselves stay sparse. Where a
+zero enters a calculation we state it, because one does.
 
 No baseline treats a suppressed quarter as a zero: a baseline requires four consecutive observed
 and positive quarters, so a suppressed quarter in the baseline window makes the event
 ineligible. Neither does a departing labeler's share, computed over observed quarters. The
 collapse outcome does: it averages the six post-event market quarters with an absent quarter read
-as zero. We read it that way because absence is informative rather than unknown. CMS withholds a
-count below eleven prescriptions, so a suppressed market-quarter total is somewhere between zero
-and ten, and against a baseline of 200 or more either end of that range is a collapse. What the
-rule cannot do is manufacture a cohort: a market whose post-event window is entirely suppressed
-is dropped rather than read as six zeros. Section~\ref{subsec:robust} reports the collapse count
-under all three readings of a suppressed quarter.
+as zero, and the reported collapse rate is therefore a zero-imputed estimate on the observed
+cohort rather than a fully observed one.
+
+We read absence as zero because it is informative rather than unknown, and the licence that gives
+us is narrower than it may appear. CMS withholds a count below eleven prescriptions, so a
+withheld record is between zero and ten. It does not follow that ten satisfies the collapse rule:
+the rule is a post-event mean below two percent of baseline, which at a baseline of 200 is four
+prescriptions. Suppression also applies to the reported labeler-product record rather than to the
+market, so a market-quarter can hide several withheld records and its unobserved total is not
+bounded by ten in general. In this cohort it is: across the \nSuppQuarters suppressed quarters in
+the outcome windows of the \nCauseTotal observed events, at most \nSuppCellsMax labeler series
+was dispensing into the market beforehand, because a near-sole market has one supplier by
+construction, and the implied ceiling exceeds the collapse threshold in \nSuppAboveThresh of
+them. Secondary suppression, which withholds a record to protect another rather than because it
+is small, means even that ceiling is not guaranteed. What the rule cannot do is manufacture a
+cohort: a market whose post-event window is entirely suppressed is dropped rather than read as
+six zeros. Section~\ref{subsec:robust} reports the collapse count under all three readings.
 
 The persistence requirement depends on how much follow-up an event has. Its window runs to
 $t+12$, and the panel ends in 2026Q1, so an event after 2023Q1 is evaluated on a shorter window:
@@ -466,8 +475,9 @@ that additionally resamples controls within each set.
 The two defects are separable and we report them separately. Route bucketing is the larger
 error in how many records it touches and the smaller in how it affects the results: correcting
 it moves \nOphthRecords ophthalmic and \nOticRecords otic labeler-market-quarter records out of the oral-liquid
-bucket, and a comparable number of injectable records out of topical, but it leaves the event
-cohort and the band counts unchanged (Table~\ref{tab:flow}, column B). Ingredient-key
+bucket, and a comparable number of injectable records out of topical, but it moves the event
+cohort by \nRouteCohortDelta observation, from \nSpecAObs to \nSpecBObs, and the minority band
+with it, while the near-sole stratum stays at \nRawSole (Table~\ref{tab:flow}, column B). Ingredient-key
 normalisation touches fewer records and does the work: \nKeysAbsorbed of \nRawKeys route-aware keys are
 duplicates of another key, and the near-sole-labeler stratum of the raw convention's cohort
 falls from \nRawSoleW events to \nRemainSoleW. The corrected panel's own observed cohort is
@@ -632,12 +642,29 @@ four-element products carry different substance sets and land in different keys.
 substance sets across the raw keys in a merge group, so what it cannot do is split one raw key
 whose own product codes differ in composition; those products share a key, which takes the modal
 set. We measure that on the panel's own unit, the raw ingredient name with its resolved route
-bucket, and separately from the case where a comparison is simply not possible. Among \nNdcCodes
-trace-element and electrolyte product codes in \nNdcCombos name-and-bucket combinations,
-\nNdcMulti combinations carry two or more different populated FDA substance sets, \nNdcMissing
-carry one populated set alongside records with no structured substances at all, and \nNdcClean are
+bucket, in four mutually exclusive categories. Among \nNdcCodes trace-element and electrolyte
+product codes in \nNdcCombos name-and-bucket combinations, \nNdcMulti combinations carry two or
+more different populated FDA substance sets, \nNdcMixed carries one populated set alongside
+records with none, \nNdcAllMissing have no usable substance set for any member, and \nNdcClean are
 fully populated and consistent. Only the first is evidence of two compositions sharing a market
-key.
+key, and only the last is evidence against it; the other two are groups the check cannot reach.
+
+Where those categories fall matters more than their counts, so we split the audit by whether a
+product is in a Medicaid-panel market at all. \nNdcAssigned of the product codes are, in
+\nNdcAssignedGroups groups across \nNdcKeys market keys, and \nNdcPanelConflicts of those groups
+carry conflicting populated substance sets. The remaining \nNdcUnassigned codes, in
+\nNdcUnassignedGroups groups, are products the panel never sees, and all \nNdcOutConflicts
+conflicts are there. The disagreements are therefore in the FDA listing rather than inside the
+markets this paper reports, which is a weaker claim than we could have made and the correct one.
+
+The absence of conflict among the assigned products is not evidence of equivalence either,
+because the check reaches only half of them: \nNdcAssignedWithSub of \nNdcAssigned have a usable
+normalised substance set, and \nNdcKeysNoSub of the \nNdcKeys market keys have none for any
+member. Sodium chloride and potassium chloride are among those keys, and the reason is our own
+cleaning rule: the step that strips counterion words so that a salt and its base compare equal
+removes sodium, potassium and chloride, which for an electrolyte erases the active ingredient
+itself. The rule is right for a salt of an organic drug and wrong here, and we report the
+coverage gap rather than treating a blank set as agreement.
 The tie-break is a partial step toward building the key from structured composition rather than
 from the name, which remains the natural next development of this method. One- and two-digit formulation indices are retained rather than
 discarded as bare numerals, which is what keeps Trace Elements 4 and Trace Elements 5 apart.
@@ -777,7 +804,8 @@ supply continued and \nCauseUndeterminedW of undetermined cause. The \nCollSuppl
 disruptions give \nCollSupplyColl collapses, which is a case description and not a rate. The
 honest summary is that in this panel the pooled collapse rate is carried by exits that are not
 supply failures, and that the gap between \nCollPooledRate and \nCollRemRate percent is the
-measurable cost of not auditing causes.
+sensitivity of the rate to removing those specified exits. It is not a causal estimate of the
+error that not auditing causes would produce.
 
 \begin{table}[htbp]
 \small
@@ -955,7 +983,8 @@ Section~\ref{subsec:replace}, and the two differ in both directions, so we state
 rather than the sizes alone. The analysis cohort requires an observed market quarter within
 $t+1$ to $t+6$, because its outcome is the mean over those six quarters. Recovery requires no
 such quarter, because its outcome is the time from a market's own first crossing to its first
-restoration and both can fall later; it requires instead that the panel extend twelve quarters
+restoration and both can fall later; it requires instead that the panel extend at least eleven
+and at most twelve quarters
 past the exit. Of the \nCrossCohort markets here, \nRecSharedAll are also in the analysis
 cohort and \nRecOnlyAll are not. Among near-sole-labeler markets specifically, \nRecSharedSole
 are in both, \nRecMainOnlySole are in the analysis cohort but not here because the panel ends
@@ -1009,7 +1038,7 @@ the test uses the whole follow-up rather than any single quarter.}\label{fig:rec
 Two things follow. The difference in whether a market falls at all is stark: \nCrossSole of the
 \nCrossSoleOf near-sole-labeler markets in this cohort fall below half of baseline, against
 \nCrossMinor of \nCrossMinorOf minority-loss markets. This cohort is not the one the earlier
-sections use: recovery requires twelve quarters of follow-up where the replacement measurement
+sections use: recovery requires up to twelve quarters of follow-up where the replacement measurement
 requires six, so it contains \nCrossCohort markets rather than \nCohort, and its band sizes are
 its own.
 Whether a fallen market comes back differs significantly at the 90 percent threshold
@@ -1267,11 +1296,15 @@ the matched comparison puts the collapse rate at
 correct censored design the answer is significant at the 90 percent threshold and not established
 at the 50 percent threshold.
 
-The finding we did not expect is that the zero-replacement result, and the collapse result with
-it, is concentrated in the events we could not explain. Not one of the \nCollPooledColl
-collapses in the observed cohort falls in the \nCollSupplyN documented supply disruptions, while
-every regulatory transition collapses, and setting the explained classes aside moves the
-collapse rate from \nCollPooledRate to \nCollRemRate percent. A monitoring programme that reads
+The finding we did not expect concerns where near-zero replacement and collapse actually fall.
+In this observed cohort both occur frequently among regulatory-associated, reimbursement-related
+and measurement-related exits rather than among documented supply disruptions: not one of the
+\nCollPooledColl collapses falls in the \nCollSupplyN documented disruptions, every regulatory
+transition collapses, and of the \nNearZeroN exits with a replacement ratio below 0.02,
+\nNearZeroUndet are undetermined and \nNearZeroExplained carry a regulatory, reimbursement or
+measurement classification. Setting the explained classes aside moves the collapse rate from
+\nCollPooledRate to \nCollRemRate percent. Regulatory association is not firm-specific
+causation, and we do not claim it is. A monitoring programme that reads
 a collapse as a supply failure would, in this panel, be wrong about most of them. Where a shortage is documented and the departing firm is named in it,
 replacement is partial: a median ratio of \nSupplyMedian across \nCauseSupplyW events arising
 from one episode, against \nAllMedian across all \nCauseTotal observed exits and
@@ -1467,13 +1500,14 @@ carry different substance sets and land in different keys, which is the tie-brea
 described; the five-element product is a separate market on its name. The full table for these
 and for \nNdcCodes electrolyte and trace-element product codes is released as
 \texttt{results/ndc\_composition\_audit.csv}, with the raw name, the route, the complete
-substance string and the raw market keys. What the tie-break cannot do is measured there too, on the
-panel's own unit and separating a real disagreement from a missing comparison: of \nNdcCombos
-name-and-bucket combinations, \nNdcMulti carry two or more different populated substance sets,
-\nNdcMissing carry one populated set alongside records with none, and \nNdcClean are consistent.
-\nNdcNoMarket of the \nNdcCodes product codes have no market in the panel, being undispensed in
-Medicaid in this window or not human prescription drugs, and \nNdcMultiKey resolve to more than
-one market key.}\label{tab:ndc}
+substance string and the raw market keys. What the tie-break cannot do is measured there too, in four
+mutually exclusive categories and split by panel membership: of \nNdcCombos name-and-bucket
+combinations, \nNdcMulti carry two or more different populated substance sets, \nNdcMixed carries
+one populated set alongside records with none, \nNdcAllMissing have none at all, and \nNdcClean
+are consistent. All \nNdcOutConflicts conflicts fall among the \nNdcUnassigned product codes that
+have no market in the panel; \nNdcPanelConflicts of the \nNdcAssignedGroups panel-linked groups
+carry one. \nNdcMultiKey product codes resolve to more than one market
+key.}\label{tab:ndc}
 \input{generated/tab_ndc}
 \end{table}
 

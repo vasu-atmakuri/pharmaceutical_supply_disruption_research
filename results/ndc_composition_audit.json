@@ -1,9 +1,31 @@
 {
  "combinations_fully_populated_and_consistent": 273,
+ "combinations_mixed_populated_and_missing": 1,
  "combinations_with_conflicting_populated_sets": 5,
- "combinations_with_missing_sets_only": 48,
+ "combinations_with_no_usable_substance_set": 47,
  "name_bucket_combinations": 326,
- "note": "Counted on the panel's own unit, the raw ingredient name with the resolved route bucket, and separating a genuine disagreement between two populated FDA substance sets from a group where some records carry no structured substances at all. Only the first is evidence that the composition tie-break left two compositions in one market key. A product code with no market in the panel was not dispensed in Medicaid in the window or is not a human prescription drug.",
+ "not_panel_linked": {
+  "conflicting_groups": 5,
+  "groups": 229,
+  "product_codes": 627
+ },
+ "note": "Four mutually exclusive categories on the panel's own unit, the raw ingredient name with its resolved route bucket. The panel-linked split matters for validation coverage: a disagreement among product codes that never enter a Medicaid-panel market is a disagreement in the FDA listing, not in a market this paper reports. A blank substance set can also be the salt-stripping step erasing an electrolyte's own name, which is why the keys without any usable set are counted and named.",
+ "panel_linked": {
+  "conflicting_groups": 0,
+  "example_keys_without_substance_data": [
+   "ACID,ASCORBATE,ASCORBIC,CHLORIDE,GLYCOL,POLYETHYLENE,POTASSIUM,SODIUM,SULFATE | OTHER",
+   "ACID,ASCORBATE,ASCORBIC,CHLORIDE,PEG,POTASSIUM,SODIUM,SULFATE | OTHER",
+   "BICARBONATE,BISACODYL,CHLORIDE,DELAYED,GLYCOL,POLYETHYLENE,POTASSIUM,RELEASE,SODIUM | ORAL OTHER",
+   "BICARBONATE,OMEPRAZOLE,SODIUM | OTHER",
+   "CHLORIDE,EXTENDED,POTASSIUM,RELEASE | ORAL TABLET",
+   "CHLORIDE,GLYCOL,MAGNESIUM,POLYETHYLENE,POTASSIUM,SODIUM,SULFATE | OTHER"
+  ],
+  "groups": 97,
+  "market_keys": 69,
+  "market_keys_with_no_usable_substance_set": 15,
+  "product_codes": 866,
+  "products_with_a_usable_substance_set": 428
+ },
  "product_codes": 1493,
  "product_codes_resolving_to_more_than_one_market": 0,
  "product_codes_without_a_market_in_the_panel": 627

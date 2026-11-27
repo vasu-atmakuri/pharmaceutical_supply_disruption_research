@@ -52,7 +52,46 @@ sensitivity moves in the direction that makes the strength-level contrast smalle
 
 ---
 
-## 1. The 1,657 percent in the last letter was ours, and it was a formatting bug
+## 1. The composition audit, recategorised and split by panel membership
+
+Accepted in full, and your regrouping of the released records reproduces exactly on our side.
+
+Two faults, both ours. The first is categorisation: the summary put every group containing any
+missing substance set into one bucket and called it partially populated, so groups with no usable
+set for any member were reported as having some evidence. Counted in four mutually exclusive
+categories:
+
+<!-- GENERATED:ndccat -->
+| Category | Groups |
+|---|---|
+| Two or more different populated substance sets | 5 |
+| One populated set plus records with none | 1 |
+| No usable substance set for any member | 47 |
+| Fully populated and consistent | 273 |
+<!-- END:ndccat -->
+
+The second fault matters more, and you found it: where those five disagreements sit. Split by
+whether a product is in a Medicaid-panel market at all,
+
+<!-- GENERATED:ndcsplit -->
+| Population | Product codes | Groups | Conflicting groups |
+|---|---|---|---|
+| Assigned a panel market | 866 | 97 | 0 |
+| Not assigned a panel market | 627 | 229 | 5 |
+<!-- END:ndcsplit -->
+
+so every disagreement is in the FDA listing and none is inside a market this paper reports. That
+is a weaker claim than the one the last version implied, and it is the correct one. Section 3.3
+and Table 12's caption now state it that way.
+
+We also report what you identified next, because it is the real limit on this evidence: the check
+reaches only half the assigned products. 428 of 866 have a usable normalised substance set, and 15
+of the 69 represented market keys have none for any member. Sodium chloride and potassium chloride
+are among those 15, and the cause is our own cleaning rule, which strips counterion words so a
+salt and its base compare equal and therefore erases an electrolyte's own name. The paper now says
+this, and says that a blank set is not agreement.
+
+## 2. The 1,657 percent in the last letter was ours, and it was a formatting bug
 
 Corrected, and the diagnosis is worth stating because it bears on the claim that this letter is
 machine-checked. The strength-level figure is stored in the results as a percentage already, and
@@ -71,7 +110,7 @@ strength granularity 19.96 to 16.57 percent, after the crosswalk correction. The
 ingredient-and-route estimate is unchanged at 10.54 percent. These are different market
 definitions and not competing estimates of one quantity.
 
-## 2. The recovery horizon was wrong, and you found it from the code
+## 3. The recovery horizon was wrong, and you found it from the code
 
 Accepted in full. The eligibility test required `t+11` to be inside the panel while the crossing
 search ran to `t+12`, and a quarter the panel does not reach read as zero dispensing. Sixteen
@@ -105,7 +144,7 @@ caption said two and two and the old manifest held eight and six. The manifest c
 columns, `horizon_quarters` and `horizon_truncated`, so the follow-up each market actually had is
 auditable.
 
-## 3. Zero substitution in the outcome, which the Methods denied
+## 4. Zero substitution in the outcome, which the Methods denied
 
 Accepted, and the sentence was simply false. It said no baseline, outcome or share calculation
 treats a suppressed quarter as a zero. The collapse outcome does: it averages the six post-event
@@ -130,7 +169,7 @@ since for a market with five of six quarters withheld it discards the fact that 
 five was under eleven prescriptions. All three are now in the paper, and the baselines and shares
 are unaffected because a suppressed quarter in a baseline window makes an event ineligible.
 
-## 4. The replacement subgroups in Section 3.8 were wrong
+## 5. The replacement subgroups in Section 3.8 were wrong
 
 Accepted in full, and the reviewer's recomputation is correct.
 
@@ -160,13 +199,13 @@ sits below the pooled rate.
 
 Section 3.8 and Tables 9 and 10 are rewritten around these rows.
 
-## 5. The limitations contradicted the event flow on baseline eligibility
+## 6. The limitations contradicted the event flow on baseline eligibility
 
 Accepted. Section 4.1 said no in-window exit failed the baseline requirement where Table 2
 reports one. The sentence now cites the same macro as the table and says that the baseline rule
 removes one of the forty-four, so relaxing it would not materially enlarge the cohort.
 
-## 6. The recovery cohort and the analysis cohort are now reconciled
+## 7. The recovery cohort and the analysis cohort are now reconciled
 
 Accepted, and this was the most useful comment in the review. The reviewer identified the cause
 correctly from the public script: the two cohorts have different observation requirements.
@@ -201,7 +240,7 @@ restoration where there is one, the censoring indicator, the time at risk and a 
 membership of the analysis cohort. The log-rank tests and the Kaplan-Meier curves in Figure 3
 can be reproduced from it directly, without rebuilding the panel.
 
-## 7. The interpretation of the cause-stratified collapse rates (C4)
+## 8. The interpretation of the cause-stratified collapse rates (C4)
 
 Accepted. The pooled-to-excluded difference is now described as the sensitivity of the observed
 collapse rate to removing specified event classes, not as a measure of the cost of failing to
@@ -209,7 +248,7 @@ audit causes, and Table 10's caption states that its rows are six descriptions o
 rather than six estimates of one quantity. The conservative exclusion in row four is reported
 alongside, as recommended.
 
-## 8. The strength of the regulatory attributions (C5)
+## 9. The strength of the regulatory attributions (C5)
 
 Accepted, and applied from the abstract through the conclusion rather than only in the methods.
 
@@ -224,7 +263,7 @@ withdrawal now carries the same qualification as the methods: leaving the progra
 basis for ordinary federal matching and so for ordinary coverage, states retain discretion, and
 at least one continued to cover the product in specified circumstances.
 
-## 9. The normalisation validation (C6)
+## 10. The normalisation validation (C6)
 
 Partly accepted.
 
@@ -240,14 +279,14 @@ we say so in the limitations; RxNorm requires a UMLS account whose approval we d
 time for this revision. We would rather ship with the limitation stated than imply a validation
 we did not perform.
 
-The NDC-level mapping for the trace-element products is a reasonable request and we have not
-added the appendix table for it. The composition tie-break is implemented on the substance set
+The NDC-level mapping for the trace-element products is now Table 12, which gives each product
+code, its route, its structured active substances and the market key it lands in. The composition tie-break is implemented on the substance set
 rather than on the raw key, which is why the two firms' Trace Elements 4 products with different
 element sets end up in different keys; the mechanism is described in Section 2.3 and its
 consequence is reported against us in Section 3.4. A product-level demonstration would be
 better and we will add it if the editor wants it.
 
-## 10. The market definition and substitutability (C7)
+## 11. The market definition and substitutability (C7)
 
 Accepted. Section 2.3 no longer claims that strengths share a production line or substitute in
 dispensing. It states that strength is excluded to match the convention the paper is testing,
@@ -256,7 +295,7 @@ per strength, and that the key is therefore a specified administrative market de
 than a validated measure of clinical substitutability. The strength-level specification stays in
 robustness, where it measures what the choice costs.
 
-## 11. Suppression and the dense grid (C8)
+## 12. Suppression and the dense grid (C8)
 
 Accepted, and tested rather than argued.
 
@@ -276,7 +315,7 @@ the bias is one-sided, a short window can only fail to see a return and so can o
 event a longer window would remove, and because dropping two thirds of the events to avoid a
 one-sided bias costs more than it buys.
 
-## 12. What the recovery analysis conditions on (C9)
+## 13. What the recovery analysis conditions on (C9)
 
 Accepted. The comparison is among markets that crossed the threshold, and crossing is itself
 related to concentration: eighteen of twenty near-sole markets cross below 90 percent against
@@ -285,14 +324,14 @@ time to restoration among markets that crossed, and not as an effect of concentr
 recovery across all markets. The manifest named under comment 3 above is the reproducibility
 file requested here.
 
-## 13. The typo-corrected sensitivity on exit outcomes (C10)
+## 14. The typo-corrected sensitivity on exit outcomes (C10)
 
 Accepted. The sensitivity now reports what the correction does to the published outcome instead
 of leaving it to be inferred: the observed cohort becomes seventeen events and the collapse
 count seven, a rate of 41.2 percent against 42.1. The reviewer's arithmetic was right. This is
 in Section 3.13 and computed by `scripts/typo_sensitivity.py`.
 
-## 14. Source identifiers in the evidence appendix
+## 15. Source identifiers in the evidence appendix
 
 Accepted, and the reviewer is right that our reason for omitting links was a bad trade for a
 paper about reproducibility. `results/event_cause_classification.csv` now carries, for each
@@ -302,7 +341,7 @@ flag saying whether the citation was verified that way. Three citations carry ve
 rest are identified by issuer, exact title and date, and are flagged as unverified rather than
 presented as checked.
 
-## 15. The smaller items
+## 16. The smaller items
 
 | Item | Change |
 |---|---|
@@ -312,7 +351,7 @@ presented as checked.
 | Recovery described as suggestive in the letter | This letter is new; the manuscript, Figure 3 and the discussion all describe the 90 percent comparison as significant under the test performed, with its three qualifications |
 | Response letter organised around our iteration | Reorganised around the comments; the history is now `decisions/review_history.md` |
 
-## 16. What we have not done
+## 17. What we have not done
 
 Three of the reviewer's suggestions are not in this revision, and we would rather say so than
 imply otherwise.
@@ -324,7 +363,7 @@ detector work into a standalone methodological contribution, and it is the first
 add, but it is a second paper's worth of work rather than a revision. And the
 monitoring-priority benchmark, for the same reason.
 
-## 17. What we believe the paper establishes, and what it does not
+## 18. What we believe the paper establishes, and what it does not
 
 **Establishes.** That the standard ingredient-by-dosage-form market definition, applied to
 public Medicaid dispensing data, contains two measurement defects; that correcting them moves

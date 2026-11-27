@@ -105,36 +105,80 @@ print(f"\nwrote results/ndc_composition_audit.csv ({len(rows)} product codes)")
 import collections
 byk=collections.defaultdict(list)
 for r in rows: byk[(r["group"],r["raw_name"],r["route_bucket"])].append(r)
-pop_conflict=[]; missing_only=[]; complete=[]
+# Four mutually exclusive categories. The previous version put every group containing
+# any missing substance set into one bucket and called it partially populated, so 47
+# groups with no usable substance set for any member were reported as having some
+# evidence. A reviewer regrouped the released records and found it.
+pop_conflict=[]; mixed=[]; all_missing=[]; complete=[]
 for k,v in byk.items():
     sets={r["substance_set"] for r in v if r["substance_set"]}
     nmiss=sum(1 for r in v if not r["substance_set"])
-    if len(sets)>1: pop_conflict.append((k,len(sets),nmiss,len(v)))
-    elif nmiss: missing_only.append((k,nmiss,len(v)))
-    else: complete.append(k)
-nokey=[r for r in rows if not r["final_market_key"]]
+    if len(sets)>1:    pop_conflict.append((k,len(sets),nmiss,len(v)))
+    elif not sets:     all_missing.append((k,len(v)))
+    elif nmiss:        mixed.append((k,nmiss,len(v)))
+    else:              complete.append(k)
+
+# The audit covers the whole FDA listing for these families, but only some of those
+# products are in a Medicaid-panel market. Validation coverage is about the latter, so
+# the two populations are separated rather than pooled: a disagreement among products
+# that never enter the panel says nothing about the markets the paper reports.
+assigned=[r for r in rows if r["final_market_key"]]
+unassigned=[r for r in rows if not r["final_market_key"]]
+def regroup(rs):
+    d=collections.defaultdict(list)
+    for r in rs: d[(r["group"],r["raw_name"],r["route_bucket"])].append(r)
+    return d
+def conflicts(d):
+    out=[]
+    for k,v in d.items():
+        sets={r["substance_set"] for r in v if r["substance_set"]}
+        if len(sets)>1: out.append(k)
+    return out
+ga,gu=regroup(assigned),regroup(unassigned)
+ca,cu=conflicts(ga),conflicts(gu)
+keys=collections.defaultdict(list)
+for r in assigned: keys[r["final_market_key"]].append(r)
+keys_nosub=[k for k,v in keys.items() if not any(r["substance_set"] for r in v)]
+withsub=sum(1 for r in assigned if r["substance_set"])
+nokey=unassigned
 multikey=[r for r in rows if ";" in r["final_market_key"]]
-print(f"\n{len(byk)} name-and-bucket combinations in the sample")
+print(f"\n{len(byk)} name-and-bucket combinations in the whole sample")
 print(f"  {len(pop_conflict):3d} with two or more different populated substance sets")
-print(f"  {len(missing_only):3d} with one populated set plus records whose set is missing")
-print(f"  {len(complete):3d} with a single populated set and nothing missing")
-print(f"  {len(nokey):3d} of {len(rows)} product codes have no market in the panel")
+print(f"  {len(mixed):3d} with one populated set plus records whose set is missing")
+print(f"  {len(all_missing):3d} with no usable substance set for any member")
+print(f"  {len(complete):3d} fully populated and consistent")
+print(f"\npanel-linked: {len(assigned)} product codes in {len(ga)} groups across "
+      f"{len(keys)} market keys")
+print(f"  {len(ca):3d} groups with conflicting populated sets")
+print(f"  {withsub:3d} of {len(assigned)} assigned products have a usable substance set")
+print(f"  {len(keys_nosub):3d} of {len(keys)} market keys have none for any member")
+print(f"not panel-linked: {len(unassigned)} product codes in {len(gu)} groups, "
+      f"{len(cu)} with conflicting populated sets")
 print(f"  {len(multikey):3d} product codes resolve to more than one market key")
 for k,n,nm,tot in sorted(pop_conflict)[:8]:
-    print(f"     [{k[0]}] {k[1][:40]} ({k[2]}): {n} populated sets, {nm} missing of {tot}")
+    _in="panel" if any(r["final_market_key"] for r in byk[k]) else "not in panel"
+    print(f"     [{_in}] {k[1][:38]} ({k[2]}): {n} populated sets of {tot} records")
 summ={"product_codes":len(rows),
       "name_bucket_combinations":len(byk),
       "combinations_with_conflicting_populated_sets":len(pop_conflict),
-      "combinations_with_missing_sets_only":len(missing_only),
+      "combinations_mixed_populated_and_missing":len(mixed),
+      "combinations_with_no_usable_substance_set":len(all_missing),
       "combinations_fully_populated_and_consistent":len(complete),
       "product_codes_without_a_market_in_the_panel":len(nokey),
       "product_codes_resolving_to_more_than_one_market":len(multikey),
-      "note":("Counted on the panel's own unit, the raw ingredient name with the "
-              "resolved route bucket, and separating a genuine disagreement between two "
-              "populated FDA substance sets from a group where some records carry no "
-              "structured substances at all. Only the first is evidence that the "
-              "composition tie-break left two compositions in one market key. A product "
-              "code with no market in the panel was not dispensed in Medicaid in the "
-              "window or is not a human prescription drug.")}
+      "panel_linked":{"product_codes":len(assigned),"groups":len(ga),
+         "market_keys":len(keys),"conflicting_groups":len(ca),
+         "products_with_a_usable_substance_set":withsub,
+         "market_keys_with_no_usable_substance_set":len(keys_nosub),
+         "example_keys_without_substance_data":sorted(keys_nosub)[:6]},
+      "not_panel_linked":{"product_codes":len(unassigned),"groups":len(gu),
+         "conflicting_groups":len(cu)},
+      "note":("Four mutually exclusive categories on the panel's own unit, the raw "
+              "ingredient name with its resolved route bucket. The panel-linked split "
+              "matters for validation coverage: a disagreement among product codes that "
+              "never enter a Medicaid-panel market is a disagreement in the FDA listing, "
+              "not in a market this paper reports. A blank substance set can also be the "
+              "salt-stripping step erasing an electrolyte's own name, which is why the "
+              "keys without any usable set are counted and named.")}
 json.dump(summ,open(f"{R}/results/ndc_composition_audit.json","w"),indent=1,sort_keys=True)
 print("wrote results/ndc_composition_audit.json")
