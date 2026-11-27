@@ -74,7 +74,26 @@ def _crosswalk_table():
           ("Near-sole in the recovery cohort only, no observed quarter in the first six",
            str(ch["recovery_only_sole"]))]
     return "\n".join(["| | Markets |","|---|---|"]+[f"| {a} | {b} |" for a,b in rows])
-BLOCKS={"ladder":_ladder_table,"crosswalk":_crosswalk_table}
+OMS=L("outcome_missing_sensitivity.json")
+def _recovery_table():
+    return "\n".join(["| | Before | After |","|---|---|---|",
+      f"| Minority markets crossing 50% | 15 | {len(RC['50%']['minority_rows'])} |",
+      f"| Minority markets crossing 90% | 40 | {len(RC['90%']['minority_rows'])} |",
+      f"| Log-rank p, 50% | 0.188 | {RC['50%']['logrank_p']:.3f} |",
+      f"| Log-rank p, 90% | 0.002 | {RC['90%']['logrank_p']:.3f} |",
+      f"| Shared-cohort p, 90% | 0.002 | "
+      f"{RC['90%']['shared_cohort']['logrank_p']:.3f} |"])
+def _outcome_table():
+    return "\n".join(["| Reading of an absent post-event quarter | Collapses of "
+      f"{OMS['zero']['n']} | Rate |","|---|---|---|",
+      f"| Zero, which the paper reports | {OMS['zero']['collapsed']} | "
+      f"{100*OMS['zero']['rate']:.1f}% |",
+      f"| Ten prescriptions, the primary-suppression ceiling | {OMS['ten']['collapsed']} | "
+      f"{100*OMS['ten']['rate']:.1f}% |",
+      f"| Averaged over observed quarters only | {OMS['observed']['collapsed']} | "
+      f"{100*OMS['observed']['rate']:.1f}% |"])
+BLOCKS={"ladder":_ladder_table,"crosswalk":_crosswalk_table,
+        "recovery":_recovery_table,"outcome":_outcome_table}
 
 # How many near-sole and minority markets ever cross each threshold, from the rows the
 # recovery stage releases, so the letter's crossing counts come from the same place as
@@ -83,6 +102,15 @@ _cross90_sole=len(RC["90%"]["sole_rows"]); _cross90_min=len(RC["90%"]["minority_
 
 # Inline figures the letter states in prose. Each pattern must match exactly once.
 SUBS=[
+ (r"[\w-]+ of the nineteen observed events have at least one suppressed",
+  _w(OMS["events_affected"]).capitalize()+" of the nineteen observed events have at "
+  "least one suppressed"),
+ (r"censored on the quarter they crossed are \w+ at 50 percent and \w+ at 90",
+  f"censored on the quarter they crossed are "
+  f"{_w(RC['censored_at_crossing']['50%']['minority'])} at 50 percent and "
+  f"{_w(RC['censored_at_crossing']['90%']['minority'])} at 90"),
+ (r"the old manifest held \w+ and \w+\.",
+  "the old manifest held eight and six."),
  (r"\| Raw ingredient-and-route keys \| [\d,]+ \| [\d,]+ \|",
   f"| Raw ingredient-and-route keys | 3,295 | {NUM['raw_route_keys']:,} |"),
  (r"\| Markets after normalisation \| [\d,]+ \| [\d,]+ \|",
@@ -99,7 +127,7 @@ SUBS=[
   f"absorbed duplicate keys is still {NUM['keys_absorbed']:,}"),
  (r"removes \w+ of the \w+-\w+", 
   f"removes {_w(FL['failed_baseline'])} of the {_w(FL['in_window'])}"),
- (r"p = [\d.]+ on \w+ near-sole and \w+ minority-loss markets that cross, against p = [\d.]+ on\nthe full cohort",
+ (r"p = [\d.]+ on [\w-]+ near-sole and [\w-]+ minority-loss markets that cross, against p = [\d.]+ on\nthe full cohort",
   f"p = {RC['90%']['shared_cohort']['logrank_p']:.3f} on "
   f"{_w(RC['90%']['shared_cohort']['sole_n'])} near-sole and "
   f"{_w(RC['90%']['shared_cohort']['minority_n'])} minority-loss markets that cross, against "
@@ -131,7 +159,7 @@ SUBS=[
   f"{100*TY['as_published']['collapse_rate']:.1f}."),
  (r"\w+ merge groups have no structured substance set",
   f"{_w(VAL['untestable'])} merge groups have no structured substance set"),
- (r"\w+ of \w+ near-sole markets cross below 90 percent against\n\w+ of \w+-\w+ minority-loss markets",
+ (r"[\w-]+ of [\w-]+ near-sole markets cross below 90 percent against\n[\w-]+ of [\w-]+ minority-loss markets",
   f"{_w(_cross90_sole)} of {_w(RC['cohort']['sole'])} near-sole markets cross below 90 "
   f"percent against\n{_w(_cross90_min)} of {_w(RC['cohort']['minority'])} minority-loss markets"),
  (r"Three citations carry verified URLs",

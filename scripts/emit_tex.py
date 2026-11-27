@@ -8,6 +8,19 @@ _ROOT=_os.environ.get("PSDR_ROOT") or _os.path.expanduser("~/mnt/Research/pharma
 # Parent folder holding the raw FDA and SDUD downloads.
 _DATA=_os.environ.get("RESEARCH_ROOT") or _os.path.expanduser("~/mnt/Research")
 R=_ROOT+"/results"
+
+def _nearzero():
+    import csv as _c
+    rows=list(_c.DictReader(open(f"{R}/event_cause_classification.csv")))
+    nz=[x for x in rows if float(x["replacement_ratio"])<0.02]
+    _EX=("withdrawal","transition","coverage","transfer","artefact")
+    und=sum(1 for x in nz if x["cause_class"]=="undetermined")
+    expl=sum(1 for x in nz if x["cause_class"] in _EX)
+    cont=sum(1 for x in nz if x["cause_class"]=="continued")
+    sup=sum(1 for x in nz if x["cause_class"]=="supply")
+    return dict(NearZeroN=_w(len(nz)), NearZeroUndet=_w(und), NearZeroExplained=_w(expl),
+                NearZeroContinued=_w(cont), NearZeroSupply=_w(sup))
+
 G=_ROOT+"/springer/generated"
 os.makedirs(G,exist_ok=True)
 L=lambda f: json.load(open(f"{R}/{f}"))
@@ -263,6 +276,22 @@ M.update(
  CrossMid=c(RC["cohort"]["mid"]),
  # the crosswalk between the recovery cohort and the main analysis cohort
  CohortSole=c(RC["cohort"]["main_sole"]),
+ # the figure caption's censoring counts, and how many markets have a horizon the
+ # panel truncates, both read from the recovery stage rather than typed
+ CensFiftyMinor=_w(RC["censored_at_crossing"]["50%"]["minority"]),
+ CensNinetyMinor=_w(RC["censored_at_crossing"]["90%"]["minority"]),
+ TruncHorizon=_w(RC["truncated_horizon_markets"]),
+ # the collapse outcome under three readings of a suppressed post-event quarter
+ OutcomeZeroColl=c(L("outcome_missing_sensitivity.json")["zero"]["collapsed"]),
+ OutcomeTenColl=c(L("outcome_missing_sensitivity.json")["ten"]["collapsed"]),
+ OutcomeObsColl=c(L("outcome_missing_sensitivity.json")["observed"]["collapsed"]),
+ OutcomeZeroRate=f"{100*L('outcome_missing_sensitivity.json')['zero']['rate']:.1f}",
+ OutcomeTenRate=f"{100*L('outcome_missing_sensitivity.json')['ten']['rate']:.1f}",
+ OutcomeObsRate=f"{100*L('outcome_missing_sensitivity.json')['observed']['rate']:.1f}",
+ OutcomeAffected=_w(L("outcome_missing_sensitivity.json")["events_affected"]),
+ # where near-zero replacement actually falls, by class. The abstract attributed it to
+ # the undetermined exits; four of the eleven are undetermined and seven are not.
+ **_nearzero(),
  RecSharedSole=_w(RC["cohort"]["shared_sole"]),
  RecMainOnlySole=_w(RC["cohort"]["main_only_sole"]),
  RecOnlySole=_w(RC["cohort"]["recovery_only_sole"]),

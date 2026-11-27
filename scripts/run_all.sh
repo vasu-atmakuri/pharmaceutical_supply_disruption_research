@@ -42,7 +42,8 @@ for f in build_sdud_parts rebuild_xw_route xwalk natpanel natpanel_route build_v
          threespec transition sole_flow_manifest recall_matchlevel sensitivities \
          route_unknown_sensitivity exit_evidence_audit detector_variants typo_sensitivity release_split collect_numbers \
          build_figures emit_tex emit_appendix_tables emit_letter_numbers \
-         build_provenance ensure_inputs data_inventory free_space; do
+         build_provenance ensure_inputs data_inventory free_space \
+         outcome_missing_sensitivity ndc_composition_audit; do
   [ -f "$W/$f.py" ] || { echo "missing stage: $W/$f.py"; exit 1; }
 done
 S="$PSDR_ROOT/springer"
@@ -72,6 +73,8 @@ echo "==13b. near-sole flow manifest ==" ; "$PY" $W/sole_flow_manifest.py | tail
 echo "==13d. exit evidence audit ==" ; "$PY" $W/exit_evidence_audit.py | head -4
 echo "==13c. unknown-route sensitivity ==" ; "$PY" $W/route_unknown_sensitivity.py | tail -4
 echo "==13e. detector window variants ==" ; "$PY" $W/detector_variants.py | tail -5
+echo "==13i. NDC-level composition audit ==" ; "$PY" $W/ndc_composition_audit.py | tail -4
+echo "==13h. outcome missing-data sensitivity ==" ; "$PY" $W/outcome_missing_sensitivity.py | tail -5
 echo "==13f. typo-corrected sensitivity ==" ; "$PY" $W/typo_sensitivity.py | tail -2
 echo "==13g. modified-release split ==" ; "$PY" $W/release_split.py | tail -4
 echo "==14. recall match level =="          ; "$PY" $W/recall_matchlevel.py      | tail -4

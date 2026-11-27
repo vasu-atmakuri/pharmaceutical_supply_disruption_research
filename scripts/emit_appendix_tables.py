@@ -33,6 +33,12 @@ for r in rows:
                            esc(r["evidence_link"] or "---")])+r" \\")
 out+= [r"\botrule",r"\end{tabular}"]
 open(f"{G}/tab_audit.tex","w").write("\n".join(out)+"\n")
+# The same rows without the tabular wrapper. Nineteen rows do not fit in a fixed float,
+# which pushed the last row and the page number past the bottom of the text block, so
+# the manuscript sets this table as a longtable and supplies its own header.
+rows_only=[l for l in out if l.endswith(r"\\") and "&" in l
+           and not l.startswith("Quarter &")]
+open(f"{G}/tab_audit_rows.tex","w").write("\n".join(rows_only)+"\n")
 
 # ---- Table: how many events each detector specification admits ----
 V=json.load(open(f"{R}/results/detector_variants.json"))
@@ -118,3 +124,22 @@ for k in ORDER:
     lm.append(r"\newcommand{\nLad%sRate}{%.1f\xspace}"%(nm,100*v["collapse_rate"]))
 open(f"{G}/ladder_macros.tex","w").write("\n".join(lm)+"\n")
 print(f"wrote tab_ladder.tex and ladder_macros.tex ({len(ORDER)} populations)")
+
+# ---- Table: product-level evidence on the composition tie-break ----
+import csv as _csv2
+_ndc=list(_csv2.DictReader(open(f"{R}/results/ndc_composition_audit.csv")))
+_te=[r for r in _ndc if r["group"]=="trace elements"]
+_t=[r"\begin{tabular}{@{}llp{3.1cm}p{3.4cm}@{}}",r"\toprule",
+    r"NDC & Route & FDA active substances & Final market key \\",r"\midrule"]
+for r in sorted(_te,key=lambda x:x["ndc"]):
+    _t.append(" & ".join([r["ndc"], esc(r["route"].title()),
+        esc(r["substance_set"].replace("; ",", ").title()),
+        esc(r["final_market_key"].replace(" | "," / "))])+r" \\")
+_t+= [r"\botrule",r"\end{tabular}"]
+open(f"{G}/tab_ndc.tex","w").write("\n".join(_t)+"\n")
+_na=json.load(open(f"{R}/results/ndc_composition_audit.json"))
+m.append(r"\newcommand{\nNdcCodes}{%s\xspace}"%f"{_na['product_codes']:,}".replace(",","{,}"))
+m.append(r"\newcommand{\nNdcCombos}{%s\xspace}"%_na["name_route_combinations"])
+m.append(r"\newcommand{\nNdcMulti}{%s\xspace}"%_na["combinations_with_multiple_substance_sets"])
+open(f"{G}/detector_macros.tex","w").write("\n".join(m)+"\n")
+print(f"wrote tab_ndc.tex ({len(_te)} trace-element product codes)")

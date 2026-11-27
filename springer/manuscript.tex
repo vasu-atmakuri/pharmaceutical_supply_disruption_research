@@ -15,6 +15,7 @@
 
 % every number below comes from springer/generated/, emitted by the analysis
 \usepackage{xspace}
+\usepackage{longtable}
 \input{generated/numbers}
 \input{generated/detector_macros}
 \input{generated/ladder_macros}
@@ -79,8 +80,10 @@ to \nCIHi). Measured from first
 crossing with censoring, near-sole-labeler markets are slower to regain 90 percent of baseline
 (log-rank $p=\nLogrankNinety$), which is significant under that test, while restoration to half
 of baseline is not ($p=\nLogrankFifty$); we report the association and claim no causal effect of
-concentration. The zero-replacement result, however, is concentrated in events whose
-cause could not be established: among the \nCauseSupplyW documented supply disruptions the median
+concentration. Near-zero replacement, however, is not where a supply-chain reading would put it.
+Of the \nNearZeroN exits with a replacement ratio below 0.02, \nNearZeroUndet are undetermined
+and \nNearZeroExplained carry a regulatory, reimbursement or measurement classification; none is
+a documented supply disruption. Among the \nCauseSupplyW documented disruptions the median
 replacement ratio is \nSupplyMedian against \nAllMedian across all \nCauseTotal observed exits,
 and none of the \nCollPooledColl collapses in the cohort is one of them. Excluding the exits an
 outside record explains as something other than a supply failure moves the collapse rate from
@@ -139,9 +142,8 @@ every remaining near-sole-labeler exit against public regulatory records rather 
 from the dispensing series itself, and find that only \nCauseSupplyW of \nCauseTotal are a
 documented supply disruption, while \nCauseExplainedW are explained by regulation, by a
 withdrawal from the Medicaid rebate programme, by a transfer of marketing rights, or by a
-misspelling that manufactures a single-source market, and \nCauseContinuedW more
-overlap a regulatory transition whose connection to the departing firm the records do not
-establish. Third, we report what survives both corrections, which is a robust association between
+misspelling that manufactures a single-source market, and in \nCauseContinuedW more a labeler
+absent before the exit supplies the market afterwards, so the market was not left unsupplied. Third, we report what survives both corrections, which is a robust association between
 pre-exit concentration and subsequent dispensing loss, together with the finding that cuts against
 the obvious interpretation of it: in the small subset where a supply disruption is actually
 documented, replacement is partial rather than absent.
@@ -296,8 +298,21 @@ require that the labeler not return to half its own baseline or more at any quar
 $t+12$. Table~\ref{tab:detvar} reports how many events each of these choices admits. The
 persistence requirement removes \nDetDipsRemoved of \nDetRangeDense, and inspection of the
 removed events shows them to be suppression gaps and short interruptions rather than departures.
-The dense grid is used only to locate events. The panels themselves stay sparse, so no baseline,
-outcome or share calculation anywhere in the paper treats a suppressed quarter as a zero.
+The dense grid is used only to locate events, and the panels themselves stay sparse. A previous
+version of this paper said that no baseline, outcome or share calculation anywhere in it treats a
+suppressed quarter as a zero. That was not true of the outcome, and a reviewer reading the
+released code found it, so we state exactly where a zero enters and measure what it does.
+
+No baseline treats a suppressed quarter as a zero: a baseline requires four consecutive observed
+and positive quarters, so a suppressed quarter in the baseline window makes the event
+ineligible. Neither does a departing labeler's share, computed over observed quarters. The
+collapse outcome does: it averages the six post-event market quarters with an absent quarter read
+as zero. We read it that way because absence is informative rather than unknown. CMS withholds a
+count below eleven prescriptions, so a suppressed market-quarter total is somewhere between zero
+and ten, and against a baseline of 200 or more either end of that range is a collapse. What the
+rule cannot do is manufacture a cohort: a market whose post-event window is entirely suppressed
+is dropped rather than read as six zeros. Section~\ref{subsec:robust} reports the collapse count
+under all three readings of a suppressed quarter.
 
 The persistence requirement depends on how much follow-up an event has. Its window runs to
 $t+12$, and the panel ends in 2026Q1, so an event after 2023Q1 is evaluated on a shorter window:
@@ -610,16 +625,24 @@ sets, one including selenious acid and the other chromic chloride. They are ther
 products carrying the same name, and no key built from the ingredient name can separate them.
 We therefore added a composition tie-break: where the merge rule would join keys for which FDA
 records different active-substance sets, the keys are kept apart. This splits four merge groups,
-including the Trace Elements case, and raises agreement with the substance data to all \nConfirmed testable groups. The tie-break is a partial step toward building the key from
-structured composition rather than from the name, which remains the natural next development of
-this method. One- and two-digit formulation indices are retained rather than
+including the Trace Elements case, and raises agreement with the substance data to all \nConfirmed
+testable groups. Table~\ref{tab:ndc} shows it at product level for those products: the two
+four-element products carry different substance sets and land in different keys. The rule compares
+substance sets across the raw keys in a merge group, so what it cannot do is split one raw key
+whose own product codes differ in composition; those products share a key, which takes the modal
+set. We measure that: among \nNdcCodes trace-element and electrolyte product codes, \nNdcMulti of
+\nNdcCombos name-and-route combinations carry more than one substance set among their own codes.
+The tie-break is a partial step toward building the key from structured composition rather than
+from the name, which remains the natural next development of this method. One- and two-digit formulation indices are retained rather than
 discarded as bare numerals, which is what keeps Trace Elements 4 and Trace Elements 5 apart.
 
 The opposite error also exists. Searching for distinct normalised keys that share a substance
 set and a route bucket finds groups the algorithm did not merge, which means the normalisation
 is conservative. Subject to the two qualifications below, the \nKeysAbsorbed figure is
 therefore better read as a lower bound on the number of duplicate keys in these data than as a
-complete count. The first qualification is coverage: \nUntestable merge groups have no
+complete count. We do not claim the \nKeysAbsorbed absorbed keys are proven duplicates. The
+\nConfirmed agreement is internal consistency among the groups that could be compared, after
+composition-based correction, and not an estimate of classification accuracy. The first qualification is coverage: \nUntestable merge groups have no
 structured substance set for any member, so neither direction of the check reaches them. The
 second is construct: products that share a substance set and a route can still differ in
 strength, release characteristics or formulation, and this check cannot see that. What it
@@ -905,8 +928,11 @@ whose record is market-wide or names the firm and the formulation.}\label{tab:la
 
 \nCauseSupplyUC events from one episode cannot settle anything, and we do not claim the
 difference between the strata is estimable. A median replacement ratio of \nSupplyMedian is not
-evidence of successful recovery either; it says that about \nSupplyMedianPct percent of the
-departing volume was taken up.
+evidence of successful recovery either. It says that other-labeler dispensing grew, net and in
+aggregate, by about \nSupplyMedianPct percent of the departing labeler's baseline. It does not say
+that \nSupplyMedianPct percent of the departing prescriptions were taken up by someone else: the
+ratio is a difference of market totals, and it cannot distinguish a competitor expanding from a
+patient switching molecule or leaving the benefit.
 What the table establishes is a negative: this panel does not support the statement that
 sole-supplier markets fail to replace lost volume after a supply disruption, because in the
 events where a supply disruption is documented, part of it was replaced. The pattern is
@@ -963,9 +989,12 @@ dispensing, measured from each market's first crossing below that threshold, wit
 restored censored at the end of follow-up. Shaded bands are Greenwood 95 percent intervals, tick
 marks denote censoring, and the counts below each panel are the numbers still at risk of
 restoration, with the entering cohort shown at quarter zero. A market that first crosses the
-threshold in the final observed quarter has no follow-up and is censored immediately; two
-minority-loss markets at the 50 percent threshold and two at the 90 percent threshold are in that
-position and contribute to the entering count but not to the curve. The pointwise bands are
+threshold in its last observable quarter has no follow-up and is censored immediately;
+\nCensFiftyMinor minority-loss market at the 50 percent threshold and \nCensNinetyMinor at the 90
+percent threshold are in that position and contribute to the entering count but not to the curve.
+The follow-up a market has is what the panel can show: \nTruncHorizon markets exited late enough
+that fewer than twelve quarters follow them, and each is searched and censored over the quarters
+that exist rather than over twelve. The pointwise bands are
 wide and overlap, which is worth seeing alongside the log-rank tests rather than in place of
 them: overlapping pointwise intervals do not contradict a significant log-rank statistic, since
 the test uses the whole follow-up rather than any single quarter.}\label{fig:recovery}
@@ -1043,11 +1072,28 @@ either key is absent from the panel.
 The detector's dense grid reads a quarter absent from the data as zero dispensing. That is a
 reading of the suppression rule, not an observation, so we test it instead of defending it.
 Replacing every absent quarter with five prescriptions leaves \nFillFiveEvents events and
-\nFillFiveSole near-sole exits; replacing it with ten, which is the most a withheld quarter can
-hold under a threshold of eleven, leaves \nFillTenEvents and \nFillTenSole. Neither changes the
+\nFillFiveSole near-sole exits; replacing it with ten, the ceiling the primary suppression rule
+implies for a single withheld quarter, leaves \nFillTenEvents and \nFillTenSole. CMS also applies
+secondary suppression, withholding a cell to protect another rather than because it is small, so
+these are three scenarios and not a bounding analysis. Neither changes the
 cohort the paper reports: the observed near-sole cohort is \nFillObserved events with
 \nFillCollapsed collapses under all three readings. The assumption moves the detected count by
 about six percent at its most extreme and the published cohort not at all.
+
+The collapse outcome reads an absent post-event quarter as zero, which
+Section~\ref{subsec:treat} explains and this measures. \nOutcomeAffected of the
+\nCauseTotal observed events have at least one suppressed quarter in the outcome window, so the
+choice is not hypothetical. Reading an absent quarter as zero gives \nOutcomeZeroColl collapses
+of \nCauseTotal, which is what the paper reports. Reading it as ten prescriptions, the most the
+primary suppression rule allows a withheld quarter to hold, gives \nOutcomeTenColl. Averaging
+only the observed quarters and letting a suppressed quarter neither lower nor raise the mean
+gives \nOutcomeObsColl, but that answers a different question: for a market with five of six
+quarters withheld it discards the fact that those five were each under eleven prescriptions. We
+report the zero reading as primary for that reason, the ten reading as what primary suppression
+can account for, and the complete-case reading so that a reader who prefers it has the number.
+Secondary suppression means a cell can be withheld to protect another cell rather than because it
+is small, so ten is the ceiling the primary rule implies and not a hard bound on what any
+particular quarter held.
 
 The persistence requirement looks twelve quarters past an event, which the panel cannot supply
 for a recent one. Of the \nDetRangeDensePersist events, \nPersistFull have the full twelve
@@ -1175,8 +1221,9 @@ procedure, not in that paper's argument, which our results support.
 The second contribution is less comfortable. Having repaired the market definition, we audited
 what the surviving events actually were. Of the \nCauseTotal near-sole-labeler exits the
 corrected panel observes, \nCauseSupplyW are a documented supply disruption, and those two are
-one recall episode affecting two formulations. \nCauseExplainedUC are explained by something
-that is not a supply failure at all: a market-wide regulatory withdrawal, \nCauseTransitionW
+one recall episode affecting two formulations. \nCauseExplainedUC have an alternative explanation in the record, which for the two
+prescription-to-over-the-counter switches is an overlapping regulatory action rather than an
+established firm-level cause: a market-wide regulatory withdrawal, \nCauseTransitionW
 regulatory transitions, a firm's withdrawal from the Medicaid Drug Rebate Program with its
 product still marketed, a transfer of marketing rights, and \nCauseArtefactW markets whose sole
 supplier is a misspelling. In \nCauseContinuedW more, a labeler absent before the exit supplies
@@ -1273,11 +1320,17 @@ right reference. Its web service was unreachable from the analysis environment; 
 release is available under a UMLS licence, which is free but requires an account and approval
 that we did not obtain in time for this version. We regard this as an access limitation of this
 analysis rather than a limitation of the method, and an RxNorm-adjudicated replication is the
-single most valuable extension of this work. No residual false merge survives this check: the two
-manufacturers' Trace Elements 4 products that FDA records with different element sets are
-separated by the composition tie-break, and Trace Elements 4 and Trace Elements 5 are separate
-keys. What remains is not a known false merge but an unmeasured one, in the \nUntestable groups
-for which FDA records no substance set for any member.
+single most valuable extension of this work. No false merge that this check can see survives it, and
+Table~\ref{tab:ndc} shows the case at product level: the Trace Elements 4 products that FDA
+records with different element sets are in different keys, and Trace Elements 4 and Trace
+Elements 5 are separate keys. Two things the check cannot see remain. The \nUntestable groups for
+which FDA records no substance set for any member are untested in either direction. And a raw key
+whose own product codes differ in composition is not split by the tie-break at all, which we
+measure rather than assume: \nNdcMulti of \nNdcCombos name-and-route combinations in the
+trace-element and electrolyte families carry more than one substance set among their own codes.
+The salt-stripping step is the reason to look there, since it removes sodium, potassium and
+chloride from a substance string before comparing it, which is right for a salt of an organic
+drug and wrong where the electrolyte is the active ingredient.
 
 The establishment linkage describes current labels rather than the labels in force at each exit.
 A version-history reconstruction would strengthen it and is the clearest extension of this work.
@@ -1358,16 +1411,31 @@ links rot. That was the wrong trade for a paper about reproducibility: a documen
 is still easier to find from a stale link and an exact title than from a description, so both
 are now recorded, and the flag distinguishes a citation we followed from one we did not.
 
-\begin{table}[htbp]
-\small
+\begin{small}
+\begin{longtable}{@{}lp{2.9cm}p{1.7cm}p{3.9cm}p{1.5cm}@{}}
 \caption{Evidence behind each event classification, generated from
 \texttt{results/event\_cause\_classification.csv}, which carries the full citation for each
 record: issuer, exact title, date, product codes where the record names them, and a URL where we
 retrieved one. Firms are the FDA labeler names for the
 five-digit NDC labeler segment. \emph{Link} is how closely the record ties to the departing firm
-and formulation, defined above.}\label{tab:audit}
-\input{generated/tab_audit}
-\end{table}
+and formulation, defined above.}\label{tab:audit}\\
+\toprule
+Quarter & Market & Firm & Regulatory record & Link \\
+\midrule
+\endfirsthead
+\caption[]{\emph{continued}}\\
+\toprule
+Quarter & Market & Firm & Regulatory record & Link \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\emph{continued on the next page}}\\
+\endfoot
+\botrule
+\endlastfoot
+\input{generated/tab_audit_rows}
+\end{longtable}
+\end{small}
 
 Three entries deserve comment. The two Rx-to-OTC switches rest on an ingredient-level link: the
 switch was approved for the brand application and the generic prescription market contracted
@@ -1381,6 +1449,21 @@ differs enough that the tie-break described in Section~\ref{subsec:market} holds
 sibling key. A product-generation change therefore reads as an exit with no replacement. We
 report it against ourselves because the same mechanism will affect any study that keys markets
 on composition, and because it bounds how far a composition tie-break can be trusted.
+
+\begin{table}[htbp]
+\caption{What the composition tie-break does at product level, for the trace-element
+products. Each row is one product code in the FDA listing, with its structured active
+substances and the market key the normalisation assigns it. The two four-element products
+carry different substance sets and land in different keys, which is the tie-break working as
+described; the five-element product is a separate market on its name. The full table for these
+and for \nNdcCodes electrolyte and trace-element product codes is released as
+\texttt{results/ndc\_composition\_audit.csv}, with the raw name, the route, the complete
+substance string and the raw market keys. What the tie-break cannot do is also measured there:
+\nNdcMulti of \nNdcCombos name-and-route combinations carry more than one substance set among
+their own product codes, and those products share a market key because the key takes the modal
+set.}\label{tab:ndc}
+\input{generated/tab_ndc}
+\end{table}
 
 \begin{table}[htbp]
 \centering

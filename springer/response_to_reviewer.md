@@ -52,7 +52,66 @@ sensitivity moves in the direction that makes the strength-level contrast smalle
 
 ---
 
-## 1. The replacement subgroups in Section 3.8 were wrong
+## 1. The recovery horizon was wrong, and you found it from the code
+
+Accepted in full. The eligibility test required `t+11` to be inside the panel while the crossing
+search ran to `t+12`, and a quarter the panel does not reach read as zero dispensing. Sixteen
+rows of the released manifest, every one a 2023Q2 exit, recorded a crossing in a quarter that
+does not exist. Your precision correction is also right: seven of those are q12 crossings at the
+50 percent threshold and five at 90 percent, not eight and eight.
+
+The fix is a per-market horizon, `min(12, TMAX - t)`, used by the crossing search, the censoring
+time, the landmark analysis and the manifest. Inside the panel an absent quarter is still read as
+a crossing, and that is deliberate rather than overlooked: CMS withholds a count below eleven
+prescriptions, so a suppressed market-quarter total against a baseline of 200 or more is below
+both thresholds. Outside the panel absence means no observation and nothing is inferred from it.
+That is the distinction you asked us to make explicit, and it is now in Section 2.5.
+
+Regenerated, the counts match your targeted calculation exactly:
+
+<!-- GENERATED:recovery -->
+| | Before | After |
+|---|---|---|
+| Minority markets crossing 50% | 15 | 8 |
+| Minority markets crossing 90% | 40 | 35 |
+| Log-rank p, 50% | 0.188 | 0.188 |
+| Log-rank p, 90% | 0.002 | 0.001 |
+| Shared-cohort p, 90% | 0.002 | 0.002 |
+<!-- END:recovery -->
+
+The 90 percent result survives, on the full cohort and on the markets shared with the analysis
+cohort. Figure 3's caption is now generated from the manifest rather than typed: the markets
+censored on the quarter they crossed are one at 50 percent and two at 90 percent, where the
+caption said two and two and the old manifest held eight and six. The manifest carries two new
+columns, `horizon_quarters` and `horizon_truncated`, so the follow-up each market actually had is
+auditable.
+
+## 2. Zero substitution in the outcome, which the Methods denied
+
+Accepted, and the sentence was simply false. It said no baseline, outcome or share calculation
+treats a suppressed quarter as a zero. The collapse outcome does: it averages the six post-event
+market quarters with an absent quarter read as zero. You read the code and caught it.
+
+Section 2.5 now says exactly where a zero enters and why, and Section 3.13 measures what it
+does. Ten of the nineteen observed events have at least one suppressed quarter
+in the outcome window, so the choice matters:
+
+<!-- GENERATED:outcome -->
+| Reading of an absent post-event quarter | Collapses of 19 | Rate |
+|---|---|---|
+| Zero, which the paper reports | 8 | 42.1% |
+| Ten prescriptions, the primary-suppression ceiling | 7 | 36.8% |
+| Averaged over observed quarters only | 4 | 21.1% |
+<!-- END:outcome -->
+
+We report the zero reading as primary and say why: absence is informative rather than unknown,
+because a withheld market-quarter total is between zero and ten prescriptions and either end is a
+collapse against a baseline of 200 or more. The complete-case row answers a different question,
+since for a market with five of six quarters withheld it discards the fact that each of those
+five was under eleven prescriptions. All three are now in the paper, and the baselines and shares
+are unaffected because a suppressed quarter in a baseline window makes an event ineligible.
+
+## 3. The replacement subgroups in Section 3.8 were wrong
 
 Accepted in full, and the reviewer's recomputation is correct.
 
@@ -62,7 +121,7 @@ worth naming because no check could see it: the macro was correct and the senten
 to the wrong population, so every number in the paragraph traced to a real analysis output.
 
 The exclusions are now six named populations, each computed on its own sample in
-`scripts/cause_strata.py`, tabulated in Table 9, and cited from the prose by name:
+`scripts/cause_strata.py`, tabulated in Table 10, and cited from the prose by name:
 
 <!-- GENERATED:ladder -->
 | Population | Events | Median R | Collapsed |
@@ -80,15 +139,15 @@ the alternative explanations whose record is market-wide or names both the firm 
 formulation, and leaves the ingredient-level transitions and the misspelled keys in. It still
 sits below the pooled rate.
 
-Section 3.8 and Table 9 are rewritten around these rows.
+Section 3.8 and Tables 9 and 10 are rewritten around these rows.
 
-## 2. The limitations contradicted the event flow on baseline eligibility
+## 4. The limitations contradicted the event flow on baseline eligibility
 
 Accepted. Section 4.1 said no in-window exit failed the baseline requirement where Table 2
 reports one. The sentence now cites the same macro as the table and says that the baseline rule
 removes one of the forty-four, so relaxing it would not materially enlarge the cohort.
 
-## 3. The recovery cohort and the analysis cohort are now reconciled
+## 5. The recovery cohort and the analysis cohort are now reconciled
 
 Accepted, and this was the most useful comment in the review. The reviewer identified the cause
 correctly from the public script: the two cohorts have different observation requirements.
@@ -113,7 +172,7 @@ That is the whole of the difference between twenty and nineteen.
 
 Because the three extra markets are all near-sole, and so could flatter the comparison, we
 repeat the test on the 105 markets the two cohorts share. At the 90 percent threshold it gives
-p = 0.002 on fifteen near-sole and forty minority-loss markets that cross, against p = 0.002 on
+p = 0.002 on fifteen near-sole and thirty-five minority-loss markets that cross, against p = 0.001 on
 the full cohort. At 50 percent it gives p = 0.271 against p = 0.188. The result does not depend
 on the markets the analysis cohort excludes.
 
@@ -123,15 +182,15 @@ restoration where there is one, the censoring indicator, the time at risk and a 
 membership of the analysis cohort. The log-rank tests and the Kaplan-Meier curves in Figure 3
 can be reproduced from it directly, without rebuilding the panel.
 
-## 4. The interpretation of the cause-stratified collapse rates (C4)
+## 6. The interpretation of the cause-stratified collapse rates (C4)
 
 Accepted. The pooled-to-excluded difference is now described as the sensitivity of the observed
 collapse rate to removing specified event classes, not as a measure of the cost of failing to
-audit causes, and Table 9's caption states that its rows are six descriptions of six samples
+audit causes, and Table 10's caption states that its rows are six descriptions of six samples
 rather than six estimates of one quantity. The conservative exclusion in row four is reported
 alongside, as recommended.
 
-## 5. The strength of the regulatory attributions (C5)
+## 7. The strength of the regulatory attributions (C5)
 
 Accepted, and applied from the abstract through the conclusion rather than only in the methods.
 
@@ -146,7 +205,7 @@ withdrawal now carries the same qualification as the methods: leaving the progra
 basis for ordinary federal matching and so for ordinary coverage, states retain discretion, and
 at least one continued to cover the product in specified circumstances.
 
-## 6. The normalisation validation (C6)
+## 8. The normalisation validation (C6)
 
 Partly accepted.
 
@@ -169,7 +228,7 @@ element sets end up in different keys; the mechanism is described in Section 2.3
 consequence is reported against us in Section 3.4. A product-level demonstration would be
 better and we will add it if the editor wants it.
 
-## 7. The market definition and substitutability (C7)
+## 9. The market definition and substitutability (C7)
 
 Accepted. Section 2.3 no longer claims that strengths share a production line or substitute in
 dispensing. It states that strength is excluded to match the convention the paper is testing,
@@ -178,7 +237,7 @@ per strength, and that the key is therefore a specified administrative market de
 than a validated measure of clinical substitutability. The strength-level specification stays in
 robustness, where it measures what the choice costs.
 
-## 8. Suppression and the dense grid (C8)
+## 10. Suppression and the dense grid (C8)
 
 Accepted, and tested rather than argued.
 
@@ -198,23 +257,23 @@ the bias is one-sided, a short window can only fail to see a return and so can o
 event a longer window would remove, and because dropping two thirds of the events to avoid a
 one-sided bias costs more than it buys.
 
-## 9. What the recovery analysis conditions on (C9)
+## 11. What the recovery analysis conditions on (C9)
 
 Accepted. The comparison is among markets that crossed the threshold, and crossing is itself
 related to concentration: eighteen of twenty near-sole markets cross below 90 percent against
-forty of seventy-seven minority-loss markets. Section 3.9 states the comparison narrowly, as
+thirty-five of seventy-seven minority-loss markets. Section 3.9 states the comparison narrowly, as
 time to restoration among markets that crossed, and not as an effect of concentration on
 recovery across all markets. The manifest named under comment 3 above is the reproducibility
 file requested here.
 
-## 10. The typo-corrected sensitivity on exit outcomes (C10)
+## 12. The typo-corrected sensitivity on exit outcomes (C10)
 
 Accepted. The sensitivity now reports what the correction does to the published outcome instead
 of leaving it to be inferred: the observed cohort becomes seventeen events and the collapse
 count seven, a rate of 41.2 percent against 42.1. The reviewer's arithmetic was right. This is
 in Section 3.13 and computed by `scripts/typo_sensitivity.py`.
 
-## 11. Source identifiers in the evidence appendix
+## 13. Source identifiers in the evidence appendix
 
 Accepted, and the reviewer is right that our reason for omitting links was a bad trade for a
 paper about reproducibility. `results/event_cause_classification.csv` now carries, for each
@@ -224,7 +283,7 @@ flag saying whether the citation was verified that way. Three citations carry ve
 rest are identified by issuer, exact title and date, and are flagged as unverified rather than
 presented as checked.
 
-## 12. The smaller items
+## 14. The smaller items
 
 | Item | Change |
 |---|---|
@@ -234,7 +293,7 @@ presented as checked.
 | Recovery described as suggestive in the letter | This letter is new; the manuscript, Figure 3 and the discussion all describe the 90 percent comparison as significant under the test performed, with its three qualifications |
 | Response letter organised around our iteration | Reorganised around the comments; the history is now `decisions/review_history.md` |
 
-## 13. What we have not done
+## 15. What we have not done
 
 Three of the reviewer's suggestions are not in this revision, and we would rather say so than
 imply otherwise.
@@ -246,7 +305,7 @@ detector work into a standalone methodological contribution, and it is the first
 add, but it is a second paper's worth of work rather than a revision. And the
 monitoring-priority benchmark, for the same reason.
 
-## 14. What we believe the paper establishes, and what it does not
+## 16. What we believe the paper establishes, and what it does not
 
 **Establishes.** That the standard ingredient-by-dosage-form market definition, applied to
 public Medicaid dispensing data, contains two measurement defects; that correcting them moves

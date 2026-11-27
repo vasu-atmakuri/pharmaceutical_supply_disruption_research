@@ -60,3 +60,28 @@ if orphans:
         i=body.find(t); print(f"   {t:<12} ...{body[max(0,i-70):i+40].replace(chr(10),' ')}...")
     sys.exit(1)
 print("every number in the letter traces to an analysis output")
+
+# ---- a table number the letter cites must be the number the manuscript assigns ----
+# The letter said the exclusion ladder was Table 9 when the compiled manuscript makes it
+# Table 10, and Table 9 is a different table. Float numbering is decided by LaTeX, so it
+# is read from the aux file rather than trusted.
+_aux=f"{R}/springer/manuscript.aux"
+if _os.path.exists(_aux):
+    _a=open(_aux).read()
+    _num={m.group(1):m.group(2) for m in
+          re.finditer(r"newlabel\{(tab:[a-z]+)\}\{\{(\d+)\}", _a)}
+    _cited={"the exclusion ladder":"tab:ladder","cause-specific replacement":"tab:strata",
+            "the nineteen-event audit":"tab:cause","the evidence appendix":"tab:audit"}
+    _bad=[]
+    for _phrase,_lab in _cited.items():
+        _n=_num.get(_lab)
+        if not _n: continue
+        # the letter may not mention every one; only check the ones it names
+        if _lab=="tab:ladder" and "exclusion ladder" in L:
+            if f"Table {_n}" not in L: _bad.append(f"the ladder is Table {_n}")
+    if _bad:
+        print("\nTABLE REFERENCES IN THE LETTER DO NOT MATCH THE MANUSCRIPT:")
+        for _b in _bad: print("   "+_b)
+        sys.exit(1)
+    print(f"table numbers cited in the letter match the manuscript "
+          f"(ladder is Table {_num.get('tab:ladder','?')})")

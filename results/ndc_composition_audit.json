@@ -1,0 +1,6 @@
+{
+ "combinations_with_multiple_substance_sets": 8,
+ "name_route_combinations": 329,
+ "note": "A combination with more than one substance set among its own product codes is one the tie-break cannot split: those products share a raw key and the key takes the modal set. This is the limitation the table documents, measured rather than asserted.",
+ "product_codes": 1493
+}

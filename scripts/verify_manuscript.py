@@ -23,7 +23,8 @@ def ck(l,c,d=""):
 ab=TEX[TEX.index("\\abstract{"):]; ab=ab[:ab.index("\\keywords")]
 body=re.sub(r"\\n[A-Za-z]+","",ab)
 lits=[x for x in re.findall(r"(?<![\w.])\d+(?:\.\d+)?(?![\w.])",body)
-      if x not in ("1","2","2016","2026","4","5","02","0","35","65","90","95")]  # band and threshold definitions, not results
+      if x not in ("1","2","2016","2026","4","5","02","0","35","65","90","95",
+                   "0.02")]  # band and threshold definitions, not results
 ck("abstract carries no hand-typed statistic", not lits, f"literals: {lits}")
 
 ck("no double-escaped macros", not re.search(r"\\\\\\\\n[A-Z]",TEX),
@@ -75,6 +76,31 @@ for f in ["fig1.pdf","fig2.pdf","fig3.pdf"]:
     ck(f"{f} newer than the results files",
        os.path.getmtime(f"{S}/{f}")>=os.path.getmtime(f"{R}/results/inference_normalized.json")-1,
        f"{f} predates inference_normalized.json")
+
+
+# ---- no page's content runs past the bottom of the text block ----
+# A nineteen-row table in a fixed float cannot break across pages, so it overran the
+# footer: the page number sat on top of the last row and the row's descenders were
+# clipped. Every other check passed, because nothing here had ever looked at where the
+# ink lands. This reads each page's lowest text and flags a page that reaches
+# meaningfully below the line the footer sits on, which is the same on every page.
+_bb=subprocess.run(["pdftotext","-bbox-layout",f"{S}/manuscript.pdf","-"],
+                   capture_output=True,text=True).stdout
+if _bb:
+    import collections as _col
+    _pages=re.findall(r'<page width="[\d.]+" height="([\d.]+)">(.*?)</page>', _bb, re.S)
+    _bot=[]
+    for _i,(_h,_body) in enumerate(_pages,1):
+        _ys=[float(_m) for _m in re.findall(r'yMax="([\d.]+)"', _body)]
+        _bot.append((_i, max(_ys) if _ys else 0.0))
+    if _bot:
+        _modal=_col.Counter(round(_b) for _,_b in _bot).most_common(1)[0][0]
+        _over=[(i,b) for i,b in _bot if b > _modal+6]
+        ck("no page overflows the text block", not _over,
+           "; ".join(f"page {i} reaches {b-_modal:.0f}pt past the footer line"
+                     for i,b in _over))
+else:
+    print("   (page-overflow check skipped: pdftotext -bbox-layout produced nothing)")
 
 print(f"{n} structural checks run")
 if fails:

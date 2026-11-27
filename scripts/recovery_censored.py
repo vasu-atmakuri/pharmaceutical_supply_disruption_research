@@ -26,6 +26,20 @@ def basec(m,t):
     return None if any(v is None or v<=0 for v in p) else float(np.mean(p))
 def cal(tq): return f"{1991+(tq-1)//4}Q{(tq-1)%4+1}"
 LOr=YMIN-B0+2; H=12
+def horizon(t):
+    """Quarters after an exit that the panel can actually show, at most H.
+
+    The search for a threshold crossing used to run to t+12 for every market while
+    eligibility only required t+11 to be inside the panel, and a quarter the panel does
+    not reach read as zero dispensing. Markets whose exit left eleven observable
+    quarters therefore recorded an artificial crossing in the twelfth. Sixteen rows of
+    the released manifest, all 2023Q2 exits, were produced that way.
+
+    Inside the panel an absent quarter is different: it means CMS withheld a count
+    under eleven prescriptions, which against a baseline of 200 or more is genuinely
+    below both thresholds, so it is read as a crossing. Outside the panel absence means
+    no observation, and nothing may be inferred from it."""
+    return min(H, TMAX-t)
 COH=[(m,v[0],v[1]) for m,v in first.items() if v[0]>=LOr and v[0]+H-1<=TMAX
      and basec(m,v[0]) is not None and any(MQ[m].get(v[0]+k) is not None for k in range(1,H+1))]
 band=lambda s:"minority" if s<.35 else ("mid" if s<.95 else "sole")
@@ -80,10 +94,11 @@ for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
         for m,t,s in COH:
             if band(s)!=b: continue
             bl=basec(m,t)
-            d=next((k for k in range(1,H+1) if (MQ[m].get(t+k) or 0)<thr*bl),None)
+            Hm=horizon(t)
+            d=next((k for k in range(1,Hm+1) if (MQ[m].get(t+k) or 0)<thr*bl),None)
             if d is None: continue               # never crossed: not at risk of recovery
-            r=next((k for k in range(d+1,H+1) if (MQ[m].get(t+k) or 0)>=thr*bl),None)
-            if r is None: rows.append((H-d,0)); detail.append((m,d,None))
+            r=next((k for k in range(d+1,Hm+1) if (MQ[m].get(t+k) or 0)>=thr*bl),None)
+            if r is None: rows.append((Hm-d,0)); detail.append((m,d,None))
             else:         rows.append((r-d,1)); detail.append((m,d,r))
         grp[b]=rows
         ev=sum(e for _,e in rows)
@@ -106,7 +121,8 @@ for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
             d=next((j for j in range(1,5) if (MQ[m].get(t+j) or 0)<thr*bl),None)
             if d is None: continue
             n+=1
-            if any((MQ[m].get(t+j) or 0)>=thr*bl for j in range(d+1,H+1)): k+=1
+            if any((MQ[m].get(t+j) or 0)>=thr*bl
+                   for j in range(d+1,horizon(t)+1)): k+=1
         lm[b]=(k,n)
         print(f"     {b:<9} {k}/{n}" + (f" = {k/n:.1%}" if n else ""))
     # The stored statistics are rounded to twelve decimals. The panels are rebuilt by
@@ -135,8 +151,9 @@ _rows=[]
 for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
     for m,t,s_ in COH:
         bl=basec(m,t)
-        d=next((k for k in range(1,H+1) if (MQ[m].get(t+k) or 0)<thr*bl),None)
-        r=None if d is None else next((k for k in range(d+1,H+1)
+        Hm=horizon(t)
+        d=next((k for k in range(1,Hm+1) if (MQ[m].get(t+k) or 0)<thr*bl),None)
+        r=None if d is None else next((k for k in range(d+1,Hm+1)
                                        if (MQ[m].get(t+k) or 0)>=thr*bl),None)
         _rows.append(dict(threshold=lbl, market=m, event_quarter=cal(t), event_tq=t,
             departing_share=round(s_,4), band=band(s_),
@@ -146,7 +163,9 @@ for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
             first_crossing_q=("" if d is None else d),
             restored_q=("" if r is None else r),
             event_observed=("" if d is None else int(r is not None)),
-            time_at_risk=("" if d is None else (r-d if r is not None else H-d))))
+            horizon_quarters=Hm,
+            horizon_truncated=int(Hm<H),
+            time_at_risk=("" if d is None else (r-d if r is not None else Hm-d))))
 _mf=_ROOT+"/results/recovery_event_manifest.csv"
 with open(_mf,"w",newline="") as _fh:
     _w=_csv.DictWriter(_fh,fieldnames=list(_rows[0].keys())); _w.writeheader(); _w.writerows(_rows)
@@ -164,6 +183,16 @@ RES["cohort"]["recovery_only_sole"]=sum(1 for m,_,s_ in COH if m not in MAIN and
 # makes the two cohort sizes reconcilable instead of merely different.
 _inrec={m for m,_,_ in COH}
 _main_sole=[m for m in MAIN if first[m][1]>=0.95]
+# Counts the figure caption states, read from the manifest rather than typed. The
+# caption said two markets at each threshold were censored on the quarter they crossed;
+# the manifest said eight and six, because the boundary defect put crossings in a
+# quarter the panel does not have.
+RES["censored_at_crossing"]={}
+for thr in ("50%","90%"):
+    RES["censored_at_crossing"][thr]={
+      b:sum(1 for r in _rows if r["threshold"]==thr and r["band"]==b
+            and r["time_at_risk"]==0) for b in ("minority","sole")}
+RES["truncated_horizon_markets"]=sum(1 for m,t,_s in COH if horizon(t)<H)
 RES["cohort"]["main_sole"]=len(_main_sole)
 RES["cohort"]["shared_sole"]=sum(1 for m in _main_sole if m in _inrec)
 RES["cohort"]["main_only_sole"]=sum(1 for m in _main_sole if m not in _inrec)
@@ -177,10 +206,11 @@ for thr,lbl in [(0.5,"50%"),(0.9,"90%")]:
         for m,t,s_ in COH:
             if band(s_)!=b or m not in MAIN: continue
             bl=basec(m,t)
-            d=next((k for k in range(1,H+1) if (MQ[m].get(t+k) or 0)<thr*bl),None)
+            Hm=horizon(t)
+            d=next((k for k in range(1,Hm+1) if (MQ[m].get(t+k) or 0)<thr*bl),None)
             if d is None: continue
-            r=next((k for k in range(d+1,H+1) if (MQ[m].get(t+k) or 0)>=thr*bl),None)
-            rr.append((H-d,0) if r is None else (r-d,1))
+            r=next((k for k in range(d+1,Hm+1) if (MQ[m].get(t+k) or 0)>=thr*bl),None)
+            rr.append((Hm-d,0) if r is None else (r-d,1))
         g[b]=rr
     z2,p2=logrank(g["minority"],g["sole"])
     RES[lbl]["shared_cohort"]={"minority_n":len(g["minority"]),"sole_n":len(g["sole"]),

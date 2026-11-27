@@ -1,0 +1,22 @@
+{
+ "events_affected": 10,
+ "note": "Three readings of an absent post-event quarter, on the same observed cohort. The paper reports the zero reading. Secondary suppression means ten is the ceiling the primary rule implies and not a hard bound, so these are scenarios.",
+ "observed": {
+  "collapsed": 4,
+  "events_with_a_suppressed_post_quarter": 10,
+  "n": 19,
+  "rate": 0.21052631578947367
+ },
+ "ten": {
+  "collapsed": 7,
+  "events_with_a_suppressed_post_quarter": 10,
+  "n": 19,
+  "rate": 0.3684210526315789
+ },
+ "zero": {
+  "collapsed": 8,
+  "events_with_a_suppressed_post_quarter": 10,
+  "n": 19,
+  "rate": 0.42105263157894735
+ }
+}
