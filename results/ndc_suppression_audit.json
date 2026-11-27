@@ -1,12 +1,16 @@
 {
+ "collapses_ndc_aware_ceiling": 5,
+ "collapses_ten_per_quarter": 7,
+ "collapses_zero_fill": 8,
  "events_with_any": 10,
- "labeler_series_per_suppressed_quarter": {
-  "max": 1,
-  "median": 1.0,
+ "labelers_per_suppressed_quarter_max": 5,
+ "ndc_cells_per_suppressed_quarter": {
+  "max": 8,
+  "median": 2.0,
   "min": 1
  },
- "note": "For each suppressed quarter in an observed event's outcome window, the number of labeler-product series dispensing into that market in the four quarters before the exit. Suppression applies to the cell, not the market, so the unobserved market total can be as large as ten times that count, which is above the two-percent collapse threshold in most cases. Ten prescriptions is therefore not a bound on a market-quarter, and the zero reading is a convention whose effect is measured in the outcome sensitivity rather than a consequence of the suppression rule.",
+ "note": "A cell is a (labeler, product code) series, which is the unit CMS suppresses. The ceiling for a suppressed market-quarter is ten prescriptions for each cell that was dispensing into the market in the four quarters before the exit, which is the most the primary rule allows that quarter to have held. Secondary suppression can withhold a cell to protect another, so even this is not a guaranteed bound. The last three figures are the collapse count under zero imputation, under ten prescriptions per market-quarter, and under the per-quarter ceiling.",
  "observed_events": 19,
- "quarters_where_the_implied_ceiling_exceeds_the_collapse_threshold": 5,
+ "quarters_whose_ceiling_exceeds_the_threshold": 17,
  "suppressed_market_quarters": 38
 }

@@ -18,7 +18,7 @@ measure, and finds two errors that operate before any supplier is counted.
    ingredient and dosage form. Dosage form does not record route of administration, so the form
    string "solution" covers oral, topical, ophthalmic and otic products at once. The ingredient
    half is a free-text string that is not normalised, so one product occupies several keys.
-   Correcting both, 379 of 3,295 route-aware keys turn out to be duplicates of another key,
+   Correcting both, 379 of 3,294 route-aware keys turn out to be duplicates of another key,
    leaving 2,915 markets. The share of national Medicaid dispensing in markets where one
    labeler holds at least 95 percent falls from 14.71 to 10.54 percent, and 26.7 percent of
    apparent near-sole market-quarters are not near-sole once the market is defined properly.

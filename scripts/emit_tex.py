@@ -204,6 +204,16 @@ M.update(
  MinorityLtTwo=f"{INF['R_<35%']['p_lt_2pct']*100:.1f}", SoleLtTwo=f"{INF['R_sole']['p_lt_2pct']*100:.1f}",
  ReplEligibleW=_w(sum(INF["R_"+b]["n"] for b in ["<35%","35-65%","65-95%","sole"])) if sum(INF["R_"+b]["n"] for b in ["<35%","35-65%","65-95%","sole"])<=99 else c(sum(INF["R_"+b]["n"] for b in ["<35%","35-65%","65-95%","sole"])),
  ReplExcluded=c(sum(SPEC["C"]["bands"].values())-sum(INF["R_"+b]["n"] for b in ["<35%","35-65%","65-95%","sole"])),
+ # phrases rather than bare numerals where a sentence needs agreement: "The 1
+ # exclusions are" and "one fail the baseline rule" both reached the rendered PDF
+ ReplExcludedPhrase=((_w(sum(SPEC["C"]["bands"].values())-sum(INF["R_"+b]["n"] for b in
+   ["<35%","35-65%","65-95%","sole"]))+" exclusion is")
+   if (sum(SPEC["C"]["bands"].values())-sum(INF["R_"+b]["n"] for b in
+       ["<35%","35-65%","65-95%","sole"]))==1 else
+   (_w(sum(SPEC["C"]["bands"].values())-sum(INF["R_"+b]["n"] for b in
+       ["<35%","35-65%","65-95%","sole"]))+" exclusions are")),
+ FlowFailedBasePhrase=(_w(_FL["failed_baseline"])+(" fails" if _FL["failed_baseline"]==1
+   else " fail")),
  ReplEligible=str(sum(INF["R_"+k]["n"] for k in ["<35%","35-65%","65-95%","sole"])),
  Cohort=str(sum(SPEC["C"]["bands"].values())),
  AltN=str(SEN["alt_baseline_n"]), AltK=str(SEN["alt_baseline_lt02_k"]),
@@ -219,6 +229,7 @@ M.update(
  Checks=_w(len(set(__import__("re").findall(r"((?:audit|check|verify)_\w+)\.py",
    open(f"{_os.path.dirname(_os.path.abspath(__file__))}/run_all.sh").read()))-{"check_environment"})),
  TreatedColl=_w(round(INF["matched"]["treated_rate"]*INF["matched"]["sets"])),
+ TreatedCollUC=_w(round(INF["matched"]["treated_rate"]*INF["matched"]["sets"])).capitalize(),
  MaxReuse=c(INF["matched"]["max_reuse"]),
  # quarters between the announced effective date of the Praluent transfer, 2020Q2,
  # and the detected alirocumab exit. Stated so the gap is disclosed, not implied.
@@ -265,6 +276,7 @@ M.update(
  TransferGapQ=_w(((2021-1991)*4+2)-((2020-1991)*4+2)),
  MaxReuseW=_w(INF["matched"]["max_reuse"]),
  SoleLtTwoW=_w(round(INF["R_sole"]["p_lt_2pct"]*INF["R_sole"]["n"])),
+ SoleLtTwoUC=_w(round(INF["R_sole"]["p_lt_2pct"]*INF["R_sole"]["n"])).capitalize(),
  MidBandN=c(INF["R_35-65%"]["n"]), MidBandNW=_w(INF["R_35-65%"]["n"]),
  MidBandMedian=f"{INF['R_35-65%']['median']:.2f}",
  ControlsOnce=c(INF["matched"]["used_once"]), TreatedSets=c(INF["matched"]["sets"]),
@@ -294,8 +306,13 @@ M.update(
  OutcomeObsRate=f"{100*L('outcome_missing_sensitivity.json')['observed']['rate']:.1f}",
  OutcomeAffected=_w(L("outcome_missing_sensitivity.json")["events_affected"]),
  SuppQuarters=c(L("ndc_suppression_audit.json")["suppressed_market_quarters"]),
- SuppCellsMax=_w(L("ndc_suppression_audit.json")["labeler_series_per_suppressed_quarter"]["max"]),
- SuppAboveThresh=c(L("ndc_suppression_audit.json")["quarters_where_the_implied_ceiling_exceeds_the_collapse_threshold"]),
+ SuppEvents=_w(L("ndc_suppression_audit.json")["events_with_any"]),
+ SuppCellsMax=c(L("ndc_suppression_audit.json")["ndc_cells_per_suppressed_quarter"]["max"]),
+ SuppCellsMed=c(int(L("ndc_suppression_audit.json")["ndc_cells_per_suppressed_quarter"]["median"])),
+ SuppLabsMax=c(L("ndc_suppression_audit.json")["labelers_per_suppressed_quarter_max"]),
+ SuppAboveThresh=c(L("ndc_suppression_audit.json")["quarters_whose_ceiling_exceeds_the_threshold"]),
+ SuppCollCeiling=c(L("ndc_suppression_audit.json")["collapses_ndc_aware_ceiling"]),
+ SuppRateCeiling=f"{100*L('ndc_suppression_audit.json')['collapses_ndc_aware_ceiling']/L('ndc_suppression_audit.json')['observed_events']:.1f}",
  # where near-zero replacement actually falls, by class. The abstract attributed it to
  # the undetermined exits; four of the eleven are undetermined and seven are not.
  **_nearzero(),

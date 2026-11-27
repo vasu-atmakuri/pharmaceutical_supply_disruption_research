@@ -74,7 +74,9 @@ string. In \nCauseContinuedW more, a labeler absent before the exit supplies the
 afterwards. \nCauseUndeterminedUC could not be classified. The concentration gradient survives the corrections: median
 replacement ratios are \nMinorityMedian where the departing share was under 35 percent, \nHighMedian at 65 to 95
 percent and \nSoleMedian at 95 percent or more, and near-sole-labeler markets collapse below two percent of
-baseline dispensing at \nTreatedRate percent against \nControlRate percent among \nControlObs matched risk-set control
+baseline dispensing at \nTreatedRate percent, a zero-imputed observed-cohort rate that falls to
+\nSuppRateCeiling percent if every suppressed quarter is set to the ceiling the suppression rule
+allows, against \nControlRate percent among \nControlObs matched risk-set control
 observations, a risk difference of \nRiskDiff points (95\% CI \nCILo
 to \nCIHi). Measured from first
 crossing with censoring, near-sole-labeler markets are slower to regain 90 percent of baseline
@@ -287,8 +289,10 @@ than observed records. A four-record window spans more than four quarters whenev
 a gap, and \nGappyPct percent of labeler-market series have at least one. Second, the comparison
 is evaluated on a dense calendar grid running from each series' first appearance to the end of
 the panel, with a quarter absent from the grid read as zero dispensing. Absence in these data
-means no reported dispensing, either none at all or a count below the suppression threshold of
-eleven, so zero is the correct reading and is conservative against a baseline of 200 or more.
+means no reported dispensing, either none at all or every constituent record withheld for falling
+below eleven prescriptions. Zero is the reading the detector uses, and it is the reading that makes
+a fall look largest rather than a conservative one, so Section~\ref{sec:results} bounds what the
+alternatives do to the headline rate.
 Without the grid a labeler that stops dispensing altogether has no records after its exit at
 all, its post-event mean is undefined, and no event can fire: the detector would see only
 labelers that keep dispensing a little. We find \nVanishUndetected labeler-markets that
@@ -314,12 +318,17 @@ withheld record is between zero and ten. It does not follow that ten satisfies t
 the rule is a post-event mean below two percent of baseline, which at a baseline of 200 is four
 prescriptions. Suppression also applies to the reported labeler-product record rather than to the
 market, so a market-quarter can hide several withheld records and its unobserved total is not
-bounded by ten in general. In this cohort it is: across the \nSuppQuarters suppressed quarters in
-the outcome windows of the \nCauseTotal observed events, at most \nSuppCellsMax labeler series
-was dispensing into the market beforehand, because a near-sole market has one supplier by
-construction, and the implied ceiling exceeds the collapse threshold in \nSuppAboveThresh of
-them. Secondary suppression, which withholds a record to protect another rather than because it
-is small, means even that ceiling is not guaranteed. What the rule cannot do is manufacture a
+bounded by ten. We counted them. Across the \nSuppQuarters suppressed quarters in the outcome
+windows of the \nCauseTotal observed events, which fall in \nSuppEvents of them, the number of
+product-code series dispensing into the market in the four quarters before the exit runs to
+\nSuppCellsMax with a median of \nSuppCellsMed, across up to \nSuppLabsMax labelers: a near-sole
+share of 95 percent is a leading share and not an exclusive one, and one labeler can market
+several product codes in the same market. Ten prescriptions for each such record is therefore the
+quarter's ceiling under the primary rule, and that ceiling exceeds the collapse threshold in
+\nSuppAboveThresh of the \nSuppQuarters quarters. Secondary suppression, which withholds a record
+to protect another rather than because it is small, means even the ceiling is not guaranteed.
+Section~\ref{subsec:robust} reports the collapse count at that ceiling, and
+\texttt{results/ndc\_suppression\_audit.csv} releases the counts quarter by quarter. What the rule cannot do is manufacture a
 cohort: a market whose post-event window is entirely suppressed is dropped rather than read as
 six zeros. Section~\ref{subsec:robust} reports the collapse count under all three readings.
 
@@ -371,7 +380,7 @@ them are reported below.
 
 Replacement ratios are computed on the subset of each cohort in which the departing labeler has
 a positive baseline, which is \nReplEligible of the \nCohort events in column C. The
-\nReplExcluded exclusions are markets whose departing labeler dispensed only in quarters that are
+\nReplExcludedPhrase a market whose departing labeler dispensed only in quarters that are
 suppressed across the outcome baseline, leaving the denominator undefined.
 
 Near-sole exits are rare, and most are lost to the panel's edges rather than to any choice of
@@ -613,7 +622,7 @@ rate, and we treat the volume figure as the more robust of the two because it re
 assignment choice.
 
 This is the practical consequence. A monitoring programme that ranks markets by apparent
-near-sole status using this convention would flag between a sixth and a quarter of its
+near-sole status using this convention would flag between a sixth and a little over a quarter of its
 market-quarters, and a third of its flagged volume, on markets that are not near-sole once route
 and ingredient spelling are handled correctly. We state it that way deliberately: these are
 markets whose classification changes under the corrected definition, which is not the same as
@@ -836,7 +845,7 @@ Table~\ref{tab:R} reports replacement on the corrected panel. Figure~\ref{fig:ev
 under 35 percent of the market, the remaining labelers took up a median \nMinorityMedian times what left,
 which reflects both substitution and background growth; where it held 65 to 95 percent they took
 up about four fifths; where it held at least 95 percent the median market took up nothing.
-\nSoleLtTwoW of \nTreated near-sole-labeler markets have a replacement ratio under 0.02.
+\nSoleLtTwoUC of \nTreated near-sole-labeler markets have a replacement ratio under 0.02.
 
 The ordering is not strictly monotone. The 35-to-65 percent band holds \nMidBandNW markets with
 a median of \nMidBandMedian, which is a feature of \nMidBandNW observations rather than a
@@ -876,7 +885,7 @@ event-level values are released with the paper.}
 We report this comparison as descriptive and secondary. The paper's contribution is measurement
 validation; \nTreatedW treated events cannot support a causal design, and we do not claim one.
 
-\nTreatedColl of the \nTreated near-sole-labeler markets, \nTreatedRate percent, collapse below two percent of baseline
+\nTreatedCollUC of the \nTreated near-sole-labeler markets, \nTreatedRate percent, collapse below two percent of baseline
 dispensing. Among \nControlObs matched risk-set control observations drawn from \nUniqueControls distinct markets, one
 does, a rate of \nControlRate percent. The matched risk difference is \nRiskDiff points, with a 95 percent
 interval of \nCILo to \nCIHi points when whole matched sets are resampled and \nCILo to \nCIHiB when
@@ -901,7 +910,8 @@ treated ones are scarce in these data precisely because near-sole-supplier marke
 
 \subsection{Bounds on the collapse rate}\label{subsec:bounds}
 
-The collapse rate of \nBoundColl of \nBoundObs is a complete-case figure and should be reported
+The collapse rate of \nBoundColl of \nBoundObs is an observed-cohort figure under zero
+imputation, not a complete-case one, and should be reported
 with the events it excludes. \nBoundEligUC near-sole-labeler exits fall inside the calendar window with
 a complete baseline; \nBoundDroppedW of those have every post-event quarter suppressed and are
 dropped. If none of the \nBoundDroppedW collapsed, the rate over the \nBoundEligW is \nBoundColl
@@ -909,7 +919,7 @@ of \nBoundElig, or \nBoundLow percent; if all \nBoundDroppedW did it is \nBoundC
 \nBoundElig, or \nBoundHigh percent. These are worst-case bounds on the calendar-eligible population, not confidence
 intervals, and they are separate from suppression uncertainty within the \nBoundObs observed
 cases, which is treated in Section~\ref{subsec:robust}. We report \nTreatedRate percent as the
-complete-case estimate and \nBoundLow to \nBoundHigh percent as the bound, and we do not collapse the two
+observed-cohort estimate and \nBoundLow to \nBoundHigh percent as the bound, and we do not collapse the two
 into one number.
 
 \subsection{The result does not hold in the events we can verify}\label{subsec:strata}
@@ -917,8 +927,8 @@ into one number.
 Table~\ref{tab:strata} stratifies replacement by the classification in
 Table~\ref{tab:cause}, and Table~\ref{tab:ladder} removes the alternative-explanation classes
 one group at a time. Each row of Table~\ref{tab:ladder} is a named population, and the counts
-below are read from it rather than from the prose, because an earlier version of this paragraph
-attached one population's median to another population's name.
+below are read from it rather than from the prose, so that a population's median cannot be
+attached to another population's name.
 
 Removing only the market-wide regulatory withdrawal, which is the minimum correction any
 supply-chain reading requires, leaves \nLadExWithdrawalNW events with a median of
@@ -1123,12 +1133,19 @@ of \nCauseTotal, which is what the paper reports. Reading it as ten prescription
 primary suppression rule allows a withheld quarter to hold, gives \nOutcomeTenColl. Averaging
 only the observed quarters and letting a suppressed quarter neither lower nor raise the mean
 gives \nOutcomeObsColl, but that answers a different question: for a market with five of six
-quarters withheld it discards the fact that those five were each under eleven prescriptions. We
+quarters withheld it discards the fact that every withheld record in those five quarters held
+fewer than eleven prescriptions. We
 report the zero reading as primary for that reason, the ten reading as what primary suppression
-can account for, and the complete-case reading so that a reader who prefers it has the number.
+can account for, and the observed-quarter reading so that a reader who prefers it has the number.
 Secondary suppression means a cell can be withheld to protect another cell rather than because it
 is small, so ten is the ceiling the primary rule implies and not a hard bound on what any
-particular quarter held.
+particular quarter held. The sharper version of that reading is the per-quarter ceiling: ten
+prescriptions for each product-code series that was dispensing into the market before the exit,
+which Section~\ref{subsec:treat} counts at up to \nSuppCellsMax per quarter. Setting every
+suppressed quarter to its own ceiling leaves \nSuppCollCeiling collapses of \nCauseTotal, or
+\nSuppRateCeiling percent. That is the most adverse reading the suppression rule permits, and it
+is the lower end of the range the reported rate should be read with: \nSuppRateCeiling to
+\nOutcomeZeroRate percent.
 
 The persistence requirement looks twelve quarters past an event, which the panel cannot supply
 for a recent one. Of the \nDetRangeDensePersist events, \nPersistFull have the full twelve
@@ -1223,10 +1240,10 @@ Suppression remains a source of uncertainty we cannot eliminate. The withholding
 records under eleven prescriptions, but CMS also applies secondary suppression, so assigning a
 maximum of ten prescriptions to each withheld record is a working assumption and not a proven
 bound. Treating every suppressed post-event record as carrying ten prescriptions moves one
-market's classification, and we report the complete-case rate and that scenario as two figures
+market's classification, and we report the observed-cohort rate and that scenario as two figures
 rather than resolving them into one. Separately, markets with no observed post-event quarter are
 dropped rather than coded as collapsed; coding them as collapsed would raise the near-sole-labeler
-collapse rate and coding them as surviving would lower it, and we report the complete-case
+collapse rate and coding them as surviving would lower it, and we report the observed-cohort
 figure with that range stated rather than choosing.
 
 \section{Discussion}\label{sec:discussion}
@@ -1256,9 +1273,10 @@ procedure, not in that paper's argument, which our results support.
 The second contribution is less comfortable. Having repaired the market definition, we audited
 what the surviving events actually were. Of the \nCauseTotal near-sole-labeler exits the
 corrected panel observes, \nCauseSupplyW are a documented supply disruption, and those two are
-one recall episode affecting two formulations. \nCauseExplainedUC have an alternative explanation in the record, which for the two
-prescription-to-over-the-counter switches is an overlapping regulatory action rather than an
-established firm-level cause: a market-wide regulatory withdrawal, \nCauseTransitionW
+one recall episode affecting two formulations. \nCauseExplainedUC have an identified alternative explanation or are a measurement artefact,
+of varying evidentiary strength: the two prescription-to-over-the-counter exits have an
+overlapping regulatory action and no record of why the particular generic labeler stopped, while
+the others name the firm or cover the whole market: a market-wide regulatory withdrawal, \nCauseTransitionW
 regulatory transitions, a firm's withdrawal from the Medicaid Drug Rebate Program with its
 product still marketed, a transfer of marketing rights, and \nCauseArtefactW markets whose sole
 supplier is a misspelling. In \nCauseContinuedW more, a labeler absent before the exit supplies
@@ -1327,9 +1345,8 @@ period is working with fewer than twenty events, and conclusions drawn from stra
 sample are descriptive rather than estimates.
 
 Medicaid dispensing is not total US dispensing. A product that leaves the Medicaid benefit while
-remaining available elsewhere looks identical here to a product that leaves the market. In the
-previous version of this analysis we could state that risk but not show it. We can now: one
-exit in the observed cohort is a firm's withdrawal from the Medicaid Drug Rebate Program
+remaining available elsewhere looks identical here to a product that leaves the market. We can show that
+rather than only state it: one exit in the observed cohort is a firm's withdrawal from the Medicaid Drug Rebate Program
 effective 1 October 2021, which removes the basis for ordinary federal matching and so for
 ordinary coverage of its products, while the product itself remained FDA-approved and marketed.
 States retain discretion and at least one continued to cover the product in specified
@@ -1448,8 +1465,8 @@ machine-readable version is released as
 classification, the evidence, the link level, and for the declared events the issuing authority,
 the document's exact title, its date, its kind, a URL where we have retrieved and read one, the
 product codes where the record names them, and a flag saying whether the citation was verified
-that way. An earlier version gave the issuer and the date and no links, on the ground that
-links rot. That was the wrong trade for a paper about reproducibility: a document that has moved
+that way. Giving the issuer and the date without links would be the wrong trade for a paper about
+reproducibility, on the ground that links rot: a document that has moved
 is still easier to find from a stale link and an exact title than from a description, so both
 are now recorded, and the flag distinguishes a citation we followed from one we did not.
 

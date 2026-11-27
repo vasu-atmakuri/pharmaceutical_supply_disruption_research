@@ -30,6 +30,7 @@ if m:
 
 # 2. the headline counts come from the results, not from an earlier draft
 S={x["tag"][0]:x for x in json.load(open(f"{R}/results/three_specifications.json"))}["C"]
+N=json.load(open(f"{R}/results/manuscript_numbers.json"))
 C=json.load(open(f"{R}/results/cause_strata.json"))
 V=json.load(open(f"{R}/results/detector_variants.json"))
 flat=re.sub(r"\s+"," ",RM)
@@ -59,14 +60,30 @@ if m2:
     ck("check count matches run_all.sh", int(m2.group(2))==checks,
        f"README says {m2.group(2)}, run_all.sh runs {checks}")
 
-# 4. the runtime the README quotes is the one run_all.sh quotes
+# 4. the README's three market counts reconcile with each other and with the results
+# An allowlist once contained 3,295, so the README kept a stale raw-key count that no
+# longer reconciled with the absorbed and normalised counts beside it: 3,295 - 379 is
+# 2,916, not the 2,915 the same paragraph reported. Empirical values do not belong on
+# an allowlist, so they are asserted instead.
+_rk=re.search(r"([\d,]+) of ([\d,]+) route-aware keys", flat)
+ck("README states the raw and absorbed key counts", _rk is not None)
+if _rk:
+    _abs=int(_rk.group(1).replace(",","")); _raw=int(_rk.group(2).replace(",",""))
+    ck("README absorbed count matches the results", _abs==N["keys_absorbed"],
+       f"README {_abs} vs results {N['keys_absorbed']}")
+    ck("README raw-key count matches the results", _raw==N["raw_route_keys"],
+       f"README {_raw} vs results {N['raw_route_keys']}")
+    ck("README key counts reconcile", _raw-_abs==S["markets"],
+       f"{_raw} - {_abs} = {_raw-_abs}, but the README and the results say {S['markets']}")
+
+# 5. the runtime the README quotes is the one run_all.sh quotes
 _a=re.search(r"roughly (\d+) to (\d+) minutes", flat)
 _b=re.search(r"roughly (\d+) to (\d+) minutes", sh)
 ck("README and run_all.sh quote the same runtime",
    _a is not None and _b is not None and _a.groups()==_b.groups(),
    f"README {_a.groups() if _a else None} vs run_all.sh {_b.groups() if _b else None}")
 
-# 5. every number in the README traces to an analysis output
+# 6. every number in the README traces to an analysis output
 vals=set()
 def walk(x):
     if isinstance(x,dict):
@@ -89,7 +106,7 @@ body=body.replace("SHA-256","")   # the name of a hash algorithm, not a quantity
 # Counts the README states in words rather than from a results file, plus the ORCID,
 # the stage and check counts checked above, and the runtime estimate.
 OK={"0","1","2","3","4","5","6","7","8","9","10","11","12","19","27","95",
-    "0009","0007","5955","2466","2016","2026","379","3,295"}
+    "0009","0007","5955","2466","2016","2026"}
 found=sorted({t for t in re.findall(r"(?<![\w.])\d[\d,]*(?:\.\d+)?(?![\w.])",body)}-OK)
 orphans=[t for t in found if t not in vals and t.replace(",","") not in vals]
 ck("every number in the README traces to an analysis output", not orphans,

@@ -19,7 +19,35 @@ ran from in `results/build_provenance.json`, which `check_released_files.py` req
 `HEAD`. The paper's code-availability statement cites that file, so the version a reader clones
 is the version the paper describes.
 
-## 0. One correction we made after this revision was drafted
+## 0. The suppression bound, counted at the unit CMS actually suppresses
+
+You were right and our bound was wrong. We had written that a suppressed market-quarter holds at
+most ten prescriptions, and that either end of the interval constitutes collapse. Both parts fail.
+Suppression applies to the reported (labeler, product code) record, not to the market-quarter, so a
+market-quarter with several constituent records has a ceiling of ten times that count. And ten is
+not automatically a collapse: the rule is two percent of baseline, which at a baseline of 200 is
+four prescriptions, so ten is above it, not below.
+
+We have therefore counted the constituent records. Across the 19 observed events there are 38
+suppressed market-quarters in 10 events. The number of constituent product-code cells in a
+suppressed market-quarter runs from 1 to 8, median 2, drawn from up to 5 distinct labelers. The
+resulting per-quarter ceiling exceeds the collapse threshold in 17 of the 38. Recomputing the
+collapse count under three readings of a suppressed quarter gives 8 of 19 under zero imputation,
+7 of 19 at ten prescriptions per market-quarter, and 5 of 19 at the per-quarter NDC-aware ceiling,
+a rate of 26.3 percent.
+
+That last figure is the honest lower bound and it is now in the abstract, in Section 3, and in the
+robustness table. The headline is a range from about a sixth to a little over a quarter rather than
+a point estimate, and the direction of the paper's claim survives the most adverse reading we can
+construct. The audit is reproducible: scripts/ndc_suppression_audit.py writes
+results/ndc_suppression_audit.json and results/ndc_suppression_audit.csv, the latter with one row
+per suppressed market-quarter, its cell count, its labeler count and its ceiling.
+
+The caveat we cannot remove: secondary suppression can withhold a cell in order to protect another
+cell, so even the NDC-aware ceiling is not a guaranteed bound. We say this rather than imply the
+ceiling is exact.
+
+## 0b. One correction we made after this revision was drafted
 
 While clearing disk space we found that the product-to-market crosswalk was not
 reproducible, and fixing it moved some descriptive counts. We report it here rather than let
@@ -162,9 +190,11 @@ in the outcome window, so the choice matters:
 | Averaged over observed quarters only | 4 | 21.1% |
 <!-- END:outcome -->
 
-We report the zero reading as primary and say why: absence is informative rather than unknown,
-because a withheld market-quarter total is between zero and ten prescriptions and either end is a
-collapse against a baseline of 200 or more. The complete-case row answers a different question,
+We report the zero reading as primary and say why: absence is informative rather than unknown.
+It does not follow that ten satisfies the collapse rule, which is two percent of baseline and so
+four prescriptions at a baseline of 200, and a market-quarter is not bounded by ten at all since
+suppression applies to the reported product-code record. Section 0 of this letter gives the
+constituent-NDC counts and the collapse count at the resulting ceiling. The complete-case row answers a different question,
 since for a market with five of six quarters withheld it discards the fact that each of those
 five was under eleven prescriptions. All three are now in the paper, and the baselines and shares
 are unaffected because a suppressed quarter in a baseline window makes an event ineligible.
@@ -213,7 +243,8 @@ correctly from the public script: the two cohorts have different observation req
 The analysis cohort requires an observed market quarter within t+1 to t+6, because its outcome
 is the mean over those six quarters. Recovery requires no such quarter, because its outcome is
 the time from a market's own first crossing to its first restoration and both can fall later; it
-requires instead that the panel extend twelve quarters past the exit. Neither is a subset of the
+requires instead that the panel extend eleven or twelve quarters past the exit, each market
+being searched and censored over the quarters it has. Neither is a subset of the
 other. Section 3.9 now gives the crosswalk in both directions:
 
 <!-- GENERATED:crosswalk -->
@@ -280,11 +311,12 @@ time for this revision. We would rather ship with the limitation stated than imp
 we did not perform.
 
 The NDC-level mapping for the trace-element products is now Table 12, which gives each product
-code, its route, its structured active substances and the market key it lands in. The composition tie-break is implemented on the substance set
-rather than on the raw key, which is why the two firms' Trace Elements 4 products with different
-element sets end up in different keys; the mechanism is described in Section 2.3 and its
-consequence is reported against us in Section 3.4. A product-level demonstration would be
-better and we will add it if the editor wants it.
+code, its route, its structured active substances and the market key it lands in. The composition tie-break compares substance
+sets across the raw keys in a merge group, which is why the two firms' Trace Elements 4 products
+with different element sets end up in different keys. It follows that the tie-break cannot split a
+single raw key whose own product codes differ in composition, and Section 3.4 now reports the
+audit of exactly that: five raw keys carry conflicting substance sets across their product codes,
+all five outside the analysed panel, and none inside it.
 
 ## 11. The market definition and substitutability (C7)
 
