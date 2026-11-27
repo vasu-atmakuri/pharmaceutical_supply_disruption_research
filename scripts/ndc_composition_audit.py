@@ -39,11 +39,17 @@ def subset(x):
         if len(q)>2: out.add(q)
     return frozenset(out)
 
-ROUTEB=None
-try:
-    from rebuild_xw_route import __doc__ as _d   # noqa: F401
-except Exception:
-    pass
+# The route bucket is decided by a SQL CASE expression in natpanel_route.py. Rather
+# than restate it here and risk the two drifting apart, the expression is read out of
+# that file and used as written, so this audit buckets a product exactly as the panel
+# does. If the panel's rule changes, this changes with it or fails loudly.
+_np=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                      "natpanel_route.py")).read()
+_i=_np.index(" CASE\n  WHEN rt LIKE '%OPHTHALMIC%'")
+_j=_np.index("ELSE 'OTHER' END", _i)+len("ELSE 'OTHER' END")
+BUCKET_SQL=_np[_i:_j]
+if "ORAL TABLET" not in BUCKET_SQL:
+    sys.exit("could not read the route-bucket rule out of natpanel_route.py")
 
 GROUPS={
  "trace elements": r"TRACE ELEMENTS|MULTITRACE|TRALEMENT|MULTRYS",
@@ -53,23 +59,33 @@ GROUPS={
 }
 rows=[]
 for label,pat in GROUPS.items():
-    q=f"""SELECT lab,pcode,generic,route,form,substance FROM read_parquet('{XW}')
-          WHERE regexp_matches(upper(generic), '{pat}')
+    q=f"""SELECT lab,pcode,generic,rt route,f form,substance,{BUCKET_SQL} AS bucket
+          FROM (SELECT lab,pcode,generic,substance,
+                       upper(COALESCE(route,'')) rt, upper(COALESCE(form,'')) f
+                FROM read_parquet('{XW}')
+                WHERE regexp_matches(upper(generic), '{pat}'))
           ORDER BY generic, lab, pcode"""
     got=con.execute(q).fetchall()
-    for lab,pcode,generic,route,form,sub in got:
+    for lab,pcode,generic,route,form,sub,bucket in got:
         g=(generic or "").strip().upper()
-        # The raw market key is the sorted ingredient tokens plus a route bucket, and
-        # the bucket is not the listing's ROUTENAME, so the key is found by matching the
-        # token set and reporting every raw key that matches with the market it maps to.
-        # the map is keyed by the raw market string, whose first field is the raw
-        # ingredient name exactly as the listing records it
-        hits=[(k,v) for k,v in MAP.items() if k.split(" | ")[0]==g]
-        final="; ".join(sorted({v for _,v in hits}))
-        rawkeys="; ".join(sorted({k for k,_ in hits}))
+        # The product's own market, not every market that shares its ingredient name.
+        # A raw market key is the raw ingredient name plus the route bucket, so the
+        # bucket has to be resolved for this product before the key can be looked up.
+        # Matching on the name alone concatenated an injectable, an oral-liquid and a
+        # topical key onto the same record for half the populated rows, which is what a
+        # reviewer found: the audit was showing what a name could map to rather than
+        # where the product went.
+        rawkey=f"{g} | {bucket}"
+        final=MAP.get(rawkey, "")
+        rawkeys=rawkey if rawkey in MAP else ""
+        if not final:
+            # the product's market is not in the panel: not dispensed in Medicaid in
+            # the window, or not a human prescription drug
+            final=""
         rows.append(dict(group=label, ndc=f"{lab}-{pcode}", raw_name=g,
                          route=(route or ""), form=(form or ""),
                          substance=(sub or ""),
+                         route_bucket=bucket,
                          substance_set="; ".join(sorted(subset(sub))),
                          raw_market_keys=rawkeys,
                          final_market_key=final))
@@ -80,21 +96,45 @@ with open(out,"w",newline="") as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
 print(f"\nwrote results/ndc_composition_audit.csv ({len(rows)} product codes)")
 
-# what the table is for: how many distinct substance sets share one raw name
+# What the table is for, counted three ways rather than one. A reviewer showed that the
+# single "more than one substance set" count treated a missing set as a different
+# composition, so a group with fourteen records carrying no structured substances and
+# eleven carrying the same set was reported as a composition conflict. It is not one.
+# The unit is also the panel's own unit now: the raw name with the resolved route
+# bucket, which is what a market key is built from.
 import collections
-byname=collections.defaultdict(set)
-for r in rows: byname[(r["group"],r["raw_name"],r["route"])].add(r["substance_set"])
-multi=[(k,v) for k,v in byname.items() if len(v)>1]
-print(f"{len(multi)} of {len(byname)} name-and-route combinations carry more than one "
-      f"substance set among their own product codes")
-for (g,nm,rt),v in sorted(multi)[:8]:
-    print(f"   [{g}] {nm[:46]} ({rt[:18]}): {len(v)} sets")
+byk=collections.defaultdict(list)
+for r in rows: byk[(r["group"],r["raw_name"],r["route_bucket"])].append(r)
+pop_conflict=[]; missing_only=[]; complete=[]
+for k,v in byk.items():
+    sets={r["substance_set"] for r in v if r["substance_set"]}
+    nmiss=sum(1 for r in v if not r["substance_set"])
+    if len(sets)>1: pop_conflict.append((k,len(sets),nmiss,len(v)))
+    elif nmiss: missing_only.append((k,nmiss,len(v)))
+    else: complete.append(k)
+nokey=[r for r in rows if not r["final_market_key"]]
+multikey=[r for r in rows if ";" in r["final_market_key"]]
+print(f"\n{len(byk)} name-and-bucket combinations in the sample")
+print(f"  {len(pop_conflict):3d} with two or more different populated substance sets")
+print(f"  {len(missing_only):3d} with one populated set plus records whose set is missing")
+print(f"  {len(complete):3d} with a single populated set and nothing missing")
+print(f"  {len(nokey):3d} of {len(rows)} product codes have no market in the panel")
+print(f"  {len(multikey):3d} product codes resolve to more than one market key")
+for k,n,nm,tot in sorted(pop_conflict)[:8]:
+    print(f"     [{k[0]}] {k[1][:40]} ({k[2]}): {n} populated sets, {nm} missing of {tot}")
 summ={"product_codes":len(rows),
-      "name_route_combinations":len(byname),
-      "combinations_with_multiple_substance_sets":len(multi),
-      "note":("A combination with more than one substance set among its own product "
-              "codes is one the tie-break cannot split: those products share a raw key "
-              "and the key takes the modal set. This is the limitation the table "
-              "documents, measured rather than asserted.")}
+      "name_bucket_combinations":len(byk),
+      "combinations_with_conflicting_populated_sets":len(pop_conflict),
+      "combinations_with_missing_sets_only":len(missing_only),
+      "combinations_fully_populated_and_consistent":len(complete),
+      "product_codes_without_a_market_in_the_panel":len(nokey),
+      "product_codes_resolving_to_more_than_one_market":len(multikey),
+      "note":("Counted on the panel's own unit, the raw ingredient name with the "
+              "resolved route bucket, and separating a genuine disagreement between two "
+              "populated FDA substance sets from a group where some records carry no "
+              "structured substances at all. Only the first is evidence that the "
+              "composition tie-break left two compositions in one market key. A product "
+              "code with no market in the panel was not dispensed in Medicaid in the "
+              "window or is not a human prescription drug.")}
 json.dump(summ,open(f"{R}/results/ndc_composition_audit.json","w"),indent=1,sort_keys=True)
 print("wrote results/ndc_composition_audit.json")

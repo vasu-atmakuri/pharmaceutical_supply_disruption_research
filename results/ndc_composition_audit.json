@@ -1,6 +1,10 @@
 {
- "combinations_with_multiple_substance_sets": 8,
- "name_route_combinations": 329,
- "note": "A combination with more than one substance set among its own product codes is one the tie-break cannot split: those products share a raw key and the key takes the modal set. This is the limitation the table documents, measured rather than asserted.",
- "product_codes": 1493
+ "combinations_fully_populated_and_consistent": 273,
+ "combinations_with_conflicting_populated_sets": 5,
+ "combinations_with_missing_sets_only": 48,
+ "name_bucket_combinations": 326,
+ "note": "Counted on the panel's own unit, the raw ingredient name with the resolved route bucket, and separating a genuine disagreement between two populated FDA substance sets from a group where some records carry no structured substances at all. Only the first is evidence that the composition tie-break left two compositions in one market key. A product code with no market in the panel was not dispensed in Medicaid in the window or is not a human prescription drug.",
+ "product_codes": 1493,
+ "product_codes_resolving_to_more_than_one_market": 0,
+ "product_codes_without_a_market_in_the_panel": 627
 }

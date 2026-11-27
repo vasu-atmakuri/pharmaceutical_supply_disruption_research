@@ -42,7 +42,7 @@ an improvement rather than a side effect. What moved:
 | Markets after normalisation | 2,916 | 2,915 |
 | Dispensing volume with an explicit route, by year | 94.4 to 95.8% | 98.4 to 99.0% |
 | Market-quarters at strength granularity | 200,534 | 193,885 |
-| Near-sole volume at strength granularity | 19.96% | 1657.00% |
+| Near-sole volume at strength granularity | 19.96% | 16.57% |
 
 Nothing in the paper's findings moves. The number of absorbed duplicate keys is still 379 the
 national near-sole dispensing share still falls from 14.71 to 10.54 percent, the observed cohort
@@ -52,7 +52,26 @@ sensitivity moves in the direction that makes the strength-level contrast smalle
 
 ---
 
-## 1. The recovery horizon was wrong, and you found it from the code
+## 1. The 1,657 percent in the last letter was ours, and it was a formatting bug
+
+Corrected, and the diagnosis is worth stating because it bears on the claim that this letter is
+machine-checked. The strength-level figure is stored in the results as a percentage already, and
+the line that wrote it into the letter multiplied by a hundred again. The manuscript was always
+right at 16.57 percent, because it reads the same field through a different formatter.
+
+What that shows is the limit of the checks rather than their absence. `audit_letter.py` requires
+every number in this letter to appear in some analysis output, and 1,657.00 did not, so the check
+should have caught it. It did not because the value was produced by the refresher that runs
+immediately before the audit, and the audit compares against values formatted to a fixed set of
+patterns, one of which happened to match. A check that verifies provenance does not verify
+semantics, which is your point and we accept it.
+
+The strength-level sensitivity reads: market-quarters 200,534 to 193,885, and near-sole volume at
+strength granularity 19.96 to 16.57 percent, after the crosswalk correction. The main
+ingredient-and-route estimate is unchanged at 10.54 percent. These are different market
+definitions and not competing estimates of one quantity.
+
+## 2. The recovery horizon was wrong, and you found it from the code
 
 Accepted in full. The eligibility test required `t+11` to be inside the panel while the crossing
 search ran to `t+12`, and a quarter the panel does not reach read as zero dispensing. Sixteen
@@ -86,7 +105,7 @@ caption said two and two and the old manifest held eight and six. The manifest c
 columns, `horizon_quarters` and `horizon_truncated`, so the follow-up each market actually had is
 auditable.
 
-## 2. Zero substitution in the outcome, which the Methods denied
+## 3. Zero substitution in the outcome, which the Methods denied
 
 Accepted, and the sentence was simply false. It said no baseline, outcome or share calculation
 treats a suppressed quarter as a zero. The collapse outcome does: it averages the six post-event
@@ -111,7 +130,7 @@ since for a market with five of six quarters withheld it discards the fact that 
 five was under eleven prescriptions. All three are now in the paper, and the baselines and shares
 are unaffected because a suppressed quarter in a baseline window makes an event ineligible.
 
-## 3. The replacement subgroups in Section 3.8 were wrong
+## 4. The replacement subgroups in Section 3.8 were wrong
 
 Accepted in full, and the reviewer's recomputation is correct.
 
@@ -141,13 +160,13 @@ sits below the pooled rate.
 
 Section 3.8 and Tables 9 and 10 are rewritten around these rows.
 
-## 4. The limitations contradicted the event flow on baseline eligibility
+## 5. The limitations contradicted the event flow on baseline eligibility
 
 Accepted. Section 4.1 said no in-window exit failed the baseline requirement where Table 2
 reports one. The sentence now cites the same macro as the table and says that the baseline rule
 removes one of the forty-four, so relaxing it would not materially enlarge the cohort.
 
-## 5. The recovery cohort and the analysis cohort are now reconciled
+## 6. The recovery cohort and the analysis cohort are now reconciled
 
 Accepted, and this was the most useful comment in the review. The reviewer identified the cause
 correctly from the public script: the two cohorts have different observation requirements.
@@ -182,7 +201,7 @@ restoration where there is one, the censoring indicator, the time at risk and a 
 membership of the analysis cohort. The log-rank tests and the Kaplan-Meier curves in Figure 3
 can be reproduced from it directly, without rebuilding the panel.
 
-## 6. The interpretation of the cause-stratified collapse rates (C4)
+## 7. The interpretation of the cause-stratified collapse rates (C4)
 
 Accepted. The pooled-to-excluded difference is now described as the sensitivity of the observed
 collapse rate to removing specified event classes, not as a measure of the cost of failing to
@@ -190,7 +209,7 @@ audit causes, and Table 10's caption states that its rows are six descriptions o
 rather than six estimates of one quantity. The conservative exclusion in row four is reported
 alongside, as recommended.
 
-## 7. The strength of the regulatory attributions (C5)
+## 8. The strength of the regulatory attributions (C5)
 
 Accepted, and applied from the abstract through the conclusion rather than only in the methods.
 
@@ -205,7 +224,7 @@ withdrawal now carries the same qualification as the methods: leaving the progra
 basis for ordinary federal matching and so for ordinary coverage, states retain discretion, and
 at least one continued to cover the product in specified circumstances.
 
-## 8. The normalisation validation (C6)
+## 9. The normalisation validation (C6)
 
 Partly accepted.
 
@@ -228,7 +247,7 @@ element sets end up in different keys; the mechanism is described in Section 2.3
 consequence is reported against us in Section 3.4. A product-level demonstration would be
 better and we will add it if the editor wants it.
 
-## 9. The market definition and substitutability (C7)
+## 10. The market definition and substitutability (C7)
 
 Accepted. Section 2.3 no longer claims that strengths share a production line or substitute in
 dispensing. It states that strength is excluded to match the convention the paper is testing,
@@ -237,7 +256,7 @@ per strength, and that the key is therefore a specified administrative market de
 than a validated measure of clinical substitutability. The strength-level specification stays in
 robustness, where it measures what the choice costs.
 
-## 10. Suppression and the dense grid (C8)
+## 11. Suppression and the dense grid (C8)
 
 Accepted, and tested rather than argued.
 
@@ -257,7 +276,7 @@ the bias is one-sided, a short window can only fail to see a return and so can o
 event a longer window would remove, and because dropping two thirds of the events to avoid a
 one-sided bias costs more than it buys.
 
-## 11. What the recovery analysis conditions on (C9)
+## 12. What the recovery analysis conditions on (C9)
 
 Accepted. The comparison is among markets that crossed the threshold, and crossing is itself
 related to concentration: eighteen of twenty near-sole markets cross below 90 percent against
@@ -266,14 +285,14 @@ time to restoration among markets that crossed, and not as an effect of concentr
 recovery across all markets. The manifest named under comment 3 above is the reproducibility
 file requested here.
 
-## 12. The typo-corrected sensitivity on exit outcomes (C10)
+## 13. The typo-corrected sensitivity on exit outcomes (C10)
 
 Accepted. The sensitivity now reports what the correction does to the published outcome instead
 of leaving it to be inferred: the observed cohort becomes seventeen events and the collapse
 count seven, a rate of 41.2 percent against 42.1. The reviewer's arithmetic was right. This is
 in Section 3.13 and computed by `scripts/typo_sensitivity.py`.
 
-## 13. Source identifiers in the evidence appendix
+## 14. Source identifiers in the evidence appendix
 
 Accepted, and the reviewer is right that our reason for omitting links was a bad trade for a
 paper about reproducibility. `results/event_cause_classification.csv` now carries, for each
@@ -283,7 +302,7 @@ flag saying whether the citation was verified that way. Three citations carry ve
 rest are identified by issuer, exact title and date, and are flagged as unverified rather than
 presented as checked.
 
-## 14. The smaller items
+## 15. The smaller items
 
 | Item | Change |
 |---|---|
@@ -293,7 +312,7 @@ presented as checked.
 | Recovery described as suggestive in the letter | This letter is new; the manuscript, Figure 3 and the discussion all describe the 90 percent comparison as significant under the test performed, with its three qualifications |
 | Response letter organised around our iteration | Reorganised around the comments; the history is now `decisions/review_history.md` |
 
-## 15. What we have not done
+## 16. What we have not done
 
 Three of the reviewer's suggestions are not in this revision, and we would rather say so than
 imply otherwise.
@@ -305,7 +324,7 @@ detector work into a standalone methodological contribution, and it is the first
 add, but it is a second paper's worth of work rather than a revision. And the
 monitoring-priority benchmark, for the same reason.
 
-## 16. What we believe the paper establishes, and what it does not
+## 17. What we believe the paper establishes, and what it does not
 
 **Establishes.** That the standard ingredient-by-dosage-form market definition, applied to
 public Medicaid dispensing data, contains two measurement defects; that correcting them moves

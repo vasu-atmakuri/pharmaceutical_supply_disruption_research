@@ -122,7 +122,9 @@ SUBS=[
   f"| Market-quarters at strength granularity | 200,534 | {SEN['strength_market_quarters']:,} |"),
  (r"\| Near-sole volume at strength granularity \| [\d.]+% \| [\d.]+% \|",
   f"| Near-sole volume at strength granularity | 19.96% | "
-  f"{100*SEN['strength_nearsole_vol']:.2f}% |"),
+  # sensitivities.json already stores this as a percentage; multiplying by 100 again
+  # printed 1657.00% in the letter while the manuscript printed 16.57
+  f"{SEN['strength_nearsole_vol']:.2f}% |"),
  (r"absorbed duplicate keys is still [\d,]+",
   f"absorbed duplicate keys is still {NUM['keys_absorbed']:,}"),
  (r"removes \w+ of the \w+-\w+", 

@@ -53,6 +53,24 @@ OK=SUPERSEDED|{"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14",
     "19","20","25","35","41","50","53","60","65","90","95","100","2016","2026","0.02","0.05"}
 found=sorted({t for t in re.findall(r"(?<![\w.])\d[\d,]*(?:\.\d+)?(?![\w.])",body)} - OK)
 orphans=[t for t in found if t not in vals and t.replace(",","") not in vals]
+
+# ---- a percentage that is a hundred times a real value is a formatting bug ----
+# The letter once printed 1,657.00% where the value was 16.57: the figure was stored as
+# a percentage and multiplied by a hundred again. It passed this audit because the
+# multiplied value happened to match one of the formats a results value is rendered in.
+# A percentage above 1000 in a paper about market shares and collapse rates is never
+# right, so it is rejected outright.
+_pcts=[t for t in re.findall(r"(\d[\d,]*(?:\.\d+)?)\s*(?:%|percent)", body)]
+# The letter quotes the erroneous value in the section that reports the error, so a
+# quoted figure is exempt. Nothing else above 1000 percent is.
+_QUOTED={"1,657","1657.00","1657"}
+_huge=[t for t in _pcts if float(t.replace(",",""))>1000 and t not in _QUOTED]
+if _huge:
+    print(f"\nIMPLAUSIBLE PERCENTAGES IN THE LETTER: {_huge}")
+    print("   a share or rate above 1000 percent is a formatting error; check for a "
+          "value that is already a percentage being multiplied by a hundred")
+    sys.exit(1)
+
 print(f"{len(found)} distinct numbers in response_to_reviewer.md")
 if orphans:
     print(f"\n{len(orphans)} with no match in any results file:")

@@ -139,7 +139,16 @@ _t+= [r"\botrule",r"\end{tabular}"]
 open(f"{G}/tab_ndc.tex","w").write("\n".join(_t)+"\n")
 _na=json.load(open(f"{R}/results/ndc_composition_audit.json"))
 m.append(r"\newcommand{\nNdcCodes}{%s\xspace}"%f"{_na['product_codes']:,}".replace(",","{,}"))
-m.append(r"\newcommand{\nNdcCombos}{%s\xspace}"%_na["name_route_combinations"])
-m.append(r"\newcommand{\nNdcMulti}{%s\xspace}"%_na["combinations_with_multiple_substance_sets"])
+m.append(r"\newcommand{\nNdcCombos}{%s\xspace}"%_na["name_bucket_combinations"])
+m.append(r"\newcommand{\nNdcMulti}{%s\xspace}"%
+         _na["combinations_with_conflicting_populated_sets"])
+m.append(r"\newcommand{\nNdcMissing}{%s\xspace}"%
+         _na["combinations_with_missing_sets_only"])
+m.append(r"\newcommand{\nNdcClean}{%s\xspace}"%
+         _na["combinations_fully_populated_and_consistent"])
+m.append(r"\newcommand{\nNdcNoMarket}{%s\xspace}"%
+         f"{_na['product_codes_without_a_market_in_the_panel']:,}".replace(",","{,}"))
+m.append(r"\newcommand{\nNdcMultiKey}{%s\xspace}"%
+         _na["product_codes_resolving_to_more_than_one_market"])
 open(f"{G}/detector_macros.tex","w").write("\n".join(m)+"\n")
 print(f"wrote tab_ndc.tex ({len(_te)} trace-element product codes)")

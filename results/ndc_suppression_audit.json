@@ -1,0 +1,12 @@
+{
+ "events_with_any": 10,
+ "labeler_series_per_suppressed_quarter": {
+  "max": 1,
+  "median": 1.0,
+  "min": 1
+ },
+ "note": "For each suppressed quarter in an observed event's outcome window, the number of labeler-product series dispensing into that market in the four quarters before the exit. Suppression applies to the cell, not the market, so the unobserved market total can be as large as ten times that count, which is above the two-percent collapse threshold in most cases. Ten prescriptions is therefore not a bound on a market-quarter, and the zero reading is a convention whose effect is measured in the outcome sensitivity rather than a consequence of the suppression rule.",
+ "observed_events": 19,
+ "quarters_where_the_implied_ceiling_exceeds_the_collapse_threshold": 5,
+ "suppressed_market_quarters": 38
+}

@@ -55,8 +55,8 @@ as time from a market's first threshold crossing to its first restoration, with 
 \textbf{Results.} Dosage form alone does not identify a market: the form string
 ``solution'' covers \nSolutionOral oral products, \nSolutionTopical topical, \nSolutionOphth ophthalmic and \nSolutionOtic otic, and in
 the original bucketing every eye and ear product in the panel was filed as an oral liquid. Using route as
-well as form, and then normalising the ingredient key, \nKeysAbsorbed of \nRawKeys keys prove to be
-duplicates of another key, leaving \nNormKeys markets; FDA substance data, recorded in a field separate from
+well as form, and then normalising the ingredient key, \nKeysAbsorbed of \nRawKeys keys are
+absorbed into another key, leaving \nNormKeys markets; FDA substance data, recorded in a field separate from
 the name the key is built from, agrees with all \nConfirmed testable merges after adjudication. Across the whole
 panel the share of dispensing in markets where one labeler holds at least 95 percent falls from
 \nNearSoleVolA to \nNearSoleVolC percent, and \nReclassRate percent of apparent near-sole market-quarters, carrying \nReclassVolLargest
@@ -351,8 +351,9 @@ is the specification used throughout.}\label{tab:flow}
 \end{table}
 
 Two features of this table matter. The route correction alone (column B) changes the market
-count but not the cohort or the bands: it repairs what the markets are called without moving the
-events. The ingredient-key normalisation (column C) is what reduces the near-sole-labeler stratum,
+count and almost nothing else: the cohort moves by \nRouteCohortDelta observation, from
+\nSpecAObs to \nSpecBObs, and the minority band with it, while the near-sole band stays at
+\nRawSole. It repairs what the markets are called without materially moving the events. The ingredient-key normalisation (column C) is what reduces the near-sole-labeler stratum,
 from \nRawSoleW events to \nRemainSoleW on the raw convention's own cohort.
 Section~\ref{subsec:defect} accounts for every one of those \nReclassSoleW. That subtraction is
 not the corrected panel's cohort, which is \nTreated: the corrected detector runs again on
@@ -630,8 +631,13 @@ testable groups. Table~\ref{tab:ndc} shows it at product level for those product
 four-element products carry different substance sets and land in different keys. The rule compares
 substance sets across the raw keys in a merge group, so what it cannot do is split one raw key
 whose own product codes differ in composition; those products share a key, which takes the modal
-set. We measure that: among \nNdcCodes trace-element and electrolyte product codes, \nNdcMulti of
-\nNdcCombos name-and-route combinations carry more than one substance set among their own codes.
+set. We measure that on the panel's own unit, the raw ingredient name with its resolved route
+bucket, and separately from the case where a comparison is simply not possible. Among \nNdcCodes
+trace-element and electrolyte product codes in \nNdcCombos name-and-bucket combinations,
+\nNdcMulti combinations carry two or more different populated FDA substance sets, \nNdcMissing
+carry one populated set alongside records with no structured substances at all, and \nNdcClean are
+fully populated and consistent. Only the first is evidence of two compositions sharing a market
+key.
 The tie-break is a partial step toward building the key from structured composition rather than
 from the name, which remains the natural next development of this method. One- and two-digit formulation indices are retained rather than
 discarded as bare numerals, which is what keeps Trace Elements 4 and Trace Elements 5 apart.
@@ -942,7 +948,7 @@ but this panel cannot test it.
 
 \subsection{Recovery, measured from the first decline}\label{subsec:recovery}
 
-Markets with twelve observed quarters after the exit form a longitudinal cohort of
+Markets with up to twelve quarters of panel after the exit form a longitudinal cohort of
 \nCrossCohort, of which \nCrossMinorOf are minority-loss, \nCrossMid middle and \nCrossSoleOf
 near-sole-labeler. This cohort is not the analysis cohort of
 Section~\ref{subsec:replace}, and the two differ in both directions, so we state the crosswalk
@@ -1144,8 +1150,8 @@ Section~\ref{subsec:market}.
 \emph{Route coverage.} Route is populated for \nRouteCovRec percent of crosswalk records but, because the
 records without it are small products, for \nRouteCovLo to \nRouteCovHi percent of dispensing volume in every
 year from 2016 to 2026, with no trend; Table~\ref{tab:routecov} gives the annual series. The
-fallback to the form string therefore governs about five percent of volume rather than a sixth of
-it.
+fallback to the form string therefore governs \nRouteFallbackLo to \nRouteFallbackHi percent of
+volume rather than a sixth of it.
 
 \emph{Unknown route versus known-other route.} The fallback assigns records with no
 \texttt{ROUTENAME} and no usable form string to \textsc{other}, where records whose route is
@@ -1298,7 +1304,9 @@ circumstances, so the mechanism is a change in the ordinary coverage and reimbur
 rather than a prohibition. The dispensing leaves this data source on a
 date that the rebate-programme record names, and nothing in the panel distinguishes that date
 from a manufacturing failure. The mechanism is therefore demonstrated rather than hypothetical,
-and the two prescription-to-over-the-counter switches are a second instance of it. Medicare Part D utilisation
+The two prescription-to-over-the-counter switches are a plausible second instance and not a
+demonstrated one: the switch is documented, but no record establishes that the departing generic
+labeler's dispensing fell for that reason. Medicare Part D utilisation
 and the national acquisition-cost files cover different populations and would partly resolve this
 ambiguity \citep{cms_partd,cms_nadac}, and linking them is a direct extension. Manufacturers are
 separately required to notify the FDA of permanent discontinuance or interrupted manufacturing
@@ -1352,10 +1360,11 @@ misspelled ingredient strings.
 Across the whole panel the correction moves the share of national Medicaid dispensing sitting in
 markets where one labeler holds at least 95 percent from \nNearSoleVolA to \nNearSoleVolC percent, and the share in
 markets with exactly one labeler from \nSingleVolA to \nSingleVolC percent. Of apparent near-sole market-quarters, \nReclassRate percent
-under the mapping rule used here, carrying \nReclassVolLargest
-percent of that volume, are not near-sole once
-the market is defined properly; the count ranges from \nReclassLow to \nReclassHigh percent across three
-defensible mapping rules. Most of the reduction is attributable to the ingredient key: route
+under the largest-component rule, carrying \nReclassVolLargest
+percent of that volume, are not near-sole once the market is defined properly. That figure is
+rule-dependent and we do not present it as an established false-positive proportion: the three
+defensible mapping rules give \nReclassLow, \nReclassRate and \nReclassHigh percent, and
+Table~\ref{tab:rules} reports each with the rule it belongs to. Most of the reduction is attributable to the ingredient key: route
 correction alone accounts for \nRoutePP of the \nNearSolePP percentage-point fall in near-sole dispensing
 share and is close to neutral for the exact single-labeler measure, creating \nRouteSplitCreated single-labeler
 market-quarters by splitting and removing a similar number by regrouping. That is the measurable consequence: a monitoring programme built
@@ -1458,10 +1467,13 @@ carry different substance sets and land in different keys, which is the tie-brea
 described; the five-element product is a separate market on its name. The full table for these
 and for \nNdcCodes electrolyte and trace-element product codes is released as
 \texttt{results/ndc\_composition\_audit.csv}, with the raw name, the route, the complete
-substance string and the raw market keys. What the tie-break cannot do is also measured there:
-\nNdcMulti of \nNdcCombos name-and-route combinations carry more than one substance set among
-their own product codes, and those products share a market key because the key takes the modal
-set.}\label{tab:ndc}
+substance string and the raw market keys. What the tie-break cannot do is measured there too, on the
+panel's own unit and separating a real disagreement from a missing comparison: of \nNdcCombos
+name-and-bucket combinations, \nNdcMulti carry two or more different populated substance sets,
+\nNdcMissing carry one populated set alongside records with none, and \nNdcClean are consistent.
+\nNdcNoMarket of the \nNdcCodes product codes have no market in the panel, being undispensed in
+Medicaid in this window or not human prescription drugs, and \nNdcMultiKey resolve to more than
+one market key.}\label{tab:ndc}
 \input{generated/tab_ndc}
 \end{table}
 

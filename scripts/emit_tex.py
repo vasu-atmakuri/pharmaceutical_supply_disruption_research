@@ -163,6 +163,10 @@ open(f"{G}/tab_deficit.tex","w").write("\n".join(out)+"\n")
 # ---------------- headline macros ----------------
 A,B,C=ABC["A"],ABC["B"],ABC["C"]
 M.update(
+ SpecAObs=c(SPEC["A"]["obs"]), SpecBObs=c(SPEC["B"]["obs"]),
+ RouteCohortDelta=_w(SPEC["B"]["obs"]-SPEC["A"]["obs"]),
+ RouteFallbackLo=f"{100-SEN['route_coverage_volume_max']:.1f}",
+ RouteFallbackHi=f"{100-SEN['route_coverage_volume_min']:.1f}",
  RawKeys=c(NUM["raw_route_keys"]), NormKeys=c(NUM["normalised_keys"]), KeysAbsorbed=c(NUM["keys_absorbed"]),
  FormBucketMarkets=c(SPEC["A"]["markets"]), ColazoMarkets=c(NUM["colazo_markets"]),
  NearSoleVolA=f"{A['sole_vol']*100:.2f}", NearSoleVolB=f"{B['sole_vol']*100:.2f}", NearSoleVolC=f"{C['sole_vol']*100:.2f}",
@@ -289,6 +293,9 @@ M.update(
  OutcomeTenRate=f"{100*L('outcome_missing_sensitivity.json')['ten']['rate']:.1f}",
  OutcomeObsRate=f"{100*L('outcome_missing_sensitivity.json')['observed']['rate']:.1f}",
  OutcomeAffected=_w(L("outcome_missing_sensitivity.json")["events_affected"]),
+ SuppQuarters=c(L("ndc_suppression_audit.json")["suppressed_market_quarters"]),
+ SuppCellsMax=_w(L("ndc_suppression_audit.json")["labeler_series_per_suppressed_quarter"]["max"]),
+ SuppAboveThresh=c(L("ndc_suppression_audit.json")["quarters_where_the_implied_ceiling_exceeds_the_collapse_threshold"]),
  # where near-zero replacement actually falls, by class. The abstract attributed it to
  # the undetermined exits; four of the eleven are undetermined and seven are not.
  **_nearzero(),
